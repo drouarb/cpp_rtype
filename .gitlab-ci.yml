@@ -14,7 +14,6 @@ build:
     - make -j${nproc}
   artifacts:
     untracked: true
-    - build/
 
 unit-tests:
   stage: test
