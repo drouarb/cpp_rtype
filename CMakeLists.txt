@@ -3,6 +3,7 @@ project(cpp_rtype)
 
 option(RTYPE_TESTS "Enable test compilation" OFF)
 
+include(CTest)
 set(PROTOBOEUF_TESTS ${RTYPE_TESTS})
 add_subdirectory(protoboeuf)
 
