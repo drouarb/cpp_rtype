@@ -1,3 +1,8 @@
+before_script:
+   - nproc=`grep -c '^processor' /proc/cpuinfo`
+   - echo "nproc = ${nproc}"
+   - mkdir -p build; cd build/
+
 stages:
   - build
   - test
@@ -5,13 +10,15 @@ stages:
 build:
   stage: build
   script:
-    - mkdir build
-    - cd build
     - cmake .. -DRTYPE_TESTS=ON
-    - make -j 4
+    - make -j${nproc}
+  artifacts:
+    untracked: true
+    - build/
 
 unit-tests:
   stage: test
+  dependencies:
+    - build
   script:
-    - cd build
     - ctest . --output-on-failure
