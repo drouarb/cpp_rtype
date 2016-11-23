@@ -2,4 +2,4 @@
 // Created by celeriy on 23/11/16.
 //
 
-#include "PacketAskLeaderBoard.hh"
+#include "network/packet/PacketAskLeaderBoard.hh"
