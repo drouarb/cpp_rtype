@@ -24,7 +24,7 @@ file(
 
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRCS})
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+set(PROTOBOEUF_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 if (PROTOBOEUF_TESTS)
     enable_testing()
