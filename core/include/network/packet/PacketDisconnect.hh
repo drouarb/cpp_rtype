@@ -6,10 +6,17 @@
 #define CPP_RTYPE_PACKETDISCONNECT_HH
 
 
-class PacketDisconnect
-{
+#include <network/packet/APacket.hh>
 
-};
+namespace network {
+ namespace packet {
+     class PacketDisconnect  : public APacket{
+     public:
+         PacketDisconnect();
+         virtual ~PacketDisconnect();
+     };
+ }
+}
 
 
 #endif //CPP_RTYPE_PACKETDISCONNECT_HH

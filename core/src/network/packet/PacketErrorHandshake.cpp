@@ -9,12 +9,13 @@ network::packet::PacketErrorHandshake::~PacketErrorHandshake()
 
 }
 
-network::packet::PacketErrorHandshake::PacketErrorHandshake(const std::string &message) : APacket(
-        ERROR_HANDSHAKE,
-        {
-                new utils::NetworkString(message.c_str())
-        }
-)
+network::packet::PacketErrorHandshake::PacketErrorHandshake(const std::string &message) :
+        APacket(
+                ERROR_HANDSHAKE,
+                {
+                        new utils::NetworkString(message.c_str())
+                }
+        )
 {}
 
 const network::utils::NetworkString &network::packet::PacketErrorHandshake::getMessage() const
