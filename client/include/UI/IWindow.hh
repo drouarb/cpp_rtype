@@ -2,6 +2,7 @@
 #define CPP_RTYPE_IWINDOW_HH_
 
 #include <string>
+#include "ILayer.hh"
 
 namespace UI {
     class IWindow {
@@ -12,6 +13,7 @@ namespace UI {
         virtual void render() = 0;
         virtual bool isOpen() = 0;
         virtual void display() = 0;
+        virtual void addLayer(ILayer*) = 0;
     };
 }
 

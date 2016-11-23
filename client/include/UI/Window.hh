@@ -18,12 +18,14 @@ namespace UI {
         void render();
         bool isOpen();
         void display();
+        void addLayer(ILayer* layer);
 
     private:
         sf::RenderWindow *window;
         unsigned int length;
         unsigned int width;
         std::string name;
+        std::vector<ILayer*> layers;
     };
 }
 

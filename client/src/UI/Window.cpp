@@ -1,7 +1,3 @@
-//
-// Created by jonas_e on 11/23/16.
-//
-
 #include <UI/Window.hh>
 
 
@@ -34,4 +30,8 @@ bool UI::Window::isOpen() {
 
 void UI::Window::display() {
     window->display();
+}
+
+void UI::Window::addLayer(ILayer* layer) { //remplacer layer par Template à layer genre enum
+    layers.push_back(layer);
 }

@@ -1,0 +1,10 @@
+#ifndef CPP_RTYPE_EVENTOBSERVER_HH
+#define CPP_RTYPE_EVENTOBSERVER_HH
+
+
+class EventObserver {
+
+};
+
+
+#endif //CPP_RTYPE_EVENTOBSERVER_HH
