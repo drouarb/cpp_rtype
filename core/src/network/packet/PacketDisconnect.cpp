@@ -3,3 +3,15 @@
 //
 
 #include "network/packet/PacketDisconnect.hh"
+
+network::packet::PacketDisconnect::~PacketDisconnect()
+{
+
+}
+
+network::packet::PacketDisconnect::PacketDisconnect() :
+APacket
+        (
+                DISCONNECT, {}
+        )
+{}
