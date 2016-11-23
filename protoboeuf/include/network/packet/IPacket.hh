@@ -17,35 +17,41 @@ namespace network {
     namespace packet {
 
         enum PacketId {
-            ERROR_CONNECT  = 0x00,
-            WELCOME_SERVER = 0x01,
-            CONNECT        = 0x02,
-            DISCONNECT     = 0x03,
-            ACCEPT         = 0x04,
+            ERROR_HANDSHAKE         = 0x00,
+            SYN                     = 0x01,
+            SYN_ACK                 = 0x02,
+            ACK                     = 0x03,
+            REGISTER                = 0x04,
+            DISCONNECT              = 0x05,
+            PING                    = 0x06,
+            PONG                    = 0x07,
 
-            ERROR_SIGN     = 0x10,
-            LOGIN          = 0x11,
-            REGISTER       = 0x12,
+            ERROR_LIST              = 0x10,
+            ASK_LIST                = 0x11,
+            GAME_LIST               = 0x12,
 
-            ERROR_CONTACT  = 0x20,
-            CONTACTS_LIST  = 0x21,
-            CONTACT_ADD    = 0x22,
-            CONTACT_REMOVE = 0x23,
+            ERROR_GAME              = 0x20,
+            JOIN                    = 0x21,
+            QUIT                    = 0x22,
 
-            ERROR_CALL     = 0x30,
-            CALL           = 0x31,
-            NOTIFY_CALL    = 0x32,
-            CANCEL         = 0x33,
-            REJECT         = 0x34,
+            EVENT_ERROR             = 0x30,
+            SPAWN_ENTITY            = 0x31,
+            DELETE_ENTITY           = 0x32,
+            UPDATE_ENTITY           = 0x33,
+            MOVE_ENTITY             = 0x34,
+            MOVE_PLAYER             = 0x35,
+            PLAYER_ATTACK           = 0x36,
+            SPAWN_EVENT_ON_POS      = 0x37,
+            SPAWN_EVENT_ON_ENTITY   = 0x38,
+            PLAY_SOUND              = 0x39,
 
-            ERROR_CLIENT   = 0x80,
-            WELCOME_CLIENT = 0x81,
-            ANSWER         = 0x82,
-            HANG_UP        = 0x83,
+            ERROR_SCORE             = 0x60,
+            ASK_LEADERBOARD         = 0x61,
+            LEADER_BOARD            = 0x62
 
-            ERROR_DATA     = 0x90,
-            AUDIO          = 0x91,
+
         };
+
 
         class IPacket {
         public:
