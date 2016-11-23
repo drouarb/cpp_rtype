@@ -2,4 +2,4 @@
 // Created by celeriy on 23/11/16.
 //
 
-#include "PacketDeleteEntity.hh"
+#include "network/packet/PacketDeleteEntity.hh"

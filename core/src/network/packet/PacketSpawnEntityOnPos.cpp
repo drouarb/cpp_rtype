@@ -2,4 +2,4 @@
 // Created by celeriy on 23/11/16.
 //
 
-#include "PacketSpawnEntityOnPos.hh"
+#include "network/packet/PacketSpawnEntityOnPos.hh"

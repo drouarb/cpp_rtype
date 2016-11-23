@@ -2,4 +2,4 @@
 // Created by celeriy on 23/11/16.
 //
 
-#include "PacketGameList.hh"
+#include "network/packet/PacketGameList.hh"

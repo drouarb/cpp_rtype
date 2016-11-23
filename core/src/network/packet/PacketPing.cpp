@@ -2,4 +2,4 @@
 // Created by celeriy on 23/11/16.
 //
 
-#include "PacketPing.hh"
+#include "network/packet/PacketPing.hh"
