@@ -3,3 +3,15 @@
 //
 
 #include "network/packet/PacketQuit.hh"
+
+network::packet::PacketQuit::~PacketQuit()
+{
+
+}
+
+network::packet::PacketQuit::PacketQuit() :
+        APacket
+                (
+                        QUIT, {}
+                )
+{}
