@@ -35,20 +35,18 @@ namespace network {
             QUIT                    = 0x22,
 
             EVENT_ERROR             = 0x30,
-            SPAWN_ENTITY            = 0x31,
-            DELETE_ENTITY           = 0x32,
-            UPDATE_ENTITY           = 0x33,
-            MOVE_ENTITY             = 0x34,
-            MOVE_PLAYER             = 0x35,
-            PLAYER_ATTACK           = 0x36,
-            SPAWN_EVENT_ON_POS      = 0x37,
-            SPAWN_EVENT_ON_ENTITY   = 0x38,
-            PLAY_SOUND              = 0x39,
+            CANCEL_EVENT            = 0x31,
+            PLAYER_MOVE             = 0x32,
+            PLAYER_ATTACK           = 0x33,
+            SPAWN_ENTITY            = 0x34,
+            DELETE_ENTITY           = 0x35,
+            UPDATE_ENTITY           = 0x36,
+            MOVE_ENTITY             = 0x37,
+            PLAY_SOUND              = 0x38,
 
             ERROR_SCORE             = 0x60,
             ASK_LEADERBOARD         = 0x61,
             LEADER_BOARD            = 0x62
-
 
         };
 
