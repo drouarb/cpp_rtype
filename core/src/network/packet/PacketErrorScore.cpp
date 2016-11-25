@@ -11,7 +11,7 @@ network::packet::PacketErrorScore::~PacketErrorScore()
 
 network::packet::PacketErrorScore::PacketErrorScore(const std::string &message) :
         APacket(
-                REGISTER,
+                ERROR_SCORE,
                 {
                         new utils::NetworkString(message.c_str())
                 }
