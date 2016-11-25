@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#define Animation std::vector<std::pair<unsigned int, std::string>> //std::string devrait etre remplacé par les parts d'image  (sf::Sprite) loadé
 
 namespace UI {
 
@@ -13,14 +14,21 @@ namespace UI {
         ITEMS_NUMBER
     };
 
+    enum animationType {
+        IDLE,
+        SIZE
+    };
+
     class AItem {
     public:
-        enum animation {
-            IDLE,
-            SIZE
-        };
+        AItem();
+        ~AItem();
+
+        void addAnimation(UI::animationType animationType, Animation animation);
+        void playAnimation(animationType animation);
+
     private:
-        std::map<UI::AItem::animation, std::vector<std::pair<unsigned int, std::string>>> sprite; //changer unsigned int dans un type plus générique ?
+        std::map<UI::animationType, Animation> sprite; //changer unsigned int dans un type plus générique ?
     };
 }
 

@@ -1,9 +1,10 @@
 
 #include <UI/UIManager.hh>
 #include <UI/Window.hh>
+#include <UI/AudioManager.hh>
 
 UI::UIManager::UIManager() {
-
+    audioManager = new UI::AudioManager();
 }
 
 UI::UIManager::~UIManager() {
@@ -38,4 +39,8 @@ int UI::UIManager::addItemToGame(UI::itemType type, std::string sprite, int posX
 
 int UI::UIManager::addLayer(UI::layerType layerType, UI::windowType windowType) {
     return windows[windowType]->addLayer(layerType); // on verra, certainement pas utile.
+}
+
+UI::IAudioManager *UI::UIManager::getAudioManager() {
+    return audioManager;
 }

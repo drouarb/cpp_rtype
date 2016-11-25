@@ -9,6 +9,9 @@
 
 namespace UI {
     class Button : public AItem {
+    public:
+        Button();
+
         void onHover();
     };
 }

@@ -4,6 +4,14 @@
 
 #include "../../include/UI/Button.hh"
 
+UI::Button::Button() {
+
+}
+
+UI::Button::~Button() {
+
+}
+
 void UI::Button::onHover() {
     //call animation
 }

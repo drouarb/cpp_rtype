@@ -5,6 +5,7 @@
 #include "IWindow.hh"
 #include "ItemFactory.hh"
 #include "ALayer.hh"
+#include "IAudioManager.hh"
 
 namespace UI {
     class UIManager {
@@ -17,9 +18,11 @@ namespace UI {
         int addItemToLayer(UI::itemType type, std::string sprite, int posX, int posY, unsigned long LayerID);
         int addItemToGame(UI::itemType type, std::string sprite, int posX, int posY);
         IWindow* getWindow(enum windowType);
+        IAudioManager* getAudioManager();
 
     private:
         std::vector<UI::IWindow*> windows;
+        IAudioManager *audioManager;
     };
 }
 
