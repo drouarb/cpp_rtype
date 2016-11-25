@@ -4,8 +4,18 @@
 #include "ILayer.hh"
 
 namespace UI {
-    class ALayer : public ILayer {
 
+    enum layerType {
+        MENU,
+        HUD,
+        GAME,
+        BACKGROUND,
+        LAYERS_NUMBER
+    };
+
+    class ALayer : public ILayer {
+    public:
+    private:
     };
 }
 

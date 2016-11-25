@@ -3,8 +3,15 @@
 
 #include <string>
 #include "ILayer.hh"
+#include "UIManager.hh"
+#include "ALayer.hh"
 
 namespace UI {
+
+    enum windowType {
+        MAIN_WINDOW
+    };
+
     class IWindow {
     public:
         virtual ~IWindow(){};
@@ -13,7 +20,7 @@ namespace UI {
         virtual void render() = 0;
         virtual bool isOpen() = 0;
         virtual void display() = 0;
-        virtual void addLayer(ILayer*) = 0;
+        virtual unsigned long addLayer(UI::layerType) = 0;
     };
 }
 

@@ -7,6 +7,8 @@
 
 #include <SFML/Graphics.hpp>
 #include "IWindow.hh"
+#include "ALayer.hh"
+#include "LayerFactory.hh"
 
 namespace UI {
     class Window : public IWindow {
@@ -18,13 +20,14 @@ namespace UI {
         void render();
         bool isOpen();
         void display();
-        void addLayer(ILayer* layer);
+        unsigned long addLayer(UI::layerType layer);
 
     private:
         sf::RenderWindow *window;
         unsigned int length;
         unsigned int width;
         std::string name;
+        LayerFactory *layerFactory;
         std::vector<ILayer*> layers;
     };
 }

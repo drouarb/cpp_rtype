@@ -2,6 +2,7 @@
 
 
 UI::Window::Window() {
+    layerFactory = new LayerFactory();
     length = 800;
     width = 600;
     name = "rtype";
@@ -9,6 +10,8 @@ UI::Window::Window() {
 
 UI::Window::~Window() {
     window->close();
+    delete(window);
+    delete(layerFactory);
 }
 
 void UI::Window::setSize(unsigned int length, unsigned int width) {
@@ -32,6 +35,7 @@ void UI::Window::display() {
     window->display();
 }
 
-void UI::Window::addLayer(ILayer* layer) { //remplacer layer par Template à layer genre enum
-    layers.push_back(layer);
+unsigned long UI::Window::addLayer(UI::layerType layer) {
+    layers.push_back(layerFactory->instantiate(layer));
+    return layers.size();
 }

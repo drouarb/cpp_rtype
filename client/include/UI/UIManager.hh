@@ -3,19 +3,19 @@
 
 #include <vector>
 #include "IWindow.hh"
+#include "ItemFactory.hh"
+#include "ALayer.hh"
 
 namespace UI {
-
-    enum windowType {
-        MAIN_WINDOW
-    };
-
     class UIManager {
     public:
         UIManager();
         ~UIManager();
 
         void init();
+        int addLayer(UI::layerType, UI::windowType windowType);
+        int addItemToLayer(UI::itemType type, std::string sprite, int posX, int posY, unsigned long LayerID);
+        int addItemToGame(UI::itemType type, std::string sprite, int posX, int posY);
         IWindow* getWindow(enum windowType);
 
     private:

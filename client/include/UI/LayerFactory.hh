@@ -5,28 +5,21 @@
 #include "ILayer.hh"
 
 namespace UI {
+
     class LayerFactory {
-        typedef UI::ILayer* (*instantiateLayer)();
-        enum layerTemplate {
-            MENU,
-            HUD,
-            GAME,
-            BACKGROUND,
-            SIZE
-        };
-
-        const static std::map<layerTemplate, instantiateLayer> layerMap;
-
     public:
         LayerFactory();
         ~LayerFactory();
-        static ILayer* instantiate(layerTemplate type);
+        static ILayer* instantiate(UI::layerType type);
 
     private:
         static ILayer* instantiateMenu();
         static ILayer* instantiateHUD();
         static ILayer* instantiateGame();
         static ILayer* instantiateBackground();
+
+        typedef UI::ILayer* (*instantiateLayer)();
+        const static std::map<UI::layerType, instantiateLayer> layerMap;
     };
 }
 
