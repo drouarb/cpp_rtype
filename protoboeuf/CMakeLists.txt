@@ -14,12 +14,16 @@ file(
         include/network/utils/NetworkVector.hh
         include/network/packet/IPacket.hh
         include/network/packet/APacket.hh
+        include/network/listener/APacketListener.hh
+        include/network/listener/IPacketListener.hh
+        include/network/listener/ListenerTemplate.hpp
         include/network/packet/APacketData.hh
         src/network/utils/NetworkInteger.cpp
         src/network/utils/NetworkString.cpp
         src/network/utils/NetworkVector.cpp
         src/network/packet/APacket.cpp
         src/network/packet/APacketData.cpp
+        src/network/listener/APacketListener.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRCS})
