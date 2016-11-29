@@ -13,7 +13,7 @@ class PacketTest: public APacket {
 public:
     PacketTest():
             APacket(
-                    ERROR_CONNECT,
+                    static_cast<PacketId>(0x10),
                     {
                             new network::utils::NetworkInteger(4, 1337),
                             new network::utils::NetworkString("Hello"),
@@ -43,7 +43,7 @@ int main() {
     p.serialize(&data);
     assert(data.size() - 5 == p.getSize());
     packetIdPtr = &data.front();
-    assert(*packetIdPtr == ERROR_CONNECT);
+    assert(*packetIdPtr == 0x10);
     packetSizePtr = reinterpret_cast<uint32_t *>(&data.front() + 1);
     assert(*packetSizePtr == p.getSize());
     assert(*packetSizePtr == data.size() - 5);
@@ -57,7 +57,7 @@ int main() {
     std::cout << "Deserialization tests" << std::endl;
     data.resize(5);
     packetIdPtr = &data.front();
-    *packetIdPtr = 0;
+    *packetIdPtr = 0x10;
     packetSizePtr = reinterpret_cast<uint32_t *>(&data.front() + 1);
     *packetSizePtr = 16 - 5;
     nb.setValue(42);
@@ -79,7 +79,7 @@ int main() {
 
     test = 0;
     data.resize(0);
-    id.setValue(ERROR_CONNECT);
+    id.setValue(0x10);
     id.serialize(&data);
     nb.setValue(PACKET_HEADER_SIZE + 1);
     nb.serialize(&data);
@@ -105,7 +105,7 @@ int main() {
     data.resize(0);
     p.serialize(&data);
     packetIdPtr = &data.front();
-    *packetIdPtr = ERROR_CALL;
+    *packetIdPtr = 0x11;
     try {
         p.deserialize(&data);
     } catch (std::domain_error e) {

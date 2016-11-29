@@ -11,7 +11,7 @@ using namespace network::packet;
 
 class PacketTest : public APacketData {
 public:
-    PacketTest() : APacketData(AUDIO, NULL) {}
+    PacketTest() : APacketData(static_cast<network::packet::PacketId>(0x91), NULL) {}
 
     ~PacketTest() {}
 };
@@ -23,7 +23,7 @@ int main() {
     t_rawdata serializedData;
     uint8_t *packetIdPtr;
     uint32_t *packetSizePtr;
-    network::utils::NetworkInteger id(1, AUDIO);
+    network::utils::NetworkInteger id(1, 0x91);
     network::utils::NetworkInteger size(4);
 
     std::cout << "Serialization tests" << std::endl;
@@ -32,7 +32,7 @@ int main() {
     p.serialize(&serializedData);
     assert(serializedData.size() - 5 == p.getSize());
     packetIdPtr = &serializedData.front();
-    assert(*packetIdPtr == AUDIO);
+    assert(*packetIdPtr == 0x91);
     packetSizePtr = reinterpret_cast<uint32_t *>(&serializedData.front() + 1);
     assert(*packetSizePtr == p.getSize());
     assert(*packetSizePtr == serializedData.size() - PACKET_HEADER_SIZE);
@@ -47,7 +47,7 @@ int main() {
     data.resize(5, 5);
     serializedData.insert(serializedData.end(), data.begin(), data.end());
     p.deserialize(&serializedData);
-    assert(p.getPacketId() == AUDIO);
+    assert(p.getPacketId() == 0x91);
     assert(size.getValue() == serializedData.size() - PACKET_HEADER_SIZE);
     assert(p.getSize() == serializedData.size() - PACKET_HEADER_SIZE);
     assert(memcmp(&p.getData().front(), &serializedData.front() + 5, 5) == 0);
@@ -64,7 +64,7 @@ int main() {
 
     test = 0;
     data.resize(0);
-    id.setValue(AUDIO);
+    id.setValue(0x91);
     id.serialize(&data);
     size.setValue(PACKET_HEADER_SIZE + 1);
     size.serialize(&data);
@@ -90,7 +90,7 @@ int main() {
     data.resize(0);
     p.serialize(&data);
     packetIdPtr = &data.front();
-    *packetIdPtr = ERROR_CALL;
+    *packetIdPtr = 0x90;
     try {
         p.deserialize(&data);
     } catch (std::domain_error e) {
