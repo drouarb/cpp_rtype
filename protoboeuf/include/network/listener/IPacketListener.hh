@@ -2,10 +2,10 @@
 // Created by drouar_b on 11/7/16.
 //
 
-#ifndef CPP_BABEL_IPACKETLISTENER_HH
-#define CPP_BABEL_IPACKETLISTENER_HH
+#ifndef CPP_RTYPE_IPACKETLISTENER_HH
+#define CPP_RTYPE_IPACKETLISTENER_HH
 
-#include "network/packet/IPacket.hh"
+#include <network/packet/IPacket.hh>
 
 namespace network {
     namespace listener {
@@ -19,4 +19,4 @@ namespace network {
     }
 }
 
-#endif //CPP_BABEL_IPACKETLISTENER_HH
+#endif //CPP_RTYPE_IPACKETLISTENER_HH
