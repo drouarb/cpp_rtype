@@ -21,6 +21,7 @@ namespace UI {
         virtual bool isOpen() = 0;
         virtual void display() = 0;
         virtual unsigned long addLayer(UI::layerType) = 0;
+        virtual ILayer* getLayer(UI::layerType layer) = 0;
     };
 }
 

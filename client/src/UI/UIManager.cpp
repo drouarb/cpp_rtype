@@ -29,8 +29,12 @@ UI::IWindow *UI::UIManager::getWindow(UI::windowType windowType) {
     return windows[windowType];
 }
 
-int UI::UIManager::addItemToLayer(UI::itemType type, std::string sprite, int posX, int posY, unsigned long LayerID) {
+unsigned long UI::UIManager::addItemToLayer(UI::itemType type, std::string sprite, int posX, int posY, unsigned long LayerID) {
     return 0;
+}
+
+int UI::UIManager::UpdateItem(unsigned long layerID, unsigned long itemID) {
+
 }
 
 int UI::UIManager::addItemToGame(UI::itemType type, std::string sprite, int posX, int posY) {

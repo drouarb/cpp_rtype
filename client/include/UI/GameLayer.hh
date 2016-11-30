@@ -5,9 +5,13 @@
 #ifndef CPP_RTYPE_GAMELAYER_HH
 #define CPP_RTYPE_GAMELAYER_HH
 
-namespace UI {
-    class GameLayer {
+#include "ALayer.hh"
 
+namespace UI {
+    class GameLayer : public ALayer {
+    public:
+        GameLayer();
+        ~GameLayer();
     };
 }
 

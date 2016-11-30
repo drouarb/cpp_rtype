@@ -1,4 +1,6 @@
 #include <UI/Window.hh>
+#include <UI/Item.hh>
+#include <iostream>
 
 
 UI::Window::Window() {
@@ -32,10 +34,20 @@ bool UI::Window::isOpen() {
 }
 
 void UI::Window::display() {
+    /*for (auto layer : layers) {
+        for (auto item : layer->getItems()) {
+            //std::cerr << "Debug: " << (static_cast<Item*>(item)->getSprite()).getPosition().x << std::endl;
+            window->draw(static_cast<Item*>(item)->getSprite());
+        }
+    }*/
     window->display();
 }
 
 unsigned long UI::Window::addLayer(UI::layerType layer) {
     layers.push_back(layerFactory->instantiate(layer));
-    return layers.size();
+    return layers.size() - 1;
+}
+
+UI::ILayer *UI::Window::getLayer(UI::layerType layer) {
+    return layers[layer];
 }

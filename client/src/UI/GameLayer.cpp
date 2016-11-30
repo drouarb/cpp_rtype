@@ -3,3 +3,10 @@
 //
 
 #include "../../include/UI/GameLayer.hh"
+
+UI::GameLayer::GameLayer() {
+}
+
+UI::GameLayer::~GameLayer() {
+
+}

@@ -5,13 +5,12 @@
 #ifndef CPP_RTYPE_BUTTON_HH
 #define CPP_RTYPE_BUTTON_HH
 
-#include "AItem.hh"
+#include "Item.hh"
 
 namespace UI {
-    class Button : public AItem {
+    class Button : public Item {
     public:
         Button();
-
         void onHover();
     };
 }

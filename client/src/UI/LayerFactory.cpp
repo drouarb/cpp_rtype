@@ -3,6 +3,7 @@
 //
 
 #include <UI/UIManager.hh>
+#include <UI/GameLayer.hh>
 #include "../../include/UI/LayerFactory.hh"
 
 const std::map<UI::layerType, UI::LayerFactory::instantiateLayer> UI::LayerFactory::layerMap = {
@@ -21,19 +22,19 @@ UI::LayerFactory::~LayerFactory() {
 }
 
 UI::ILayer *UI::LayerFactory::instantiateMenu() {
-    return nullptr;
+    return static_cast<ILayer*>(new GameLayer());
 }
 
 UI::ILayer *UI::LayerFactory::instantiateHUD() {
-    return nullptr;
+    return static_cast<ILayer*>(new GameLayer());
 }
 
 UI::ILayer *UI::LayerFactory::instantiateGame() {
-    return nullptr;
+    return static_cast<ILayer*>(new GameLayer());
 }
 
 UI::ILayer *UI::LayerFactory::instantiateBackground() {
-    return nullptr;
+    return static_cast<ILayer*>(new GameLayer());
 }
 
 UI::ILayer *UI::LayerFactory::instantiate(UI::layerType type) {
