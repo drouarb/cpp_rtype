@@ -40,8 +40,6 @@ void UI::Window::display() {
     for (auto layer : layers) {
         for (auto item : layer->getItems()) {
             //std::cerr << "Debug: " << (static_cast<Item*>(item)->getSprite()).getPosition().x << std::endl;
-//            Item* item2 = dynamic_cast<Item*>(item);
- //           item2->getSprite();
             window->draw(dynamic_cast<Item*>(item)->getSprite());
         }
     }
