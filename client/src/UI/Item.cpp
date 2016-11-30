@@ -10,10 +10,11 @@ UI::Item::Item() : sprite() {
 }
 
 void UI::Item::setImage(std::string filename) {
-    sf::Texture texture;
+    name = filename;
     if (!texture.loadFromFile(filename)) {
-        sprite.setTexture(texture);
         std::cerr << "Failed to load : " << filename << std::endl; // essayer de charger un placeholder à la place
+    } else {
+    sprite.setTexture(texture);
     }
 }
 
@@ -22,5 +23,7 @@ void UI::Item::setPosition(unsigned int x, unsigned int y) {
 }
 
 sf::Sprite UI::Item::getSprite() {
+    //std::cerr << name << std::endl;
+    //std::cerr << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
     return sprite;
 }

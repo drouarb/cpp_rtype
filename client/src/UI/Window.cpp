@@ -8,6 +8,7 @@ UI::Window::Window() {
     length = 800;
     width = 600;
     name = "rtype";
+    window = new sf::RenderWindow(sf::VideoMode(length, width, 32), name);
 }
 
 UI::Window::~Window() {
@@ -26,7 +27,9 @@ void UI::Window::setName(std::string name) {
 }
 
 void UI::Window::render() {
-    window = new sf::RenderWindow(sf::VideoMode(length, width), name);
+    window->create(sf::VideoMode(length, width, 32), name);
+    window->setFramerateLimit(60);
+    //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;
 }
 
 bool UI::Window::isOpen() {
@@ -34,13 +37,15 @@ bool UI::Window::isOpen() {
 }
 
 void UI::Window::display() {
-    /*for (auto layer : layers) {
+    for (auto layer : layers) {
         for (auto item : layer->getItems()) {
             //std::cerr << "Debug: " << (static_cast<Item*>(item)->getSprite()).getPosition().x << std::endl;
-            window->draw(static_cast<Item*>(item)->getSprite());
+//            Item* item2 = dynamic_cast<Item*>(item);
+ //           item2->getSprite();
+            window->draw(dynamic_cast<Item*>(item)->getSprite());
         }
-    }*/
-    window->display();
+    }
+    //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;
 }
 
 unsigned long UI::Window::addLayer(UI::layerType layer) {

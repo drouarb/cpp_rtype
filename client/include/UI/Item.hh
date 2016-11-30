@@ -19,6 +19,8 @@ namespace UI {
 
     private:
         sf::Sprite sprite;
+        sf::Texture texture;
+        std::string name;
     };
 }
 

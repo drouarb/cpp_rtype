@@ -9,7 +9,7 @@
 namespace UI {
 
     enum windowType {
-        MAIN_WINDOW
+        MAIN_WINDOW = 0
     };
 
     class IWindow {

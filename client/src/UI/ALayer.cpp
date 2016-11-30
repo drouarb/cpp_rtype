@@ -21,6 +21,6 @@ std::vector<UI::AItem*> UI::ALayer::getItems() {
 
 unsigned long UI::ALayer::addItem(UI::itemType type, std::string sprite, int posX, int posY) {
     AItem* item = itemFactory->instantiate(type);
-    items.push_back(itemFactory->instantiate(type));
+    items.push_back(item);
     return items.size() - 1;
 }

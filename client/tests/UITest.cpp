@@ -17,7 +17,7 @@ int main()
 
 
     /* TEST BASIC SANS ABSTRACTION ********************
-    sf::RenderWindow app(sf::VideoMode(800,600,32), "mdr");
+    sf::RenderWindow* app = new sf::RenderWindow(sf::VideoMode(800,600,32), "mdr");
     sf::Texture texture;
     sf::Sprite sprite;
 
@@ -32,27 +32,26 @@ int main()
         sprite.setTexture(texture);
     }
     sprite.setPosition(250,250);
-    while (app.isOpen()) {
-        app.draw(sprite);
-        app.display();
+    while (app->isOpen()) {
+        app->draw(sprite);
+        app->display();
     }*/
 
-
-    UI::UIManager *ui = new UI::UIManager();
+    /* TEST CLASSIQUE SANS ABSTRACTION *********************/
+    UI::UIManager* ui = new UI::UIManager();
     unsigned long item;
-    std::string filename("/home/jonas_e/Desktop/ALL_GONE.jpg");
-    sf::Sprite sprite; //peut �tre une partie d'image
+   std::string filename("/home/jonas_e/Desktop/ALL_GONE.jpg");
+//    sf::Sprite sprite; //peut �tre une partie d'image
 
         ui->init();
         //layer = ui->getWindow(UI::MAIN_WINDOW)->addLayer(UI::GAME);
-        /*ui->addItemToLayer(UI::BUTTON, "/home/jonas_e/Desktop/ALL_GONE.jpg", 250, 250, UI::GAME);
         ui->getAudioManager()->playMusic("/home/jonas_e/Work/Epitech/rtype/media/musics/Lady_Crimson.ogg");
         ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
         ui->getWindow(UI::MAIN_WINDOW);
         ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME);
         item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Desktop/ALL_GONE.jpg", 250, 250);
         ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->setImage("/home/jonas_e/Desktop/ALL_GONE.jpg");
-        ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->setPosition(250, 250);*/
+        ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->setPosition(250, 250);
         //ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->addAnimation(UI::IDLE, std::vector<std::pair<unsigned int, std::string> {0, "/home/jonas_e/Desktop/ALL_GONE.jpg"}>);
         UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);
         while (window->isOpen()) {

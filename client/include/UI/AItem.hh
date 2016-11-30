@@ -32,7 +32,7 @@ namespace UI {
         void playAnimation(animationType animation);
 
     private:
-        std::map<UI::animationType, Animation> sprites; //changer unsigned int dans un type plus générique ?
+        //std::map<UI::animationType, Animation> sprites; //changer unsigned int dans un type plus générique ?
 
 
         //sf::Sprite createSprite(const std::string filename, unsigned long part);
