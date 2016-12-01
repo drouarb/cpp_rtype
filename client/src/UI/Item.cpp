@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include <SFML/Graphics/Texture.hpp>
 #include "../../include/UI/Item.hh"
 
 UI::Item::Item() /*: sprite()*/ {
