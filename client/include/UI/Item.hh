@@ -13,6 +13,7 @@ namespace UI {
     class Item : public AItem {
     public:
         Item();
+        virtual ~Item();
         void setImage(std::string filename);
         void setPosition(unsigned int posX, unsigned int posY);
         sf::Sprite getSprite();

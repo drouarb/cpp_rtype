@@ -24,7 +24,7 @@ namespace UI {
     class AItem {
     public:
         AItem();
-        ~AItem();
+        virtual ~AItem();
 
         virtual void setImage(std::string filename) = 0;
         virtual void setPosition(unsigned int posX, unsigned int posY) = 0;

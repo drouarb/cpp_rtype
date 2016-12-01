@@ -43,6 +43,7 @@ void UI::Window::display() {
             window->draw(dynamic_cast<Item*>(item)->getSprite());
         }
     }
+    window->display();
     //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;
 }
 

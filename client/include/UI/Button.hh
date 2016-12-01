@@ -11,6 +11,7 @@ namespace UI {
     class Button : public Item {
     public:
         Button();
+        ~Button();
         void onHover();
     };
 }

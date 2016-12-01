@@ -6,7 +6,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include "../../include/UI/Item.hh"
 
-UI::Item::Item() : sprite() {
+UI::Item::Item() /*: sprite()*/ {
 }
 
 void UI::Item::setImage(std::string filename) {
@@ -26,4 +26,8 @@ sf::Sprite UI::Item::getSprite() {
     //std::cerr << name << std::endl;
     //std::cerr << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
     return sprite;
+}
+
+UI::Item::~Item() {
+
 }
