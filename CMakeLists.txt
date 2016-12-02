@@ -16,3 +16,6 @@ add_subdirectory(client)
 
 set(SERVER_TESTS ${RTYPE_TESTS})
 add_subdirectory(server)
+
+set(ENTITIES_TESTS ${RTYPE_TESTS})
+add_subdirectory(Entities)
