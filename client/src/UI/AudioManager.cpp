@@ -35,7 +35,7 @@ void UI::AudioManager::addMusic(int playlistID) {
 }
 
 void UI::AudioManager::setVolume(int newVolume) {
-    volume = newVolume;
+    volume = newVolume > 100 ? 100 : newVolume < 0 ? 0 : newVolume;
     if (music.getStatus() == sf::SoundSource::Status::Playing)
         music.setVolume(newVolume);
 }

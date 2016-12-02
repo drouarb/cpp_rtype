@@ -22,6 +22,7 @@ namespace UI {
         void display();
         unsigned long addLayer(UI::layerType layer);
         ILayer* getLayer(UI::layerType layer);
+        sf::RenderWindow *getWindow();
 
     private:
         sf::RenderWindow *window;

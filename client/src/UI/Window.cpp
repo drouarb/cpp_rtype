@@ -40,7 +40,7 @@ void UI::Window::display() {
     for (auto layer : layers) {
         for (auto item : layer->getItems()) {
             //std::cerr << "Debug: " << (static_cast<Item*>(item)->getSprite()).getPosition().x << std::endl;
-            window->draw(dynamic_cast<Item*>(item)->getSprite());
+            window->draw(static_cast<Item*>(item)->getSprite());
         }
     }
     window->display();
@@ -54,4 +54,8 @@ unsigned long UI::Window::addLayer(UI::layerType layer) {
 
 UI::ILayer *UI::Window::getLayer(UI::layerType layer) {
     return layers[layer];
+}
+
+sf::RenderWindow *UI::Window::getWindow() {
+    return window;
 }
