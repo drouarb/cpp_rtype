@@ -4,8 +4,8 @@
 
 #include "listener/ClientListenerCancelEvent.hh"
 
-
-ClientListenerCancelEvent::ClientListenerCancelEvent(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::CANCEL_EVENT)
+using namespace client;
+ClientListenerCancelEvent::ClientListenerCancelEvent(client::IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::CANCEL_EVENT)
 {
 
 }

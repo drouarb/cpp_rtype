@@ -8,16 +8,19 @@
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketEventError.hh"
 #include "IGameClient.hh"
-class ClientListenerEventError : public network::ListenerTemplate<network::packet::PacketEventError, network::packet::EVENT_ERROR>
-{
-    class IGameClient;
-public:
-    ClientListenerEventError(IGameClient *gameClient);
-    ~ClientListenerEventError();
-    void notify(const network::packet::PacketEventError * packet);
+namespace client {
+    class ClientListenerEventError
+            : public network::ListenerTemplate<network::packet::PacketEventError, network::packet::EVENT_ERROR> {
 
-private:
-    IGameClient *gameclient;
-};
+    public:
+        ClientListenerEventError(IGameClient *gameClient);
 
+        ~ClientListenerEventError();
+
+        void notify(const network::packet::PacketEventError *packet);
+
+    private:
+        IGameClient *gameclient;
+    };
+}
 #endif //CPP_RTYPE_CLIENTLISTENEREVENTERROR_HH

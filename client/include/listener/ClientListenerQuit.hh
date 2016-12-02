@@ -8,17 +8,20 @@
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketQuit.hh"
 #include "IGameClient.hh"
-class ClientListenerQuit : public network::ListenerTemplate<network::packet::PacketQuit, network::packet::QUIT>
-{
-    class IGameClient;
-public:
-    ClientListenerQuit(IGameClient *gameClient);
-    ~ClientListenerQuit();
-    void notify(const network::packet::PacketQuit * packet);
+namespace client {
+    class ClientListenerQuit : public network::ListenerTemplate<network::packet::PacketQuit, network::packet::QUIT> {
 
-private:
-    IGameClient *gameclient;
-};
+    public:
+        ClientListenerQuit(IGameClient *gameClient);
+
+        ~ClientListenerQuit();
+
+        void notify(const network::packet::PacketQuit *packet);
+
+    private:
+        IGameClient *gameclient;
+    };
+}
 
 
 #endif //CPP_RTYPE_CLIENTLISTENERQUIT_HH

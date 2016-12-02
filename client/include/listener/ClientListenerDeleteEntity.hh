@@ -8,17 +8,20 @@
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketDeleteEntity.hh"
 #include "IGameClient.hh"
-class ClientListenerDeleteEntity : public network::ListenerTemplate<network::packet::PacketDeleteEntity, network::packet::DELETE_ENTITY>
-{
-    class IGameClient;
-public:
-    ClientListenerDeleteEntity(IGameClient *gameClient);
-    ~ClientListenerDeleteEntity();
-    void notify(const network::packet::PacketDeleteEntity * packet);
+namespace client {
+    class ClientListenerDeleteEntity
+            : public network::ListenerTemplate<network::packet::PacketDeleteEntity, network::packet::DELETE_ENTITY> {
 
-private:
-    IGameClient *gameclient;
-};
+    public:
+        ClientListenerDeleteEntity(IGameClient *gameClient);
 
+        ~ClientListenerDeleteEntity();
+
+        void notify(const network::packet::PacketDeleteEntity *packet);
+
+    private:
+        IGameClient *gameclient;
+    };
+}
 
 #endif //CPP_RTYPE_CLIENTLISTENERDELETEENTITY_HH

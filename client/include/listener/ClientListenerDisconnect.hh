@@ -9,10 +9,9 @@
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketDisconnect.hh"
 #include "IGameClient.hh"
-
+namespace client {
 class ClientListenerDisconnect : public network::ListenerTemplate<network::packet::PacketDisconnect, network::packet::DISCONNECT>
 {
-    class IGameClient;
 public:
     ClientListenerDisconnect(IGameClient *gameClient);
     ~ClientListenerDisconnect();
@@ -21,5 +20,6 @@ public:
 private:
     IGameClient *gameclient;
 };
+}
 
 #endif //CPP_RTYPE_CLIENTLISTENERDISCONNECT_HH

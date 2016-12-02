@@ -4,7 +4,7 @@
 
 #include "listener/ClientListenerUpdateEntity.hh"
 
-
+using namespace client;
 ClientListenerUpdateEntity::ClientListenerUpdateEntity(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::UPDATE_ENTITY)
 {
 

@@ -4,6 +4,7 @@
 
 
 #include "listener/ClientListenerMoveEntity.hh"
+using namespace client;
 ClientListenerMoveEntity::ClientListenerMoveEntity(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::MOVE_ENTITY)
 {
 

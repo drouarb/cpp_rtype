@@ -3,6 +3,7 @@
 //
 
 #include "listener/ClientListenerSpawnEntity.hh"
+using namespace client;
 ClientListenerSpawnEntity::ClientListenerSpawnEntity(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::SPAWN_ENTITY)
 {
 

@@ -8,18 +8,19 @@
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketPong.hh"
 #include "IGameClient.hh"
+namespace client {
+    class ClientListenerPong : public network::ListenerTemplate<network::packet::PacketPong, network::packet::PONG> {
+    public:
+        ClientListenerPong(IGameClient *gameClient);
 
-class ClientListenerPong : public network::ListenerTemplate<network::packet::PacketPong, network::packet::PONG>
-{
-    class IGameClient;
-public:
-    ClientListenerPong(IGameClient *gameClient);
-    ~ClientListenerPong();
-    void notify(const network::packet::PacketPong * packet);
+        ~ClientListenerPong();
 
-private:
-    IGameClient *gameclient;
-};
+        void notify(const network::packet::PacketPong *packet);
+
+    private:
+        IGameClient *gameclient;
+    };
+}
 
 
 #endif //CPP_RTYPE_CLIENTLISTERNERPONG_HH
