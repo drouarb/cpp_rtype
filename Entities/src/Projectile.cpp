@@ -17,3 +17,5 @@ void Projectile::collide(Server::IEntity *) {
 Server::EntityAction *Projectile::nextAction() {
     return nullptr;
 }
+
+ENTRY_POINTS(Projectile);

@@ -13,3 +13,5 @@ void PowerUp::collide(Server::IEntity *) {
 Server::EntityAction *PowerUp::nextAction() {
     return nullptr;
 }
+
+ENTRY_POINTS(PowerUp);

@@ -13,3 +13,5 @@ void Obstacle::collide(Server::IEntity *) {
 Server::EntityAction *Obstacle::nextAction() {
     return nullptr;
 }
+
+ENTRY_POINTS(Obstacle);
