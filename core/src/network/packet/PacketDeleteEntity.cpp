@@ -33,7 +33,7 @@ uint32_t network::packet::PacketDeleteEntity::getTick() const
     return GET_NETINT(schema, 0);
 }
 
-void network::packet::PacketDeleteEntity::setEventId(uint16_t id)
+void network::packet::PacketDeleteEntity::setEventId(uint32_t id)
 {
     SET_NETINT(schema, 1, id);
 }

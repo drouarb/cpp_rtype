@@ -11,11 +11,12 @@
 namespace network {
  namespace packet {
      class PacketDeleteEntity : public APacket {
+     public:
         virtual ~PacketDeleteEntity();
         PacketDeleteEntity(uint32_t tick = 0,uint32_t eventId = 0, uint16_t entityId = 0);
          void setTick(uint32_t tick);
          uint32_t getTick() const;
-         void setEventId(uint16_t id);
+         void setEventId(uint32_t id);
          uint16_t getEventId() const;
          void setEntityId(uint16_t entityId);
          uint16_t getEntityId() const;
