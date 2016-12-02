@@ -3,9 +3,18 @@
 //
 
 #include <BasicEntity.hh>
+#include <cassert>
+#include <iostream>
+
 
 int main()
 {
-    BasicEntity *basicEntity = new BasicEntity(42);
+    std::cout << "TEST" << std::endl;
+
+    Server::IEntity *pEntity = create_entity(43);
+/*
+    BasicEntity *basicEntity = dynamic_cast<BasicEntity *>(pEntity);
+    assert(basicEntity != nullptr);
+    */
     return 0;
 }

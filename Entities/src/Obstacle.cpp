@@ -2,7 +2,7 @@
 // Created by greg on 02/12/2016.
 //
 
-#include "ObstacleTest.hh"
+#include "Obstacle.hh"
 
 Obstacle::Obstacle(const Server::EntityId entityId) : AEntity(entityId, "") {}
 

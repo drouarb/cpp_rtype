@@ -16,4 +16,6 @@ public:
     virtual Server::EntityAction *nextAction() final;
 };
 
+
+
 #endif //CPP_RTYPE_BASICENTITY_HH

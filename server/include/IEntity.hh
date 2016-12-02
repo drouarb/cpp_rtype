@@ -15,6 +15,7 @@
     Server::IEntity *create_entity(uint16_t entityId) { return new className(entityId); } \
     }
 
+
 namespace Server {
 
     /** \interface IEntity
