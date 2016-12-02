@@ -9,17 +9,20 @@
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketSynAck.hh"
 #include "IGameClient.hh"
-class ClientListenerSynAck : public network::ListenerTemplate<network::packet::PacketSynAck, network::packet::SYN_ACK>
-{
-    class IGameClient;
-public:
-    ClientListenerSynAck(IGameClient *gameClient);
-    ~ClientListenerSynAck();
-    void notify(const network::packet::PacketSynAck * packet);
+namespace client {
+    class ClientListenerSynAck
+            : public network::ListenerTemplate<network::packet::PacketSynAck, network::packet::SYN_ACK> {
 
-private:
-    IGameClient *gameclient;
-};
+    public:
+        ClientListenerSynAck(IGameClient *gameClient);
 
+        ~ClientListenerSynAck();
 
+        void notify(const network::packet::PacketSynAck *packet);
+
+    private:
+        IGameClient *gameclient;
+    };
+
+}
 #endif //CPP_RTYPE_CLIENTLISTENERSYNACK_HH

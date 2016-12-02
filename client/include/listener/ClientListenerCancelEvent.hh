@@ -9,17 +9,20 @@
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketCancelEvent.hh"
 #include "IGameClient.hh"
-class ClientListenerCancelEvent : public network::ListenerTemplate<network::packet::PacketCancelEvent, network::packet::CANCEL_EVENT>
-{
-    class IGameClient;
-public:
-    ClientListenerCancelEvent(IGameClient *gameClient);
-    ~ClientListenerCancelEvent();
-    void notify(const network::packet::PacketCancelEvent * packet);
+namespace client {
+    class ClientListenerCancelEvent
+            : public network::ListenerTemplate<network::packet::PacketCancelEvent, network::packet::CANCEL_EVENT> {
 
-private:
-    IGameClient *gameclient;
-};
+    public:
+        ClientListenerCancelEvent(IGameClient *gameClient);
 
+        ~ClientListenerCancelEvent();
 
+        void notify(const network::packet::PacketCancelEvent *packet);
+
+    private:
+        IGameClient *gameclient;
+    };
+
+}
 #endif //CPP_RTYPE_CLIENTLISTENERCANCELEVENT_HH

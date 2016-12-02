@@ -9,17 +9,20 @@
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketMoveEntity.hh"
 #include "IGameClient.hh"
-class ClientListenerMoveEntity : public network::ListenerTemplate<network::packet::PacketMoveEntity, network::packet::MOVE_ENTITY>
-{
-    class IGameClient;
-public:
-    ClientListenerMoveEntity(IGameClient *gameClient);
-    ~ClientListenerMoveEntity();
-    void notify(const network::packet::PacketMoveEntity * packet);
+namespace client {
+    class ClientListenerMoveEntity
+            : public network::ListenerTemplate<network::packet::PacketMoveEntity, network::packet::MOVE_ENTITY> {
 
-private:
-    IGameClient *gameclient;
-};
+    public:
+        ClientListenerMoveEntity(IGameClient *gameClient);
 
+        ~ClientListenerMoveEntity();
+
+        void notify(const network::packet::PacketMoveEntity *packet);
+
+    private:
+        IGameClient *gameclient;
+    };
+}
 
 #endif //CPP_RTYPE_CLIENTLISTENERMOVEENTITY_HH

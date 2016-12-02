@@ -3,7 +3,7 @@
 //
 
 #include "listener/ClientListenerSynAck.hh"
-
+using namespace client;
 ClientListenerSynAck::ClientListenerSynAck(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::SYN_ACK)
 {
 

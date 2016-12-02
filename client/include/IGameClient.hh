@@ -6,9 +6,11 @@
 #define CPP_RTYPE_IGAMECLIENT_HH
 
 
-class IGameClient {
+namespace client {
 
-};
+    class IGameClient {
 
+    };
+}
 
 #endif //CPP_RTYPE_IGAMECLIENT_HH

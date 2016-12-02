@@ -4,7 +4,7 @@
 
 #include "listener/ClientListenerEventError.hh"
 
-
+using namespace client;
 ClientListenerEventError::ClientListenerEventError(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::EVENT_ERROR)
 {
 
