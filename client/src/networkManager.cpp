@@ -75,5 +75,3 @@ void networkManager::addListenerToPacketFactory(client::IGameClient *gameclient)
     for (auto it = listeners.begin(); it != listeners.end(); it++)
         packetFactory->registerListener(*it);
 }
-
-²
