@@ -8,7 +8,7 @@
 
 #include <AEntity.hh>
 
-class Obstacle : Server::AEntity {
+class Obstacle : public Server::AEntity {
 public:
     Obstacle(const Server::EntityId entityId);
 
