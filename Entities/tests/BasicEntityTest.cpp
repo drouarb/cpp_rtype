@@ -12,9 +12,7 @@ int main()
     std::cout << "TEST" << std::endl;
 
     Server::IEntity *pEntity = create_entity(43);
-/*
     BasicEntity *basicEntity = dynamic_cast<BasicEntity *>(pEntity);
     assert(basicEntity != nullptr);
-    */
     return 0;
 }
