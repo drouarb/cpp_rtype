@@ -10,12 +10,15 @@
 #include <cstdbool>
 #include "IEntity.hh"
 
+extern "C" {
+    Server::IEntity *create_entity(uint16_t entityId);
+};
 namespace Server {
 
     typedef uint16_t EntityId;
     typedef int8_t TeamId;
 
-    class AEntity : public  IEntity {
+    class AEntity : public IEntity {
     private:
         const EntityId entityId;
     public:

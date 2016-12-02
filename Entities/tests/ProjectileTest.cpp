@@ -3,9 +3,13 @@
 //
 
 #include <Projectile.hh>
+#include <cassert>
 
 int main()
 {
-    Projectile *projectile = new Projectile(42);
+    Server::IEntity *pEntity = create_entity(43);
+    Projectile *projectile = dynamic_cast<Projectile *>(pEntity);
+    assert(projectile != nullptr);
+
     return 0;
 }

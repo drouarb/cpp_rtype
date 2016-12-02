@@ -3,9 +3,13 @@
 //
 
 #include <PowerUp.hh>
+#include <cassert>
+
 
 int main()
 {
-    PowerUp *powerUp = new PowerUp(42);
+    Server::IEntity *pEntity = create_entity(43);
+    PowerUp *powerUp = dynamic_cast<PowerUp *>(pEntity);
+    assert(powerUp != nullptr);
     return 0;
 }
