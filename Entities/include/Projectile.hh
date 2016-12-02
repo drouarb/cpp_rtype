@@ -17,6 +17,10 @@ public:
     Projectile(const Server::EntityId entityId);
 
     damagePoint_t getDamage();
+    void collide(Server::IEntity *);
+
+    Server::EntityAction *nextAction();
+
 };
 
 

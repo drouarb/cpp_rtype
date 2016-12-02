@@ -9,3 +9,11 @@ Projectile::Projectile(const Server::EntityId entityId) : IDamager(entityId, "")
 IDamager::damagePoint_t Projectile::getDamage() {
     return this->damage;
 }
+
+void Projectile::collide(Server::IEntity *) {
+
+}
+
+Server::EntityAction *Projectile::nextAction() {
+    return nullptr;
+}
