@@ -6,6 +6,24 @@ file(
         GLOB_RECURSE
         CORE_TESTS_SOURCES
         network/packet/PacketTest.cpp
+        network/packet/testPacketAck.cpp
+        network/packet/testPacketPing.cpp
+        network/packet/testPacketDeleteEntity.cpp
+        network/packet/testPacketErrorGame.cpp
+        network/packet/testPacketErrorHandShake.cpp
+        network/packet/testPacketErrorList.cpp
+        network/packet/testPacketErrorScore.cpp
+        network/packet/testPacketGameJoin.cpp
+        network/packet/testPacketGameList.cpp
+        network/packet/testPacketPong.cpp
+        network/packet/testPacketCancelEvent.cpp
+        network/packet/testPacketEventError.cpp
+        network/packet/testPacketLeaderBoard.cpp
+        network/packet/testPacketMoveEntity.cpp
+        network/packet/testPacketPlayerAttack.cpp
+        network/packet/testPacketPlayerMove.cpp
+        network/packet/testPacketPlaySound.cpp
+
 )
 
 foreach(test ${CORE_TESTS_SOURCES})

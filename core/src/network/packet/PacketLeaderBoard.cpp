@@ -9,7 +9,7 @@ network::packet::PacketLeaderBoard::PacketLeaderBoard(std::vector<std::pair<uint
                 LEADER_BOARD,
                 {
                         new utils::NetworkVector(2, {
-                                new utils::NetworkInteger(1),
+                                new utils::NetworkInteger(4),
                                 new utils::NetworkString
                         })
                 }

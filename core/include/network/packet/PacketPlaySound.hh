@@ -11,6 +11,7 @@
 namespace network {
     namespace packet {
         class PacketPlaySound : public APacket {
+        public:
             virtual ~PacketPlaySound();
             PacketPlaySound(uint32_t tick = 0,uint32_t eventId = 0, uint16_t SoundName = 0);
             void setTick(uint32_t tick);
