@@ -11,6 +11,7 @@
 namespace network {
     namespace packet {
         class PacketMoveEntity : public APacket {
+        public:
             virtual ~PacketMoveEntity();
             PacketMoveEntity(uint32_t tick = 0,uint32_t eventId = 0, uint16_t entityId = 0, uint16_t vecx = 0, uint16_t vecy = 0);
             void setTick(uint32_t tick);
