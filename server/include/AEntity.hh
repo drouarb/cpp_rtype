@@ -22,9 +22,10 @@ namespace Server {
     private:
         const EntityId entityId;
     public:
+        typedef uint32_t damagePoint_t;
         AEntity(const EntityId entityId, const std::string &sprite);
 
-    private:
+    protected:
         const std::string sprite;
         uint16_t posX;
         uint16_t posY;

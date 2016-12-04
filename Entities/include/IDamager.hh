@@ -10,7 +10,6 @@
 class IDamager : public Server::AEntity {
 
 public:
-    typedef uint32_t damagePoint_t;
 
 
     IDamager(const Server::EntityId entityId, const std::string &sprite) : AEntity(entityId, sprite) {}
