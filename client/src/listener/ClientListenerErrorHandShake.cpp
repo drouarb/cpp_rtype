@@ -6,7 +6,7 @@
 
 
 using namespace client;
-ClientListenerErrorHandShake::ClientListenerErrorHandShake(client::IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::ERROR_HANDSHAKE)
+ClientListenerErrorHandShake::ClientListenerErrorHandShake(client::GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::ERROR_HANDSHAKE)
 {
 
 }
@@ -18,5 +18,5 @@ ClientListenerErrorHandShake::~ClientListenerErrorHandShake()
 
 void ClientListenerErrorHandShake::notify(const network::packet::PacketErrorHandshake *packet)
 {
-
+    gameclient->HandshakeErroFromServer(packet->getMessage());
 }

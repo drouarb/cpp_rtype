@@ -8,20 +8,20 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketSynAck.hh"
-#include "IGameClient.hh"
+#include "GameClient.hh"
 namespace client {
     class ClientListenerSynAck
             : public network::ListenerTemplate<network::packet::PacketSynAck, network::packet::SYN_ACK> {
 
     public:
-        ClientListenerSynAck(IGameClient *gameClient);
+        ClientListenerSynAck(GameClient *gameClient);
 
         ~ClientListenerSynAck();
 
         void notify(const network::packet::PacketSynAck *packet);
 
     private:
-        IGameClient *gameclient;
+        GameClient *gameclient;
     };
 
 }
