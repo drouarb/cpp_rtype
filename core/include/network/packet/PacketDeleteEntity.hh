@@ -17,7 +17,7 @@ namespace network {
          void setTick(uint32_t tick);
          uint32_t getTick() const;
          void setEventId(uint32_t id);
-         uint16_t getEventId() const;
+         uint32_t getEventId() const;
          void setEntityId(uint16_t entityId);
          uint16_t getEntityId() const;
      };

@@ -14,6 +14,7 @@ void testPacketErrorGame()
     pong->serialize(&data);
     network::packet::PacketErrorGame *pong2 = new network::packet::PacketErrorGame();
     pong2->deserialize(&data);
+    assert(pong->getMessage().compare("toto") == 0);
     assert(pong->getMessage().compare(pong2->getMessage()) == 0);
     std::cout << "SUCCESS getMessage()" << std::endl;
     std::cout << "DONE" << std::endl;
