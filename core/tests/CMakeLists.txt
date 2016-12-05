@@ -23,6 +23,11 @@ file(
         network/packet/testPacketPlayerAttack.cpp
         network/packet/testPacketPlayerMove.cpp
         network/packet/testPacketPlaySound.cpp
+        network/packet/testPacketRegister.cpp
+        network/packet/testPacketSpawnEntity.cpp
+        network/packet/testPacketSyn.cpp
+        network/packet/testPacketSynAck.cpp
+        network/packet/testPacketUpdateEntity.cpp
 
 )
 

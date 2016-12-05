@@ -14,6 +14,7 @@ void testPacketJoin()
     ack->serialize(&data);
     PacketJoin *ack2 = new PacketJoin();
     ack2->deserialize(&data);
+    assert(ack->getJoin() == UINT8_MAX);
     assert(ack->getJoin() == ack2->getJoin());
     std::cout << "SUCCESS getJoin()" << std::endl;
     std::cout << "DONE" << std::endl;

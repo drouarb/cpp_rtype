@@ -14,6 +14,7 @@ void testPacketEventError()
     ping->serialize(&data);
     network::packet::PacketEventError *ping2 = new network::packet::PacketEventError();
     ping2->deserialize(&data);
+    assert(ping->getMessage().compare("toto") == 0);
     assert(ping->getMessage().compare(ping2->getMessage()) == 0);
     std::cout << "SUCCESS getMessage()" << std::endl;
     std::cout << "DONE" << std::endl;

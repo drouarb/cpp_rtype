@@ -33,12 +33,12 @@ uint32_t network::packet::PacketUpdateEntity::getTick() const
     return GET_NETINT(schema, 0);
 }
 
-void network::packet::PacketUpdateEntity::setEventId(uint16_t id)
+void network::packet::PacketUpdateEntity::setEventId(uint32_t id)
 {
     SET_NETINT(schema, 1, id);
 }
 
-uint16_t network::packet::PacketUpdateEntity::getEventId() const
+uint32_t network::packet::PacketUpdateEntity::getEventId() const
 {
     return GET_NETINT(schema, 1);
 }

@@ -1,21 +1,20 @@
 //
-// Created by celeriy on 03/12/16.
+// Created by celeriy on 05/12/16.
 //
 
-#include "network/packet/PacketMoveEntity.cpp"
+#include "network/packet/PacketUpdateEntity.cpp"
 #include <iostream>
 #include <assert.h>
 
 using namespace network;
 using namespace packet;
 
-void testPacketMoveEntity()
-{
-    std::cout << "====Packet Move Entity Test====" << std::endl;
+void testUpdateEntity()
+{    std::cout << "====Packet Move Entity Test====" << std::endl;
     t_rawdata data;
-    PacketMoveEntity *ack = new PacketMoveEntity(UINT32_MAX, UINT32_MAX, UINT16_MAX, UINT16_MAX , UINT16_MAX);
+    PacketUpdateEntity *ack = new PacketUpdateEntity(UINT32_MAX, UINT32_MAX, UINT16_MAX , UINT16_MAX);
     ack->serialize(&data);
-    PacketMoveEntity *ack2 = new PacketMoveEntity();
+    PacketUpdateEntity *ack2 = new PacketUpdateEntity();
     ack2->deserialize(&data);
     assert(ack->getTick() == UINT32_MAX);
     assert(ack->getTick() == ack2->getTick());
@@ -26,16 +25,14 @@ void testPacketMoveEntity()
     assert(ack->getEventId() == UINT32_MAX);
     assert(ack->getEventId() == ack2->getEventId());
     std::cout << "SUCCESS getEventId()" << std::endl;
-    assert(ack->getVecX() == UINT16_MAX);
-    assert(ack->getVecX() == ack2->getVecX());
-    std::cout << "SUCCESS getTVecX()" << std::endl;
-    assert(ack->getVecY() == UINT16_MAX);
-    assert(ack->getVecY() == ack2->getVecY());
-    std::cout << "SUCCESS getVeccY()" << std::endl;
+    assert(ack->getHp() == UINT16_MAX);
+    assert(ack->getHp() == ack2->getHp());
+    std::cout << "SUCCESS getHp()" << std::endl;
     std::cout << "DONE" << std::endl;
 }
+
 int main()
 {
-    testPacketMoveEntity();
+    testUpdateEntity();
     return (0);
 }

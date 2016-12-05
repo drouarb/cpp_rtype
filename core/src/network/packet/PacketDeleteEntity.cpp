@@ -38,7 +38,7 @@ void network::packet::PacketDeleteEntity::setEventId(uint32_t id)
     SET_NETINT(schema, 1, id);
 }
 
-uint16_t network::packet::PacketDeleteEntity::getEventId() const
+uint32_t network::packet::PacketDeleteEntity::getEventId() const
 {
     return GET_NETINT(schema, 1);
 }
