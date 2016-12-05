@@ -7,6 +7,7 @@ file(
         GLOB_RECURSE
         CORE_SRCS
         src/*.cpp
+        src/listener/*.cpp
         include/*.hh
         include/*.hpp
 )
