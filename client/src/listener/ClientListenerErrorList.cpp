@@ -4,7 +4,7 @@
 
 #include "listener/ClientListenerErrorList.hh"
 using namespace client;
-ClientListenerErrorList::ClientListenerErrorList(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::ERROR_LIST)
+ClientListenerErrorList::ClientListenerErrorList(GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::ERROR_LIST)
 {
 
 }

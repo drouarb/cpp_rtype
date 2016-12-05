@@ -18,8 +18,8 @@ include_directories(${SFML_INCLUDE_DIR})
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${CLIENT_SRCS})
-target_link_libraries(${PROJECT_NAME} protoboeuf)
 target_link_libraries(${PROJECT_NAME} rtype_core)
+target_link_libraries(${PROJECT_NAME} protoboeuf)
 target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES})
 
 if (CLIENT_TESTS)

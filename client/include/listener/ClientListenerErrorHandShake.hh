@@ -7,21 +7,21 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketErrorHandshake.hh"
-#include "IGameClient.hh"
+#include "GameClient.hh"
 
 namespace client {
     class ClientListenerErrorHandShake
             : public network::ListenerTemplate<network::packet::PacketErrorHandshake, network::packet::ERROR_HANDSHAKE> {
 
     public:
-        ClientListenerErrorHandShake(IGameClient *gameClient);
+        ClientListenerErrorHandShake(GameClient *gameClient);
 
         ~ClientListenerErrorHandShake();
 
         void notify(const network::packet::PacketErrorHandshake *packet);
 
     private:
-        IGameClient *gameclient;
+        GameClient *gameclient;
     };
 }
 

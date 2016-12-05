@@ -5,7 +5,7 @@
 #include "listener/ClientListenerQuit.hh"
 
 using namespace client;
-ClientListenerQuit::ClientListenerQuit(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::QUIT)
+ClientListenerQuit::ClientListenerQuit(GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::QUIT)
 {
 
 }
