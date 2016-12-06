@@ -8,6 +8,8 @@
 #define DLL_EXTENSION ""
 #endif
 
+
+
 template <typename T>
 class IDlLoader
 {
