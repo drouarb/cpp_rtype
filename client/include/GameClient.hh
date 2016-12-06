@@ -16,7 +16,7 @@ namespace client {
     class GameClient {
     private:
         std::mutex client_mut;
-        std::pair<uint16_t , uint16_t>syn_ack = std::pair<uint16_t , uint16_t>(UINT16_MAX, UINT16_MAX);
+        std::pair<uint16_t , uint16_t>syn_ack;// = std::pair<uint16_t , uint16_t>(UINT16_MAX, UINT16_MAX);
         bool error_hanshake = false;
         networkManager *manager  = NULL;
     public:
