@@ -5,16 +5,13 @@
 #ifndef CPP_RTYPE_IDAMAGER_HH
 #define CPP_RTYPE_IDAMAGER_HH
 
-#include <AEntity.hh>
+#include "definitions.hh"
+#include <IEntity.hh>
 
-class IDamager : public server::AEntity {
+class IDamager {
 
 public:
-
-
-    IDamager(const server::entityId_t entityId, const std::string &sprite) : AEntity(entityId, sprite) {}
-
-    virtual damagePoint_t getDamage()= 0;
+    virtual server::damage_t getDamage()= 0;
 
 };
 

@@ -6,9 +6,9 @@
 #define CPP_RTYPE_OBSTACLE_HH
 
 
-#include <AEntity.hh>
+#include <IEntity.hh>
 
-class Obstacle : public server::AEntity {
+class Obstacle : public server::IEntity {
 public:
     Obstacle(const server::entityId_t entityId);
 

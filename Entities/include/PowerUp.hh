@@ -6,9 +6,9 @@
 #define CPP_RTYPE_POWERUP_HH
 
 
-#include <AEntity.hh>
+#include <IEntity.hh>
 
-class PowerUp : public server::AEntity {
+class PowerUp : public server::IEntity {
 public:
     PowerUp(const server::entityId_t entityId);
 

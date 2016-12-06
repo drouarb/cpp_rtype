@@ -8,16 +8,17 @@
 
 #include <IEntity.hh>
 #include "IDamager.hh"
+#include <definitions.hh>
 
-class Projectile : public IDamager, public IEntity
+class Projectile : public IDamager, public server::IEntity
 {
 private:
-    damagePoint_t damage;
+    server::damage_t damage;
     unsigned int nbHits;
 public:
     Projectile(const server::entityId_t entityId);
 
-    damagePoint_t getDamage();
+    server::damage_t getDamage();
     void collide(server::IEntity *);
 
     server::EntityAction *nextAction();
