@@ -7,12 +7,12 @@
 
 #include <string>
 #include <ostream>
-#include "AEntity.hh"
 
-namespace Server {
+namespace server {
 
     /** \struct EntityAction
-    *   \brief //TODO
+    *   \brief Actions done by the entity at a game round. Will be stored in the simulation.
+     *   Other actions (like movement and HP changing) will be done from inside the IEntity, and detected by the server automatically.
     */
 
     class IEntity;

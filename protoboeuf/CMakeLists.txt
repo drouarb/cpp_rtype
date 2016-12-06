@@ -26,7 +26,7 @@ file(
         src/network/listener/APacketListener.cpp
 )
 
-add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRCS})
+add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRCS} ../server/include/definitions.hh)
 
 set(PROTOBOEUF_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 

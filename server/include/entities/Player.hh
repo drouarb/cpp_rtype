@@ -5,7 +5,7 @@
 #ifndef CPP_RTYPE_PLAYER_HH
 #define CPP_RTYPE_PLAYER_HH
 
-namespace Server {
+namespace server {
     class Player {
 
     };

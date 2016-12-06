@@ -8,7 +8,7 @@
 
 int main()
 {
-    Server::IEntity *pEntity = create_entity(43);
+    server::IEntity *pEntity = create_entity(43);
     PowerUp *powerUp = dynamic_cast<PowerUp *>(pEntity);
     assert(powerUp != nullptr);
     return 0;

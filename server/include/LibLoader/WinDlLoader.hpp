@@ -23,7 +23,6 @@ public:
 		if (lib_handle)
 			FreeLibrary(lib_handle);
 	}
-
 	T * getInstance()
 	{
 		if (lib_handle == NULL)
@@ -31,6 +30,6 @@ public:
 		fun_ptr creation_fun = (fun_ptr)GetProcAddress(lib_handle, DLL_FUN_NAME);
 		if (creation_fun == NULL)
 			return (NULL);
-		return (creation_fun());
+		return (static_cast<T *>(creation_fun()));
 	}
 };

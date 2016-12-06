@@ -8,13 +8,13 @@
 
 #include <AEntity.hh>
 
-class PowerUp : public Server::AEntity {
+class PowerUp : public server::AEntity {
 public:
-    PowerUp(const Server::EntityId entityId);
+    PowerUp(const server::entityId_t entityId);
 
-    void collide(Server::IEntity *);
+    void collide(server::IEntity *);
 
-    Server::EntityAction *nextAction();
+    server::EntityAction *nextAction();
 
 };
 

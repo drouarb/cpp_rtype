@@ -7,7 +7,7 @@
 
 int main()
 {
-    Server::IEntity *pEntity = create_entity(43);
+    server::IEntity *pEntity = create_entity(43);
     Obstacle *obstacle = dynamic_cast<Obstacle *>(pEntity);
     assert(obstacle != nullptr);
     return 0;
