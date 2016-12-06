@@ -11,7 +11,7 @@
 #include "IEntity.hh"
 
 extern "C" {
-    Server::IEntity *create_entity(uint16_t entityId);
+    void *create_entity(uint16_t entityId);
 };
 namespace Server {
 

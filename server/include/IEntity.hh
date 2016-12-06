@@ -12,7 +12,7 @@
  */
 
 #define ENTRY_POINTS(className) extern "C" { \
-    Server::IEntity *create_entity(uint16_t entityId) { return new className(entityId); } \
+    void *create_entity(uint16_t entityId) { return new className(entityId); } \
     }
 
 

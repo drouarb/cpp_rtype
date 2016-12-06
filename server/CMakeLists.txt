@@ -15,6 +15,7 @@ include_directories(include)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SERVER_SRCS})
+target_link_libraries(${PROJECT_NAME} dl)
 target_link_libraries(${PROJECT_NAME} protoboeuf)
 target_link_libraries(${PROJECT_NAME} rtype_core)
 
