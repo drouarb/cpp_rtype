@@ -19,6 +19,8 @@ add_executable(${PROJECT_NAME} ${SERVER_SRCS})
 target_link_libraries(${PROJECT_NAME} dl)
 target_link_libraries(${PROJECT_NAME} protoboeuf)
 target_link_libraries(${PROJECT_NAME} rtype_core)
+target_link_libraries(${PROJECT_NAME} pthread)
+
 
 if (CLIENT_TESTS)
     enable_testing()
