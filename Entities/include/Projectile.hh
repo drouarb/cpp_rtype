@@ -6,20 +6,21 @@
 #define CPP_RTYPE_PROJECTILE_HH
 
 
-#include <AEntity.hh>
+#include <IEntity.hh>
 #include "IDamager.hh"
 
-class Projectile : public IDamager {
+class Projectile : public IDamager, public IEntity
+{
 private:
     damagePoint_t damage;
     unsigned int nbHits;
 public:
-    Projectile(const Server::EntityId entityId);
+    Projectile(const server::entityId_t entityId);
 
     damagePoint_t getDamage();
-    void collide(Server::IEntity *);
+    void collide(server::IEntity *);
 
-    Server::EntityAction *nextAction();
+    server::EntityAction *nextAction();
 
 };
 

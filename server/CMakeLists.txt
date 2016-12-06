@@ -12,6 +12,7 @@ file(
 )
 
 include_directories(include)
+include_directories(include/entities)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SERVER_SRCS})

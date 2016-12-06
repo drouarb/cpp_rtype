@@ -4,13 +4,13 @@
 
 #include "AActor.hh"
 
-using namespace Server;
-
-AActor::AActor(const Server::EntityId entityId, const std::string &sprite) : AEntity(entityId, sprite) {}
+using namespace server;
+/*
+AActor::AActor(const server::entityId_t entityId, const std::string &sprite) {}
 
 void AActor::hit(int damage) {
     this->hp -= damage;
     if (this->hp <= 0) {
         this->destroyed = true;
     }
-}
+}*/

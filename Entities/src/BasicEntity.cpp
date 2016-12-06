@@ -4,13 +4,13 @@
 
 #include "BasicEntity.hh"
 
-BasicEntity::BasicEntity(const Server::EntityId entityId) : AEntity(entityId, "") {}
+BasicEntity::BasicEntity(const server::entityId_t entityId) : AEntity(entityId, "") {}
 
-void BasicEntity::collide(Server::IEntity *) {
+void BasicEntity::collide(server::IEntity *) {
 
 }
 
-Server::EntityAction *BasicEntity::nextAction() {
+server::EntityAction *BasicEntity::nextAction() {
     return nullptr;
 }
 

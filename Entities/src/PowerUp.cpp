@@ -4,13 +4,13 @@
 
 #include "PowerUp.hh"
 
-PowerUp::PowerUp(const Server::EntityId entityId) : AEntity(entityId, "") {}
+PowerUp::PowerUp(const server::entityId_t entityId) : AEntity(entityId, "") {}
 
-void PowerUp::collide(Server::IEntity *) {
+void PowerUp::collide(server::IEntity *) {
 
 }
 
-Server::EntityAction *PowerUp::nextAction() {
+server::EntityAction *PowerUp::nextAction() {
     return nullptr;
 }
 

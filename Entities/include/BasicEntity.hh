@@ -6,14 +6,14 @@
 #define CPP_RTYPE_BASICENTITY_HH
 
 
-#include "AEntity.hh"
+#include "IEntity.hh"
 
-class BasicEntity : public Server::AEntity {
+class BasicEntity : public server::IEntity {
 public:
-    BasicEntity(const Server::EntityId entityId);
+    BasicEntity(const server::entityId_t entityId);
 
-    virtual void collide(Server::IEntity *) final;
-    virtual Server::EntityAction *nextAction() final;
+    virtual void collide(server::IEntity *) final;
+    virtual server::EntityAction *nextAction() final;
 };
 
 

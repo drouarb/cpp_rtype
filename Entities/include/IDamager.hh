@@ -7,12 +7,12 @@
 
 #include <AEntity.hh>
 
-class IDamager : public Server::AEntity {
+class IDamager : public server::AEntity {
 
 public:
 
 
-    IDamager(const Server::EntityId entityId, const std::string &sprite) : AEntity(entityId, sprite) {}
+    IDamager(const server::entityId_t entityId, const std::string &sprite) : AEntity(entityId, sprite) {}
 
     virtual damagePoint_t getDamage()= 0;
 

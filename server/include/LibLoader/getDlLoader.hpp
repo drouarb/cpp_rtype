@@ -8,10 +8,11 @@
 //#include <winnt.h>
 #include <string>
 #ifdef _WIN32
-#include <tchar.h>
-#endif
 #include "Windows.h"
+#include <tchar.h>
 #include "WinDlLoader.hpp"
+#endif
+#include "UnixDlLoader.hpp"
 
 template <typename T>
 IDlLoader<T> * getDlLoader(const std::string &path)

@@ -4,17 +4,17 @@
 
 #include "Projectile.hh"
 
-Projectile::Projectile(const Server::EntityId entityId) : IDamager(entityId, "") {}
+Projectile::Projectile(const server::entityId_t entityId) : IDamager(entityId, "") {}
 
 IDamager::damagePoint_t Projectile::getDamage() {
     return this->damage;
 }
 
-void Projectile::collide(Server::IEntity *) {
+void Projectile::collide(server::IEntity *) {
 
 }
 
-Server::EntityAction *Projectile::nextAction() {
+server::EntityAction *Projectile::nextAction() {
     return nullptr;
 }
 

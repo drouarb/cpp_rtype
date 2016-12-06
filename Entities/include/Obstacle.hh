@@ -8,13 +8,13 @@
 
 #include <AEntity.hh>
 
-class Obstacle : public Server::AEntity {
+class Obstacle : public server::AEntity {
 public:
-    Obstacle(const Server::EntityId entityId);
+    Obstacle(const server::entityId_t entityId);
 
-    void collide(Server::IEntity *);
+    void collide(server::IEntity *);
 
-    Server::EntityAction *nextAction();
+    server::EntityAction *nextAction();
 };
 
 

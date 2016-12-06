@@ -4,13 +4,13 @@
 
 #include "Obstacle.hh"
 
-Obstacle::Obstacle(const Server::EntityId entityId) : AEntity(entityId, "") {}
+Obstacle::Obstacle(const server::entityId_t entityId) : AEntity(entityId, "") {}
 
-void Obstacle::collide(Server::IEntity *) {
+void Obstacle::collide(server::IEntity *) {
 
 }
 
-Server::EntityAction *Obstacle::nextAction() {
+server::EntityAction *Obstacle::nextAction() {
     return nullptr;
 }
 

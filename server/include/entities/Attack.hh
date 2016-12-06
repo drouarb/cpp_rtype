@@ -7,18 +7,18 @@
 
 #include <string>
 #include <ostream>
-#include "AEntity.hh"
+#include "definitions.hh"
 
-namespace Server {
+namespace server {
 
     struct Attack {
         std::string soundFile;
         std::string sprite;
-        AEntity::damagePoint_t damage;
+        int damage;
         uint16_t recharge;
         uint16_t nbHits;
 
-        Attack(const std::string &soundFile, const std::string &sprite, AEntity::damagePoint_t damage,
+        Attack(const std::string &soundFile, const std::string &sprite, damage_t damage,
                uint16_t recharge, uint16_t nbHits);
 
     };

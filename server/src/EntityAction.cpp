@@ -4,9 +4,9 @@
 
 #include "EntityAction.hh"
 
-Server::EntityAction::EntityAction() : soundToPlay(""), destroy(false), newEntity(nullptr) {}
+server::EntityAction::EntityAction() : soundToPlay(""), destroy(false), newEntity(nullptr) {}
 
-std::ostream &Server::operator<<(std::ostream &os, const Server::EntityAction &action) {
+std::ostream &server::operator<<(std::ostream &os, const server::EntityAction &action) {
     os << "soundToPlay: " << action.soundToPlay << " destroy: " << action.destroy << " newEntity: " << action.newEntity;
     return os;
 }
