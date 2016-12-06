@@ -13,7 +13,7 @@ namespace network {
         public:
             virtual ~ISocketDataListener() { };
 
-            virtual void notify(int fd, std::vector<unsigned char> *data) = 0;
+            virtual void notify(unsigned long fd, std::vector<unsigned char> *data) = 0;
         };
     }
 }

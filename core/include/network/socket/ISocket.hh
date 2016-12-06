@@ -20,7 +20,27 @@ namespace network {
          */
         class ISocket {
         public:
-            virtual ~ISocket() { }
+            /*!
+             * @enum e_socketType
+             * @brief Type of the socket
+             */
+            enum e_socketType {
+                CLIENT,
+                SERVER
+            };
+
+            /*!
+             * @enum e_socketStatus
+             * @brief Socket Status
+             */
+            enum e_socketStatus {
+                DISCONNECTED,
+                CONNECTING,
+                CONNECTED,
+                STOPPING,
+            };
+
+            virtual ~ISocket() {}
 
             /*!
              * @brief Start a thread on poll() and return
@@ -30,6 +50,7 @@ namespace network {
 
             /*!
              * @brief Start processing network on current thread
+             * @throw throw std::runtime_error if socket already running or failed to connect
              */
             virtual void poll() = 0;
 
@@ -42,6 +63,7 @@ namespace network {
             /*!
              * @brief Send data to all already connected clients
              * @param data Data to send
+             * @throw If the socket isn't running
              */
             virtual void broadcast(std::vector<uint8_t> *data) = 0;
 
@@ -49,8 +71,9 @@ namespace network {
              * @brief Send data to a client
              * @param data Data to send
              * @param dest Id of the receiver
+             * @throw If the socket isn't running
              */
-            virtual void send(std::vector<uint8_t> *data, int dest) = 0;
+            virtual void send(std::vector<uint8_t> *data, unsigned long dest) = 0;
 
             /*!
              * @brief Register a listener who listen for a new successful connection
@@ -87,6 +110,18 @@ namespace network {
              * @param listener Instance of the listener
              */
             virtual void unregisterDataListener(listener::ISocketDataListener *listener) = 0;
+
+            /*!
+             * @brief Get if the socket is a server or a client
+             * @return type of the socket
+             */
+            virtual e_socketType getType() = 0;
+
+            /*!
+             * @brief Get if the socket is running
+             * @return status of the socket
+             */
+            virtual e_socketStatus getStatus() = 0;
         };
     }
 }
