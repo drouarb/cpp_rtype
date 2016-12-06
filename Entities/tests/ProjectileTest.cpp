@@ -7,9 +7,11 @@
 
 int main()
 {
+/*
     server::IEntity *pEntity = create_entity(43);
     Projectile *projectile = dynamic_cast<Projectile *>(pEntity);
     assert(projectile != nullptr);
 
     return 0;
+*/
 }

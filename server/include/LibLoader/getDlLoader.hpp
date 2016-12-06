@@ -11,8 +11,9 @@
 #include "Windows.h"
 #include <tchar.h>
 #include "WinDlLoader.hpp"
-#endif
+#else
 #include "UnixDlLoader.hpp"
+#endif
 
 template <typename T>
 IDlLoader<T> * getDlLoader(const std::string &path)

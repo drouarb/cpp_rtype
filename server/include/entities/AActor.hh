@@ -7,7 +7,7 @@
 
 
 #include <vector>
-#include "Attack.hh"
+#include "../../../Entities/include/Attack.hh"
 #include "IEntity.hh"
 
 /*
