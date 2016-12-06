@@ -7,6 +7,7 @@
 
 #include <network/listener/ISocketConnectionListener.hh>
 #include <network/listener/IPacketListener.hh>
+#include <network/socket/ISocket.hh>
 #include <network/packet/IPacket.hh>
 #include <string>
 
