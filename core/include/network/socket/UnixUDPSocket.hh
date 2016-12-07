@@ -9,6 +9,7 @@
 #include <list>
 #include <forward_list>
 #include <arpa/inet.h>
+#include <poll.h>
 #include "helpers/Stopwatch.hh"
 #include "ISocket.hh"
 
@@ -21,9 +22,17 @@ namespace network {
         class UnixUDPSocket : public ISocket {
         private:
             struct s_UDPClient {
+                int npings;
+                unsigned short ack;
                 helpers::Stopwatch sw;
                 e_socketStatus status;
                 struct sockaddr_in client;
+            };
+
+            enum e_handshakeState {
+                SYN,
+                SYNACK,
+                ACK
             };
 
             typedef int SOCKET;
@@ -47,8 +56,8 @@ namespace network {
             virtual bool run();
             virtual void poll();
             virtual bool stop();
-            virtual void broadcast(std::vector<uint8_t> *data);
-            virtual void send(std::vector<uint8_t> *data, unsigned long dest);
+            virtual void broadcast(const std::vector<uint8_t> &data);
+            virtual void send(const std::vector<uint8_t> &data, unsigned long dest);
             virtual void registerConnectionListener(listener::ISocketConnectionListener *listener);
             virtual void unregisterConnectionListener(listener::ISocketConnectionListener *listener);
             virtual void registerDisconnectionListener(listener::ISocketDisconnectionListener *listener);
@@ -62,11 +71,17 @@ namespace network {
             void serverPoll();
             void clientPoll();
 
+            unsigned long getClientId(const struct sockaddr_in &client);
+
+            void handleServerData(std::vector<uint8_t> &data, struct s_UDPClient &client);
+            bool handleServerHandshake(std::vector<uint8_t> &data, struct s_UDPClient &client, e_handshakeState state);
+
         private:
             e_socketType type;
             e_socketStatus status;
 
             SOCKET mainSocketFd;
+            struct pollfd pollfd;
             struct sockaddr_in mainSocket;
             std::list<struct s_UDPClient> clients;
 

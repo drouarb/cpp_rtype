@@ -5,6 +5,9 @@
 #include <cstring>
 #include <stdexcept>
 #include <unistd.h>
+#include <network/packet/PacketSyn.hh>
+#include <network/packet/PacketSynAck.hh>
+#include <network/packet/PacketAck.hh>
 #include "network/socket/UnixUDPSocket.hh"
 
 network::socket::UnixUDPSocket::UnixUDPSocket(unsigned short port) : type(network::socket::ISocket::SERVER),
@@ -58,11 +61,87 @@ void network::socket::UnixUDPSocket::serverPoll() {
         throw new std::runtime_error("UnixUDPSocket can't bind port");
     }
 
+    bool found;
+    struct sockaddr_in recvSocket;
+    socklen_t recvSocketLen = sizeof(recvSocket);
+    std::vector<uint8_t> buffer(SOCKET_BUFFER);
+
+    pollfd.fd = mainSocketFd;
+    pollfd.events = POLLIN;
+    pollfd.revents = 0;
     status = CONNECTED;
+
     while (status == CONNECTED) {
-        //TODO server stuffs
+        int ret = ::poll(&pollfd, 1, POLL_TIMEOUT);
+        if (ret) {
+            recvfrom(mainSocketFd, buffer.data(), SOCKET_BUFFER, 0, (struct sockaddr *) &recvSocket, &recvSocketLen);
+            found = false;
+            for (auto it = clients.begin(); it != clients.end(); it++) {
+                if (getClientId((*it).client) == getClientId(recvSocket)) {
+                    found = true;
+                    (*it).sw.set();
+                    if ((*it).status == CONNECTED)
+                        handleServerData(buffer, (*it));
+                    if ((*it).status == CONNECTING)
+                        if (!handleServerHandshake(buffer, (*it), ACK))
+                            clients.erase(it);
+                    break;
+                }
+            }
+            if (!found) {
+                clients.emplace_back();
+                clients.back().status = CONNECTING;
+                if (!handleServerHandshake(buffer, clients.back(), SYNACK))
+                    clients.pop_back();
+            }
+        }
+        //TODO Exec stopwatch ping & con
     }
     status = DISCONNECTED;
+}
+
+void network::socket::UnixUDPSocket::handleServerData(std::vector<uint8_t> &data, struct s_UDPClient &client) {
+    for (auto &l : dataListeners) {
+        l->notify(getClientId(client.client), &data);
+    }
+}
+
+bool network::socket::UnixUDPSocket::handleServerHandshake(std::vector<uint8_t> &data, struct s_UDPClient &client,
+                                                           e_handshakeState state) {
+    if (state == SYNACK) {
+        try {
+            std::vector<uint8_t> buff;
+            packet::PacketSyn packetSyn;
+            packet::PacketSynAck packetSynAck;
+
+            packetSyn.deserialize(&data);
+
+            client.ack = rand();
+            packetSynAck.setSyn(packetSyn.getSyn());
+            packetSynAck.setAck(client.ack);
+
+            packetSynAck.serialize(&buff);
+            send(buff, getClientId(client.client));
+        } catch (std::exception e) {
+            return false;
+        }
+    } else {
+        try {
+            packet::PacketAck packetAck;
+            packetAck.deserialize(&data);
+
+            if (packetAck.getAck() != client.ack)
+                return false;
+            else {
+                for (auto &l : connectionListeners) {
+                    l->notify(getClientId(client.client));
+                }
+            }
+        } catch (std::exception e) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void network::socket::UnixUDPSocket::clientPoll() {
@@ -72,24 +151,40 @@ void network::socket::UnixUDPSocket::clientPoll() {
     }
 }
 
-void network::socket::UnixUDPSocket::broadcast(std::vector<uint8_t> *data) {
+void network::socket::UnixUDPSocket::broadcast(const std::vector<uint8_t> &data) {
     if (status != CONNECTED)
         throw new std::runtime_error("Can't send if socket isn't running");
     if (type == SERVER) {
-        for (auto client : clients) {
+        for (auto &client : clients) {
             if (client.status == CONNECTED) {
-                sendto(mainSocketFd, data->data(), data->size(), 0, (sockaddr *)&client.client, sizeof(client.client));
+                sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &client.client, sizeof(client.client));
             }
         }
     } else {
-        sendto(mainSocketFd, data->data(), data->size(), 0, (sockaddr *)&mainSocket, sizeof(&mainSocket));
+        sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &mainSocket, sizeof(&mainSocket));
     }
 }
 
-void network::socket::UnixUDPSocket::send(std::vector<uint8_t> *data, unsigned long dest) {
+void network::socket::UnixUDPSocket::send(const std::vector<uint8_t> &data, unsigned long dest) {
     if (status != CONNECTED)
         throw new std::runtime_error("Can't send if socket isn't running");
-    //TODO Send data
+    if (type == SERVER) {
+        for (auto &client : clients) {
+            if (getClientId(client.client) == dest && client.status == CONNECTED) {
+                sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &client.client, sizeof(client.client));
+                return;
+            }
+        }
+    } else {
+        sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &mainSocket, sizeof(&mainSocket));
+    }
+}
+
+unsigned long network::socket::UnixUDPSocket::getClientId(const struct sockaddr_in &client) {
+    unsigned long id = client.sin_addr.s_addr;
+    id <<= 16;
+    id |= client.sin_port;
+    return id;
 }
 
 void

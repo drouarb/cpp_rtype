@@ -11,6 +11,11 @@
 #include <network/listener/ISocketDisconnectionListener.hh>
 #include <network/listener/ISocketDataListener.hh>
 
+#define POLL_TIMEOUT 100
+#define SOCKET_BUFFER 65507
+#define PING_TIME 1000
+#define NB_PINGS  4
+#define TIMEOUT   5000
 
 namespace network {
     namespace socket {
@@ -65,7 +70,7 @@ namespace network {
              * @param data Data to send
              * @throw If the socket isn't running
              */
-            virtual void broadcast(std::vector<uint8_t> *data) = 0;
+            virtual void broadcast(const std::vector<uint8_t> &data) = 0;
 
             /*!
              * @brief Send data to a client
@@ -73,7 +78,7 @@ namespace network {
              * @param dest Id of the receiver
              * @throw If the socket isn't running
              */
-            virtual void send(std::vector<uint8_t> *data, unsigned long dest) = 0;
+            virtual void send(const std::vector<uint8_t> &data, unsigned long dest) = 0;
 
             /*!
              * @brief Register a listener who listen for a new successful connection

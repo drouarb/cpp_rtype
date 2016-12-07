@@ -11,7 +11,9 @@
 #include <sys/time.h>
 #include <helpers/Stopwatch.hh>
 
-helpers::Stopwatch::Stopwatch() {}
+helpers::Stopwatch::Stopwatch() {
+    this->set();
+}
 
 helpers::Stopwatch::~Stopwatch() {}
 
