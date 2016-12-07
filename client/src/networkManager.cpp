@@ -15,10 +15,7 @@
 #include <listener/ClientListenerPlaySound.hh>
 #include <listener/ClientListenerQuit.hh>
 #include <listener/ClientListenerSpawnEntity.hh>
-#include <listener/ClientListenerSynAck.hh>
 #include <listener/ClientListenerUpdateEntity.hh>
-#include <listener/ClientListernerPong.hh>
-#include <listener/ClientListenerErrorHandShake.hh>
 #include <iostream>
 #include <network/packet/PacketAck.hh>
 #include "networkManager.hh"
@@ -76,46 +73,8 @@ void networkManager::addListenerToPacketFactory(client::GameClient *gameclient)
     listeners.push_back(new client::ClientListenerPlaySound(gameclient));
     listeners.push_back(new client::ClientListenerQuit(gameclient));
     listeners.push_back(new client::ClientListenerSpawnEntity(gameclient));
-    listeners.push_back(new client::ClientListenerSynAck(gameclient));
     listeners.push_back(new client::ClientListenerUpdateEntity(gameclient));
-    listeners.push_back(new client::ClientListenerPong(gameclient));
-    listeners.push_back(new client::ClientListenerErrorHandShake(gameclient));
     for (auto it = listeners.begin(); it != listeners.end(); it++)
         packetFactory->registerListener(*it);
 }
 
-bool networkManager::sendSyn(uint16_t syn_va_value)
-{
-    if (packetFactory == NULL)
-    {
-        std::cerr << "packet factory is NULL" << std::endl;
-        return (false);
-    }
-    network::packet::PacketSyn syn(syn_va_value);
-    this->packetFactory->send(syn);
-    return (true);
-}
-
-bool networkManager::sendAck(uint16_t ack_value)
-{
-    if (packetFactory == NULL)
-    {
-        std::cerr << "packet factory is NULL" << std::endl;
-        return (false);
-    }
-    network::packet::PacketAck ack(ack_value);
-    this->packetFactory->send(ack);
-    return (true);
-}
-
-bool networkManager::sendErrorHandshake(const std::string &message)
-{
-    if (packetFactory == NULL)
-    {
-        std::cerr << "packet factory is NULL" << std::endl;
-        return (false);
-    }
-    network::packet::PacketErrorHandshake errorHandshake (message);
-    this->packetFactory->send(errorHandshake);
-    return (true);
-}
