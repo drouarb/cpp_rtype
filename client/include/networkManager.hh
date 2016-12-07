@@ -23,9 +23,6 @@ namespace client {
 
          void addListenerToPacketFactory(client::GameClient *gameclient);
          bool startPacketFactory();
-         bool sendSyn(uint16_t syn);
-         bool sendAck(uint16_t ack_value);
-         bool sendErrorHandshake(const std::string & message);
      };
 }
 
