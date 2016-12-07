@@ -6,6 +6,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <ostream>
 
 namespace server {
     class Level {
@@ -26,8 +27,7 @@ namespace server {
          * @param tick
          * @return
          */
-        const std::vector<Spawn> &getNewSpawns(round_t tick) const;
-
+        const std::vector<Spawn> *getNewSpawns(round_t tick) const;
     private:
         std::map<round_t, std::vector<Spawn>> spawns;
         std::string name;

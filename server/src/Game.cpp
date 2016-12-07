@@ -30,7 +30,8 @@ void Game::progressLevel()
 {
     if (lvl)
     {
-        for (auto spawn : lvl->getNewSpawns(round))
+        const std::vector<Spawn> *pVector = lvl->getNewSpawns(round);
+        for (auto spawn : *pVector)
         {
             entities.push_back(spawn.trigger());
         }
