@@ -19,6 +19,8 @@ network::socket::UnixUDPSocket::UnixUDPSocket(unsigned short port) : type(networ
     mainSocket.sin_family = AF_INET;
     mainSocket.sin_port = htons(port);
     mainSocket.sin_addr.s_addr = htonl(INADDR_ANY);
+    pollfd.fd = mainSocketFd;
+    pollfd.events = POLLIN;
 }
 
 network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsigned short port) : type(
@@ -28,6 +30,8 @@ network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsign
     memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
     mainSocket.sin_port = htons(port);
+    pollfd.fd = mainSocketFd;
+    pollfd.events = POLLIN;
     if (inet_aton(address.c_str(), &mainSocket.sin_addr) == 0)
         throw new std::runtime_error("UnixUDPSocket Invalid ip");
 
@@ -70,24 +74,21 @@ void network::socket::UnixUDPSocket::serverPoll() {
     socklen_t recvSocketLen = sizeof(recvSocket);
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
 
-    pollfd.fd = mainSocketFd;
-    pollfd.events = POLLIN;
-    pollfd.revents = 0;
     status = CONNECTED;
 
     while (status == CONNECTED) {
-        int ret = ::poll(&pollfd, 1, POLL_TIMEOUT);
-        if (ret) {
+        if (::poll(&pollfd, 1, POLL_TIMEOUT)) {
             recvfrom(mainSocketFd, buffer.data(), SOCKET_BUFFER, 0, (struct sockaddr *) &recvSocket, &recvSocketLen);
             found = false;
             for (auto it = clients.begin(); it != clients.end(); it++) {
                 if (getClientId((*it).client) == getClientId(recvSocket)) {
                     found = true;
                     (*it).sw.set();
+                    (*it).npings = 0;
                     if ((*it).status == CONNECTED)
-                        handleServerData(buffer, (*it));
+                        handleData(buffer, (*it).client);
                     if ((*it).status == CONNECTING)
-                        if (!handleServerHandshake(buffer, (*it), ACK))
+                        if (!serverHandshake(buffer, (*it), ACK))
                             clients.erase(it);
                     break;
                 }
@@ -95,33 +96,17 @@ void network::socket::UnixUDPSocket::serverPoll() {
             if (!found) {
                 clients.emplace_back();
                 clients.back().status = CONNECTING;
-                if (!handleServerHandshake(buffer, clients.back(), SYNACK))
+                if (!serverHandshake(buffer, clients.back(), SYNACK))
                     clients.pop_back();
             }
         }
-        handleServerTimeout();
+        serverTimeout();
     }
     status = DISCONNECTED;
 }
 
-void network::socket::UnixUDPSocket::handleServerData(std::vector<uint8_t> &data, struct s_UDPClient &client) {
-    try {
-        std::vector<uint8_t> buff;
-        packet::PacketPing packetPing;
-        packet::PacketPong packetPong;
-
-        packetPing.deserialize(&data);
-        packetPong.serialize(&buff);
-        send(buff, getClientId(client.client));
-    } catch (std::exception e) {
-        for (auto &l : dataListeners) {
-            l->notify(getClientId(client.client), &data);
-        }
-    }
-}
-
-bool network::socket::UnixUDPSocket::handleServerHandshake(std::vector<uint8_t> &data, struct s_UDPClient &client,
-                                                           e_handshakeState state) {
+bool network::socket::UnixUDPSocket::serverHandshake(std::vector<uint8_t> &data, struct s_UDPClient &client,
+                                                     e_handshakeState state) {
     if (state == SYNACK) {
         try {
             std::vector<uint8_t> buff;
@@ -158,7 +143,7 @@ bool network::socket::UnixUDPSocket::handleServerHandshake(std::vector<uint8_t> 
     return true;
 }
 
-void network::socket::UnixUDPSocket::handleServerTimeout() {
+void network::socket::UnixUDPSocket::serverTimeout() {
     std::vector<uint8_t> buff;
     packet::PacketPing packetPing;
     std::list<std::list<struct s_UDPClient>::iterator> to_disconnect;
@@ -169,6 +154,7 @@ void network::socket::UnixUDPSocket::handleServerTimeout() {
             if ((*it).sw.elapsedMs() > (*it).npings * PING_TIME) {
                 if ((*it).npings < MAX_PINGS) {
                     send(buff, getClientId((*it).client));
+                    (*it).npings++;
                 } else {
                     to_disconnect.push_back(it);
                 }
@@ -194,9 +180,14 @@ void network::socket::UnixUDPSocket::clientPoll() {
     }
 
     clientHandshake();
+    std::vector<uint8_t> buffer(SOCKET_BUFFER);
 
     while (status == CONNECTED) {
-        //TODO client stuffs
+        if (::poll(&pollfd, 1, POLL_TIMEOUT)) {
+            recv(mainSocketFd, buffer.data(), buffer.size(), 0);
+            handleData(buffer, mainSocket);
+        }
+        clientTimeout();
     }
 }
 
@@ -210,6 +201,7 @@ void network::socket::UnixUDPSocket::clientHandshake() {
     packetSyn.setSyn(syn);
     packetSyn.serialize(&buff);
     sendto(mainSocketFd, buff.data(), buff.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
+
     if (::poll(&pollfd, 1, HANDSHAKE_TIMEOUT) == 0)
         throw std::runtime_error("Client socket no handshake received");
     buff.resize(SOCKET_BUFFER);
@@ -221,11 +213,50 @@ void network::socket::UnixUDPSocket::clientHandshake() {
     }
     if (packetSynAck.getSyn() != syn)
         throw std::runtime_error("Invalid SynAck response: bad syn");
+
     buff.resize(0);
     packetAck.setAck(packetSynAck.getAck());
     packetAck.serialize(&buff);
     sendto(mainSocketFd, buff.data(), buff.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
+    sw.set();
+    npings = 0;
     status = CONNECTED;
+}
+
+void network::socket::UnixUDPSocket::clientTimeout() {
+    if (sw.elapsedMs() > npings * PING_TIME) {
+        if (npings < MAX_PINGS) {
+            std::vector<uint8_t> buff;
+            packet::PacketPing packetPing;
+
+            packetPing.serialize(&buff);
+            broadcast(buff);
+            npings++;
+        } else {
+            status = DISCONNECTED;
+            close(mainSocketFd);
+            for (auto &l : disconnectionListeners) {
+                l->notify(getClientId(mainSocket));
+            }
+        }
+    }
+}
+
+void network::socket::UnixUDPSocket::handleData(std::vector<uint8_t> &data, const struct sockaddr_in &client) {
+    //TODO PacketDisconnect
+    try {
+        std::vector<uint8_t> buff;
+        packet::PacketPing packetPing;
+        packet::PacketPong packetPong;
+
+        packetPing.deserialize(&data);
+        packetPong.serialize(&buff);
+        send(buff, getClientId(client));
+    } catch (std::exception e) {
+        for (auto &l : dataListeners) {
+            l->notify(getClientId(client), &data);
+        }
+    }
 }
 
 void network::socket::UnixUDPSocket::broadcast(const std::vector<uint8_t> &data) {

@@ -71,23 +71,32 @@ namespace network {
             void serverPoll();
             void clientPoll();
 
-            unsigned long getClientId(const struct sockaddr_in &client);
+            //Server stuffs
+            void serverTimeout();
+            bool serverHandshake(std::vector<uint8_t> &data, struct s_UDPClient &client, e_handshakeState state);
 
-            void handleServerTimeout();
-            void handleServerData(std::vector<uint8_t> &data, struct s_UDPClient &client);
-            bool handleServerHandshake(std::vector<uint8_t> &data, struct s_UDPClient &client, e_handshakeState state);
-
+            //Client stuffs
+            void clientTimeout();
             void clientHandshake();
+
+            unsigned long getClientId(const struct sockaddr_in &client);
+            void handleData(std::vector<uint8_t> &data, const struct sockaddr_in &client);
 
         private:
             e_socketType type;
             e_socketStatus status;
 
+            //Socket stuffs
             SOCKET mainSocketFd;
             struct pollfd pollfd;
             struct sockaddr_in mainSocket;
 
+            //Client stuffs
+            int npings;
             unsigned short syn;
+            helpers::Stopwatch sw;
+
+            //Server Stuffs
             std::list<struct s_UDPClient> clients;
 
             std::forward_list<listener::ISocketConnectionListener *> connectionListeners;
