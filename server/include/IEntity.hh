@@ -55,7 +55,7 @@ namespace server {
         /*
          * Those setters are there mainly for the simulation, so just obey the server and set the variables accordingly.
          */
-        //TODO: ideally, the object created by the dynamic library should not have access to some of these variables.
+        //TODO: ideally, the object created by the dynamic library should not have access to its position and entityID.
 
         virtual void setPosX(pos_t) = 0;
         virtual pos_t getPosX() = 0;
