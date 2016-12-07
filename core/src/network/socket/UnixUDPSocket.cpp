@@ -8,6 +8,8 @@
 #include <network/packet/PacketSyn.hh>
 #include <network/packet/PacketSynAck.hh>
 #include <network/packet/PacketAck.hh>
+#include <network/packet/PacketPing.hh>
+#include <network/packet/PacketPong.hh>
 #include "network/socket/UnixUDPSocket.hh"
 
 network::socket::UnixUDPSocket::UnixUDPSocket(unsigned short port) : type(network::socket::ISocket::SERVER),
@@ -95,14 +97,24 @@ void network::socket::UnixUDPSocket::serverPoll() {
                     clients.pop_back();
             }
         }
-        //TODO Exec stopwatch ping & con
+        handleServerTimeout();
     }
     status = DISCONNECTED;
 }
 
 void network::socket::UnixUDPSocket::handleServerData(std::vector<uint8_t> &data, struct s_UDPClient &client) {
-    for (auto &l : dataListeners) {
-        l->notify(getClientId(client.client), &data);
+    try {
+        std::vector<uint8_t> buff;
+        packet::PacketPing packetPing;
+        packet::PacketPong packetPong;
+
+        packetPing.deserialize(&data);
+        packetPong.serialize(&buff);
+        send(buff, getClientId(client.client));
+    } catch (std::exception e) {
+        for (auto &l : dataListeners) {
+            l->notify(getClientId(client.client), &data);
+        }
     }
 }
 
@@ -116,7 +128,7 @@ bool network::socket::UnixUDPSocket::handleServerHandshake(std::vector<uint8_t> 
 
             packetSyn.deserialize(&data);
 
-            client.ack = rand();
+            client.ack = (uint16_t)rand();
             packetSynAck.setSyn(packetSyn.getSyn());
             packetSynAck.setAck(client.ack);
 
@@ -142,6 +154,35 @@ bool network::socket::UnixUDPSocket::handleServerHandshake(std::vector<uint8_t> 
         }
     }
     return true;
+}
+
+void network::socket::UnixUDPSocket::handleServerTimeout() {
+    std::vector<uint8_t> buff;
+    packet::PacketPing packetPing;
+    std::list<std::list<struct s_UDPClient>::iterator> to_disconnect;
+
+    packetPing.serialize(&buff);
+    for (auto it = clients.begin(); it != clients.end(); it++) {
+        if ((*it).status == CONNECTED) {
+            if ((*it).sw.elapsedMs() > (*it).npings * PING_TIME) {
+                if ((*it).npings < MAX_PINGS) {
+                    send(buff, getClientId((*it).client));
+                } else {
+                    to_disconnect.push_back(it);
+                }
+            }
+        } else {
+            if ((*it).sw.elapsedMs() > MAX_PINGS * PING_TIME) {
+                to_disconnect.push_back(it);
+            }
+        }
+    }
+    for (auto &it : to_disconnect) {
+        if ((*it).status == CONNECTED)
+            for (auto &l : disconnectionListeners)
+                l->notify(getClientId((*it).client));
+        clients.erase(it);
+    }
 }
 
 void network::socket::UnixUDPSocket::clientPoll() {

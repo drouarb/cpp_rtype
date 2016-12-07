@@ -75,6 +75,7 @@ namespace network {
 
             void handleServerData(std::vector<uint8_t> &data, struct s_UDPClient &client);
             bool handleServerHandshake(std::vector<uint8_t> &data, struct s_UDPClient &client, e_handshakeState state);
+            void handleServerTimeout();
 
         private:
             e_socketType type;

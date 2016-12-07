@@ -14,8 +14,7 @@
 #define POLL_TIMEOUT 100
 #define SOCKET_BUFFER 65507
 #define PING_TIME 1000
-#define NB_PINGS  4
-#define TIMEOUT   5000
+#define MAX_PINGS 5
 
 namespace network {
     namespace socket {
