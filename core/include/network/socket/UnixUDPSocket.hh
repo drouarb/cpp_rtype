@@ -73,9 +73,11 @@ namespace network {
 
             unsigned long getClientId(const struct sockaddr_in &client);
 
+            void handleServerTimeout();
             void handleServerData(std::vector<uint8_t> &data, struct s_UDPClient &client);
             bool handleServerHandshake(std::vector<uint8_t> &data, struct s_UDPClient &client, e_handshakeState state);
-            void handleServerTimeout();
+
+            void clientHandshake();
 
         private:
             e_socketType type;
@@ -84,6 +86,8 @@ namespace network {
             SOCKET mainSocketFd;
             struct pollfd pollfd;
             struct sockaddr_in mainSocket;
+
+            unsigned short syn;
             std::list<struct s_UDPClient> clients;
 
             std::forward_list<listener::ISocketConnectionListener *> connectionListeners;

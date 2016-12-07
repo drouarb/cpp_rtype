@@ -15,6 +15,7 @@
 network::socket::UnixUDPSocket::UnixUDPSocket(unsigned short port) : type(network::socket::ISocket::SERVER),
                                                                      status(DISCONNECTED) {
     memset(&mainSocket, 0, sizeof(mainSocket));
+    memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
     mainSocket.sin_port = htons(port);
     mainSocket.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -24,6 +25,7 @@ network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsign
         network::socket::ISocket::CLIENT),
                                                                                                  status(DISCONNECTED) {
     memset(&mainSocket, 0, sizeof(mainSocket));
+    memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
     mainSocket.sin_port = htons(port);
     if (inet_aton(address.c_str(), &mainSocket.sin_addr) == 0)
@@ -128,7 +130,7 @@ bool network::socket::UnixUDPSocket::handleServerHandshake(std::vector<uint8_t> 
 
             packetSyn.deserialize(&data);
 
-            client.ack = (uint16_t)rand();
+            client.ack = (uint16_t) rand();
             packetSynAck.setSyn(packetSyn.getSyn());
             packetSynAck.setAck(client.ack);
 
@@ -172,7 +174,7 @@ void network::socket::UnixUDPSocket::handleServerTimeout() {
                 }
             }
         } else {
-            if ((*it).sw.elapsedMs() > MAX_PINGS * PING_TIME) {
+            if ((*it).sw.elapsedMs() > HANDSHAKE_TIMEOUT) {
                 to_disconnect.push_back(it);
             }
         }
@@ -186,10 +188,44 @@ void network::socket::UnixUDPSocket::handleServerTimeout() {
 }
 
 void network::socket::UnixUDPSocket::clientPoll() {
-    //TODO Handshake
+    if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+        status = DISCONNECTED;
+        throw new std::runtime_error("UnixUDPSocket can't instantiate socket");
+    }
+
+    clientHandshake();
+
     while (status == CONNECTED) {
         //TODO client stuffs
     }
+}
+
+void network::socket::UnixUDPSocket::clientHandshake() {
+    std::vector<uint8_t> buff;
+    packet::PacketSyn packetSyn;
+    packet::PacketSynAck packetSynAck;
+    packet::PacketAck packetAck;
+
+    syn = (uint16_t) rand();
+    packetSyn.setSyn(syn);
+    packetSyn.serialize(&buff);
+    sendto(mainSocketFd, buff.data(), buff.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
+    if (::poll(&pollfd, 1, HANDSHAKE_TIMEOUT) == 0)
+        throw std::runtime_error("Client socket no handshake received");
+    buff.resize(SOCKET_BUFFER);
+    recv(mainSocketFd, buff.data(), SOCKET_BUFFER, 0);
+    try {
+        packetSynAck.deserialize(&buff);
+    } catch (std::exception e) {
+        throw std::runtime_error("Invalid SynAck response: bad packet");
+    }
+    if (packetSynAck.getSyn() != syn)
+        throw std::runtime_error("Invalid SynAck response: bad syn");
+    buff.resize(0);
+    packetAck.setAck(packetSynAck.getAck());
+    packetAck.serialize(&buff);
+    sendto(mainSocketFd, buff.data(), buff.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
+    status = CONNECTED;
 }
 
 void network::socket::UnixUDPSocket::broadcast(const std::vector<uint8_t> &data) {
@@ -197,9 +233,8 @@ void network::socket::UnixUDPSocket::broadcast(const std::vector<uint8_t> &data)
         throw new std::runtime_error("Can't send if socket isn't running");
     if (type == SERVER) {
         for (auto &client : clients) {
-            if (client.status == CONNECTED) {
+            if (client.status == CONNECTED)
                 sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &client.client, sizeof(client.client));
-            }
         }
     } else {
         sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &mainSocket, sizeof(&mainSocket));

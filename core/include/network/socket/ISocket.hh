@@ -15,6 +15,7 @@
 #define SOCKET_BUFFER 65507
 #define PING_TIME 1000
 #define MAX_PINGS 5
+#define HANDSHAKE_TIMEOUT 1000
 
 namespace network {
     namespace socket {
