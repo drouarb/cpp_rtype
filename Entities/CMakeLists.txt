@@ -23,7 +23,7 @@ set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJ
 
 foreach (entity_file ${ENTITIES_SRC_FILES})
     get_filename_component(entity_name ${entity_file} NAME_WE)
-    add_library(${entity_name} SHARED ${entity_file} ${ENTITIES_HEADER_FILES} src/BasicEntity.cpp)
+    add_library(${entity_name} SHARED ${entity_file} ${ENTITIES_HEADER_FILES} ../server/src/EntityAction.cpp )
    #TODO Must be replaced by SHARED
 endforeach (entity_file)
 

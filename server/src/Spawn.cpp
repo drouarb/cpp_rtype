@@ -1,3 +1,5 @@
+#include <LibLoader/IDlLoader.hh>
+#include <iostream>
 #include "Spawn.hh"
 
 using namespace server;
@@ -22,7 +24,7 @@ Spawn & Spawn::operator=(const Spawn & other)
 
 IEntity * Spawn::trigger()
 {
-    IEntity * entity = IEntity::make(this->dlName);
+    IEntity * entity = IEntity::make(this->dlName + DLL_EXTENSION);
     if (entity == nullptr)
         return (nullptr);
     entity->setPosX(this->posX);

@@ -2,6 +2,7 @@
 #define RTYPE_GAME_HH_
 
 #include "Level.hh"
+#include "Client.hh"
 
 namespace server
 {
@@ -12,15 +13,19 @@ namespace server
         Game(int lobbyId, const Level &);
         ~Game();
 
+        void newPlayer(Client *client);
+        void removePlayer(Client *client);
         void setLevel(const Level &);
         void tick(round_t);
         int getLobbyId();
 
     private:
+        std::list<Client *> clientList;
         const Level * lvl;
         std::vector<IEntity*> entities;
         round_t round;
         int gameId;
+
 
         /**
          * Checks level for new spawns, or whatever the level may tell the game to do.

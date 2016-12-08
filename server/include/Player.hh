@@ -5,9 +5,12 @@
 #ifndef CPP_RTYPE_PLAYER_HH
 #define CPP_RTYPE_PLAYER_HH
 
-namespace server {
-    class Player {
+#include "IPlayer.hh"
+#include "definitions.hh"
 
+namespace server {
+    class Player : IPlayer {
+        void shoot(attackId_t attackId) override;
     };
 }
 
