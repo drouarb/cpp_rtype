@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <LibLoader/IDlLoader.hh>
+#include <Player.hh>
 #include "Game.hh"
 
 using namespace server;
@@ -49,7 +50,7 @@ void Game::progressLevel()
             IEntity * entity = spawn.trigger();
             if (entity == nullptr)
             {
-                std::cerr << "Game " << gameId << ": failed to create entity " << spawn.dlName + DLL_EXTENSION << std::endl;
+                std::cerr << "Game " << gameId << ": failed to create entity " << spawn.dlName << std::endl;
             }
             else
             {
@@ -120,17 +121,19 @@ void Game::unspawn()
 
 }
 
-void Game::newPlayer(Client *client) {
+Controller * Game::newPlayer(Client *client) {
     if (clientList.size() == 4) {
         throw std::runtime_error("Cannot add more than 4 player in a game");
     }
-    this->clientList.push_back(client);
+    Controller *controller = new Controller();
+    this->clientList[client] = controller;
+    IEntity *player = new Player();
+    controller->setEntity(player);
+    this->entities.push_back(player);
+    return controller;
 }
 
 void Game::removePlayer(Client *client) {
-    const std::list<server::Client *>::iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
-    if (position == this->clientList.end()) {
-        return;
-    }
-    this->clientList.erase(position);
+    delete (this->clientList[client]);
+    this->clientList[client] = NULL;
 }

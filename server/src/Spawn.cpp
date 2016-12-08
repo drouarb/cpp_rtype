@@ -24,7 +24,7 @@ Spawn & Spawn::operator=(const Spawn & other)
 
 IEntity * Spawn::trigger()
 {
-    IEntity * entity = IEntity::make(this->dlName + DLL_EXTENSION);
+    IEntity * entity = IEntity::make(this->dlName);
     if (entity == nullptr)
         return (nullptr);
     entity->setPosX(this->posX);

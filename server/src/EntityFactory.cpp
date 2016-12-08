@@ -12,7 +12,7 @@ IEntity * IEntity::make(const std::string & path)
     }
     catch (std::runtime_error &e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "IEntity::make " << e.what() << std::endl;
         return (nullptr);
     }
 }
