@@ -121,19 +121,22 @@ void Game::unspawn()
 
 }
 
-Controller * Game::newPlayer(Client *client) {
+void Game::newPlayer(Client *client) {
     if (clientList.size() == 4) {
         throw std::runtime_error("Cannot add more than 4 player in a game");
     }
     Controller *controller = new Controller();
-    this->clientList[client] = controller;
+    this->clientList.push_back(client);
     IEntity *player = new Player();
     controller->setEntity(player);
+    client->setController(controller);
     this->entities.push_back(player);
-    return controller;
 }
 
 void Game::removePlayer(Client *client) {
-    delete (this->clientList[client]);
-    this->clientList[client] = NULL;
+    const std::list<server::Client *>::iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
+    if (position == this->clientList.end()) {
+        return;
+    }
+    this->clientList.erase(position);
 }
