@@ -2,6 +2,7 @@
 
 #include "IDlLoader.hh"
 #include "Windows.h"
+#include <wchar.h>
 
 template<typename T>
 class WinDlLoader : public IDlLoader<T>
@@ -15,7 +16,7 @@ public:
 	{
 		lib_handle = LoadLibrary(dll_name);
 		if (lib_handle == NULL)
-			throw "Failed to load dll";
+			throw std::runtime_error("Failed to load dll: " + std::string(dll_name));
 	}
 
 	~WinDlLoader()

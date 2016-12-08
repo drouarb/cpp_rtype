@@ -26,21 +26,23 @@ server::Core::Core(const std::string &path) {
             return;
         }
     }
-    if (levels.empty())
-    {
+    if (levels.empty()) {
         std::cerr << "No levels. Aborting." << std::endl;
         return;
     }
     run();
 }
 
-void server::Core::run()
-{
+void server::Core::run() {
     Game game(1, levels[0]);
 
-    for (int i = 0; i < 20; ++i)
-    {
-        game.tick(i);
+    for (round_t i = 0; i < 20; ++i) {
+//        try {
+            game.tick(i);
+//        } catch (char const *toto) {
+//            std::cout << toto << std::endl;
+//
+//        }
     }
 }
 

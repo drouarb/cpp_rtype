@@ -1,10 +1,15 @@
+#include <algorithm>
 #include <iostream>
+#include <LibLoader/IDlLoader.hh>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game(int lobbyId) : lvl(nullptr), entities(256), gameId(lobbyId)
-{ }
+Game::Game(int lobbyId) : lvl(nullptr), gameId(lobbyId)
+{
+    //this->entities.reserve(256);
+    //Create vector with 256 nullptr, causes SIGSEV on all iteration
+}
 
 Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), entities(256), gameId(lobbyId)
 { }
@@ -43,7 +48,7 @@ void Game::progressLevel()
             IEntity * entity = spawn.trigger();
             if (entity == nullptr)
             {
-                std::cerr << "Game " << gameId << ": failed to create entity " << spawn.dlName << std::endl;
+                std::cerr << "Game " << gameId << ": failed to create entity " << spawn.dlName + DLL_EXTENSION << std::endl;
             }
             else
             {
@@ -63,7 +68,10 @@ void Game::letEntitesAct()
 {
     for (auto entity : entities)
     {
-        if (!entity->isDestroyed())
+        if (!entity) {
+            return;
+        }
+        if (!entity->isDestroyed()){}
         {
             auto action = entity->nextAction();
             if (action->destroy)
@@ -101,4 +109,19 @@ void Game::unspawn()
             entity->destroy();
         }
     }
+}
+
+void Game::newPlayer(Client *client) {
+    if (clientList.size() == 4) {
+        throw std::runtime_error("Cannot add more than 4 player in a game");
+    }
+    this->clientList.push_back(client);
+}
+
+void Game::removePlayer(Client *client) {
+    const std::list<server::Client *>::const_iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
+    if (position == this->clientList.end()) {
+        return;
+    }
+    this->clientList.erase(position);
 }

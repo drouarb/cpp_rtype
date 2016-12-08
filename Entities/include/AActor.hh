@@ -10,19 +10,26 @@
 #include "../../../Entities/include/Attack.hh"
 #include "IEntity.hh"
 
-/*
+
 namespace server {
 
     class AActor : public server::IEntity {
-    public:
-        AActor(const server::entityId_t entityId, const std::string &sprite);
+    private:
+        int hp;
+        bool destroyed;
 
-        virtual void play(std::vector<server::IEntity *>)= 0;
+
+    public:
+        AActor(const server::entityId_t entityId);
+
+        void play(std::vector<server::IEntity *>);
 
         virtual void hit(int damage);
+
+
+        bool isDestroyed() override;
     };
 
 }
-*/
 
 #endif //CPP_RTYPE_AACTOR_HH
