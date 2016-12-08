@@ -8,22 +8,43 @@ namespace server
     class Game
     {
     public:
-        Game();
-        Game(const Level &);
+        Game(int lobbyId);
+        Game(int lobbyId, const Level &);
         ~Game();
 
         void setLevel(const Level &);
         void tick(round_t);
+        int getLobbyId();
 
     private:
         const Level * lvl;
         std::vector<IEntity*> entities;
         round_t round;
+        int gameId;
 
+        /**
+         * Checks level for new spawns, or whatever the level may tell the game to do.
+         */
         void progressLevel();
+        /**
+         * Must be called after letEntitiesAct and before moveEntities.
+         * Checks for future collisions according to the current vector.
+         * Changes the vectors so that the entities about to collide touch but do not overlap.
+         * Calls the entity's collide() method in case of "collision".
+         */
         void checkCollisions();
+        /**
+         * Here, entities will do their things.
+         */
         void letEntitesAct();
+        /**
+         * Moves the entities according to their vector.
+         */
         void moveEntities();
+        /**
+         * Must be called after moveEntities, and before sending packets.
+         */
+        void unspawn();
     };
 }
 

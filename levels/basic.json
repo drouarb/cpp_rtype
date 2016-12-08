@@ -2,7 +2,7 @@
   "name": "basic",
   "spawns": [
     {
-      "dlName": "basic",
+      "dlName": "build/Entities/libBasicEntity.so",
       "time": 0,
       "posX": 0,
       "posY": 0

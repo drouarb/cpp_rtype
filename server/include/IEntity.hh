@@ -12,8 +12,8 @@
  *  \brief Allow to create entry point for shared libairies
  */
 
-#define ENTRY_POINTS(className) extern "C" { \
-    void *create_entity(uint16_t entityId) { return new className(entityId); } \
+#define ENTRY_POINT(className) extern "C" { \
+    void *create_entity() { return new className(); } \
     }
 
 
@@ -72,7 +72,7 @@ namespace server {
         virtual bool isDestroyed() = 0;
 
         /**
-         * This method is always called just before nextAction().
+         * This method is called before nextAction().
          * It informs the entity that it just collided with the Entity passed as parameter.
          * If the instance where collide() is called is an actor, it should check the colliding entity for damage.
          * This method may be called multiple times before nextAction() is called, if there are multiple collisions.

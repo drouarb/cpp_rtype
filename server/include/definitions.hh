@@ -14,6 +14,12 @@ namespace server {
     typedef int32_t damage_t;
 }
 
+#define FIELD_WIDTH 800
+#define FIELD_HEIGHT 600
+#define FIELD_BORDER_LEFT 0
+#define FIELD_BORDER_RIGHT (FIELD_BORDER_LEFT + FIELD_WIDTH)
+#define LEFT_MARGIN 100
+#define RIGHT_MARGIN (LEFT_MARGIN)
 
 #ifdef LOG_ERROR
 #define ERROR(expr) std::cerr << expr << std::endl;

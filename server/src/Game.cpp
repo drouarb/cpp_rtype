@@ -1,11 +1,12 @@
+#include <iostream>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game() : lvl(nullptr), entities(256)
+Game::Game(int lobbyId) : lvl(nullptr), entities(256), gameId(lobbyId)
 { }
 
-Game::Game(const Level & lvl) : lvl(&lvl), entities(256)
+Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), entities(256), gameId(lobbyId)
 { }
 
 Game::~Game()
@@ -20,10 +21,16 @@ void Game::tick(round_t round)
 {
     this->round = round;
     progressLevel();
-    checkCollisions();
     letEntitesAct();
+    checkCollisions();
     moveEntities();
-    //TODO: how will packets be sent? ref to packetfactory? intermediate class?
+    unspawn();
+    //TODO: send packets to client
+}
+
+int Game::getLobbyId()
+{
+    return (gameId);
 }
 
 void Game::progressLevel()
@@ -33,7 +40,15 @@ void Game::progressLevel()
         const std::vector<Spawn> *pVector = lvl->getNewSpawns(round);
         for (auto spawn : *pVector)
         {
-            entities.push_back(spawn.trigger());
+            IEntity * entity = spawn.trigger();
+            if (entity == nullptr)
+            {
+                std::cerr << "Game " << gameId << ": failed to create entity " << spawn.dlName << std::endl;
+            }
+            else
+            {
+                entities.push_back(spawn.trigger());
+            }
         }
     }
 }
@@ -41,6 +56,7 @@ void Game::progressLevel()
 void Game::checkCollisions()
 {
     //TODO
+    //
 }
 
 void Game::letEntitesAct()
@@ -64,6 +80,25 @@ void Game::moveEntities()
     {
         entity->setPosX(entity->getPosX() + entity->getSpeedX());
         entity->setPosY(entity->getPosY() + entity->getSpeedY());
+        //TODO: do this in checkCollisions, by changing the vectors?
+        if (entity->getPosY() > FIELD_HEIGHT)
+            entity->setPosY(FIELD_HEIGHT);
+        if (entity->getPosY() < 0)
+            entity->setPosY(0);
+        if (entity->getPosX() < FIELD_BORDER_LEFT - LEFT_MARGIN)
+            entity->setPosX(FIELD_BORDER_LEFT - LEFT_MARGIN);
+        if (entity->getPosX() > FIELD_BORDER_RIGHT + RIGHT_MARGIN)
+            entity->setPosX(FIELD_BORDER_RIGHT + RIGHT_MARGIN);
     }
 }
 
+void Game::unspawn()
+{
+    for (auto entity : entities)
+    {
+        if (entity->getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN)
+        {
+            entity->destroy();
+        }
+    }
+}
