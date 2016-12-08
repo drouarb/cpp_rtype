@@ -7,9 +7,10 @@
 
 #include "IPlayer.hh"
 #include "definitions.hh"
+#include "IEntity.hh"
 
 namespace server {
-    class Player : IPlayer {
+    class Player : public IPlayer, public IEntity {
         void shoot(attackId_t attackId) override;
     };
 }
