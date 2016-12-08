@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Explorer/FileExplorer.hh"
 #include "Core.hh"
+#include "Game.hh"
 
 server::Core::Core(const std::string &path) {
     FolderExplorer fileExplorer(path);
@@ -24,6 +25,22 @@ server::Core::Core(const std::string &path) {
             std::cerr << "Error" << std::endl;
             return;
         }
+    }
+    if (levels.empty())
+    {
+        std::cerr << "No levels. Aborting." << std::endl;
+        return;
+    }
+    run();
+}
+
+void server::Core::run()
+{
+    Game game(1, levels[0]);
+
+    for (int i = 0; i < 20; ++i)
+    {
+        game.tick(i);
     }
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <dlfcn.h>
 #include "string"
 #include "IDlLoader.hh"
 

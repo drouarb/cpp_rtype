@@ -17,12 +17,13 @@ file(
 
 include_directories(include)
 include_directories(../server/include)
+include_directories(../server/include/entities)
 
 set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 foreach (entity_file ${ENTITIES_SRC_FILES})
     get_filename_component(entity_name ${entity_file} NAME_WE)
-    add_library(${entity_name} SHARED ${entity_file} ${ENTITIES_HEADER_FILES})
+    add_library(${entity_name} SHARED ${entity_file} ${ENTITIES_HEADER_FILES} src/BasicEntity.cpp)
    #TODO Must be replaced by SHARED
 endforeach (entity_file)
 

@@ -15,6 +15,9 @@ namespace server {
          * @param path to a folder
          */
         Core(const std::string &path);
+
+    private:
+        void run();
     };
 
 }
