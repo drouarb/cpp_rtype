@@ -6,13 +6,14 @@
 #define CPP_RTYPE_IGAMECLIENT_HH
 
 #include <mutex>
-#include "networkManager.hh"
+#include "NetworkManager.hh"
 namespace client {
 
+    class NetworkManager;
     class GameClient {
     private:
         std::mutex client_mut;
-        networkManager *manager  = NULL;
+        NetworkManager *manager  = NULL;
     public:
         GameClient();
         ~GameClient(){};

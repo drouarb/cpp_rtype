@@ -5,7 +5,7 @@
 #include "listener/ClientListenerPlaySound.hh"
 using namespace client;
 
-ClientListenerPlaySound::ClientListenerPlaySound(GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::PLAY_SOUND)
+ClientListenerPlaySound::ClientListenerPlaySound(NetworkManager *networkManager) : networkManager(networkManager), APacketListener(network::packet::PLAY_SOUND)
 {
 
 }

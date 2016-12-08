@@ -15,8 +15,8 @@ void client::GameClient::createNetworkManager(const std::string &ip, unsigned sh
 {
     try
     {
-        manager = new networkManager(ip, port);
-        manager->addListenerToPacketFactory(this);
+        manager = new NetworkManager(ip, port, this);
+        manager->addListenerToPacketFactory();
         manager->startPacketFactory();
     }
     catch (std::runtime_error &e)

@@ -10,18 +10,19 @@
 #include "GameClient.hh"
 namespace client {
     class GameClient;
-     class networkManager {
+     class NetworkManager {
      private:
+         GameClient *gameClient;
          network::PacketFactory *packetFactory = NULL;
          std::vector<network::listener::IPacketListener*>	listeners;
      public:
-         ~networkManager();
+         ~NetworkManager();
 
          network::PacketFactory *getPacketFactory() const;
 
-         networkManager(const std::string &ip, unsigned short port);
+         NetworkManager(const std::string &ip, unsigned short port, GameClient *gameclient);
 
-         void addListenerToPacketFactory(client::GameClient *gameclient);
+         void addListenerToPacketFactory();
          bool startPacketFactory();
      };
 }
