@@ -43,6 +43,9 @@ void Game::progressLevel()
     if (lvl)
     {
         const std::vector<Spawn> *pVector = lvl->getNewSpawns(round);
+        if (pVector == NULL) {
+            return;
+        }
         for (auto spawn : *pVector)
         {
             IEntity * entity = spawn.trigger();
@@ -86,6 +89,9 @@ void Game::moveEntities()
 {
     for (auto entity : entities)
     {
+        if (!entity) {
+            return;
+        }
         entity->setPosX(entity->getPosX() + entity->getSpeedX());
         entity->setPosY(entity->getPosY() + entity->getSpeedY());
         //TODO: do this in checkCollisions, by changing the vectors?
@@ -104,7 +110,10 @@ void Game::unspawn()
 {
     for (auto entity : entities)
     {
-        if (entity->getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN)
+        if (!entity) {
+            return;
+        }
+        if (entity->getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN){}
         {
             entity->destroy();
         }
