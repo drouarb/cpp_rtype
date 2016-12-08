@@ -14,14 +14,14 @@ namespace server
         Game(int lobbyId, const Level &);
         ~Game();
 
-        Controller * newPlayer(Client *client);
+        void newPlayer(Client *client);
         void removePlayer(Client *client);
         void setLevel(const Level &);
         void tick(round_t);
         int getLobbyId();
 
     private:
-        std::map<Client *, Controller *> clientList;
+        std::list<Client *> clientList;
         const Level * lvl;
         std::list<IEntity*> entities;
         std::list<IEntity*> destroyedEntities;

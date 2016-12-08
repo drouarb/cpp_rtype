@@ -4,6 +4,7 @@
 
 #include <definitions.hh>
 #include <Player.hh>
+#include <iostream>
 
 void server::Player::shoot(server::attackId_t attackId) {
     //TODO
@@ -96,9 +97,9 @@ bool server::Player::isDestroyed()
     return destroyed;
 }
 
-void server::Player::collide(server::IEntity *)
+void server::Player::collide(server::IEntity *entity)
 {
-
+    std::cout << "Player " << this->id << " collide with entity id " << entity->getEntityId() << std::endl;
 }
 
 server::EntityAction *server::Player::nextAction()
