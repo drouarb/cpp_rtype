@@ -3,6 +3,7 @@
 
 #include "Level.hh"
 #include "Client.hh"
+#include <list>
 
 namespace server
 {
@@ -22,7 +23,8 @@ namespace server
     private:
         std::list<Client *> clientList;
         const Level * lvl;
-        std::vector<IEntity*> entities;
+        std::list<IEntity*> entities;
+        std::list<IEntity*> destroyedEntities;
         round_t round;
         int gameId;
 
