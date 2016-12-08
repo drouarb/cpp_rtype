@@ -2,12 +2,14 @@
 // Created by lewis_e on 08/12/16.
 //
 
+#include <iostream>
 #include "BasicEntity.hh"
 
 ENTRY_POINT(BasicEntity)
 
 BasicEntity::BasicEntity() : id(0), team(server::NA), sprite(""), posX(FIELD_BORDER_RIGHT + RIGHT_MARGIN), posY(FIELD_HEIGHT / 2), speedX(0), speedY(0), hp(-1), destroyed(false)
-{ }
+{
+}
 
 void BasicEntity::setEntityId(server::entityId_t id)
 {

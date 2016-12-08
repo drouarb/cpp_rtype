@@ -10,7 +10,8 @@ void server::Player::shoot(server::attackId_t attackId) {
     //TODO
 }
 
-server::Player::Player() {}
+server::Player::Player() :  id(0), team(server::PLAYER), sprite(""), posX(0), posY(FIELD_HEIGHT / 2), speedX(0), speedY(0), hp(-1), destroyed(false)
+{}
 
 void server::Player::setEntityId(server::entityId_t id)
 {

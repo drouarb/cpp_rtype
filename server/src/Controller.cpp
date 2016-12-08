@@ -1,8 +1,8 @@
 #include <Controller.hh>
 
 void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY) {
-    this->entity->setPosX(entity->getPosX() + entity->getSpeedX());
-    this->entity->setPosY(entity->getPosY() + entity->getSpeedY());
+    this->entity->setSpeedX(speedX);
+    this->entity->setSpeedY(speedY);
 }
 
 void server::Controller::playShoot(server::attackId_t attackId) {

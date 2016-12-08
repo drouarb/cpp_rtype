@@ -3,13 +3,14 @@
 #include <LibLoader/IDlLoader.hh>
 #include <Player.hh>
 #include "Game.hh"
+#include "../../Entities/include/BasicEntity.hh"
 
 using namespace server;
 
-Game::Game(int lobbyId) : lvl(nullptr), gameId(lobbyId)
+Game::Game(int lobbyId) : lvl(nullptr), gameId(lobbyId), entityIdCount(0)
 { }
 
-Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), gameId(lobbyId)
+Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), gameId(lobbyId), entityIdCount(0)
 { }
 
 Game::~Game()
@@ -54,7 +55,10 @@ void Game::progressLevel()
             }
             else
             {
-                entities.push_front(spawn.trigger());
+                entity->setEntityId(entityIdCount);
+                std::cout << entity->getPosX() << ", " << entity->getPosY();
+                entityIdCount++;
+                entities.push_front(entity);
             }
         }
     }
@@ -128,6 +132,8 @@ void Game::newPlayer(Client *client) {
     Controller *controller = new Controller();
     this->clientList.push_back(client);
     IEntity *player = new Player();
+    player->setEntityId(entityIdCount);
+    entityIdCount++;
     controller->setEntity(player);
     client->setController(controller);
     this->entities.push_back(player);

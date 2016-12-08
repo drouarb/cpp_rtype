@@ -6,12 +6,15 @@
 #define CPP_RTYPE_BASICENTITY_HH
 
 
+#include <ostream>
 #include "../../server/include/IEntity.hh"
 #include "../../server/include/definitions.hh"
 
 class BasicEntity : public server::IEntity {
 public:
     BasicEntity();
+
+    friend std::ostream &operator<<(std::ostream &os, const BasicEntity &entity);
 
     void setEntityId(server::entityId_t);
     server::entityId_t getEntityId();

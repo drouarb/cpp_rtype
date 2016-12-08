@@ -27,6 +27,7 @@ namespace server
         std::list<IEntity*> destroyedEntities;
         round_t round;
         int gameId;
+        entityId_t entityIdCount;
 
 
         /**
