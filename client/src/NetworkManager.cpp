@@ -18,6 +18,11 @@
 #include <listener/ClientListenerUpdateEntity.hh>
 #include <iostream>
 #include <network/packet/PacketAck.hh>
+#include <network/packet/PacketRegister.hh>
+#include <network/packet/PacketAskList.hh>
+#include <network/packet/PacketJoin.hh>
+#include <network/packet/PacketPlayerMove.hh>
+#include <network/packet/PacketPlayerAttack.hh>
 #include "NetworkManager.hh"
 
 using namespace client;
@@ -76,5 +81,90 @@ void NetworkManager::addListenerToPacketFactory()
     listeners.push_back(new client::ClientListenerUpdateEntity(this));
     for (auto it = listeners.begin(); it != listeners.end(); it++)
         packetFactory->registerListener(*it);
+}
+
+void NetworkManager::receiveDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) {
+}
+
+void NetworkManager::receiveDisconnect() {
+}
+
+void NetworkManager::receiveCancelEvent(uint32_t eventId) {
+
+}
+
+void NetworkManager::receiveErrorList(const std::string &message) {
+
+}
+
+void NetworkManager::receiveEventError(const std::string &message) {
+
+}
+
+void NetworkManager::receiveGameList(const std::vector<std::pair<uint8_t, uint16_t >> GameList) {
+
+}
+
+void NetworkManager::receiveLeaderBoard(std::vector<std::pair<uint32_t, std::string>> LeaderBoard) {
+
+}
+
+void
+NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy) {
+
+}
+
+void NetworkManager::receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {
+
+}
+
+void NetworkManager::receiveQuit() {
+
+}
+
+void
+NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
+                                   uint16_t pos_x, uint16_t pos_y) {
+
+}
+
+void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp) {
+
+}
+
+void NetworkManager::sendRegister(const std::string &name) {
+
+    network::packet::PacketRegister packetRegister(name);
+    packetFactory->send(packetRegister);
+}
+
+void NetworkManager::sendDisconnect() {
+    network::packet::PacketDisconnect disconnect;
+    packetFactory->send(disconnect);
+}
+
+void NetworkManager::sendAskList() {
+    network::packet::PacketAskList askList;
+    packetFactory->send(askList);
+}
+
+void NetworkManager::sendJoin(uint8_t roomId) {
+    network::packet::PacketJoin join(roomId);
+    packetFactory->send(join);
+}
+
+void NetworkManager::sendQuit() {
+    network::packet::PacketQuit quit;
+    packetFactory->send(quit);
+}
+
+void NetworkManager::sendPlayerMove(uint32_t tick, uint16_t vect_x, uint16_t vect_y) {
+    network::packet::PacketPlayerMove playerMove(tick, vect_x, vect_y);
+    packetFactory->send(playerMove);
+}
+
+void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
+    network::packet::PacketPlayerAttack packetPlayerAttack(tick, attackId);
+    packetFactory->send(packetPlayerAttack);
 }
 

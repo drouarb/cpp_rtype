@@ -17,5 +17,5 @@ ClientListenerQuit::~ClientListenerQuit()
 
 void ClientListenerQuit::notify(const network::packet::PacketQuit *packet)
 {
-
+    networkManager->receiveQuit();
 }

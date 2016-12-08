@@ -17,5 +17,5 @@ ClientListenerEventError::~ClientListenerEventError()
 
 void ClientListenerEventError::notify(const network::packet::PacketEventError *packet)
 {
-
+    networkManager->receiveEventError(packet->getMessage());
 }

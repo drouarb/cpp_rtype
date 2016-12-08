@@ -16,5 +16,5 @@ ClientListenerLeaderBoard::~ClientListenerLeaderBoard()
 
 void ClientListenerLeaderBoard::notify(const network::packet::PacketLeaderBoard *packet)
 {
-
+    networkManager->receiveLeaderBoard(packet->getLeaderBoard());
 }

@@ -17,5 +17,5 @@ ClientListenerUpdateEntity::~ClientListenerUpdateEntity()
 
 void ClientListenerUpdateEntity::notify(const network::packet::PacketUpdateEntity *packet)
 {
-
+    networkManager->receiveUpdateEntity(packet->getTick(), packet->getEventId(), packet->getEntityId(), packet->getHp());
 }

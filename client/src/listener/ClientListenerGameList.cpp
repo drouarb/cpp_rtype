@@ -15,5 +15,5 @@ ClientListenerGameList::~ClientListenerGameList()
 }
 void ClientListenerGameList::notify(const network::packet::PacketGameList *packet)
 {
-
+    networkManager->receiveGameList(packet->getGameList());
 }

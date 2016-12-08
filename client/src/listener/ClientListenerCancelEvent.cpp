@@ -17,5 +17,5 @@ ClientListenerCancelEvent::~ClientListenerCancelEvent()
 
 void ClientListenerCancelEvent::notify(const network::packet::PacketCancelEvent *packet)
 {
-
+    networkManager->receiveCancelEvent(packet->getCancelEvent());
 }

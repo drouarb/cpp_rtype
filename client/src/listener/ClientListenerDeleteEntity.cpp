@@ -16,5 +16,5 @@ ClientListenerDeleteEntity::~ClientListenerDeleteEntity()
 
 void ClientListenerDeleteEntity::notify(const network::packet::PacketDeleteEntity *packet)
 {
-
+    this->networkManager->receiveDeleteEntity(packet->getTick(), packet->getEventId(), packet->getEntityId());
 }
