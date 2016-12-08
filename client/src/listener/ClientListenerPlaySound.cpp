@@ -17,5 +17,5 @@ ClientListenerPlaySound::~ClientListenerPlaySound()
 
 void ClientListenerPlaySound::notify(const network::packet::PacketPlaySound *packet)
 {
-
+    networkManager->receivePlaySound(packet->getTick(),packet->getEventId(), packet->getSoundName());
 }

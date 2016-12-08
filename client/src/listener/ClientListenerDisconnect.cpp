@@ -16,5 +16,5 @@ ClientListenerDisconnect::~ClientListenerDisconnect()
 
 void ClientListenerDisconnect::notify(const network::packet::PacketDisconnect *packet)
 {
-
+    networkManager->receiveDisconnect();
 }

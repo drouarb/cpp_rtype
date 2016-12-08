@@ -16,5 +16,5 @@ ClientListenerErrorList::~ClientListenerErrorList()
 
 void ClientListenerErrorList::notify(const network::packet::PacketErrorList *packet)
 {
-
+    networkManager->receiveErrorList(packet->getMessage());
 }
