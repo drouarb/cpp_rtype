@@ -13,7 +13,7 @@ namespace server {
     typedef float speed_t;
     typedef int32_t damage_t;
     typedef uint8_t attackId_t;
-    typedef uint16_t clientId_t;
+    typedef int clientId_t;
 }
 
 #define FIELD_WIDTH 800

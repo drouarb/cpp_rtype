@@ -36,6 +36,10 @@ server::Core::Core(const std::string &path) {
 void server::Core::run() {
     Game game(1, levels[0]);
 
+    Client client(1);
+    game.newPlayer(&client);
+    client.getController()->playMove(10, 1);
+
     for (round_t i = 0; i < 20; ++i)
     {
         std::cout << "- round " << std::to_string(i) << " - - - - - - - - - - - - - - - - - -" << std::endl;
