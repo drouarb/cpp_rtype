@@ -6,12 +6,9 @@
 using namespace server;
 
 Game::Game(int lobbyId) : lvl(nullptr), gameId(lobbyId)
-{
-    //this->entities.reserve(256);
-    //Create vector with 256 nullptr, causes SIGSEV on all iteration
-}
+{ }
 
-Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), entities(256), gameId(lobbyId)
+Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), gameId(lobbyId)
 { }
 
 Game::~Game()
@@ -43,7 +40,8 @@ void Game::progressLevel()
     if (lvl)
     {
         const std::vector<Spawn> *pVector = lvl->getNewSpawns(round);
-        if (pVector == NULL) {
+        if (pVector == NULL)
+        {
             return;
         }
         for (auto spawn : *pVector)
@@ -55,7 +53,7 @@ void Game::progressLevel()
             }
             else
             {
-                entities.push_back(spawn.trigger());
+                entities.push_front(spawn.trigger());
             }
         }
     }
@@ -69,19 +67,18 @@ void Game::checkCollisions()
 
 void Game::letEntitesAct()
 {
-    for (auto entity : entities)
+    for (auto it = entities.begin(); it != entities.end(); ++it)
     {
-        if (!entity) {
-            return;
-        }
-        if (!entity->isDestroyed()){}
+        auto action = (*it)->nextAction();
+        if (action->newEntity)
         {
-            auto action = entity->nextAction();
-            if (action->destroy)
-                entity->destroy();
-            if (action->newEntity)
-                entities.push_back(action->newEntity);
+            entities.push_back(action->newEntity);
         }
+        if (action->destroy)
+        {
+            (*it)->destroy();
+        }
+        delete action;
     }
 }
 
@@ -89,11 +86,9 @@ void Game::moveEntities()
 {
     for (auto entity : entities)
     {
-        if (!entity) {
-            return;
-        }
         entity->setPosX(entity->getPosX() + entity->getSpeedX());
         entity->setPosY(entity->getPosY() + entity->getSpeedY());
+        std::cout << "entity " << std::to_string(entity->getEntityId()) << " x=" << std::to_string(entity->getPosX()) << " y=" << std::to_string(entity->getPosY()) << std::endl;
         //TODO: do this in checkCollisions, by changing the vectors?
         if (entity->getPosY() > FIELD_HEIGHT)
             entity->setPosY(FIELD_HEIGHT);
@@ -108,16 +103,21 @@ void Game::moveEntities()
 
 void Game::unspawn()
 {
-    for (auto entity : entities)
+    for (auto it = entities.begin(); it != entities.end();)
     {
-        if (!entity) {
-            return;
-        }
-        if (entity->getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN){}
+        if ((*it)->getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN)
         {
-            entity->destroy();
+            (*it)->destroy();
         }
+        if ((*it)->isDestroyed())
+        {
+            destroyedEntities.push_front(*it);
+            it = entities.erase(it);
+        }
+        else
+            ++it;
     }
+
 }
 
 void Game::newPlayer(Client *client) {
@@ -128,7 +128,7 @@ void Game::newPlayer(Client *client) {
 }
 
 void Game::removePlayer(Client *client) {
-    const std::list<server::Client *>::const_iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
+    const std::list<server::Client *>::iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
     if (position == this->clientList.end()) {
         return;
     }

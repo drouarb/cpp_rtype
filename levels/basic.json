@@ -2,7 +2,7 @@
   "name": "basic",
   "spawns": [
     {
-      "dlName": "cmake-build-debug/Entities/libBasicEntity",
+      "dlName": "build/Entities/libBasicEntity",
       "time": 0,
       "posX": 0,
       "posY": 0

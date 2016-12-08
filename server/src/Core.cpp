@@ -36,13 +36,10 @@ server::Core::Core(const std::string &path) {
 void server::Core::run() {
     Game game(1, levels[0]);
 
-    for (round_t i = 0; i < 20; ++i) {
-//        try {
-            game.tick(i);
-//        } catch (char const *toto) {
-//            std::cout << toto << std::endl;
-//
-//        }
+    for (round_t i = 0; i < 20; ++i)
+    {
+        std::cout << "- round " << std::to_string(i) << " - - - - - - - - - - - - - - - - - -" << std::endl;
+        game.tick(i);
     }
 }
 
