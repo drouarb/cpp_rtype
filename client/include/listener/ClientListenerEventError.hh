@@ -7,20 +7,20 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketEventError.hh"
-#include "GameClient.hh"
+#include "NetworkManager.hh"
 namespace client {
     class ClientListenerEventError
             : public network::ListenerTemplate<network::packet::PacketEventError, network::packet::EVENT_ERROR> {
 
     public:
-        ClientListenerEventError(GameClient *gameClient);
+        ClientListenerEventError(NetworkManager *networkManager);
 
         ~ClientListenerEventError();
 
         void notify(const network::packet::PacketEventError *packet);
 
     private:
-        GameClient *gameclient;
+        NetworkManager *networkManager;
     };
 }
 #endif //CPP_RTYPE_CLIENTLISTENEREVENTERROR_HH

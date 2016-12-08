@@ -18,16 +18,16 @@
 #include <listener/ClientListenerUpdateEntity.hh>
 #include <iostream>
 #include <network/packet/PacketAck.hh>
-#include "networkManager.hh"
+#include "NetworkManager.hh"
 
 using namespace client;
 
-networkManager::~networkManager()
+NetworkManager::~NetworkManager()
 {
     delete(packetFactory);
 }
 
-networkManager::networkManager(const std::string &ip, unsigned short port)
+NetworkManager::NetworkManager(const std::string &ip, unsigned short port, GameClient *gameclient) : gameClient(gameclient)
 {
     try
     {
@@ -35,21 +35,21 @@ networkManager::networkManager(const std::string &ip, unsigned short port)
     }
     catch (std::runtime_error & e)
     {
-        this->packetFactory = NULL;
+        this->packetFactory = nullptr;
         std::cerr << e.what() << std::endl;
         throw (std::runtime_error("netWorkManager failed to instance"));
     }
 }
 
-network::PacketFactory *networkManager::getPacketFactory() const
+network::PacketFactory *NetworkManager::getPacketFactory() const
 {
     return packetFactory;
 }
 
-bool networkManager::startPacketFactory()
+bool NetworkManager::startPacketFactory()
 {
     try {
-        if (packetFactory == NULL)
+        if (packetFactory == nullptr)
             return false;
         packetFactory->run();
     }
@@ -60,20 +60,20 @@ bool networkManager::startPacketFactory()
     return true;
 }
 
-void networkManager::addListenerToPacketFactory(client::GameClient *gameclient)
+void NetworkManager::addListenerToPacketFactory()
 {
-    listeners.push_back(new client::ClientListenerCancelEvent(gameclient));
-    listeners.push_back(new client::ClientListenerDeleteEntity(gameclient));
-    listeners.push_back(new client::ClientListenerDisconnect(gameclient));
-    listeners.push_back(new client::ClientListenerErrorList(gameclient));
-    listeners.push_back(new client::ClientListenerEventError(gameclient));
-    listeners.push_back(new client::ClientListenerGameList(gameclient));
-    listeners.push_back(new client::ClientListenerLeaderBoard(gameclient));
-    listeners.push_back(new client::ClientListenerMoveEntity(gameclient));
-    listeners.push_back(new client::ClientListenerPlaySound(gameclient));
-    listeners.push_back(new client::ClientListenerQuit(gameclient));
-    listeners.push_back(new client::ClientListenerSpawnEntity(gameclient));
-    listeners.push_back(new client::ClientListenerUpdateEntity(gameclient));
+    listeners.push_back(new client::ClientListenerCancelEvent(this));
+    listeners.push_back(new client::ClientListenerDeleteEntity(this));
+    listeners.push_back(new client::ClientListenerDisconnect(this));
+    listeners.push_back(new client::ClientListenerErrorList(this));
+    listeners.push_back(new client::ClientListenerEventError(this));
+    listeners.push_back(new client::ClientListenerGameList(this));
+    listeners.push_back(new client::ClientListenerLeaderBoard(this));
+    listeners.push_back(new client::ClientListenerMoveEntity(this));
+    listeners.push_back(new client::ClientListenerPlaySound(this));
+    listeners.push_back(new client::ClientListenerQuit(this));
+    listeners.push_back(new client::ClientListenerSpawnEntity(this));
+    listeners.push_back(new client::ClientListenerUpdateEntity(this));
     for (auto it = listeners.begin(); it != listeners.end(); it++)
         packetFactory->registerListener(*it);
 }
