@@ -1,3 +1,4 @@
+#include <iostream>
 #include "IEntity.hh"
 #include "LibLoader/getDlLoader.hpp"
 
@@ -9,8 +10,9 @@ IEntity * IEntity::make(const std::string & path)
     {
         return (getDlLoader<IEntity>(path)->getInstance());
     }
-    catch (std::runtime_error)
+    catch (std::runtime_error &e)
     {
+        std::cerr << e.what() << std::endl;
         return (nullptr);
     }
 }
