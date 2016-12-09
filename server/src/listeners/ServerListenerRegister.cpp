@@ -11,5 +11,4 @@ server::ServerListenerRegister::ServerListenerRegister() : APacketListener(netwo
 void server::ServerListenerRegister::notify(const network::packet::PacketRegister *packet) {
 }
 
-server::ServerListenerRegister::ServerListenerRegister(server::IListenerHandler *iListenerHandler) : IListenerHandler(
-        IListenerHandler), APacketListener(network::packet::REGISTER) {}
+server::ServerListenerRegister::ServerListenerRegister(server::IListenerHandler *iListenerHandler) : listenerHandler(iListenerHandler), APacketListener(network::packet::REGISTER) {}

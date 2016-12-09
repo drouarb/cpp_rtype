@@ -14,12 +14,12 @@ namespace server {
 
     class ServerListenerRegister : public network::ListenerTemplate<network::packet::PacketRegister, network::packet::REGISTER> {
     private:
-        IListenerHandler *IListenerHandler;
+        IListenerHandler * listenerHandler;
 
     public:
         ServerListenerRegister();
 
-        ServerListenerRegister(server::IListenerHandler *IListenerHandler);
+        ServerListenerRegister(server::IListenerHandler * listenerHandler);
 
         void notify(const network::packet::PacketRegister *packet);
     };

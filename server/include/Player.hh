@@ -22,7 +22,9 @@ namespace server {
         server::speed_t speedY;
         int hp;
         bool destroyed;
+
         std::queue<attackId_t> attackQueue;
+        bool mustDestroy;
 
     public:
         Player();

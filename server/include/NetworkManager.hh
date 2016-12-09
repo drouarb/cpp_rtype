@@ -28,7 +28,7 @@ namespace server {
 
         void clientDisconnect(int src) override;
 
-        void clientJoin(int src) override;
+        void clientJoin(int src, gameId_t game) override;
 
         void clientPlayerAttack(int src, attackId_t attackId) override;
 

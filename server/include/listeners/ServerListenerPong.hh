@@ -13,11 +13,11 @@ namespace server {
 
     class ServerListenerPong : public network::ListenerTemplate<network::packet::PacketPong, network::packet::PONG> {
     private:
-        IListenerHandler *IListenerHandler;
+        IListenerHandler * listenerHandler;
 
     public:
 
-        ServerListenerPong(server::IListenerHandler *IListenerHandler);
+        ServerListenerPong(server::IListenerHandler * listenerHandler);
 
         void notify(const network::packet::PacketPong *packet);
     };

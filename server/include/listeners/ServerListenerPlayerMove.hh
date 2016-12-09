@@ -14,12 +14,12 @@ namespace server {
 
     class ServerListenerPlayerMove : public network::ListenerTemplate<network::packet::PacketPlayerMove, network::packet::PLAYER_MOVE> {
     private:
-        IListenerHandler *IListenerHandler;
+        IListenerHandler * listenerHandler;
 
     public:
         ServerListenerPlayerMove();
 
-        ServerListenerPlayerMove(server::IListenerHandler *IListenerHandler);
+        ServerListenerPlayerMove(server::IListenerHandler * listenerHandler);
 
         void notify(const network::packet::PacketPlayerMove *packet);
     };

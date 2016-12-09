@@ -7,6 +7,8 @@
 
 #include "cstdint"
 
+#define ROUND_DURATION_MS 30
+
 namespace server {
     typedef uint32_t round_t;
     typedef float pos_t;
@@ -14,6 +16,7 @@ namespace server {
     typedef int32_t damage_t;
     typedef uint8_t attackId_t;
     typedef int clientId_t;
+    typedef int gameId_t;
 }
 
 #define FIELD_WIDTH 800

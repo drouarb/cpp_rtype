@@ -6,7 +6,8 @@
 
 
 void server::ServerListenerJoin::notify(const network::packet::PacketJoin *packet) {
-
+    this->listenerHandler->clientJoin(packet->getSource(), packet->getJoin());
 }
 
-server::ServerListenerJoin::ServerListenerJoin(server::IListenerHandler *iListenerHandler) : APacketListener(network::packet::JOIN), IListenerHandler(IListenerHandler) {}
+server::ServerListenerJoin::ServerListenerJoin(server::IListenerHandler *iListenerHandler) : APacketListener(network::packet::JOIN), listenerHandler(iListenerHandler)
+{ }

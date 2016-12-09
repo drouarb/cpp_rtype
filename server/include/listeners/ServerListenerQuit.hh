@@ -14,12 +14,12 @@ namespace server {
 
     class ServerListenerQuit : public network::ListenerTemplate<network::packet::PacketQuit, network::packet::QUIT> {
     private:
-        IListenerHandler *IListenerHandler;
+        IListenerHandler * listenerHandler;
 
     public:
         ServerListenerQuit();
 
-        ServerListenerQuit(server::IListenerHandler *IListenerHandler);
+        ServerListenerQuit(server::IListenerHandler * listenerHandler);
 
         void notify(const network::packet::PacketQuit *packet);
     };

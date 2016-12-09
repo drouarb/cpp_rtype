@@ -13,7 +13,7 @@ namespace server {
 
     class ServerListenerPlayerAttack : public network::ListenerTemplate<network::packet::PacketPlayerAttack, network::packet::PLAYER_ATTACK> {
     private:
-        IListenerHandler *IListenerHandler;
+        IListenerHandler * listenerHandler;
 
     public:
         ServerListenerPlayerAttack();

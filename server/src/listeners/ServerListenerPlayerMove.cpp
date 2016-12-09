@@ -9,8 +9,7 @@ server::ServerListenerPlayerMove::ServerListenerPlayerMove() : APacketListener(n
 }
 
 void server::ServerListenerPlayerMove::notify(const network::packet::PacketPlayerMove *packet) {
-
+    this->listenerHandler->clientPlayerQuit(packet->getSource());
 }
 
-server::ServerListenerPlayerMove::ServerListenerPlayerMove(server::IListenerHandler *iListenerHandler) : IListenerHandler(
-        IListenerHandler), APacketListener(network::packet::PLAYER_MOVE) {}
+server::ServerListenerPlayerMove::ServerListenerPlayerMove(server::IListenerHandler *iListenerHandler) : listenerHandler(iListenerHandler), APacketListener(network::packet::PLAYER_MOVE) {}
