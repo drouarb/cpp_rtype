@@ -4,10 +4,9 @@
 
 #include "listeners/ServerListenerJoin.hh"
 
-server::ServerListenerJoin::ServerListenerJoin() : APacketListener(network::packet::JOIN) {
-
-}
 
 void server::ServerListenerJoin::notify(const network::packet::PacketJoin *packet) {
 
 }
+
+server::ServerListenerJoin::ServerListenerJoin(server::IListenerHandler *iListenerHandler) : APacketListener(network::packet::JOIN), IListenerHandler(IListenerHandler) {}

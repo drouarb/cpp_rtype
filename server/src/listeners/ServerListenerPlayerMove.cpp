@@ -11,3 +11,6 @@ server::ServerListenerPlayerMove::ServerListenerPlayerMove() : APacketListener(n
 void server::ServerListenerPlayerMove::notify(const network::packet::PacketPlayerMove *packet) {
 
 }
+
+server::ServerListenerPlayerMove::ServerListenerPlayerMove(server::IListenerHandler *iListenerHandler) : IListenerHandler(
+        IListenerHandler), APacketListener(network::packet::PLAYER_MOVE) {}

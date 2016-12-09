@@ -17,6 +17,7 @@
 #include <listener/ClientListenerSynAck.hh>
 #include <listener/ClientListenerUpdateEntity.hh>
 #include <listener/ClientListernerPong.hh>
+#include <list>
 #include "networkManager.hh"
 
 using namespace client;
