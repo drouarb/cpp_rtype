@@ -19,7 +19,6 @@ network::socket::UnixUDPSocket::UnixUDPSocket(unsigned short port) : type(networ
     mainSocket.sin_family = AF_INET;
     mainSocket.sin_port = htons(port);
     mainSocket.sin_addr.s_addr = htonl(INADDR_ANY);
-    pollfd.fd = mainSocketFd;
     pollfd.events = POLLIN;
 }
 
@@ -30,7 +29,6 @@ network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsign
     memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
     mainSocket.sin_port = htons(port);
-    pollfd.fd = mainSocketFd;
     pollfd.events = POLLIN;
     if (inet_aton(address.c_str(), &mainSocket.sin_addr) == 0)
         throw new std::runtime_error("UnixUDPSocket Invalid ip");
@@ -39,6 +37,7 @@ network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsign
 
 bool network::socket::UnixUDPSocket::run() {
     //TODO thread poll
+    thread = new std::thread(&UnixUDPSocket::poll, this);
     return false;
 }
 
@@ -77,6 +76,7 @@ void network::socket::UnixUDPSocket::serverPoll() {
     status = CONNECTED;
 
     while (status == CONNECTED) {
+        pollfd.fd = mainSocketFd;
         if (::poll(&pollfd, 1, POLL_TIMEOUT)) {
             recvfrom(mainSocketFd, buffer.data(), SOCKET_BUFFER, 0, (struct sockaddr *) &recvSocket, &recvSocketLen);
             found = false;
@@ -96,6 +96,7 @@ void network::socket::UnixUDPSocket::serverPoll() {
             if (!found) {
                 clients.emplace_back();
                 clients.back().status = CONNECTING;
+                memcpy(&clients.back().client, &recvSocket, sizeof(recvSocket));
                 if (!serverHandshake(buffer, clients.back(), SYNACK))
                     clients.pop_back();
             }
@@ -132,6 +133,7 @@ bool network::socket::UnixUDPSocket::serverHandshake(std::vector<uint8_t> &data,
             if (packetAck.getAck() != client.ack)
                 return false;
             else {
+                client.status = CONNECTED;
                 for (auto &l : connectionListeners) {
                     l->notify(getClientId(client.client));
                 }
@@ -151,7 +153,7 @@ void network::socket::UnixUDPSocket::serverTimeout() {
     packetPing.serialize(&buff);
     for (auto it = clients.begin(); it != clients.end(); it++) {
         if ((*it).status == CONNECTED) {
-            if ((*it).sw.elapsedMs() > (*it).npings * PING_TIME) {
+            if ((*it).sw.elapsedMs() > ((*it).npings + 1) * PING_TIME) {
                 if ((*it).npings < MAX_PINGS) {
                     send(buff, getClientId((*it).client));
                     (*it).npings++;
@@ -182,9 +184,12 @@ void network::socket::UnixUDPSocket::clientPoll() {
     clientHandshake();
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
 
+    pollfd.fd = mainSocketFd;
     while (status == CONNECTED) {
         if (::poll(&pollfd, 1, POLL_TIMEOUT)) {
             recv(mainSocketFd, buffer.data(), buffer.size(), 0);
+            npings = 0;
+            sw.set();
             handleData(buffer, mainSocket);
         }
         clientTimeout();
@@ -202,6 +207,7 @@ void network::socket::UnixUDPSocket::clientHandshake() {
     packetSyn.serialize(&buff);
     sendto(mainSocketFd, buff.data(), buff.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
 
+    pollfd.fd = mainSocketFd;
     if (::poll(&pollfd, 1, HANDSHAKE_TIMEOUT) == 0)
         throw std::runtime_error("Client socket no handshake received");
     buff.resize(SOCKET_BUFFER);
@@ -224,7 +230,7 @@ void network::socket::UnixUDPSocket::clientHandshake() {
 }
 
 void network::socket::UnixUDPSocket::clientTimeout() {
-    if (sw.elapsedMs() > npings * PING_TIME) {
+    if (sw.elapsedMs() > (npings + 1) * PING_TIME) {
         if (npings < MAX_PINGS) {
             std::vector<uint8_t> buff;
             packet::PacketPing packetPing;
@@ -268,7 +274,7 @@ void network::socket::UnixUDPSocket::broadcast(const std::vector<uint8_t> &data)
                 sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &client.client, sizeof(client.client));
         }
     } else {
-        sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &mainSocket, sizeof(&mainSocket));
+        sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
     }
 }
 
@@ -277,13 +283,13 @@ void network::socket::UnixUDPSocket::send(const std::vector<uint8_t> &data, unsi
         throw new std::runtime_error("Can't send if socket isn't running");
     if (type == SERVER) {
         for (auto &client : clients) {
-            if (getClientId(client.client) == dest && client.status == CONNECTED) {
+            if (getClientId(client.client) == dest && (client.status == CONNECTED || client.status == CONNECTING)) {
                 sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &client.client, sizeof(client.client));
                 return;
             }
         }
     } else {
-        sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &mainSocket, sizeof(&mainSocket));
+        sendto(mainSocketFd, data.data(), data.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
     }
 }
 
