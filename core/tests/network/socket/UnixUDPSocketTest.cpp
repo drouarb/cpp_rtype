@@ -44,15 +44,35 @@ public:
     }
 };
 
+class DataL: public listener::ISocketDataListener {
+    std::vector<uint8_t> data;
+public:
+    virtual void notify(unsigned long fd, std::vector<unsigned char> *data) {
+        std::cout << "Received " << data->size() << std::endl;
+        this->data.insert(this->data.end(), data->begin(), data->end());
+    }
+
+    const std::vector<uint8_t> &getData() const {
+        return data;
+    }
+};
+
 int main() {
     ConL *conL = new ConL;
+    DataL *dataL = new DataL;
+    std::vector<uint8_t> data;
     DisconL *disconL = new DisconL;
     socket::UnixUDPSocket *server = new socket::UnixUDPSocket(PORT);
     socket::UnixUDPSocket *client = new socket::UnixUDPSocket("127.0.0.1", PORT);
 
     server->run();
     server->registerConnectionListener(conL);
+    server->registerDataListener(dataL);
     server->registerDisconnectionListener(disconL);
+
+    for (uint8_t i = 0; i < 10; i++) {
+        data.push_back(i);
+    }
 
     client->run();
 
@@ -62,9 +82,15 @@ int main() {
 
     usleep(500000);
 
+    client->broadcast(data);
+
+    for (int i = 0; i < dataL->getData().size(); i++) {
+        assert(data[i] == dataL->getData()[i]);
+    }
+
     client->stop();
 
-    sleep(6);
+    sleep(7);
 
     assert(disconL->isDisconnected());
 }
