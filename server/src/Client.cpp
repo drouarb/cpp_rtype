@@ -11,6 +11,7 @@ void server::Client::setController(server::Controller *controller) {
 server::Client::Client(server::clientId_t clientId) : clientId(clientId), controller(nullptr) {}
 
 server::Client::Client() {
+    this->name = "";
     this->clientId = 0;
     this->controller = nullptr;
 }
@@ -28,6 +29,14 @@ server::Client &server::Client::operator=(const server::Client &toCopy) {
 
 server::clientId_t server::Client::getClientId() const {
     return clientId;
+}
+
+void server::Client::setName(const std::string &name) {
+    this->name = name;
+}
+
+const std::string &server::Client::getName() const {
+    return name;
 }
 
 bool ::server::operator==(const server::Client &lft, const server::Client &rht) {

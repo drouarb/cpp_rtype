@@ -2,6 +2,7 @@
 
 #include "definitions.hh"
 #include "IEntity.hh"
+#include "IPlayer.hh"
 
 namespace server {
     class Controller {
@@ -12,5 +13,8 @@ namespace server {
         void playMove(pos_t speedX, pos_t speedY);
         void playShoot(attackId_t attackId);
         void setEntity(IEntity *entity);
+
+    private:
+        IPlayer *getPlayer();
     };
 }

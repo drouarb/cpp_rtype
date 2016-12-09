@@ -7,8 +7,14 @@ namespace server {
     private:
         Controller *controller;
         clientId_t clientId;
+        std::string name;
     public:
         Client();
+
+        void setName(const std::string &name);
+
+        const std::string &getName() const;
+
         Client(const Client &toCopy);
         Client &operator=(const Client &toCopy);
         Client(clientId_t clientId);

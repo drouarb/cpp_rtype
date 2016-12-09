@@ -7,7 +7,7 @@
 #include <iostream>
 
 void server::Player::shoot(server::attackId_t attackId) {
-    //TODO
+    this->attackQueue.push(attackId);
 }
 
 server::Player::Player() :  id(0), team(server::PLAYER), sprite(""), posX(0), posY(FIELD_HEIGHT / 2), speedX(0), speedY(0), hp(-1), destroyed(false)

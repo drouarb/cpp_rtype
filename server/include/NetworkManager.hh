@@ -4,12 +4,20 @@
 #include <map>
 #include <listeners/IListenerHandler.hh>
 #include <helpers/ClientContainer.hh>
+#include "definitions.hh"
 #include "Client.hh"
+#include "Core.hh"
 
 namespace server {
+
+    class Core;
+
     class NetworkManager : public server::IListenerHandler {
         ClientContainer clientContainer;
+        Core *core;
     public:
+        NetworkManager(Core *core);
+
         const std::list<Client> &getClientList() const;
 
         void sendGameState(int hp, clientId_t clientId);
@@ -22,9 +30,9 @@ namespace server {
 
         void clientJoin(int src) override;
 
-        void clientPlayerAttack(int src) override;
+        void clientPlayerAttack(int src, attackId_t attackId) override;
 
-        void clientPlayerMove(int src) override;
+        void clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) override;
 
         void clientPlayerQuit(int src) override;
     };

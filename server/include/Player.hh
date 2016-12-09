@@ -5,6 +5,7 @@
 #ifndef CPP_RTYPE_PLAYER_HH
 #define CPP_RTYPE_PLAYER_HH
 
+#include <queue>
 #include "definitions.hh"
 #include "IPlayer.hh"
 #include "IEntity.hh"
@@ -21,6 +22,7 @@ namespace server {
         server::speed_t speedY;
         int hp;
         bool destroyed;
+        std::queue<attackId_t> attackQueue;
 
     public:
         Player();
