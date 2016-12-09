@@ -2,4 +2,6 @@
 
 int main() {
     server::Core core("./levels/");
+
+    core.run();
 }

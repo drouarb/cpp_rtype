@@ -16,10 +16,13 @@ include_directories(include/entities)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SERVER_SRCS})
+add_library("${PROJECT_NAME}lib" STATIC ${SERVER_SRCS})
 target_link_libraries(${PROJECT_NAME} dl)
-target_link_libraries(${PROJECT_NAME} protoboeuf)
 target_link_libraries(${PROJECT_NAME} rtype_core)
 target_link_libraries(${PROJECT_NAME} pthread)
+target_link_libraries("${PROJECT_NAME}lib" dl)
+target_link_libraries("${PROJECT_NAME}lib" rtype_core)
+target_link_libraries("${PROJECT_NAME}lib" pthread)
 
 
 if (CLIENT_TESTS)

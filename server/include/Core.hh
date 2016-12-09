@@ -31,8 +31,24 @@ namespace server {
         void setClient(Client &, gameId_t);
         void removeClient(Client &);
 
-    private:
         void run();
+
+        /**
+         *      ______                 _                _
+         *     / _____)           _   (_)              | |
+         *    | /      ____ _   _| |_  _  ___  ____    | |
+         *    | |     / _  | | | |  _)| |/ _ \|  _ \   |_|
+         *    | \____( ( | | |_| | |__| | |_| | | | |   _
+         *     \______)_||_|\____|\___)_|\___/|_| |_|  |_|
+         *
+         *
+         *
+         * Test method, don't use it
+         */
+
+        Core(const std::string &path, NetworkManager *networkManager);
+
+    private:
 
         Game * getClientsGame(const Client &);
     };

@@ -17,6 +17,8 @@ include_directories(${PROTOBOEUF_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} STATIC ${CORE_SRCS})
 
+target_link_libraries(${PROJECT_NAME} protoboeuf)
+
 set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 if (CORE_TESTS)

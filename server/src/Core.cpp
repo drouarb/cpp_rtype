@@ -34,7 +34,6 @@ server::Core::Core(const std::string &path) : sw()
         std::cerr << "No levels. Aborting." << std::endl;
         return;
     }
-    run();
 }
 
 void server::Core::run()
@@ -97,4 +96,7 @@ server::Game * server::Core::getClientsGame(const server::Client & client)
     return (nullptr);
 }
 
-
+server::Core::Core(const std::string &path, server::NetworkManager *networkManager) : Core(path) {
+    delete (this->networkManager);
+    this->networkManager = networkManager;
+}
