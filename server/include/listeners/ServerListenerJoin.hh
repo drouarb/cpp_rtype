@@ -13,10 +13,10 @@ namespace server {
 
     class ServerListenerJoin : public network::ListenerTemplate<network::packet::PacketJoin, network::packet::JOIN> {
     private:
-        IListenerHandler *IListenerHandler;
+        IListenerHandler * listenerHandler;
 
     public:
-        ServerListenerJoin(server::IListenerHandler *IListenerHandler);
+        ServerListenerJoin(server::IListenerHandler * listenerHandler);
 
         void notify(const network::packet::PacketJoin *packet);
     };

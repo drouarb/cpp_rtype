@@ -20,11 +20,15 @@ void server::NetworkManager::clientRegister(int src, const std::string &name) {
 }
 
 void server::NetworkManager::clientDisconnect(int src) {
+    Client &client = this->clientContainer.get(src);
+    core->removeClient(client);
     this->clientContainer.remove(src);
 }
 
-void server::NetworkManager::clientJoin(int src) {
+void server::NetworkManager::clientJoin(int src, gameId_t game)
+{
     Client &client = this->clientContainer.get(src);
+    core->setClient(client, game);
 }
 
 void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId) {
@@ -39,4 +43,5 @@ void server::NetworkManager::clientPlayerMove(int src, uint16_t vectX, uint16_t 
 
 void server::NetworkManager::clientPlayerQuit(int src) {
     Client &client = this->clientContainer.get(src);
+    core->removeClient(client);
 }

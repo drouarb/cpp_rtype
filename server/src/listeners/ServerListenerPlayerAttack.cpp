@@ -12,4 +12,4 @@ void server::ServerListenerPlayerAttack::notify(const network::packet::PacketPla
 
 }
 
-server::ServerListenerPlayerAttack::ServerListenerPlayerAttack(server::IListenerHandler *iListenerHandler) : APacketListener(network::packet::PLAYER_ATTACK), IListenerHandler(iListenerHandler) {}
+server::ServerListenerPlayerAttack::ServerListenerPlayerAttack(server::IListenerHandler *iListenerHandler) : APacketListener(network::packet::PLAYER_ATTACK), listenerHandler(iListenerHandler) {}

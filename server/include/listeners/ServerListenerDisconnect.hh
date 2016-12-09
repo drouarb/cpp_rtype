@@ -13,7 +13,7 @@ namespace server {
 
     class ServerListenerDisconnect : public network::ListenerTemplate<network::packet::PacketDisconnect, network::packet::DISCONNECT> {
     private:
-        IListenerHandler *IListenerHandler;
+        IListenerHandler *listenerHandler;
 
     public:
         ServerListenerDisconnect(server::IListenerHandler *iListenerHandler);

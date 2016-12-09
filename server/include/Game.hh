@@ -14,11 +14,15 @@ namespace server
         Game(int lobbyId, const Level &);
         ~Game();
 
+        bool operator==(const Game & other);
+
         void newPlayer(Client *client);
         void removePlayer(Client *client);
         void setLevel(const Level &);
         void tick(round_t);
-        int getLobbyId();
+        gameId_t getLobbyId();
+        bool hasClient(const Client &);
+        bool empty();
 
     private:
         std::list<Client *> clientList;
@@ -26,7 +30,7 @@ namespace server
         std::list<IEntity*> entities;
         std::list<IEntity*> destroyedEntities;
         round_t round;
-        int gameId;
+        gameId_t gameId;
         entityId_t entityIdCount;
 
 

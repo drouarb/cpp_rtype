@@ -23,7 +23,6 @@ namespace server {
         IEntity *newEntity;
 
         EntityAction();
-
     };
 
      std::ostream &operator<<(std::ostream &os, const EntityAction &action);

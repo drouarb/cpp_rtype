@@ -8,5 +8,4 @@ void server::ServerListenerPong::notify(const network::packet::PacketPong *packe
 
 }
 
-server::ServerListenerPong::ServerListenerPong(server::IListenerHandler *iListenerHandler) : IListenerHandler(
-        IListenerHandler), APacketListener(network::packet::PONG) {}
+server::ServerListenerPong::ServerListenerPong(server::IListenerHandler *iListenerHandler) : listenerHandler(iListenerHandler), APacketListener(network::packet::PONG) {}

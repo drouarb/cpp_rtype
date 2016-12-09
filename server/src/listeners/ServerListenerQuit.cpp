@@ -12,5 +12,4 @@ void server::ServerListenerQuit::notify(const network::packet::PacketQuit *packe
 
 }
 
-server::ServerListenerQuit::ServerListenerQuit(server::IListenerHandler *iListenerHandler) : IListenerHandler(
-        IListenerHandler), APacketListener(network::packet::QUIT) {}
+server::ServerListenerQuit::ServerListenerQuit(server::IListenerHandler *iListenerHandler) : listenerHandler(iListenerHandler), APacketListener(network::packet::QUIT) {}

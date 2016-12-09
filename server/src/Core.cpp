@@ -1,13 +1,16 @@
 
-#include <chrono>
-#include <thread>
-#include <iostream>
 #include "Explorer/FileExplorer.hh"
 #include "Core.hh"
-#include "Game.hh"
+#include <algorithm>
+#include <thread>
+#include <iostream>
+#include <unistd.h>
 
-server::Core::Core(const std::string &path) {
+server::Core::Core(const std::string &path) : sw()
+{
     FolderExplorer fileExplorer(path);
+
+    lastGameId = 0;
 
     fileExplorer.loadFolder();
     this->networkManager = new NetworkManager(this);
@@ -34,18 +37,64 @@ server::Core::Core(const std::string &path) {
     run();
 }
 
-void server::Core::run() {
-    Game game(1, levels[0]);
-
-    Client client(1);
-    game.newPlayer(&client);
-    client.getController()->playMove(10, 1);
-
-    for (round_t i = 0; i < 20; ++i)
+void server::Core::run()
+{
+    round_t r = 0;
+    while (true)
     {
-        std::cout << "- round " << std::to_string(i) << " - - - - - - - - - - - - - - - - - -" << std::endl;
-        game.tick(i);
+        sw.set();
+        mutex.lock();
+        std::cout << "- round " << std::to_string(r) << " - - - - - - - - - - - - - - - - - -" << std::endl;
+        for (auto & game : games)
+        {
+            std::cout << "- game " << std::to_string(game.getLobbyId()) << " - - -" << std::endl;
+            game.tick(r);
+        }
+        ++r;
+        mutex.unlock();
+        usleep(ROUND_DURATION_MS - sw.ellapsedMs());
     }
+}
+
+void server::Core::setClient(server::Client & client, server::gameId_t gameId)
+{
+    removeClient(client);
+    for (auto& game : games)
+    {
+        if (game.getLobbyId() == gameId)
+        {
+            game.newPlayer(&client);
+            return;
+        }
+    }
+
+    games.push_back(Game(lastGameId));
+    games.back().setLevel(levels[lastGameId % levels.size()]);
+    games.back().newPlayer(&client);
+    ++lastGameId;
+}
+
+void server::Core::removeClient(server::Client & client)
+{
+    auto game = getClientsGame(client);
+    if (game)
+    {
+        game->removePlayer(&client);
+        if (game->empty())
+        {
+            games.erase(std::find(games.begin(), games.end(), *game));
+        }
+    }
+}
+
+server::Game * server::Core::getClientsGame(const server::Client & client)
+{
+    for (auto& game : games)
+    {
+        if (game.hasClient(client))
+            return (&game);
+    }
+    return (nullptr);
 }
 
 

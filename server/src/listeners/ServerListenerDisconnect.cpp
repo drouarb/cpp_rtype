@@ -6,8 +6,8 @@
 
 
 void server::ServerListenerDisconnect::notify(const network::packet::PacketDisconnect *packet) {
-    this->IListenerHandler->clientDisconnect(packet->getSource());
+    this->listenerHandler->clientDisconnect(packet->getSource());
 }
 
-server::ServerListenerDisconnect::ServerListenerDisconnect(server::IListenerHandler *iListenerHandler) : IListenerHandler(
-        IListenerHandler), APacketListener(network::packet::DISCONNECT) {}
+server::ServerListenerDisconnect::ServerListenerDisconnect(server::IListenerHandler *iListenerHandler) : listenerHandler(
+        iListenerHandler), APacketListener(network::packet::DISCONNECT) {}

@@ -14,7 +14,25 @@ Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), gameId(lobbyId), entityI
 { }
 
 Game::~Game()
-{ }
+{
+    for (auto client : clientList)
+    {
+        removePlayer(client);
+    }
+    for (auto entity : entities)
+    {
+        delete entity;
+    }
+    for (auto entity : destroyedEntities)
+    {
+        delete entity;
+    }
+}
+
+bool Game::operator==(const Game &other)
+{
+    return (this == &other);
+}
 
 void Game::setLevel(const Level & lvl)
 {
@@ -32,7 +50,7 @@ void Game::tick(round_t round)
     //TODO: send packets to client
 }
 
-int Game::getLobbyId()
+gameId_t Game::getLobbyId()
 {
     return (gameId);
 }
@@ -144,5 +162,23 @@ void Game::removePlayer(Client *client) {
     if (position == this->clientList.end()) {
         return;
     }
+    client->getController()->destroy();
+    delete client->getController();
+    client->setController(nullptr);
     this->clientList.erase(position);
+}
+
+bool Game::hasClient(const Client & client)
+{
+    for (auto c : clientList)
+    {
+        if (c == &client)
+            return (true);
+    }
+    return (false);
+}
+
+bool Game::empty()
+{
+    return (clientList.empty());
 }

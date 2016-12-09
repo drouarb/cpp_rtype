@@ -10,7 +10,7 @@ void server::Player::shoot(server::attackId_t attackId) {
     this->attackQueue.push(attackId);
 }
 
-server::Player::Player() :  id(0), team(server::PLAYER), sprite(""), posX(0), posY(FIELD_HEIGHT / 2), speedX(0), speedY(0), hp(-1), destroyed(false)
+server::Player::Player() :  id(0), team(server::PLAYER), sprite(""), posX(0), posY(FIELD_HEIGHT / 2), speedX(0), speedY(0), hp(-1), destroyed(false), mustDestroy(false)
 {}
 
 void server::Player::setEntityId(server::entityId_t id)
@@ -105,5 +105,11 @@ void server::Player::collide(server::IEntity *entity)
 
 server::EntityAction *server::Player::nextAction()
 {
-    return new EntityAction();
+    std::cout << "shoot: " << std::to_string(attackQueue.back()) << std::endl;
+    while (!attackQueue.empty())
+        attackQueue.pop();
+    EntityAction * act = new EntityAction();
+    if (mustDestroy)
+        act->destroy = true;
+    return act;
 }
