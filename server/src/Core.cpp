@@ -10,6 +10,7 @@ server::Core::Core(const std::string &path) {
     FolderExplorer fileExplorer(path);
 
     fileExplorer.loadFolder();
+    this->networkManager = new NetworkManager(this);
     const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
     for (auto f : vector) {
         if (f.name.find(".json") == std::string::npos) {
