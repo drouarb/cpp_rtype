@@ -4,10 +4,9 @@
 
 #include "listeners/ServerListenerPong.hh"
 
-server::ServerListenerPong::ServerListenerPong() : APacketListener(network::packet::PONG) {
-
-}
-
 void server::ServerListenerPong::notify(const network::packet::PacketPong *packet) {
 
 }
+
+server::ServerListenerPong::ServerListenerPong(server::IListenerHandler *iListenerHandler) : IListenerHandler(
+        IListenerHandler), APacketListener(network::packet::PONG) {}

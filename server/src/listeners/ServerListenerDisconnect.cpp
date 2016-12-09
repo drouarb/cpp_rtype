@@ -4,10 +4,10 @@
 
 #include "listeners/ServerListenerDisconnect.hh"
 
-server::ServerListenerDisconnect::ServerListenerDisconnect() : APacketListener(network::packet::DISCONNECT) {
-
-}
 
 void server::ServerListenerDisconnect::notify(const network::packet::PacketDisconnect *packet) {
-
+    this->IListenerHandler->clientDisconnect(packet->getSource());
 }
+
+server::ServerListenerDisconnect::ServerListenerDisconnect(server::IListenerHandler *iListenerHandler) : IListenerHandler(
+        IListenerHandler), APacketListener(network::packet::DISCONNECT) {}

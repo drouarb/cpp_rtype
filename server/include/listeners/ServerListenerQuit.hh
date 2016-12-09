@@ -8,12 +8,18 @@
 #include <network/packet/IPacket.hh>
 #include <network/packet/PacketQuit.hh>
 #include <network/listener/ListenerTemplate.hpp>
+#include "IListenerHandler.hh"
 
 namespace server {
 
     class ServerListenerQuit : public network::ListenerTemplate<network::packet::PacketQuit, network::packet::QUIT> {
+    private:
+        IListenerHandler *IListenerHandler;
+
     public:
         ServerListenerQuit();
+
+        ServerListenerQuit(server::IListenerHandler *IListenerHandler);
 
         void notify(const network::packet::PacketQuit *packet);
     };

@@ -7,12 +7,16 @@
 
 #include <network/packet/PacketAskList.hh>
 #include <network/listener/ListenerTemplate.hpp>
+#include "IListenerHandler.hh"
 
 namespace server {
 
     class ServerListenerAskList : public network::ListenerTemplate<network::packet::PacketAskList, network::packet::ASK_LIST> {
+    private:
+        IListenerHandler *iListenerHandler;
+
     public:
-        ServerListenerAskList();
+        ServerListenerAskList(IListenerHandler *iListenerHandler);
 
         void notify(const network::packet::PacketAskList *packet);
     };
