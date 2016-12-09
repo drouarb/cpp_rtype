@@ -31,25 +31,25 @@ network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsign
     mainSocket.sin_port = htons(port);
     pollfd.events = POLLIN;
     if (inet_aton(address.c_str(), &mainSocket.sin_addr) == 0)
-        throw new std::runtime_error("UnixUDPSocket Invalid ip");
+        throw std::runtime_error("UnixUDPSocket Invalid ip");
 
 }
 
 bool network::socket::UnixUDPSocket::run() {
-    //TODO thread poll
+    //TODO Don't use std::thread
     thread = new std::thread(&UnixUDPSocket::poll, this);
     return false;
 }
 
 bool network::socket::UnixUDPSocket::stop() {
     status = STOPPING;
-    //TODO stop thread
+    thread->join();
     return false;
 }
 
 void network::socket::UnixUDPSocket::poll() {
     if (status != DISCONNECTED)
-        throw new std::runtime_error("UnixUDPSocket Already running");
+        throw std::runtime_error("UnixUDPSocket Already running");
     status = CONNECTING;
     if (type == CLIENT)
         clientPoll();
@@ -60,12 +60,12 @@ void network::socket::UnixUDPSocket::poll() {
 void network::socket::UnixUDPSocket::serverPoll() {
     if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
         status = DISCONNECTED;
-        throw new std::runtime_error("UnixUDPSocket can't instantiate socket");
+        throw std::runtime_error("UnixUDPSocket can't instantiate socket");
     }
     if (bind(mainSocketFd, (struct sockaddr *) &mainSocket, sizeof(mainSocket)) == -1) {
         close(mainSocketFd);
         status = DISCONNECTED;
-        throw new std::runtime_error("UnixUDPSocket can't bind port");
+        throw std::runtime_error("UnixUDPSocket can't bind port");
     }
 
     bool found;
@@ -77,7 +77,7 @@ void network::socket::UnixUDPSocket::serverPoll() {
 
     while (status == CONNECTED) {
         pollfd.fd = mainSocketFd;
-        if (::poll(&pollfd, 1, POLL_TIMEOUT)) {
+        if (::poll(&pollfd, 1, POLL_TIMEOUT) && status == CONNECTED) {
             recvfrom(mainSocketFd, buffer.data(), SOCKET_BUFFER, 0, (struct sockaddr *) &recvSocket, &recvSocketLen);
             found = false;
             for (auto it = clients.begin(); it != clients.end(); it++) {
@@ -178,7 +178,7 @@ void network::socket::UnixUDPSocket::serverTimeout() {
 void network::socket::UnixUDPSocket::clientPoll() {
     if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
         status = DISCONNECTED;
-        throw new std::runtime_error("UnixUDPSocket can't instantiate socket");
+        throw std::runtime_error("UnixUDPSocket can't instantiate socket");
     }
 
     clientHandshake();
@@ -186,7 +186,7 @@ void network::socket::UnixUDPSocket::clientPoll() {
 
     pollfd.fd = mainSocketFd;
     while (status == CONNECTED) {
-        if (::poll(&pollfd, 1, POLL_TIMEOUT)) {
+        if (::poll(&pollfd, 1, POLL_TIMEOUT) && status == CONNECTED) {
             recv(mainSocketFd, buffer.data(), buffer.size(), 0);
             npings = 0;
             sw.set();
@@ -266,8 +266,10 @@ void network::socket::UnixUDPSocket::handleData(std::vector<uint8_t> &data, cons
 }
 
 void network::socket::UnixUDPSocket::broadcast(const std::vector<uint8_t> &data) {
+    if (status == STOPPING)
+        return;
     if (status != CONNECTED)
-        throw new std::runtime_error("Can't send if socket isn't running");
+        throw std::runtime_error("Can't send if socket isn't running");
     if (type == SERVER) {
         for (auto &client : clients) {
             if (client.status == CONNECTED)
@@ -279,8 +281,10 @@ void network::socket::UnixUDPSocket::broadcast(const std::vector<uint8_t> &data)
 }
 
 void network::socket::UnixUDPSocket::send(const std::vector<uint8_t> &data, unsigned long dest) {
+    if (status == STOPPING)
+        return;
     if (status != CONNECTED)
-        throw new std::runtime_error("Can't send if socket isn't running");
+        throw std::runtime_error("Can't send if socket isn't running");
     if (type == SERVER) {
         for (auto &client : clients) {
             if (getClientId(client.client) == dest && (client.status == CONNECTED || client.status == CONNECTING)) {
