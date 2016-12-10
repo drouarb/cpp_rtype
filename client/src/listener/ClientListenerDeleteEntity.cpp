@@ -4,7 +4,7 @@
 
 #include "listener/ClientListenerDeleteEntity.hh"
 using namespace client;
-ClientListenerDeleteEntity::ClientListenerDeleteEntity(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::DELETE_ENTITY)
+ClientListenerDeleteEntity::ClientListenerDeleteEntity(GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::DELETE_ENTITY)
 {
 
 }

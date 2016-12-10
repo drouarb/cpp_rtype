@@ -7,20 +7,20 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketErrorList.hh"
-#include "IGameClient.hh"
+#include "GameClient.hh"
 namespace client {
     class ClientListenerErrorList
             : public network::ListenerTemplate<network::packet::PacketErrorList, network::packet::ERROR_LIST> {
 
     public:
-        ClientListenerErrorList(IGameClient *gameClient);
+        ClientListenerErrorList(GameClient *gameClient);
 
         ~ClientListenerErrorList();
 
         void notify(const network::packet::PacketErrorList *packet);
 
     private:
-        IGameClient *gameclient;
+        GameClient *gameclient;
     };
 }
 

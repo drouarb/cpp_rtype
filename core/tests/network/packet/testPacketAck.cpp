@@ -14,6 +14,7 @@ void testPacketAck()
     ack->serialize(&data);
     PacketAck *ack2 = new PacketAck();
     ack2->deserialize(&data);
+    assert(ack2->getAck() == UINT16_MAX);
     assert(ack->getAck() == ack2->getAck());
     std::cout << "SUCCESS getAck()" << std::endl;
     std::cout << "DONE" << std::endl;

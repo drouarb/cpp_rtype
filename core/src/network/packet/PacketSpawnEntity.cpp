@@ -37,12 +37,12 @@ uint32_t network::packet::PacketSpawnEntity::getTick() const
     return GET_NETINT(schema, 0);
 }
 
-void network::packet::PacketSpawnEntity::setEventId(uint16_t id)
+void network::packet::PacketSpawnEntity::setEventId(uint32_t id)
 {
 SET_NETINT(schema, 1, id);
 }
 
-uint16_t network::packet::PacketSpawnEntity::getEventId() const
+uint32_t network::packet::PacketSpawnEntity::getEventId() const
 {
     return GET_NETINT(schema, 1);
 }

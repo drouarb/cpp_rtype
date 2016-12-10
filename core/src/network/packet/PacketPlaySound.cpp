@@ -32,12 +32,12 @@ uint32_t network::packet::PacketPlaySound::getTick() const
     return GET_NETINT(schema, 0);
 }
 
-void network::packet::PacketPlaySound::setEventId(uint16_t id)
+void network::packet::PacketPlaySound::setEventId(uint32_t id)
 {
     SET_NETINT(schema, 1, id);
 }
 
-uint16_t network::packet::PacketPlaySound::getEventId() const
+uint32_t network::packet::PacketPlaySound::getEventId() const
 {
     return GET_NETINT(schema, 1);
 }

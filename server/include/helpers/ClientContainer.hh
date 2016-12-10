@@ -17,7 +17,7 @@ namespace server {
     public:
         Client &get(int id);
 
-        Client &operator[](int id);
+        Client &create(int id);
 
         void remove(int id);
 

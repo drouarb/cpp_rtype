@@ -40,6 +40,8 @@ namespace server {
 
         static IEntity * make(const std::string & path);
 
+        virtual ~IEntity() {}
+
         /**
          * The entityId is given by the server. The object should not choose its own entityId.
          */

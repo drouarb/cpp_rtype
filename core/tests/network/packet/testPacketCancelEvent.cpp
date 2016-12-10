@@ -14,6 +14,7 @@ void testCancelEvent()
     event->serialize(&rawdata);
     PacketCancelEvent *event2 = new PacketCancelEvent();
     event2->deserialize(&rawdata);
+    assert(event2->getCancelEvent() == UINT32_MAX);
     assert(event2->getCancelEvent() == event->getCancelEvent());
     std::cout << "SUCCESS getCancelEvent()" << std::endl;
     std::cout << "DONE" << std::endl;

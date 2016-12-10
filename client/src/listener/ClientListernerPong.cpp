@@ -5,7 +5,7 @@
 #include "listener/ClientListernerPong.hh"
 
 using namespace client;
-ClientListenerPong::ClientListenerPong(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::PONG)
+ClientListenerPong::ClientListenerPong(GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::PONG)
 {
 
 }
