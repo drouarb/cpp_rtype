@@ -20,7 +20,9 @@ namespace server {
         std::vector<Game> games;
         gameId_t lastGameId;
         Stopwatch sw;
-
+    protected:
+        bool isRunning;
+        round_t max;
     public:
         /**
          *
@@ -28,10 +30,11 @@ namespace server {
          */
         Core(const std::string &path);
 
-        void setClient(Client &, gameId_t);
-        void removeClient(Client &);
+        virtual void setClient(Client &, gameId_t);
 
-        void run();
+        virtual void removeClient(Client &);
+
+        virtual void run();
 
         /**
          *      ______                 _                _

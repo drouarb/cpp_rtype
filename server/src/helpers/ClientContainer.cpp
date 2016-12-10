@@ -4,19 +4,14 @@
 
 #include "helpers/ClientContainer.hh"
 #include <algorithm>
+#include <iostream>
 
 server::Client &server::ClientContainer::get(int id) {
     try {
         return (*this).at(id);
     } catch (std::out_of_range &e) {
-        (*this)[id] = Client(id);//TODO see this with Esteban
-        this->clientList.push_back((*this)[id]);
+        throw std::logic_error("Unknow client with id " + std::to_string(id) + " try to action but was not connected");
     }
-    return get(id);
-}
-
-server::Client &server::ClientContainer::operator[](int id) {
-    return this->get(id);
 }
 
 void server::ClientContainer::remove(int id) {
@@ -30,4 +25,10 @@ void server::ClientContainer::remove(int id) {
 
 const std::list<server::Client> &server::ClientContainer::toStdList() const {
     return this->clientList;
+}
+
+server::Client &server::ClientContainer::create(int id) {
+    (*this)[id] = Client(id);
+    this->clientList.push_back((*this)[id]);
+    return (*this)[id];
 }

@@ -31,7 +31,8 @@ void server::NetworkManager::clientJoin(int src, gameId_t game)
     core->setClient(client, game);
 }
 
-void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId) {
+void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId, round_t tick) {
+    //TODO Use tick
     Client &client = this->clientContainer.get(src);
     client.getController()->playShoot(attackId);
 }
@@ -44,4 +45,9 @@ void server::NetworkManager::clientPlayerMove(int src, uint16_t vectX, uint16_t 
 void server::NetworkManager::clientPlayerQuit(int src) {
     Client &client = this->clientContainer.get(src);
     core->removeClient(client);
+}
+
+void server::NetworkManager::createClient(int src) {
+    this->clientContainer.create(src).setController(new Controller());
+
 }

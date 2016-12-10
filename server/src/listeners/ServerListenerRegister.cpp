@@ -9,6 +9,7 @@ server::ServerListenerRegister::ServerListenerRegister() : APacketListener(netwo
 }
 
 void server::ServerListenerRegister::notify(const network::packet::PacketRegister *packet) {
+    this->listenerHandler->clientRegister(packet->getSource(), packet->getMessage());
 }
 
 server::ServerListenerRegister::ServerListenerRegister(server::IListenerHandler *iListenerHandler) : listenerHandler(iListenerHandler), APacketListener(network::packet::REGISTER) {}

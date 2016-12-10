@@ -13,10 +13,13 @@ namespace server {
     class Core;
 
     class NetworkManager : public server::IListenerHandler {
+    protected:
         ClientContainer clientContainer;
         Core *core;
     public:
         NetworkManager(Core *core);
+
+        void createClient(int src) override;
 
         const std::list<Client> &getClientList() const;
 
@@ -30,7 +33,7 @@ namespace server {
 
         void clientJoin(int src, gameId_t game) override;
 
-        void clientPlayerAttack(int src, attackId_t attackId) override;
+        void clientPlayerAttack(int src, attackId_t attackId, round_t tick) override;
 
         void clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) override;
 
