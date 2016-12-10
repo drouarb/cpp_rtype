@@ -24,11 +24,11 @@ namespace client
     };
 }
 
-typedef pos_t		std::pair<uint16_t, uint16_t>;
-typedef vec_t		std::pair<uint16_t, uint16_t>;
-typedef tick		uint32_t;
-typedef id_t		uint16_t;
-typedef idtype_t	uint16_t;
-typedef UIevent_t	uint16_t;
+typedef std::pair<uint16_t, uint16_t>	pos_t;
+typedef std::pair<uint16_t, uint16_t>	vec_t;
+typedef uint32_t			tick;
+typedef uint16_t			ide_t;
+typedef uint16_t			typeide_t;
+typedef uint16_t			UIevent_t;
 
 #endif
