@@ -11,7 +11,6 @@ server::ServerListenerPlayerAttack::ServerListenerPlayerAttack() : APacketListen
 
 void server::ServerListenerPlayerAttack::notify(const network::packet::PacketPlayerAttack *packet) {
     this->listenerHandler->clientPlayerAttack(packet->getSource(), packet->getAttackId(), packet->getTick());
-    std::cout << "toto END" << std::endl;
 }
 
 server::ServerListenerPlayerAttack::ServerListenerPlayerAttack(server::IListenerHandler *iListenerHandler) : APacketListener(network::packet::PLAYER_ATTACK), listenerHandler(iListenerHandler) {}
