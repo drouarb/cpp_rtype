@@ -1,4 +1,5 @@
 #include <NetworkManager.hh>
+#include <iostream>
 
 server::NetworkManager::NetworkManager(server::Core *core) : core(core) {}
 
@@ -33,8 +34,10 @@ void server::NetworkManager::clientJoin(int src, gameId_t game)
 
 void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId, round_t tick) {
     //TODO Use tick
+    std::cout << "toto" << std::endl;
     Client &client = this->clientContainer.get(src);
     client.getController()->playShoot(attackId);
+    std::cout << "END" << std::endl;
 }
 
 void server::NetworkManager::clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) {
@@ -49,5 +52,4 @@ void server::NetworkManager::clientPlayerQuit(int src) {
 
 void server::NetworkManager::createClient(int src) {
     this->clientContainer.create(src).setController(new Controller());
-
 }

@@ -5,6 +5,7 @@
 #include <thread>
 #include <iostream>
 #include <unistd.h>
+#include <cassert>
 
 server::Core::Core(const std::string &path) : sw() {
     FolderExplorer fileExplorer(path);
@@ -67,7 +68,8 @@ void server::Core::setClient(server::Client &client, server::gameId_t gameId) {
     games.push_back(Game(lastGameId));
     games.back().setLevel(levels[lastGameId % levels.size()]);
     games.back().newPlayer(&client);
-    ++lastGameId;
+    assert(client.getController() != nullptr);
+    ++lastGameId; //TODO strange
 }
 
 void server::Core::removeClient(server::Client &client) {
