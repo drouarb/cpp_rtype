@@ -10,12 +10,13 @@
 namespace network {
  namespace packet {
      class PacketSpawnEntity  : public APacket{
+     public:
         PacketSpawnEntity(uint32_t tick = 0, uint32_t eventId = 0, const std::string &spriteName = "", uint16_t entityId = 0, uint16_t pos_x = 0, uint16_t pos_y = 0);
         virtual ~PacketSpawnEntity();
          void setTick(uint32_t tick);
          uint32_t getTick() const;
-         void setEventId(uint16_t id);
-         uint16_t getEventId() const;
+         void setEventId(uint32_t id);
+         uint32_t getEventId() const;
          void setSpriteName(const std::string &msg);
          const utils::NetworkString &getSpriteName() const;
          void setEntityId(uint16_t entityId);

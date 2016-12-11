@@ -4,7 +4,7 @@
 
 #include "listener/ClientListenerGameList.hh"
 using namespace client;
-ClientListenerGameList::ClientListenerGameList(IGameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::GAME_LIST)
+ClientListenerGameList::ClientListenerGameList(GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::GAME_LIST)
 {
 
 }

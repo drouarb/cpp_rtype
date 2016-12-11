@@ -25,6 +25,5 @@ void network::packet::PacketAck::setAck(uint16_t ack)
 
 uint16_t network::packet::PacketAck::getAck() const
 {
-    GET_NETINT(schema, 0);
-    return 0;
+    return     GET_NETINT(schema, 0);;
 }

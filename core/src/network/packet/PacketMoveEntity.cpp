@@ -36,12 +36,12 @@ uint32_t network::packet::PacketMoveEntity::getTick() const
     return GET_NETINT(schema, 0);
 }
 
-void network::packet::PacketMoveEntity::setEventId(uint16_t id)
+void network::packet::PacketMoveEntity::setEventId(uint32_t id)
 {
     SET_NETINT(schema, 1, id);
 }
 
-uint16_t network::packet::PacketMoveEntity::getEventId() const
+uint32_t network::packet::PacketMoveEntity::getEventId() const
 {
     return GET_NETINT(schema, 1);
 }

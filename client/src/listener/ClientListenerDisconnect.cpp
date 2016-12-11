@@ -5,7 +5,7 @@
 #include "listener/ClientListenerDisconnect.hh"
 
 using namespace client;
-ClientListenerDisconnect::ClientListenerDisconnect(IGameClient *gameClient) :  gameclient(gameClient),  APacketListener(network::packet::DISCONNECT)
+ClientListenerDisconnect::ClientListenerDisconnect(GameClient *gameClient) :  gameclient(gameClient),  APacketListener(network::packet::DISCONNECT)
 {
 }
 

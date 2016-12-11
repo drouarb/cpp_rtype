@@ -5,14 +5,15 @@
 #include <thread>
 #include <iostream>
 #include <unistd.h>
+#include <cassert>
 
-server::Core::Core(const std::string &path) : sw()
-{
+server::Core::Core(const std::string &path) : sw() {
     FolderExplorer fileExplorer(path);
 
     lastGameId = 0;
-
+    this->isRunning = true;
     fileExplorer.loadFolder();
+    this->max = 0;
     this->networkManager = new NetworkManager(this);
     const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
     for (auto f : vector) {
@@ -36,62 +37,55 @@ server::Core::Core(const std::string &path) : sw()
     }
 }
 
-void server::Core::run()
-{
-    round_t r = 0;
-    while (true)
-    {
+void server::Core::run() {
+    round_t r;
+    while (this->isRunning) {
         sw.set();
         mutex.lock();
         std::cout << "- round " << std::to_string(r) << " - - - - - - - - - - - - - - - - - -" << std::endl;
-        for (auto & game : games)
-        {
-            std::cout << "- game " << std::to_string(game.getLobbyId()) << " - - -" << std::endl;
-            game.tick(r);
+        for (auto &game : games) {
+            std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
+            game->tick(r);
         }
         ++r;
         mutex.unlock();
         usleep(ROUND_DURATION_MS - sw.ellapsedMs());
+        if (max && r >= max) {
+            return;
+        }
     }
 }
 
-void server::Core::setClient(server::Client & client, server::gameId_t gameId)
-{
+void server::Core::setClient(server::Client &client, server::gameId_t gameId) {
     removeClient(client);
-    for (auto& game : games)
-    {
-        if (game.getLobbyId() == gameId)
-        {
-            game.newPlayer(&client);
+    for (auto &game : games) {
+        if (game->getLobbyId() == gameId) {
+            game->newPlayer(&client);
             return;
         }
     }
 
-    games.push_back(Game(lastGameId));
-    games.back().setLevel(levels[lastGameId % levels.size()]);
-    games.back().newPlayer(&client);
-    ++lastGameId;
+    games.push_back(new Game(lastGameId));
+    games.back()->setLevel(levels[lastGameId % levels.size()]);
+    games.back()->newPlayer(&client);
+    assert(client.getController() != nullptr);
+    ++lastGameId; //TODO strange
 }
 
-void server::Core::removeClient(server::Client & client)
-{
+void server::Core::removeClient(server::Client &client) {
     auto game = getClientsGame(client);
-    if (game)
-    {
+    if (game) {
         game->removePlayer(&client);
-        if (game->empty())
-        {
-            games.erase(std::find(games.begin(), games.end(), *game));
+        if (game->empty()) {
+            games.erase(std::find(games.begin(), games.end(), game));
         }
     }
 }
 
-server::Game * server::Core::getClientsGame(const server::Client & client)
-{
-    for (auto& game : games)
-    {
-        if (game.hasClient(client))
-            return (&game);
+server::Game *server::Core::getClientsGame(const server::Client &client) {
+    for (auto &game : games) {
+        if (game->hasClient(client))
+            return (game);
     }
     return (nullptr);
 }

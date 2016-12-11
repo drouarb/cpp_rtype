@@ -17,8 +17,10 @@ void testPacketPlayerAttack()
     ack->serialize(&data);
     PacketPlayerAttack *ack2 = new PacketPlayerAttack();
     ack2->deserialize(&data);
+    assert(ack->getTick() == UINT32_MAX);
     assert(ack->getTick() == ack2->getTick());
     std::cout << "SUCCESS getTick()" << std::endl;
+    assert(ack->getAttackId() == UINT8_MAX);
     assert(ack->getAttackId() == ack2->getAttackId());
     std::cout << "SUCCESS getAttackId()" << std::endl;
      std::cout << "DONE" << std::endl;

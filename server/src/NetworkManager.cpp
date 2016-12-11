@@ -1,4 +1,5 @@
 #include <NetworkManager.hh>
+#include <iostream>
 
 server::NetworkManager::NetworkManager(server::Core *core) : core(core) {}
 
@@ -15,8 +16,13 @@ void server::NetworkManager::sendMessage(const std::string &msg, server::clientI
 }
 
 void server::NetworkManager::clientRegister(int src, const std::string &name) {
-    Client &client = this->clientContainer.get(src);
-    client.setName(name);
+    try {
+        Client &client = this->clientContainer.get(src);
+        client.setName(name);
+    } catch (std::logic_error &e) {
+        Client &client = this->clientContainer.create(src);
+        client.setName(name);
+    }
 }
 
 void server::NetworkManager::clientDisconnect(int src) {
@@ -31,9 +37,12 @@ void server::NetworkManager::clientJoin(int src, gameId_t game)
     core->setClient(client, game);
 }
 
-void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId) {
+void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId, round_t tick) {
+    //TODO Use tick
+    std::cout << "toto" << std::endl;
     Client &client = this->clientContainer.get(src);
     client.getController()->playShoot(attackId);
+    std::cout << "END" << std::endl;
 }
 
 void server::NetworkManager::clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) {
@@ -44,4 +53,8 @@ void server::NetworkManager::clientPlayerMove(int src, uint16_t vectX, uint16_t 
 void server::NetworkManager::clientPlayerQuit(int src) {
     Client &client = this->clientContainer.get(src);
     core->removeClient(client);
+}
+
+void server::NetworkManager::createClient(int src) {
+    this->clientContainer.create(src).setController(new Controller());
 }
