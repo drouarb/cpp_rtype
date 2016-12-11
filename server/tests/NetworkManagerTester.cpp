@@ -16,7 +16,7 @@ void reset() {
 int main() {
     reset();
     NetworkManagerTest networkManagerTest(nullptr);
-    CoreTest core("./levels/", &networkManagerTest);
+    CoreTest core("../levels/", &networkManagerTest);
     networkManagerTest.setCore(&core);
 
     toTest(networkManagerTest, core);
