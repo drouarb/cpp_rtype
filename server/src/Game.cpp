@@ -15,6 +15,8 @@ Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), gameId(lobbyId), entityI
 
 Game::~Game()
 {
+    std::cout << "calling destructor" << std::endl;
+    std::cout << "clientList: " << clientList.back() << std::endl;
     for (auto client : clientList)
     {
         removePlayer(client);
@@ -149,7 +151,7 @@ void Game::newPlayer(Client *client) {
     }
     Controller *controller = new Controller();
     this->clientList.push_back(client);
-    IEntity *player = new Player();
+    Player *player = new Player();
     player->setEntityId(entityIdCount);
     entityIdCount++;
     controller->setEntity(player);
@@ -165,7 +167,8 @@ void Game::removePlayer(Client *client) {
     client->getController()->destroy();
     delete client->getController();
     client->setController(nullptr);
-    this->clientList.erase(position);
+    std::cout << "erase" << *position << std::endl;
+    this->clientList.remove(*position);
 }
 
 bool Game::hasClient(const Client & client)

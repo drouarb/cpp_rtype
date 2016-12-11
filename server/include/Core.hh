@@ -17,7 +17,7 @@ namespace server {
         NetworkManager *networkManager;
         std::mutex mutex;
         std::vector<Level> levels;
-        std::vector<Game> games;
+        std::vector<Game *> games;
         gameId_t lastGameId;
         Stopwatch sw;
     protected:

@@ -16,8 +16,13 @@ void server::NetworkManager::sendMessage(const std::string &msg, server::clientI
 }
 
 void server::NetworkManager::clientRegister(int src, const std::string &name) {
-    Client &client = this->clientContainer.get(src);
-    client.setName(name);
+    try {
+        Client &client = this->clientContainer.get(src);
+        client.setName(name);
+    } catch (std::logic_error &e) {
+        Client &client = this->clientContainer.create(src);
+        client.setName(name);
+    }
 }
 
 void server::NetworkManager::clientDisconnect(int src) {
