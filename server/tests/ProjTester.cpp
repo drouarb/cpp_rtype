@@ -27,9 +27,7 @@ void CoreTest::run() {
     server::Core::run();
 }
 
-NetworkManagerTest::NetworkManagerTest(server::Core *core) : NetworkManager(core) {
-    std::cout << "Construction OK " << std::endl;
-}
+NetworkManagerTest::NetworkManagerTest(server::Core *core) : NetworkManager(core) {}
 
 void NetworkManagerTest::setCore(server::Core *core) {
     this->core = core;
