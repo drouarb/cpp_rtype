@@ -62,7 +62,7 @@ int main()
         ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
         item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Desktop/ALL_GONE.jpg", 250, 250);
         ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->setImage("/home/jonas_e/Desktop/ALL_GONE.jpg");
-        ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->setPosition(250, 250);
+        ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->setPosition(100, 250);
         //ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->addAnimation(UI::IDLE, std::vector<std::pair<unsigned int, std::string> {0, "/home/jonas_e/Desktop/ALL_GONE.jpg"}>);
         UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);
         UI::IEventObserver* eventObserver = ui->getEventObserver();
