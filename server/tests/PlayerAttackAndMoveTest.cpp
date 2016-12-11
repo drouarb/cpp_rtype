@@ -66,7 +66,6 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     try {
         join->notify(packetJoin);
         playerAttack->notify(packetPlayerAttack);
-        return;
         playerMove->notify(packetPlayerMove);
         assert(true);
     }catch (std::logic_error &e) {

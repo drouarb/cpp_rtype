@@ -44,8 +44,8 @@ void server::Core::run() {
         mutex.lock();
         std::cout << "- round " << std::to_string(r) << " - - - - - - - - - - - - - - - - - -" << std::endl;
         for (auto &game : games) {
-            std::cout << "- game " << std::to_string(game.getLobbyId()) << " - - -" << std::endl;
-            game.tick(r);
+            std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
+            game->tick(r);
         }
         ++r;
         mutex.unlock();
@@ -59,15 +59,15 @@ void server::Core::run() {
 void server::Core::setClient(server::Client &client, server::gameId_t gameId) {
     removeClient(client);
     for (auto &game : games) {
-        if (game.getLobbyId() == gameId) {
-            game.newPlayer(&client);
+        if (game->getLobbyId() == gameId) {
+            game->newPlayer(&client);
             return;
         }
     }
 
-    games.push_back(Game(lastGameId));
-    games.back().setLevel(levels[lastGameId % levels.size()]);
-    games.back().newPlayer(&client);
+    games.push_back(new Game(lastGameId));
+    games.back()->setLevel(levels[lastGameId % levels.size()]);
+    games.back()->newPlayer(&client);
     assert(client.getController() != nullptr);
     ++lastGameId; //TODO strange
 }
@@ -77,15 +77,15 @@ void server::Core::removeClient(server::Client &client) {
     if (game) {
         game->removePlayer(&client);
         if (game->empty()) {
-            games.erase(std::find(games.begin(), games.end(), *game));
+            games.erase(std::find(games.begin(), games.end(), game));
         }
     }
 }
 
 server::Game *server::Core::getClientsGame(const server::Client &client) {
     for (auto &game : games) {
-        if (game.hasClient(client))
-            return (&game);
+        if (game->hasClient(client))
+            return (game);
     }
     return (nullptr);
 }
