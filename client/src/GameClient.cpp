@@ -10,12 +10,15 @@
 
 using namespace client;
 
-client::GameClient::GameClient() :manager(nullptr) , tickRateServer(TICKRATE), world(nullptr)
+client::GameClient::GameClient()
 {
-    handler = new EventManager;
-    managerUi.init(1920, 1020);
-    managerUi.getEventObserver()->setEventManager(handler);
-    managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
+  handler = new EventManager;
+  managerUi.init(1920, 1020);
+  managerUi.getEventObserver()->setEventManager(handler);
+  managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
+  manager = nullptr;
+  tickRateClient = TICKRATE;
+  world = nullptr;
 }
 
 void client::GameClient::createNetworkManager(const std::string &ip, unsigned short port)
@@ -54,7 +57,10 @@ void	GameClient::readaptTickRate(int servTickRate,
 				    std::pair<tick, uint64_t> estiClientHoro,
 				    std::pair<tick, uint64_t> servHoro)
 {
-  // ici faire une formule pour gérer le tickrate et le réadapter sur le rythme du serveur
+  tickRateClient = tickRateClient
+    + (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
+    * (((double)(estiClientHoro.first - servHoro.first)) * TICKCURRENTDIFFCONST)
+    * (((double)(estiClientHoro.second - servHoro.second)) * HORODIFFCONST);
 }
 
 int	GameClient::calcTickRate(int nbrLevel)

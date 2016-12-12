@@ -14,22 +14,24 @@
 #include "UI/UIManager.hh"
 
 #define TICKRATE 60
+#define TICKRATEDIFFCONST 0.1
+#define TICKCURRENTDIFFCONST (1.0 / ((double)TICKRATE) / 5.0)
+#define HORODIFFCONST (1.0 / 5000.0)
 
 namespace client {
     class NetworkManager;
 
     class GameClient {
     private:
-        NetworkManager *manager;
-        tick tickRateServer;
-        World *world;
-        UI::UIManager managerUi;
-        IEventHandler *handler;
+      World			*world;
+      UI::UIManager		managerUi;
+      IEventHandler		*handler;
+      std::mutex		client_mut;
+      NetworkManager		*manager;
+      tick			tickRateClient;
+      std::map<tick, uint64_t>	horodatageTick;
     public:
-        World *getWorld() const;
 
-    private:
-        std::map<tick, uint64_t> horodatageTick;
     public:
         GameClient();
 
@@ -50,6 +52,7 @@ namespace client {
 
         void manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy);
         void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
+        World *getWorld() const;
     private:
         void readaptTickRate(int servTickRate,
                              std::pair<tick, uint64_t> estiClientHoro,
