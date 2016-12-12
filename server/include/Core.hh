@@ -2,24 +2,27 @@
 #define RTYPE_SERVER_CORE_HH_
 
 #include "NetworkManager.hh"
-#include "helpers/Stopwatch.hh"
+#include "helpers/IStopwatch.hh"
 #include <string>
 #include <Level.hh>
 #include <Game.hh>
 #include <mutex>
 
-namespace server {
+namespace server
+{
 
     class NetworkManager;
 
-    class Core {
+    class Core
+    {
     private:
         NetworkManager *networkManager;
         std::mutex mutex;
         std::vector<Level> levels;
         std::vector<Game *> games;
         gameId_t lastGameId;
-        Stopwatch sw;
+        IStopwatch * sw;
+
     protected:
         bool isRunning;
         round_t max;
@@ -50,10 +53,13 @@ namespace server {
          */
 
         Core(const std::string &path, NetworkManager *networkManager);
+        ~Core();
 
     private:
 
         Game * getClientsGame(const Client &);
+        virtual void psetClient(Client &, gameId_t);
+        virtual void premoveClient(Client &);
     };
 
 }

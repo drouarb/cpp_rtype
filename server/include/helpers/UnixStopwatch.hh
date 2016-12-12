@@ -8,31 +8,24 @@
 // Last update Fri May 27 19:19:52 2016 Esteban Lewis
 //
 
-#ifndef  STOPWATCH_HPP_
-# define STOPWATCH_HPP_
+#ifndef  UNIXSTOPWATCH_HPP_
+# define UNIXSTOPWATCH_HPP_
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
+# include "IStopwatch.hh"
 # include <sys/time.h>
-#endif
 # include <time.h>
 
-class			Stopwatch
+class			UnixStopwatch : public IStopwatch
   {
   public:
-    Stopwatch();
-    ~Stopwatch();
+    UnixStopwatch();
+    ~UnixStopwatch();
     
     void			set();
     long			ellapsedMs();
     
   private:
-#ifdef _WIN32
-	  unsigned long         tick;
-#else
 	  struct timeval		startTime;
-#endif
 };
 
 #endif

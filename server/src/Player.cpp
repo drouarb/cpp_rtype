@@ -100,12 +100,13 @@ bool server::Player::isDestroyed()
 
 void server::Player::collide(server::IEntity *entity)
 {
-    std::cout << "Player " << this->id << " collide with entity id " << entity->getEntityId() << std::endl;
+    std::cout << "Player " << this->id << " collides with entity id " << entity->getEntityId() << std::endl;
 }
 
 server::EntityAction *server::Player::nextAction()
 {
-    std::cout << "shoot: " << std::to_string(attackQueue.back()) << std::endl;
+    if (!attackQueue.empty())
+        std::cout << "shoot: " << std::to_string(attackQueue.back()) << std::endl;
     while (!attackQueue.empty())
         attackQueue.pop();
     EntityAction * act = new EntityAction();

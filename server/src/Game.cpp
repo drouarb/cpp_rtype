@@ -146,8 +146,10 @@ void Game::unspawn()
 }
 
 void Game::newPlayer(Client *client) {
-    if (clientList.size() == 4) {
-        throw std::runtime_error("Cannot add more than 4 player in a game");
+    if (clientList.size() == 4)
+    {
+        std::cout << "maximum number of players reached" << std::endl;
+        return;
     }
     Controller *controller = new Controller();
     this->clientList.push_back(client);

@@ -31,6 +31,11 @@ void server::NetworkManager::clientDisconnect(int src) {
     this->clientContainer.remove(src);
 }
 
+void server::NetworkManager::clientConnect(int src)
+{
+    clientContainer.create(src);
+}
+
 void server::NetworkManager::clientJoin(int src, gameId_t game)
 {
     Client &client = this->clientContainer.get(src);
@@ -55,6 +60,7 @@ void server::NetworkManager::clientPlayerQuit(int src) {
     core->removeClient(client);
 }
 
-void server::NetworkManager::createClient(int src) {
+void server::NetworkManager::createClient(int src) //TODO ???
+{
     this->clientContainer.create(src).setController(new Controller());
 }
