@@ -14,8 +14,8 @@ namespace client {
 
     class NetworkManager {
     private:
-        GameClient *gameClient = nullptr;
-        network::PacketFactory *packetFactory = nullptr;
+        GameClient *gameClient;
+        network::PacketFactory *packetFactory;
         std::vector<network::listener::IPacketListener *> listeners;
     public:
         ~NetworkManager();

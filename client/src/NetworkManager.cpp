@@ -84,6 +84,7 @@ void NetworkManager::addListenerToPacketFactory()
 }
 
 void NetworkManager::receiveDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) {
+    gameClient->manageDeleteEntity(tick, eventId, entityId);
 }
 
 void NetworkManager::receiveDisconnect() {
@@ -111,7 +112,7 @@ void NetworkManager::receiveLeaderBoard(std::vector<std::pair<uint32_t, std::str
 
 void
 NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy) {
-
+    gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy);
 }
 
 void NetworkManager::receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {
@@ -125,11 +126,12 @@ void NetworkManager::receiveQuit() {
 void
 NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
                                    uint16_t pos_x, uint16_t pos_y) {
+    gameClient->manageSpawnEntity(tick , eventId, spriteName, entityId, pos_x, pos_y);
 
 }
 
 void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp) {
-
+    gameClient->manageUpdateEntity(tick, eventId, entityId, hp);
 }
 
 void NetworkManager::sendRegister(const std::string &name) {
