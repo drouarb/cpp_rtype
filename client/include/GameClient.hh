@@ -14,28 +14,43 @@
 
 #define TICKRATE 60
 
-namespace client
-{
+namespace client {
     class NetworkManager;
-  
-    class GameClient
-    {
+
+    class GameClient {
     private:
-      std::mutex		client_mut;
-      NetworkManager		*manager;
-      tick			tickRateServer;
-      std::map<tick, uint64_t>	horodatageTick;
+        NetworkManager *manager;
+        tick tickRateServer;
+        World *world;
     public:
-      GameClient();
-      ~GameClient(){};
-      void createNetworkManager(const std::string &ip, unsigned short port);
-      void deleteNetworkManager();
-      void	gameLoop();
+        World *getWorld() const;
+
     private:
-      void      readaptTickRate(int servTickRate,
-				std::pair<tick, uint64_t> estiClientHoro,
-				std::pair<tick, uint64_t> servHoro);
-      int       calcTickRate(int nbrLevel);
+        std::map<tick, uint64_t> horodatageTick;
+    public:
+        GameClient();
+
+        ~GameClient() {};
+        void manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
+                                uint16_t pos_x, uint16_t pos_y);
+
+        void manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp);
+
+        void createNetworkManager(const std::string &ip, unsigned short port);
+
+        void deleteNetworkManager();
+
+        void gameLoop();
+
+        void manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy);
+        void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
+    private:
+        void readaptTickRate(int servTickRate,
+                             std::pair<tick, uint64_t> estiClientHoro,
+                             std::pair<tick, uint64_t> servHoro);
+
+        int calcTickRate(int nbrLevel);
+        
     };
 }
 

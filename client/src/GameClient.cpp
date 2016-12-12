@@ -9,10 +9,8 @@
 
 using namespace client;
 
-client::GameClient::GameClient()
+client::GameClient::GameClient() :manager(nullptr) , tickRateServer(TICKRATE), world(nullptr)
 {
-  manager = NULL;
-  tickRateServer = TICKRATE;
 }
 
 void client::GameClient::createNetworkManager(const std::string &ip, unsigned short port)
@@ -25,7 +23,7 @@ void client::GameClient::createNetworkManager(const std::string &ip, unsigned sh
     }
     catch (std::runtime_error &e)
     {
-        manager = NULL;
+        manager = nullptr;
         std::cerr << e.what() << std::endl;
 
     }
@@ -69,4 +67,26 @@ int	GameClient::calcTickRate(int nbrLevel)
   tickEnd = it->first;
   timeEnd = it->second;
   return ((tickBegin - tickEnd) / ((timeBegin - timeEnd) * 1000));
+}
+
+World *GameClient::getWorld() const {
+    return world;
+}
+
+void GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
+                                   uint16_t pos_x, uint16_t pos_y) {
+
+
+}
+
+void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp) {
+
+}
+
+void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy) {
+
+}
+
+void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) {
+
 }
