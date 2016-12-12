@@ -57,10 +57,15 @@ void	GameClient::readaptTickRate(int servTickRate,
 				    std::pair<tick, uint64_t> estiClientHoro,
 				    std::pair<tick, uint64_t> servHoro)
 {
-  tickRateClient = tickRateClient
-    + (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
+  double	tickRateModif;
+  
+  tickRateModif = (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
     * (((double)(estiClientHoro.first - servHoro.first)) * TICKCURRENTDIFFCONST)
     * (((double)(estiClientHoro.second - servHoro.second)) * HORODIFFCONST);
+  if (tickRateModif < 0.0)
+    --tickRateClient;
+  else if (tickRateModif > 0.0)
+    ++tickRateClient;
 }
 
 int	GameClient::calcTickRate(int nbrLevel)
