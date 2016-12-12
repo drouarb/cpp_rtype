@@ -8,34 +8,19 @@
 // Last update Fri May 27 19:20:15 2016 Esteban Lewis
 //
 
-#include "helpers/Stopwatch.hh"
+#include "helpers/IStopwatch.hh"
 
-Stopwatch::Stopwatch()
-{ }
-
-Stopwatch::~Stopwatch()
-{ }
-
-void
-Stopwatch::set()
-{
 #ifdef _WIN32
-	tick = static_cast<unsigned long>(GetTickCount());
+#include "helpers/WindowsStopwatch.hh"
 #else
-	gettimeofday(&startTime, NULL);
+#include "helpers/UnixStopwatch.hh"
 #endif
-}
 
-long
-Stopwatch::ellapsedMs()
+IStopwatch * IStopwatch::getInstance()
 {
 #ifdef _WIN32
-	return (static_cast<unsigned long>(GetTickCount()) - tick);
+    return (new WindowsStopwatch());
 #else
-	struct timeval checkTime;
-
-  gettimeofday(&checkTime, NULL);
-  return ((checkTime.tv_sec - startTime.tv_sec) * 1000 +
-	  (checkTime.tv_usec - startTime.tv_usec) / 1000);
+    return (new UnixStopwatch());
 #endif
 }

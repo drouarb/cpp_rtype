@@ -5,8 +5,12 @@
 #ifndef CPP_RTYPE_IPLAYER_HH
 #define CPP_RTYPE_IPLAYER_HH
 
-namespace server {
-    class IPlayer {
+#include "IEntity.hh"
+
+namespace server
+{
+    class IPlayer : public IEntity
+    {
     public:
         virtual void shoot(attackId_t attackId) = 0;
     };

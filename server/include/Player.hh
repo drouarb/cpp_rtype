@@ -6,12 +6,12 @@
 #define CPP_RTYPE_PLAYER_HH
 
 #include <queue>
-#include "definitions.hh"
 #include "IPlayer.hh"
-#include "IEntity.hh"
 
-namespace server {
-    class Player : public IPlayer, public IEntity {
+namespace server
+{
+    class Player : public IPlayer
+    {
     private:
         server::entityId_t id;
         server::Team  team;

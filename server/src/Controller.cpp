@@ -7,19 +7,15 @@ void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY) {
 }
 
 void server::Controller::playShoot(server::attackId_t attackId) {
-    IPlayer *pPlayer = this->getPlayer();
-    if (!pPlayer) {
-        throw std::logic_error("Controller player is NULL, aborting");
+    if (!entity)
+    {
+        return;
     }
-    pPlayer->shoot(attackId);
+    entity->shoot(attackId);
 }
 
 void server::Controller::setEntity(server::Player *entity) {
     this->entity = entity;
-}
-
-server::IPlayer *server::Controller::getPlayer() {
-    return reinterpret_cast<IPlayer *>(this->entity);
 }
 
 void server::Controller::destroy() {
