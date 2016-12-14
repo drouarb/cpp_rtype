@@ -1,11 +1,12 @@
 {
-  "name": "basic",
-  "spawns": [
+  name: "basic",
+  spawns:
+  [
     {
-      "dlName": "build/Entities/libBasicEntity",
-      "time": 0,
-      "posX": 0,
-      "posY": 0
+      dlName: "build/Entities/libBasicEntity",
+      time: "0",
+      posX: "0",
+      posY: "0"
     }
   ]
 }

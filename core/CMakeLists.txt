@@ -13,6 +13,7 @@ file(
 )
 
 include_directories(include)
+include_directories(include/JSON)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} STATIC ${CORE_SRCS})
