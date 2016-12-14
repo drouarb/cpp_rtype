@@ -10,6 +10,16 @@
 #define ROUND_DURATION_MS 30
 
 namespace server {
+
+    enum Team : unsigned int
+    {
+        NA      = 0,    //not applicable (non-actor entities)
+        PLAYER  = 1,    //players' team
+        FOE     = 2     //default team for enemies
+        // Other values greater than 2 may be used in the dynamic libraries. The server is not concerned by them.
+    };
+
+
     typedef uint32_t round_t;
     typedef float pos_t;
     typedef float speed_t;
@@ -17,6 +27,7 @@ namespace server {
     typedef uint8_t attackId_t;
     typedef int clientId_t;
     typedef int gameId_t;
+    typedef uint32_t entityId_t;
 }
 
 #define FIELD_WIDTH 800

@@ -64,7 +64,6 @@ void server::Core::run()
         }
         if (r == 12)
         {
-            networkManager->clientPlayerMove(14, 3, 0);
             ++r;
         }
         if (r == 14)
@@ -96,7 +95,7 @@ void server::Core::run()
             break;
         }
         if (sw->ellapsedMs() < ROUND_DURATION_MS)
-            usleep(ROUND_DURATION_MS - sw->ellapsedMs());
+            usleep((ROUND_DURATION_MS - sw->ellapsedMs()) * 1000);
     }
 }
 
@@ -123,7 +122,6 @@ void server::Core::psetClient(server::Client &client, server::gameId_t gameId)
     games.back()->setLevel(levels[lastGameId % levels.size()]);
     ++lastGameId;
     games.back()->newPlayer(&client);
-    assert(client.getController() != nullptr); //TODO ???
 }
 
 

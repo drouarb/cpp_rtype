@@ -15,7 +15,7 @@ namespace server {
      */
     class IListenerHandler {
     public:
-        virtual void createClient(int src) = 0;
+        virtual void clientConnect(int src) = 0;
         virtual void clientRegister(int src, const std::string &name)= 0;
         virtual void clientDisconnect(int src)= 0;
         virtual void clientJoin(int src, gameId_t game)= 0;

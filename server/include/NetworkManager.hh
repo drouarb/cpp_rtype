@@ -19,8 +19,6 @@ namespace server {
     public:
         NetworkManager(Core *core);
 
-        void createClient(int src) override;
-
         const std::list<Client> &getClientList() const;
 
         void sendGameState(int hp, clientId_t clientId);

@@ -2,7 +2,7 @@
 #define RTYPE_SPAWN_HH_
 
 #include "definitions.hh"
-#include "IEntity.hh"
+#include "Entity.hh"
 
 namespace server
 {
@@ -19,7 +19,7 @@ namespace server
         pos_t posX;
         pos_t posY;
 
-        IEntity * trigger();
+        Entity * trigger(entityId_t id);
     };
 }
 
