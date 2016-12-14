@@ -3,7 +3,6 @@
 
 #include <string>
 #include "ILayer.hh"
-#include "UIManager.hh"
 #include "ALayer.hh"
 
 namespace UI {

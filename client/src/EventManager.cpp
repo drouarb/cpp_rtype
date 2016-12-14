@@ -7,7 +7,10 @@
 #include <UI/UIManager.hh>
 
 
-int testshitfunction(int modifier, UI::UIManager *neue);
+int testshitfunction(int modifier, UI::UIManager *neue)
+{
+
+}
 void client::EventManager::onKeyPressed(sf::Keyboard::Key key) {
     switch (key) {
         case sf::Keyboard::Unknown:break;
