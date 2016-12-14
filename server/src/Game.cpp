@@ -1,9 +1,7 @@
 #include <algorithm>
 #include <iostream>
-#include <LibLoader/IDlLoader.hh>
 #include <Player.hh>
 #include "Game.hh"
-#include "../../Entities/include/BasicEntity.hh"
 
 using namespace server;
 
@@ -15,8 +13,6 @@ Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), gameId(lobbyId), entityI
 
 Game::~Game()
 {
-    std::cout << "calling destructor" << std::endl;
-    std::cout << "clientList: " << clientList.back() << std::endl;
     for (auto client : clientList)
     {
         removePlayer(client);
@@ -68,15 +64,14 @@ void Game::progressLevel()
         }
         for (auto spawn : *pVector)
         {
-            IEntity * entity = spawn.trigger();
+            Entity * entity = spawn.trigger(entityIdCount);
             if (entity == nullptr)
             {
                 std::cerr << "Game " << gameId << ": failed to create entity " << spawn.dlName << std::endl;
             }
             else
             {
-                entity->setEntityId(entityIdCount);
-                std::cout << entity->getPosX() << ", " << entity->getPosY();
+                std::cout << entity->data.getPosX() << ", " << entity->data.getPosY();
                 entityIdCount++;
                 entities.push_front(entity);
             }
@@ -94,14 +89,26 @@ void Game::letEntitesAct()
 {
     for (auto it = entities.begin(); it != entities.end(); ++it)
     {
-        auto action = (*it)->nextAction();
+        EntityAction * action = (*it)->obj->nextAction();
+        if (action->speedX != (*it)->data.getVectX())
+        {
+            (*it)->data.setVectX(action->speedX);
+        }
+        if (action->speedY != (*it)->data.getVectY())
+        {
+            (*it)->data.setVectY(action->speedY);
+        }
+        if (action->hp != (*it)->data.getHp())
+        {
+            (*it)->data.setHp(action->hp);
+        }
         if (action->newEntity)
         {
             entities.push_back(action->newEntity);
         }
         if (action->destroy)
         {
-            (*it)->destroy();
+            (*it)->data.setDestroyed(true);
         }
         delete action;
     }
@@ -111,18 +118,18 @@ void Game::moveEntities()
 {
     for (auto entity : entities)
     {
-        entity->setPosX(entity->getPosX() + entity->getSpeedX());
-        entity->setPosY(entity->getPosY() + entity->getSpeedY());
-        std::cout << "entity " << std::to_string(entity->getEntityId()) << " x=" << std::to_string(entity->getPosX()) << " y=" << std::to_string(entity->getPosY()) << std::endl;
+        entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
+        entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
+        std::cout << "entity " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
         //TODO: do this in checkCollisions, by changing the vectors?
-        if (entity->getPosY() > FIELD_HEIGHT)
-            entity->setPosY(FIELD_HEIGHT);
-        if (entity->getPosY() < 0)
-            entity->setPosY(0);
-        if (entity->getPosX() < FIELD_BORDER_LEFT - LEFT_MARGIN)
-            entity->setPosX(FIELD_BORDER_LEFT - LEFT_MARGIN);
-        if (entity->getPosX() > FIELD_BORDER_RIGHT + RIGHT_MARGIN)
-            entity->setPosX(FIELD_BORDER_RIGHT + RIGHT_MARGIN);
+        if (entity->data.getPosY() > FIELD_HEIGHT)
+            entity->data.setPosY(FIELD_HEIGHT);
+        if (entity->data.getPosY() < 0)
+            entity->data.setPosY(0);
+        if (entity->data.getPosX() < FIELD_BORDER_LEFT - LEFT_MARGIN)
+            entity->data.setPosX(FIELD_BORDER_LEFT - LEFT_MARGIN);
+        if (entity->data.getPosX() > FIELD_BORDER_RIGHT + RIGHT_MARGIN)
+            entity->data.setPosX(FIELD_BORDER_RIGHT + RIGHT_MARGIN);
     }
 }
 
@@ -130,11 +137,11 @@ void Game::unspawn()
 {
     for (auto it = entities.begin(); it != entities.end();)
     {
-        if ((*it)->getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN)
+        if ((*it)->data.getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN)
         {
-            (*it)->destroy();
+            (*it)->data.setDestroyed(true);
         }
-        if ((*it)->isDestroyed())
+        if ((*it)->data.isDestroyed())
         {
             destroyedEntities.push_front(*it);
             it = entities.erase(it);
@@ -154,11 +161,12 @@ void Game::newPlayer(Client *client) {
     Controller *controller = new Controller();
     this->clientList.push_back(client);
     Player *player = new Player();
-    player->setEntityId(entityIdCount);
+    Entity *entity = new Entity();
+    entity->initialize(player, entityIdCount);
     entityIdCount++;
     controller->setEntity(player);
     client->setController(controller);
-    this->entities.push_back(player);
+    this->entities.push_back(entity);
 }
 
 void Game::removePlayer(Client *client) {

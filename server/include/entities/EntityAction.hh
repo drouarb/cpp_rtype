@@ -7,6 +7,7 @@
 
 #include <string>
 #include <ostream>
+#include <definitions.hh>
 
 namespace server {
 
@@ -15,12 +16,15 @@ namespace server {
      *   Other actions (like movement and HP changing) will be done from inside the IEntity, and detected by the server automatically.
     */
 
-    class IEntity;
+    class Entity;
 
     struct EntityAction {
         std::string soundToPlay;
         bool destroy;
-        IEntity *newEntity;
+        Entity *newEntity;
+        speed_t speedX;
+        speed_t speedY;
+        int hp;
 
         EntityAction();
     };

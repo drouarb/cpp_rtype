@@ -22,12 +22,12 @@ Spawn & Spawn::operator=(const Spawn & other)
     return (*this);
 }
 
-IEntity * Spawn::trigger()
+Entity * Spawn::trigger(entityId_t id)
 {
-    IEntity * entity = IEntity::make(this->dlName);
+    Entity * entity = Entity::make(this->dlName, id);
     if (entity == nullptr)
         return (nullptr);
-    entity->setPosX(this->posX);
-    entity->setPosY(this->posY);
+    entity->data.setPosX(this->posX);
+    entity->data.setPosY(this->posY);
     return (entity);
 }

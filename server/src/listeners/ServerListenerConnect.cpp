@@ -9,5 +9,5 @@ server::ServerListenerConnect::ServerListenerConnect(server::IListenerHandler *l
         listenerHandler) {}
 
 void server::ServerListenerConnect::notify(int fd) {
-    this->listenerHandler->createClient(fd);
+    this->listenerHandler->clientConnect(fd);
 }

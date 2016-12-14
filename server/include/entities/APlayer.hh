@@ -5,14 +5,15 @@
 #ifndef CPP_RTYPE_IPLAYER_HH
 #define CPP_RTYPE_IPLAYER_HH
 
-#include "IEntity.hh"
+#include "ADynamicObject.hh"
 
 namespace server
 {
-    class IPlayer : public IEntity
+    class APlayer : public ADynamicObject
     {
     public:
         virtual void shoot(attackId_t attackId) = 0;
+        virtual void move(speed_t vectX, speed_t vectY) = 0;
     };
 }
 

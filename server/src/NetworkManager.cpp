@@ -31,37 +31,31 @@ void server::NetworkManager::clientDisconnect(int src) {
     this->clientContainer.remove(src);
 }
 
-void server::NetworkManager::clientConnect(int src) {
+void server::NetworkManager::clientConnect(int src)
+{
     clientContainer.create(src);
 }
 
-void server::NetworkManager::clientJoin(int src, gameId_t game) {
-    try {
-        Client &client = this->clientContainer.get(src);
-        core->setClient(client, game);
-    } catch (std::logic_error) {
-        Client &client = this->clientContainer.create(src);
-        core->setClient(client, game);
-    }
+void server::NetworkManager::clientJoin(int src, gameId_t game)
+{
+    Client &client = this->clientContainer.get(src);
+    core->setClient(client, game);
 }
 
 void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId, round_t tick) {
     //TODO Use tick
     Client &client = this->clientContainer.get(src);
-    client.getController()->playShoot(attackId);
+    if (client.getController())
+        client.getController()->playShoot(attackId);
 }
 
 void server::NetworkManager::clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) {
     Client &client = this->clientContainer.get(src);
-    client.getController()->playMove(vectX, vectY);
+    if (client.getController())
+        client.getController()->playMove(vectX, vectY);
 }
 
 void server::NetworkManager::clientPlayerQuit(int src) {
     Client &client = this->clientContainer.get(src);
     core->removeClient(client);
-}
-
-void __attribute__((deprecated)) server::NetworkManager::createClient(int src)
-{
-
 }

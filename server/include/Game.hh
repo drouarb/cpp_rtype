@@ -27,8 +27,8 @@ namespace server
     private:
         std::list<Client *> clientList;
         const Level * lvl;
-        std::list<IEntity*> entities;
-        std::list<IEntity*> destroyedEntities;
+        std::list<Entity*> entities;
+        std::list<Entity*> destroyedEntities;
         round_t round;
         gameId_t gameId;
         entityId_t entityIdCount;
