@@ -30,17 +30,6 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     packetPlayerAttack->setTick(1);
     packetPlayerAttack->setAttackId(1);
 
-    try {
-        playerAttack->notify(packetPlayerAttack);
-        playerMove->notify(packetPlayerMove);
-        assert(false);
-    }catch (std::logic_error) {
-        std::cout << "END" << std::endl;
-        assert(true); //Must throw cause client was not connected
-    }
-    assert(!status[NETWORK_MANAGER_clientPlayerAttack]);
-    assert(!status[NETWORK_MANAGER_clientPlayerMove]);
-
     networkManagerTest.createClient(42);
 
     try {
