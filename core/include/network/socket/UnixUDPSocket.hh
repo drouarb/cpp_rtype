@@ -81,7 +81,7 @@ namespace network {
             void clientHandshake();
 
             unsigned long getClientId(const struct sockaddr_in &client);
-            void handleData(std::vector<uint8_t> &data, const struct sockaddr_in &client);
+            void handleData(const std::vector<uint8_t> &data, const struct sockaddr_in &client);
 
         private:
             e_socketType type;

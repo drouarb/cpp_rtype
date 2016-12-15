@@ -47,9 +47,9 @@ public:
 class DataL: public listener::ISocketDataListener {
     std::vector<uint8_t> data;
 public:
-    virtual void notify(unsigned long fd, std::vector<unsigned char> *data) {
-        std::cout << "Received " << data->size() << std::endl;
-        this->data.insert(this->data.end(), data->begin(), data->end());
+    virtual void notify(unsigned long fd, const std::vector<unsigned char> &data) {
+        std::cout << "Received " << data.size() << std::endl;
+        this->data.insert(this->data.end(), data.begin(), data.end());
     }
 
     const std::vector<uint8_t> &getData() const {

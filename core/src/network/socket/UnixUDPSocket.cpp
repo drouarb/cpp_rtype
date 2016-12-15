@@ -248,19 +248,20 @@ void network::socket::UnixUDPSocket::clientTimeout() {
     }
 }
 
-void network::socket::UnixUDPSocket::handleData(std::vector<uint8_t> &data, const struct sockaddr_in &client) {
+void network::socket::UnixUDPSocket::handleData(const std::vector<uint8_t> &data, const struct sockaddr_in &client) {
     //TODO PacketDisconnect
     try {
         std::vector<uint8_t> buff;
         packet::PacketPing packetPing;
         packet::PacketPong packetPong;
 
-        packetPing.deserialize(&data);
+        //TODO Const APacket Protoboeuf
+        packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
         packetPong.serialize(&buff);
         send(buff, getClientId(client));
     } catch (std::exception e) {
         for (auto &l : dataListeners) {
-            l->notify(getClientId(client), &data);
+            l->notify(getClientId(client), data);
         }
     }
 }
