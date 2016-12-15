@@ -5,12 +5,17 @@
 #include <stdexcept>
 #include <iostream>
 #include <future>
+#include "EventManager.hh"
 #include "GameClient.hh"
 
 using namespace client;
 
 client::GameClient::GameClient() :manager(nullptr) , tickRateServer(TICKRATE), world(nullptr)
 {
+    handler = new EventManager;
+    managerUi.init(1920, 1020);
+    managerUi.getEventObserver()->setEventManager(handler);
+    managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
 }
 
 void client::GameClient::createNetworkManager(const std::string &ip, unsigned short port)
@@ -35,9 +40,14 @@ void client::GameClient::deleteNetworkManager()
     manager = NULL;
 }
 
-void	GameClient::gameLoop()
-{
-  
+void	GameClient::gameLoop() {
+
+    UI::IWindow *window = managerUi.getWindow(UI::MAIN_WINDOW);
+    UI::IEventObserver *eventObserver = managerUi.getEventObserver();
+    while (window->isOpen()) {
+        window->display();
+        eventObserver->getEvent();
+    }
 }
 
 void	GameClient::readaptTickRate(int servTickRate,

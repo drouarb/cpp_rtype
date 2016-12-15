@@ -13,7 +13,7 @@ namespace UI {
         UIManager();
         ~UIManager();
 
-        void init();
+        void init(short size_x, short size_y);
         unsigned long addLayer(UI::layerType, UI::windowType windowType);
         unsigned long addItemToLayer(UI::itemType type, std::string sprite, int posX, int posY, unsigned long LayerID);
         int addItemToGame(UI::itemType type, std::string sprite, int posX, int posY);

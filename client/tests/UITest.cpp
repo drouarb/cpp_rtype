@@ -30,25 +30,24 @@ int main()
     UI::AItem* item;
     UI::AItem* item2;
 
-    ui->init();
-    ui->getEventObserver()->listen(ui->getWindow(UI::MAIN_WINDOW));
+    ui->init(800, 600);
+        ui->getEventObserver()->listen(ui->getWindow(UI::MAIN_WINDOW));
+        //layer = ui->getWindow(UI::MAIN_WINDOW)->addLayer(UI::GAME);
+        ui->getAudioManager()->playMusic("/home/jonas_e/Work/Epitech/rtype/media/musics/Lady_Crimson.ogg");
+        ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
+        item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Desktop/ALL_GONE.jpg", 250, 250);
+        ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->setImage("/home/jonas_e/Desktop/ALL_GONE.jpg");
+        ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->setPosition(250, 250);
+        //ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->getItem(item)->addAnimation(UI::IDLE, std::vector<std::pair<unsigned int, std::string> {0, "/home/jonas_e/Desktop/ALL_GONE.jpg"}>);
+        UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);
+        UI::IEventObserver* eventObserver = ui->getEventObserver();
+        testshitfunction(0, ui);
+        while (window->isOpen()) {
+            window->display();
+            eventObserver->getEvent();
+            //vs
+            //ui->display();
 
-    ui->getAudioManager()->playMusic("/home/jonas_e/Work/Epitech/rtype/media/musics/Lady_Crimson.ogg");
-    ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
-    item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Desktop/ALL_GONE.jpg", 250, 250);
-    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addItem(UI::ITEM, "/home/jonas_e/Desktop/fire.png", 300, 300);
-    UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);
-    UI::IEventObserver* eventObserver = ui->getEventObserver();
-    item2->setRatio(0.20);
-    testshitfunction(0, ui);
-    while (window->isOpen()) {
-        window->display();
-        if (ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->isVisible())
-            ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->close();
-        else
-            ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->open();
-        item->setPosition(100, 100);
-        eventObserver->getEvent();
-    }
+        }
     return 1;
 }

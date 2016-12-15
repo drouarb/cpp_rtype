@@ -11,6 +11,7 @@
 #include "Entity.hh"
 #include "NetworkManager.hh"
 #include "Definitions.hh"
+#include "UI/UIManager.hh"
 
 #define TICKRATE 60
 
@@ -22,6 +23,8 @@ namespace client {
         NetworkManager *manager;
         tick tickRateServer;
         World *world;
+        UI::UIManager managerUi;
+        IEventHandler *handler;
     public:
         World *getWorld() const;
 
@@ -41,6 +44,9 @@ namespace client {
         void deleteNetworkManager();
 
         void gameLoop();
+        UI::UIManager *getUi(){
+            return &this->managerUi;
+        }
 
         void manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy);
         void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
@@ -50,7 +56,6 @@ namespace client {
                              std::pair<tick, uint64_t> servHoro);
 
         int calcTickRate(int nbrLevel);
-        
     };
 }
 
