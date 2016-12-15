@@ -30,7 +30,6 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     packetPlayerAttack->setTick(1);
     packetPlayerAttack->setAttackId(1);
 
-    networkManagerTest.createClient(42);
 
     try {
         playerAttack->notify(packetPlayerAttack);

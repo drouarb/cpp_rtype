@@ -77,3 +77,5 @@ fabric.properties
 
 .idea/
 build/
+
+cmake-build-debug
