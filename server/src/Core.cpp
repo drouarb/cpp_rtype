@@ -44,7 +44,8 @@ void server::Core::run()
     //round_t r = 0;
     while (isRunning)
     {
-        /*if (r == 2)
+/*
+        if (r == 2)
         {
             networkManager->clientConnect(14);
             ++r;
@@ -73,9 +74,11 @@ void server::Core::run()
         {
             networkManager->clientDisconnect(14);
             ++r;
-            max = 22;
         }
-         */
+        if (r == 22)
+            return;
+        ++r;
+*/
 
 
         sw->set();
@@ -87,7 +90,6 @@ void server::Core::run()
             std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
             game->tick();
         }
-        //++r;
         mutex.unlock();
 
         if (sw->ellapsedMs() < ROUND_DURATION_MS)

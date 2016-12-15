@@ -11,6 +11,8 @@
 
 namespace server
 {
+    class Entity;
+
     class ADynamicObject
     {
     public:
@@ -22,7 +24,7 @@ namespace server
          * If the instance where collide() is called is an actor, it should check the colliding entity for damage.
          * This method may be called multiple times before nextAction() is called, if there are multiple collisions.
          */
-        virtual void collide(const EntityData &) = 0;
+        virtual void collide(const Entity &) = 0;
         /**
          * This method is called at each game round. Here, the entity can chose to do anything (or nothing).
          * Playing a sound, destroying oneself or creating a new entity must be done via EntityAction.
@@ -36,6 +38,13 @@ namespace server
          * They will only be applied if the entity is created by another entity.
          */
         virtual EntityInitialization * initialize() = 0;
+        /**
+         * This method returns the damage that this entity causes when colliding with another entity.
+         * May be null.
+         * Is typically used for projectiles.
+         * May be negative (for a boon for instance).
+         */
+        virtual damage_t getDamage() = 0;
 
         const EntityData * data;
     };

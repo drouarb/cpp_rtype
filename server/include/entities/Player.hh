@@ -26,10 +26,10 @@ namespace server
         void move(speed_t vectX, speed_t vectY) override;
 
 
-        void collide(const EntityData &entity) override;
+        void collide(const Entity &entity) override;
         EntityAction *nextAction() override;
         EntityInitialization * initialize() override;
-
+        damage_t getDamage() override;
     };
 }
 
