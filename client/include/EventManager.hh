@@ -6,12 +6,21 @@
 #define CPP_RTYPE_EVENTMANAGER_HH
 
 #include <SFML/Window/Keyboard.hpp>
+#include "IEventHandler.hh"
+
 namespace client {
-    class EventManager {
+    class EventManager : public IEventHandler {
     public:
         EventManager();
+
         ~EventManager();
-        static void onKeyPressed(sf::Keyboard::Key key);
+
+        void onKeyPressed(short key);
+
+        void onKeyRealease(short key);
+
+        void onMouseRealease(short x, short y);
+
     };
 }
 

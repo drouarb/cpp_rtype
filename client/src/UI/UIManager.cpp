@@ -16,10 +16,10 @@ UI::UIManager::~UIManager() {
     }
 }
 
-void UI::UIManager::init() {
+void UI::UIManager::init(short size_x, short size_y) {
     IWindow* mainWindow = new UI::Window();
     mainWindow->setName("rtype");
-    mainWindow->setSize(800, 600);
+    mainWindow->setSize(size_x, size_y);
     mainWindow->render();
     windows.push_back(mainWindow);
     windows[MAIN_WINDOW]->addLayer(MENU);

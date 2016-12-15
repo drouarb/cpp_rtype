@@ -1,5 +1,6 @@
 #include <iostream>
 #include <EventManager.hh>
+#include <thread>
 #include "../../include/UI/EventObserver.hh"
 
 UI::EventObserver::EventObserver() {
@@ -15,7 +16,7 @@ void UI::EventObserver::getEvent() {
                 window->close();
                 break;
             case sf::Event::KeyPressed:
-                client::EventManager::onKeyPressed(event.key.code);
+                this->eventManager->onKeyPressed(event.key.code);
                 break;
             case sf::Event::KeyReleased:break;
             case sf::Event::MouseButtonPressed:event.mouseButton.x;event.mouseButton.y;
@@ -73,4 +74,8 @@ void UI::EventObserver::init(sf::RenderWindow* win) {
 
 void UI::EventObserver::listen(UI::IWindow *win) {
     window = static_cast<UI::Window*>(win)->getWindow();
+}
+
+void UI::EventObserver::setEventManager(client::IEventHandler *eventHandler) {
+    this->eventManager = eventHandler;
 }

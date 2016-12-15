@@ -55,7 +55,7 @@ int main()
    std::string filename("/home/jonas_e/Desktop/ALL_GONE.jpg");
 //    sf::Sprite sprite; //peut �tre une partie d'image
 
-        ui->init();
+    ui->init(800, 600);
         ui->getEventObserver()->listen(ui->getWindow(UI::MAIN_WINDOW));
         //layer = ui->getWindow(UI::MAIN_WINDOW)->addLayer(UI::GAME);
         ui->getAudioManager()->playMusic("/home/jonas_e/Work/Epitech/rtype/media/musics/Lady_Crimson.ogg");
