@@ -73,7 +73,7 @@ void Game::progressLevel()
             {
                 std::cout << entity->data.getPosX() << ", " << entity->data.getPosY();
                 entityIdCount++;
-                entities.push_front(entity);
+                entities.push_back(entity);
             }
         }
     }
@@ -81,8 +81,173 @@ void Game::progressLevel()
 
 void Game::checkCollisions()
 {
-    //TODO
-    //
+    size_t max = entities.size();
+    for (size_t i = 0; i < max; ++i)
+    {
+        for (size_t j = i + 1; j < max; ++j)
+        {
+            int dist;
+
+            // calculations are based on entities[i]
+
+            // --- x axis
+
+            // - left edge
+            if (entities[j]->data.getPosX() < entities[i]->data.getPosX() &&
+                    ((fy(i) >= fy(j) && fy(i) <= fyp(j)) || (fyp(i) >= fy(j) && fyp(i) <= fyp(j))))
+            {
+                dist = fx(i) - fxp(j);
+                std::cout << "left dist=" << std::to_string(dist) << std::endl;
+                if (dist <= 0)
+                {
+                    entities[i]->obj->collide(*entities[j]);
+                    entities[j]->obj->collide(*entities[i]);
+
+                    if (entities[i]->data.getVectX() <= 0)
+                    {
+                        if (dist >= entities[i]->data.getVectX())
+                        {
+                            entities[i]->data.setVectX(entities[i]->data.getVectX() - dist);
+                            dist = 0;
+                        }
+                        else
+                        {
+                            dist -= entities[i]->data.getVectX();
+                            entities[i]->data.setVectX(0);
+                        }
+                    }
+                    if (entities[j]->data.getVectX() >= 0)
+                    {
+                        if (-dist <= entities[j]->data.getVectX())
+                        {
+                            entities[j]->data.setVectX(entities[j]->data.getVectX() - -dist);
+                        }
+                        else
+                        {
+                            entities[j]->data.setVectX(0);
+                        }
+                    }
+                }
+            }
+
+            // - right edge
+            if (entities[j]->data.getPosX() > entities[i]->data.getPosX() &&
+                ((fy(i) >= fy(j) && fy(i) <= fyp(j)) || (fyp(i) >= fy(j) && fyp(i) <= fyp(j))))
+            {
+                dist = fx(j) - fxp(i);
+                std::cout << "right dist=" << std::to_string(dist) << std::endl;
+                if (dist <= 0)
+                {
+                    entities[i]->obj->collide(*entities[j]);
+                    entities[j]->obj->collide(*entities[i]);
+
+                    if (entities[j]->data.getVectX() <= 0)
+                    {
+                        if (dist >= entities[j]->data.getVectX())
+                        {
+                            entities[j]->data.setVectX(entities[j]->data.getVectX() - dist);
+                            dist = 0;
+                        }
+                        else
+                        {
+                            dist -= entities[j]->data.getVectX();
+                            entities[j]->data.setVectX(0);
+                        }
+                    }
+                    if (entities[i]->data.getVectX() >= 0)
+                    {
+                        if (-dist <= entities[i]->data.getVectX())
+                        {
+                            entities[i]->data.setVectX(entities[i]->data.getVectX() - -dist);
+                        }
+                        else
+                        {
+                            entities[i]->data.setVectX(0);
+                        }
+                    }
+                }
+            }
+
+            // --- y axis
+
+            // - upper edge
+            if (entities[j]->data.getPosY() < entities[i]->data.getPosY() &&
+                ((fx(i) >= fx(j) && fx(i) <= fxp(j)) || (fxp(i) >= fx(j) && fxp(i) <= fxp(j))))
+            {
+                dist = fy(i) - fyp(j);
+                std::cout << "up dist=" << std::to_string(dist) << std::endl;
+                if (dist <= 0)
+                {
+                    entities[i]->obj->collide(*entities[j]);
+                    entities[j]->obj->collide(*entities[i]);
+
+                    if (entities[i]->data.getVectY() <= 0)
+                    {
+                        if (dist >= entities[i]->data.getVectY())
+                        {
+                            entities[i]->data.setVectY(entities[i]->data.getVectY() - dist);
+                            dist = 0;
+                        }
+                        else
+                        {
+                            dist -= entities[i]->data.getVectY();
+                            entities[i]->data.setVectY(0);
+                        }
+                    }
+                    if (entities[j]->data.getVectY() >= 0)
+                    {
+                        if (-dist <= entities[j]->data.getVectY())
+                        {
+                            entities[j]->data.setVectY(entities[j]->data.getVectY() - -dist);
+                        }
+                        else
+                        {
+                            entities[j]->data.setVectY(0);
+                        }
+                    }
+                }
+            }
+
+            // - lower edge
+            if (entities[j]->data.getPosY() > entities[i]->data.getPosY() &&
+                ((fx(i) >= fx(j) && fx(i) <= fxp(j)) || (fxp(i) >= fx(j) && fxp(i) <= fxp(j))))
+            {
+                dist = fy(j) - fyp(i);
+                std::cout << "down dist=" << std::to_string(dist) << std::endl;
+                if (dist <= 0)
+                {
+                    entities[i]->obj->collide(*entities[j]);
+                    entities[j]->obj->collide(*entities[i]);
+
+                    if (entities[j]->data.getVectY() <= 0)
+                    {
+                        if (dist >= entities[j]->data.getVectY())
+                        {
+                            entities[j]->data.setVectY(entities[j]->data.getVectY() - dist);
+                            dist = 0;
+                        }
+                        else
+                        {
+                            dist -= entities[j]->data.getVectY();
+                            entities[j]->data.setVectY(0);
+                        }
+                    }
+                    if (entities[i]->data.getVectY() >= 0)
+                    {
+                        if (-dist <= entities[i]->data.getVectY())
+                        {
+                            entities[i]->data.setVectY(entities[i]->data.getVectY() - -dist);
+                        }
+                        else
+                        {
+                            entities[i]->data.setVectY(0);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
 }
 
 void Game::letEntitesAct()
@@ -144,8 +309,8 @@ void Game::unspawn()
         }
         if ((*it)->data.isDestroyed())
         {
-            destroyedEntities.push_front(*it);
-            it = entities.erase(it);
+            destroyedEntities.push_back(*it);
+            it = vect_erase(it, entities);
         }
         else
             ++it;
@@ -195,4 +360,56 @@ bool Game::hasClient(const Client & client)
 bool Game::empty()
 {
     return (clientList.empty());
+}
+
+std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator it, std::vector<Entity*> & vect)
+{
+    if (it == vect.end())
+    {
+        return (vect.erase(it));
+    }
+
+    *it = vect.back();
+    vect.pop_back();
+    return (it);
+}
+
+pos_t Game::fx(int i)
+{
+    return (entities[i]->data.getPosX() + entities[i]->data.getVectX());
+}
+
+pos_t Game::fy(int i)
+{
+    return (entities[i]->data.getPosY() + entities[i]->data.getVectY());
+}
+
+pos_t Game::fxp(int i)
+{
+    return (entities[i]->data.getPosX() + entities[i]->data.getSprite().sizeX + entities[i]->data.getVectX());
+}
+
+pos_t Game::fyp(int i)
+{
+    return (entities[i]->data.getPosY() + entities[i]->data.getSprite().sizeY + entities[i]->data.getVectY());
+}
+
+pos_t Game::fx(size_t i)
+{
+    return (entities[i]->data.getPosX() + entities[i]->data.getVectX());
+}
+
+pos_t Game::fy(size_t i)
+{
+    return (entities[i]->data.getPosY() + entities[i]->data.getVectY());
+}
+
+pos_t Game::fxp(size_t i)
+{
+    return (entities[i]->data.getPosX() + entities[i]->data.getSprite().sizeX + entities[i]->data.getVectX());
+}
+
+pos_t Game::fyp(size_t i)
+{
+    return (entities[i]->data.getPosY() + entities[i]->data.getSprite().sizeY + entities[i]->data.getVectY());
 }

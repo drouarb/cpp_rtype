@@ -49,7 +49,7 @@ void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId, ro
         client.getController()->playShoot(attackId);
 }
 
-void server::NetworkManager::clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) {
+void server::NetworkManager::clientPlayerMove(int src, speed_t vectX, speed_t vectY) {
     Client &client = this->clientContainer.get(src);
     if (client.getController())
         client.getController()->playMove(vectX, vectY);

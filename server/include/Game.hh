@@ -27,11 +27,13 @@ namespace server
     private:
         std::list<Client *> clientList;
         const Level * lvl;
-        std::list<Entity*> entities;
-        std::list<Entity*> destroyedEntities;
+        std::vector<Entity*> entities;
+        std::vector<Entity*> destroyedEntities;
         round_t round;
         gameId_t gameId;
         entityId_t entityIdCount;
+
+        std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
 
         /**
@@ -42,7 +44,7 @@ namespace server
          * Must be called after letEntitiesAct and before moveEntities.
          * Checks for future collisions according to the current vector.
          * Changes the vectors so that the entities about to collide touch but do not overlap.
-         * Calls the entity's collide() method in case of "collision".
+         * Calls the entity's collide() method in case of collision.
          */
         void checkCollisions();
         /**
@@ -57,6 +59,15 @@ namespace server
          * Must be called after moveEntities, and before sending packets.
          */
         void unspawn();
+        
+        pos_t fx(int);
+        pos_t fxp(int);
+        pos_t fy(int);
+        pos_t fyp(int);
+        pos_t fx(size_t);
+        pos_t fxp(size_t);
+        pos_t fy(size_t);
+        pos_t fyp(size_t);
     };
 }
 
