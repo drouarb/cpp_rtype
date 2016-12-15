@@ -7,6 +7,7 @@
 
 #include "definitions.hh"
 #include "EntityInitialization.hh"
+#include "Sprite.hh"
 
 namespace server
 {
@@ -22,9 +23,9 @@ namespace server
 
         void setTeam(Team team);
 
-        const std::string &getSprite() const;
+        const Sprite &getSprite() const;
 
-        void setSprite(const std::string &sprite);
+        void setSprite(const Sprite &);
 
         entityId_t getId() const;
 
@@ -56,7 +57,7 @@ namespace server
 
     private:
         Team team;
-        std::string sprite;
+        Sprite sprite;
         entityId_t id;
         pos_t posX;
         pos_t posY;

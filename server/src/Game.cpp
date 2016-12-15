@@ -5,10 +5,10 @@
 
 using namespace server;
 
-Game::Game(int lobbyId) : lvl(nullptr), gameId(lobbyId), entityIdCount(0)
+Game::Game(int lobbyId) : lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0)
 { }
 
-Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), gameId(lobbyId), entityIdCount(0)
+Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0)
 { }
 
 Game::~Game()
@@ -37,9 +37,9 @@ void Game::setLevel(const Level & lvl)
     this->lvl = &lvl;
 }
 
-void Game::tick(round_t round)
+void Game::tick()
 {
-    this->round = round;
+    round++;
     progressLevel();
     letEntitesAct();
     checkCollisions();

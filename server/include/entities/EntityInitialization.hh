@@ -7,6 +7,7 @@
 
 #include "EntityAction.hh"
 #include "../definitions.hh"
+#include "Sprite.hh"
 
 namespace server
 {
@@ -14,7 +15,7 @@ namespace server
     {
         pos_t posX;
         pos_t posY;
-        std::string sprite;
+        Sprite sprite;
         Team team;
 
         EntityAction action;

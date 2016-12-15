@@ -15,7 +15,7 @@ include_directories(include)
 include_directories(include/entities)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
-add_executable(${PROJECT_NAME} ${SERVER_SRCS} include/entities/ADynamicObject.hh include/entities/EntityData.hh src/entities/EntityData.cpp include/entities/Entity.hh src/entities/Entity.cpp)
+add_executable(${PROJECT_NAME} ${SERVER_SRCS} include/entities/ADynamicObject.hh include/entities/EntityData.hh src/entities/EntityData.cpp include/entities/Entity.hh src/entities/Entity.cpp include/entities/Sprite.hh src/entities/Sprite.cpp)
 add_library("${PROJECT_NAME}lib" STATIC ${SERVER_SRCS})
 target_link_libraries(${PROJECT_NAME} dl)
 target_link_libraries(${PROJECT_NAME} rtype_core)

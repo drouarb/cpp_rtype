@@ -25,7 +25,7 @@ namespace server
 
     protected:
         bool isRunning;
-        round_t max;
+
     public:
         /**
          *

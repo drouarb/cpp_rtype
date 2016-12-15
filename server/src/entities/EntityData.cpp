@@ -35,12 +35,12 @@ void EntityData::setTeam(Team team)
     EntityData::team = team;
 }
 
-const std::string &EntityData::getSprite() const
+const Sprite &EntityData::getSprite() const
 {
     return sprite;
 }
 
-void EntityData::setSprite(const std::string &sprite)
+void EntityData::setSprite(const Sprite &sprite)
 {
     EntityData::sprite = sprite;
 }

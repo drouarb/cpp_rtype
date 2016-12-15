@@ -19,7 +19,7 @@ namespace server
         void newPlayer(Client *client);
         void removePlayer(Client *client);
         void setLevel(const Level &);
-        void tick(round_t);
+        void tick();
         gameId_t getLobbyId();
         bool hasClient(const Client &);
         bool empty();
