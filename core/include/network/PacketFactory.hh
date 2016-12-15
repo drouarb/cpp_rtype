@@ -10,25 +10,54 @@
 #include <network/socket/ISocket.hh>
 #include <network/packet/IPacket.hh>
 #include <string>
+#include <map>
+#include <set>
+#include <vector>
 
 namespace network {
     class PacketFactory {
+    private:
+        typedef packet::IPacket *(PacketFactory::* createPacketFunc)(unsigned long fd, const t_rawdata &data) const;
+
     public:
-        PacketFactory(short port);
-        PacketFactory(const std::string &address, short port);
+        PacketFactory(unsigned short port);
+        PacketFactory(const std::string &address, unsigned short port);
         ~PacketFactory();
 
         void run();
         void poll();
+        void stop();
 
-        void send(const packet::IPacket &packet);
-        void send(const packet::IPacket &packet, int fd);
+        void broadcast(const packet::IPacket &packet) const;
+        void send(const packet::IPacket &packet, unsigned long fd) const;
+
+        void dataCallback(unsigned long fd, const std::vector<uint8_t> &data) const;
 
         void registerConnectionListener(listener::ISocketConnectionListener *listener);
         void unregisterConnectionListener(listener::ISocketConnectionListener *listener);
 
+        void registerDisconnectionListener(listener::ISocketDisconnectionListener *listener);
+        void unregisterDisconnectionListener(listener::ISocketDisconnectionListener *listener);
+
         void registerListener(listener::IPacketListener *listener);
         void unregisterListener(listener::IPacketListener *listener);
+
+    private:
+        socket::ISocket *socket;
+
+        template<class T>
+        packet::IPacket *createPacket(unsigned long fd, const t_rawdata &data) const {
+            T *packet = new T();
+            //TODO Const ref protoboeuf
+            packet->deserialize(const_cast<t_rawdata *>(&data));
+            packet->setSource(fd);
+            return packet;
+        }
+
+        void notifyPacket(network::packet::IPacket *packet) const;
+
+        std::map<packet::PacketId, std::set<listener::IPacketListener *>> listeners;
+        static const std::map<packet::PacketId, createPacketFunc> createMap;
     };
 }
 
