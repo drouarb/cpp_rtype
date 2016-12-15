@@ -1,0 +1,84 @@
+{
+  name: "basic",
+  spawns:
+  [
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "0",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    },
+    {
+      dlName: "build/Entities/libBasicNastyEntity",
+      time: "50",
+      posX: "10",
+      posY: "10"
+    }
+  ]
+}

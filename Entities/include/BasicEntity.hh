@@ -7,18 +7,23 @@
 
 
 #include <ostream>
-#include "../../server/include/entities/ADynamicObject.hh"
-#include "../../server/include/definitions.hh"
+#include "entities/ADynamicObject.hh"
+#include "definitions.hh"
 
 class BasicEntity : public server::ADynamicObject {
 public:
     BasicEntity();
 
-    friend std::ostream &operator<<(std::ostream &os, const BasicEntity &entity);
+//    friend std::ostream &operator<<(std::ostream &os, const BasicEntity &entity);
 
-    void collide(server::IEntity *) final;
-    server::EntityAction *nextAction() final;
-    server::EntityInitialization *initialize() final;
+    void collide(const server::Entity &) override ;
+    server::EntityAction *nextAction() override ;
+    server::EntityInitialization *initialize() override ;
+
+    server::damage_t getDamage() override;
+
+private:
+    bool destroyed;
 };
 
 

@@ -9,7 +9,6 @@ std::map<METHOD_CALLED, bool> status;
 
 
 void CoreTest::run(server::round_t maxTick) {
-    this->max = maxTick;
     server::Core::run();
 }
 

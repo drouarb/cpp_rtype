@@ -1,5 +1,0 @@
-
-server::Entity::Entity()
-{
-
-}

@@ -9,7 +9,6 @@ file(
         *.cpp
 )
 
-#[[
 foreach (test ${ENTITIES_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
     add_executable(${test_name} ${test})
@@ -17,5 +16,4 @@ foreach (test ${ENTITIES_TESTS_SOURCES})
     target_link_libraries(${test_name} ${lib_name})
     add_test(${test_name} ${test_name})
 endforeach (test)
-]]
 

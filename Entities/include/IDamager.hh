@@ -6,7 +6,6 @@
 #define CPP_RTYPE_IDAMAGER_HH
 
 #include "definitions.hh"
-#include <IEntity.hh>
 
 class IDamager {
 
