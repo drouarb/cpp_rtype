@@ -14,7 +14,6 @@ server::Core::Core(const std::string &path) : sw(IStopwatch::getInstance())
     lastGameId = 0;
     this->isRunning = true;
     fileExplorer.loadFolder();
-    this->max = 0;
     this->networkManager = new NetworkManager(this);
     const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
     for (auto f : vector)
@@ -42,11 +41,10 @@ server::Core::Core(const std::string &path) : sw(IStopwatch::getInstance())
 
 void server::Core::run()
 {
-    round_t r = 0;
+    //round_t r = 0;
     while (isRunning)
     {
-/*
-        if (r == 2)
+        /*if (r == 2)
         {
             networkManager->clientConnect(14);
             ++r;
@@ -77,23 +75,21 @@ void server::Core::run()
             ++r;
             max = 22;
         }
-*/
+         */
+
 
         sw->set();
         mutex.lock();
 
-        std::cout << "- round " << std::to_string(r) << " - - - - - - - - - - - - - - - - - -" << std::endl;
+        std::cout << "- round  - - - - - - - - - - - - - - - - - -" << std::endl;
         for (auto &game : games)
         {
             std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
-            game->tick(r);
+            game->tick();
         }
-        ++r;
+        //++r;
         mutex.unlock();
-        if (max && r >= max)
-        {
-            break;
-        }
+
         if (sw->ellapsedMs() < ROUND_DURATION_MS)
             usleep((ROUND_DURATION_MS - sw->ellapsedMs()) * 1000);
     }
