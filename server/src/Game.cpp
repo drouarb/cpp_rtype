@@ -104,7 +104,8 @@ void Game::letEntitesAct()
         }
         if (action->newEntity)
         {
-            entities.push_back(action->newEntity);
+            entities.push_back(new Entity(action->newEntity, entityIdCount));
+            entityIdCount++;
         }
         if (action->destroy)
         {
