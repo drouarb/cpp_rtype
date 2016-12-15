@@ -37,7 +37,6 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
         playerMove->notify(packetPlayerMove);
         assert(false);
     }catch (std::logic_error) {
-        std::cout << "END" << std::endl;
         assert(true); //Must throw cause no join was made
     }
 
@@ -62,6 +61,7 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
         assert(false);
     }catch (std::runtime_error &e) {
         std::cerr << e.what() << std::endl;
+        assert(false);
     }
 
     assert(status[NETWORK_MANAGER_clientPlayerAttack]);
