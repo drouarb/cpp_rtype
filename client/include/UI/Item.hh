@@ -13,16 +13,17 @@
 namespace UI {
     class Item : public AItem {
     public:
-        Item();
+        Item(itemType type);
         virtual ~Item();
         void setImage(std::string filename);
-        void setPosition(unsigned int posX, unsigned int posY);
+        void setPosition(float posX, float posY);
+        void moveX(float range);
+        void moveY(float range);
         sf::Sprite getSprite();
 
     private:
         sf::Sprite sprite;
         sf::Texture texture;
-        std::string name;
     };
 }
 

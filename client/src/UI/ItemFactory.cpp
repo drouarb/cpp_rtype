@@ -8,6 +8,8 @@
 const std::map<UI::itemType , UI::ItemFactory::instantiateItem> UI::ItemFactory::itemMap = {
         {BUTTON, &instantiateButton},
         {ITEM, &instantiateNormalItem},
+        {BACKGROUND, &instantiateBackground},
+        {BACKGROUND_OBJECT, &instantiateBackgroundObject},
 };
 
 
@@ -24,7 +26,15 @@ UI::AItem* UI::ItemFactory::instantiateButton() {
 }
 
 UI::AItem* UI::ItemFactory::instantiateNormalItem() {
-    return new UI::Item();
+    return new UI::Item(ITEM);
+}
+
+UI::AItem* UI::ItemFactory::instantiateBackground() {
+    return new UI::Item(ITEM);
+}
+
+UI::AItem* UI::ItemFactory::instantiateBackgroundObject() {
+    return new UI::Item(ITEM);
 }
 
 UI::AItem* UI::ItemFactory::instantiate(UI::itemType type) {

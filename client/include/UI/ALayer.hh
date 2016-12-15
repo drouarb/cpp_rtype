@@ -11,7 +11,7 @@ namespace UI {
         MENU,
         HUD,
         GAME,
-        BACKGROUND,
+        BACKGROUNDS,
         LAYERS_NUMBER
     };
 
@@ -21,7 +21,8 @@ namespace UI {
         ~ALayer();
         unsigned long addItem(UI::itemType type, std::string sprite, int posX, int posY);
         AItem *getItem(unsigned long itemID);
-    private:
+
+    protected:
         std::vector<AItem*> items;
         ItemFactory* itemFactory;
         std::vector<AItem *> getItems();

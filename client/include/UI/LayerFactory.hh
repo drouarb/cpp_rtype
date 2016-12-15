@@ -14,6 +14,7 @@ namespace UI {
 
     private:
         static ILayer* instantiateMenu();
+
         static ILayer* instantiateHUD();
         static ILayer* instantiateGame();
         static ILayer* instantiateBackground();

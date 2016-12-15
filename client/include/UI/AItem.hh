@@ -12,6 +12,8 @@ namespace UI {
     enum itemType {
         BUTTON,
         ITEM,
+        BACKGROUND,
+        BACKGROUND_OBJECT,
         ITEMS_NUMBER
     };
 
@@ -23,17 +25,17 @@ namespace UI {
 
     class AItem {
     public:
-        AItem();
+        AItem(itemType);
         virtual ~AItem();
         virtual void setImage(std::string filename) = 0;
-        virtual void setPosition(unsigned int posX, unsigned int posY) = 0;
+        virtual void setPosition(float posX, float posY) = 0;
         void addAnimation(UI::animationType animationType, Animation animation);
         void playAnimation(animationType animation);
+        itemType getType();
 
-    private:
+    protected:
+        itemType type;
         //std::map<UI::animationType, Animation> sprites; //changer unsigned int dans un type plus générique ?
-
-
         //sf::Sprite createSprite(const std::string filename, unsigned long part);
     };
 }

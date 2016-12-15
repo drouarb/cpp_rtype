@@ -19,6 +19,8 @@ namespace UI {
     private:
         static AItem* instantiateButton();
         static AItem* instantiateNormalItem();
+        static AItem *instantiateBackgroundObject();
+        static AItem *instantiateBackground();
         const static std::map<UI::itemType, instantiateItem> itemMap;
     };
 }
