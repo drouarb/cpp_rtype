@@ -5,6 +5,7 @@
 #include <definitions.hh>
 #include <Player.hh>
 #include <iostream>
+#include "Entity.hh"
 
 using namespace server;
 
@@ -16,9 +17,9 @@ void Player::shoot(attackId_t attackId)
 Player::Player() : mustDestroy(false), vectX(0), vectY(0)
 { }
 
-void Player::collide(const EntityData &entity)
+void Player::collide(const Entity &entity)
 {
-    std::cout << "Player " << this->data->getId() << " collides with entity id " << entity.getId() << std::endl;
+    std::cout << "Player " << this->data->getId() << " collides with entity id " << entity.data.getId() << std::endl;
 }
 
 EntityAction * Player::nextAction()
@@ -45,6 +46,11 @@ EntityInitialization * Player::initialize()
     ei->posX = 0;
     ei->posY = FIELD_HEIGHT / 2;
     return (ei);
+}
+
+damage_t Player::getDamage()
+{
+    return (0);
 }
 
 void Player::move(speed_t vectX, speed_t vectY)
