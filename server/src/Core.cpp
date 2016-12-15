@@ -41,7 +41,7 @@ server::Core::Core(const std::string &path) : sw(IStopwatch::getInstance())
 
 void server::Core::run()
 {
-    //round_t r = 0;
+    round_t r = 0;
     while (isRunning)
     {
 /*
@@ -84,7 +84,7 @@ void server::Core::run()
         sw->set();
         mutex.lock();
 
-        std::cout << "- round  - - - - - - - - - - - - - - - - - -" << std::endl;
+        std::cout << "- round - - - - - - - - - - - - - - - - - -" << std::endl;
         for (auto &game : games)
         {
             std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;

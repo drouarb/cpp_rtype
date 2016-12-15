@@ -45,6 +45,7 @@ EntityInitialization * Player::initialize()
     ei->action.hp = 5;
     ei->posX = 0;
     ei->posY = FIELD_HEIGHT / 2;
+
     return (ei);
 }
 

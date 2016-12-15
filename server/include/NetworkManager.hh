@@ -35,7 +35,7 @@ namespace server {
 
         void clientPlayerAttack(int src, attackId_t attackId, round_t tick) override;
 
-        void clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) override;
+        void clientPlayerMove(int src, speed_t vectX, speed_t vectY) override;
 
         void clientPlayerQuit(int src) override;
     };
