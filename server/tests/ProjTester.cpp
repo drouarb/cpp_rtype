@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include "ProjTester.hpp"
+#include "definitions.hh"
+
 
 std::map<METHOD_CALLED, bool> status;
 
@@ -52,7 +54,8 @@ void NetworkManagerTest::clientPlayerAttack(int src, server::attackId_t attackId
     status[NETWORK_MANAGER_clientPlayerAttack] = true;
 }
 
-void NetworkManagerTest::clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) {
+void NetworkManagerTest::clientPlayerMove(int src, server::speed_t vectX, server::speed_t vectY)
+{
     server::NetworkManager::clientPlayerMove(src, vectX, vectY);
     status[NETWORK_MANAGER_clientPlayerMove] = true;
 }

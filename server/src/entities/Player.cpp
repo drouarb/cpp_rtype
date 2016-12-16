@@ -11,10 +11,12 @@ using namespace server;
 
 void Player::shoot(attackId_t) {
     //TODO Create map of <attackId_t, ADynamicObject *>
-    this->attackQueue.push(new MagicMissile());
+    this->attackQueue.push(new MagicMissile(this->data->getPosX() + 3, this->data->getPosY()));
 }
 
-Player::Player() : mustDestroy(false), vectX(0), vectY(0) {}
+Player::Player() : mustDestroy(false), vectX(0), vectY(0) {
+    INFO("Player created")
+}
 
 void Player::collide(const Entity &entity) {
     std::cout << "Player " << this->data->getId() << " collides with entity id " << entity.data.getId() << std::endl;
@@ -34,7 +36,8 @@ EntityAction *Player::nextAction() {
         act->destroy = true;
     }
     act->speedX = vectX;
-    act->speedY = vectY;    
+    act->speedY = vectY;
+
     return act;
 }
 
@@ -66,17 +69,22 @@ EntityAction *Player::MagicMissile::nextAction() {
 
     if (this->mustDestroy) {
         entityAction->destroy = true;
-        return entityAction;
     }
-    return nullptr;
+    entityAction->speedX = 10;
+    entityAction->speedY = 0;
+    return entityAction;
 }
 
 EntityInitialization *Player::MagicMissile::initialize() {
-    return new EntityInitialization();
+    EntityInitialization *initialization = new EntityInitialization();
+    initialization->action.hp = DEFAULT_LIFE;
+    initialization->posX = this->posX;
+    initialization->posY = this->posY;
+    return initialization;
 }
 
 damage_t Player::MagicMissile::getDamage() {
     return DAMAGE;
 }
 
-Player::MagicMissile::MagicMissile() : mustDestroy(false) {}
+Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY) : mustDestroy(false), posX(posX), posY(posY) {}

@@ -4,6 +4,7 @@
 #include <map>
 #include <listeners/IListenerHandler.hh>
 #include <helpers/ClientContainer.hh>
+#include <thread/IMutex.hh>
 #include "definitions.hh"
 #include "Client.hh"
 #include "Core.hh"
@@ -13,6 +14,8 @@ namespace server {
     class Core;
 
     class NetworkManager : public server::IListenerHandler {
+    private:
+        IMutex *mutex;
     protected:
         ClientContainer clientContainer;
         Core *core;
