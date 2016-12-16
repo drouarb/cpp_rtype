@@ -17,10 +17,11 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     server::ServerListenerJoin *join = new server::ServerListenerJoin(&networkManagerTest);
     server::ServerListenerDisconnect *disconnect = new server::ServerListenerDisconnect(&networkManagerTest);
 
+
+    networkManagerTest.clientConnect(42);
     packetDisconnect->setSource(42);
     packetJoin->setSource(42);
     packetJoin->setJoin(1);
-
     join->notify(packetJoin);
     disconnect->notify(packetDisconnect);
     assert(status[NETWORK_MANAGER_clientJoin]);

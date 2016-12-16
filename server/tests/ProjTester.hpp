@@ -37,7 +37,8 @@ public:
 
     void clientPlayerAttack(int src, server::attackId_t attackId, server::round_t tick) override;
 
-    void clientPlayerMove(int src, uint16_t vectX, uint16_t vectY) override;
+    void clientPlayerMove(int src, server::speed_t vectX, server::speed_t vectY) override;
+
 
     void clientPlayerQuit(int src) override;
 };

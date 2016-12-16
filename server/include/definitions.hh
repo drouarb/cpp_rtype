@@ -37,7 +37,11 @@ namespace server {
 #define LEFT_MARGIN 100
 #define RIGHT_MARGIN (LEFT_MARGIN)
 
-#ifdef LOG_ERROR
+#ifdef LOG_INFO
+#define ERROR(expr) std::cerr << expr << std::endl;
+#define WARN(expr) std::cerr << expr << std::endl;
+#define INFO(expr) std::cerr << expr << std::endl;
+#elif LOG_ERROR
 #define ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr)
 #define INFO(expr)
@@ -45,11 +49,6 @@ namespace server {
 #define ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr) std::cerr << expr << std::endl;
 #define INFO(expr)
-#elif LOG_INFO
-#define ERROR(expr) std::cerr << expr << std::endl;
-#define WARN(expr) std::cerr << expr << std::endl;
-#define INFO(expr) std::cerr << expr << std::endl;
-#warning Compilation with LOG_INFO enabled, this may reduce application speed
 #else
 #define ERROR(expr)
 #define WARN(expr)

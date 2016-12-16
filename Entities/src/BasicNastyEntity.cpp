@@ -25,7 +25,8 @@ server::EntityAction *BasicNastyEntity::nextAction() {
 
     if (this->stopwatch->ellapsedMs() > FIRE_FREQUENCY) {
         this->stopwatch->set();
-        a->newEntity = new VeryNastyProjectile();
+        VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3, this->data->getPosY());
+        a->newEntity = projectile;
     }
     return (a);
 }
@@ -56,11 +57,20 @@ server::EntityAction *BasicNastyEntity::VeryNastyProjectile::nextAction() {
 }
 
 server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize() {
-    return (new server::EntityInitialization(""));//TODO Add sprite
+    server::EntityInitialization *initialization = new server::EntityInitialization("");
+    initialization->posX = this->posX;
+    initialization->posY = this->posY;
+    initialization->action.speedX = -3;
+    initialization->action.speedY = 0;
+    return initialization;//TODO Add sprite
 }
 
 server::damage_t BasicNastyEntity::VeryNastyProjectile::getDamage() {
     return NASTY_DAMAGE;
 }
 
-BasicNastyEntity::VeryNastyProjectile::VeryNastyProjectile() : isCollide(false) {}
+BasicNastyEntity::VeryNastyProjectile::VeryNastyProjectile(server::speed_t posX, server::speed_t posY)
+        : isCollide(false) {
+    this->posX = posX;
+    this->posY = posY;
+}

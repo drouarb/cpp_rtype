@@ -6,6 +6,7 @@
 #define CPP_RTYPE_PLAYER_HH
 
 
+
 #include <queue>
 #include "APlayer.hh"
 
@@ -15,32 +16,13 @@ namespace server
     {
     private:
 
-//        std::queue<attackId_t> __attribute__((deprecated)) attackQueue;
+        static const int DEFAULT_LIFE = 500;
+
+        //        std::queue<attackId_t> __attribute__((deprecated)) attackQueue;
         std::queue<ADynamicObject *>  attackQueue;
         bool mustDestroy;
         speed_t vectX;
         speed_t vectY;
-
-    protected:
-
-        class MagicMissile : public ADynamicObject {
-        public:
-            void collide(const Entity &entity) override;
-
-            EntityAction *nextAction() override;
-
-            EntityInitialization *initialize() override;
-
-            damage_t getDamage() override;
-
-            MagicMissile();
-
-        private:
-            bool mustDestroy;
-
-            static const int DAMAGE = 20;
-
-        };
 
     public:
 
@@ -53,6 +35,27 @@ namespace server
         EntityAction *nextAction() override;
         EntityInitialization * initialize() override;
         damage_t getDamage() override;
+
+        class MagicMissile : public ADynamicObject {
+        public:
+            void collide(const Entity &entity) override;
+
+            EntityAction *nextAction() override;
+
+            EntityInitialization *initialize() override;
+
+            damage_t getDamage() override;
+
+            MagicMissile(pos_t posX, pos_t posY);
+
+        private:
+            bool mustDestroy;
+
+            pos_t posX;
+            pos_t posY;
+            static const int DAMAGE = 20;
+
+        };
     };
 }
 

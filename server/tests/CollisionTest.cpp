@@ -1,19 +1,27 @@
 //
-// Created by greg on 10/12/2016.
+// Created by greg on 15/12/2016.
 //
 
+#include <listeners/ServerListenerDisconnect.hh>
+#include <listeners/ServerListenerJoin.hh>
 #include <cassert>
-#include "ProjTester.hpp"
 #include <network/packet/PacketPlayerAttack.hh>
 #include <network/packet/PacketPlayerMove.hh>
 #include <listeners/ServerListenerPlayerAttack.hh>
 #include <listeners/ServerListenerPlayerMove.hh>
 #include <iostream>
-#include <network/packet/PacketJoin.hh>
-#include <listeners/ServerListenerJoin.hh>
+#include <thread/Thread.hpp>
+#include "ProjTester.hpp"
+
+
+void run(CoreTest *coreTest) {
+    coreTest->run();
+}
 
 void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
 {
+    Thread<void (*)(CoreTest *), CoreTest *> *thread = new Thread<void (*)(CoreTest *), CoreTest *>(&run, &coreTest);
+
     network::packet::PacketPlayerAttack *packetPlayerAttack = new network::packet::PacketPlayerAttack();
     network::packet::PacketPlayerMove *packetPlayerMove = new network::packet::PacketPlayerMove();
 
@@ -30,19 +38,10 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     packetPlayerAttack->setTick(1);
     packetPlayerAttack->setAttackId(1);
 
-    try {
-        playerAttack->notify(packetPlayerAttack);
-        playerMove->notify(packetPlayerMove);
-        assert(false);
-    }catch (std::logic_error) {
-        assert(true); //Must throw cause no join was made
-    }
-
     assert(!status[NETWORK_MANAGER_clientPlayerAttack]);
     assert(!status[NETWORK_MANAGER_clientPlayerMove]);
 
     networkManagerTest.clientConnect(42);
-
 
     network::packet::PacketJoin *packetJoin = new network::packet::PacketJoin();
     server::ServerListenerJoin *join = new server::ServerListenerJoin(&networkManagerTest);
@@ -50,9 +49,7 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     packetJoin->setSource(42);
     packetJoin->setJoin(1);
 
-
-    networkManagerTest.clientConnect(42);
-
+    
     try {
         join->notify(packetJoin);
         playerAttack->notify(packetPlayerAttack);
@@ -68,6 +65,14 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
 
     assert(status[NETWORK_MANAGER_clientPlayerAttack]);
     assert(status[NETWORK_MANAGER_clientPlayerMove]);
-    
-    std::cout << "END OF TEST" << std::endl;
+
+    INFO("END OF TEST")
+
+    IStopwatch *pStopwatch = IStopwatch::getInstance();
+    pStopwatch->set();
+    while (pStopwatch->ellapsedMs() < 5000) {
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+    }
+    thread->detach();
+
 }

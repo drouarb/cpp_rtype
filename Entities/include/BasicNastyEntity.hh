@@ -18,7 +18,7 @@ private:
         bool isCollide = false;
 
     public:
-        VeryNastyProjectile();
+        VeryNastyProjectile(server::speed_t posX, server::speed_t posY);
 
         void collide(const server::Entity &) override ;
         server::EntityAction *nextAction() override ;
@@ -27,6 +27,8 @@ private:
     private:
         server::damage_t getDamage() override;
 
+        server::speed_t posX;
+        server::speed_t posY;
     };
 
 private:
