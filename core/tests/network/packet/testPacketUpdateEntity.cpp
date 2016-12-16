@@ -12,7 +12,7 @@ using namespace packet;
 void testUpdateEntity()
 {    std::cout << "====Packet Move Entity Test====" << std::endl;
     t_rawdata data;
-    PacketUpdateEntity *ack = new PacketUpdateEntity(UINT32_MAX, UINT32_MAX, UINT16_MAX , UINT16_MAX);
+    PacketUpdateEntity *ack = new PacketUpdateEntity(UINT32_MAX, UINT32_MAX, UINT16_MAX , INT16_MAX);
     ack->serialize(&data);
     PacketUpdateEntity *ack2 = new PacketUpdateEntity();
     ack2->deserialize(&data);
@@ -25,7 +25,7 @@ void testUpdateEntity()
     assert(ack->getEventId() == UINT32_MAX);
     assert(ack->getEventId() == ack2->getEventId());
     std::cout << "SUCCESS getEventId()" << std::endl;
-    assert(ack->getHp() == UINT16_MAX);
+    assert(ack->getHp() == INT16_MAX);
     assert(ack->getHp() == ack2->getHp());
     std::cout << "SUCCESS getHp()" << std::endl;
     std::cout << "DONE" << std::endl;
