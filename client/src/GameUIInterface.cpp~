@@ -1,0 +1,15 @@
+/*
+** trouve_b
+*/
+
+#include "GameUIInterface.hh"
+
+using namespace client;
+
+GameUIInterface::GameUIInterface()
+{
+}
+
+GameUIInterface::~GameUIInterface()
+{
+}

@@ -12,6 +12,14 @@ World::World()
 
 World::~World()
 {
+  std::map<ide_t, Entity*>::iterator it;
+
+  it = entitys.begin();
+  while (it != entitys.end())
+    {
+      delete it->second;
+      ++it;
+    }
 }
 
 void	World::spawnEntity(ide_t nid, pos_t pos, typeide_t idtype, UIevent_t nevent, tick nturn)
@@ -94,4 +102,14 @@ Entity			*World::getEntityById(ide_t nid)
 std::map<ide_t, Entity*>	World::getEntitys()
 {
   return (entitys);
+}
+
+std::vector<std::pair<UIevent_t, pos_t> >	World::getEvents()
+{
+  std::vector<std::pair<UIevent_t, pos_t> >	retVec;
+
+  retVec = UIevents;
+  UIevents.clear();
+  UIevents.reserve(RESERVE_UIEVENTS);
+  return (retVec);
 }
