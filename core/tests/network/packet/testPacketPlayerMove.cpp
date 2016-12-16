@@ -13,7 +13,7 @@ void testPacketPlayerMove()
 {
         std::cout << "====Packet Player Move Test====" << std::endl;
         t_rawdata data;
-        PacketPlayerMove *ack = new PacketPlayerMove(UINT32_MAX, INT16_MIN, INT16_MAX);
+        PacketPlayerMove *ack = new PacketPlayerMove(UINT32_MAX, INT16_MAX, INT16_MAX);
         ack->serialize(&data);
         PacketPlayerMove *ack2 = new PacketPlayerMove();
         ack2->deserialize(&data);
