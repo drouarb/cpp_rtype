@@ -11,9 +11,15 @@ namespace UI {
     class ILayer {
     public:
         virtual ~ILayer(){};
-        virtual unsigned long addItem(UI::itemType type, std::string sprite, int posX, int posY) = 0;
+        virtual AItem *addItem(UI::itemType type, const std::string& sprite, int posX, int posY) = 0;
         virtual AItem *getItem(unsigned long itemID) = 0;
         virtual std::vector<AItem *> getItems() = 0;
+        virtual void open() = 0;
+        virtual void close() = 0;
+        virtual bool isVisible() = 0;
+
+    protected:
+        bool visible;
     };
 }
 

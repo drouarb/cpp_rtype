@@ -17,9 +17,12 @@ namespace UI {
         virtual ~Item();
         void setImage(std::string filename);
         void setPosition(float posX, float posY);
+        void setRatio(float ratio);
+        void setRatio(float sizeXMax, float sizeYMax);
         void moveX(float range);
         void moveY(float range);
         sf::Sprite getSprite();
+        void setTexture(sf::Texture*);
 
     private:
         sf::Sprite sprite;

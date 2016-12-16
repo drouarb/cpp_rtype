@@ -19,8 +19,12 @@ namespace UI {
     public:
         ALayer();
         ~ALayer();
-        unsigned long addItem(UI::itemType type, std::string sprite, int posX, int posY);
-        AItem *getItem(unsigned long itemID);
+
+        UI::AItem *addItem(UI::itemType type, const std::string& sprite, int posX, int posY);
+        UI::AItem *getItem(unsigned long itemID);
+        void open();
+        void close();
+        bool isVisible();
 
     protected:
         std::vector<AItem*> items;

@@ -29,6 +29,8 @@ namespace UI {
         virtual ~AItem();
         virtual void setImage(std::string filename) = 0;
         virtual void setPosition(float posX, float posY) = 0;
+        virtual void setRatio(float sizeXMax, float sizeYMax) = 0;
+        virtual void setRatio(float ratio) = 0;
         void addAnimation(UI::animationType animationType, Animation animation);
         void playAnimation(animationType animation);
         itemType getType();

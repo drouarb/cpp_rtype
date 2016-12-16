@@ -2,6 +2,7 @@
 
 UI::ALayer::ALayer() {
     itemFactory = new ItemFactory();
+    visible = true;
 }
 
 UI::ALayer::~ALayer() {
@@ -19,8 +20,22 @@ std::vector<UI::AItem*> UI::ALayer::getItems() {
     return items;
 }
 
-unsigned long UI::ALayer::addItem(UI::itemType type, std::string sprite, int posX, int posY) {
-    AItem* item = itemFactory->instantiate(type);
+UI::AItem* UI::ALayer::addItem(UI::itemType type, const std::string& sprite, int posX, int posY) {
+    AItem* item = itemFactory->instantiate(type, sprite);
+    item->setImage(sprite);
+    item->setPosition(posX, posY);
     items.push_back(item);
-    return items.size() - 1;
+    return item;
+}
+
+bool UI::ALayer::isVisible() {
+    return visible;
+}
+
+void UI::ALayer::close() {
+    visible = false;
+}
+
+void UI::ALayer::open() {
+    visible = true;
 }

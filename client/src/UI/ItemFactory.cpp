@@ -18,7 +18,24 @@ UI::ItemFactory::ItemFactory() {
 }
 
 UI::ItemFactory::~ItemFactory() {
+    for (auto texture : textureMap) {
+        delete(texture.second);
+    }
 
+}
+
+
+
+void UI::ItemFactory::setTexture(UI::Item* item) {
+    if (textureMap.count(texturePath) > 0) {
+        item->setTexture(textureMap.at(texturePath));
+    }
+    else {
+        sf::Texture *texture = new sf::Texture();
+        texture->loadFromFile(texturePath);
+        textureMap.insert(std::pair<std::string, sf::Texture*>(texturePath, texture));
+        item->setTexture(textureMap.at(texturePath));
+    }
 }
 
 UI::AItem* UI::ItemFactory::instantiateButton() {
@@ -26,17 +43,27 @@ UI::AItem* UI::ItemFactory::instantiateButton() {
 }
 
 UI::AItem* UI::ItemFactory::instantiateNormalItem() {
-    return new UI::Item(ITEM);
+    UI::Item* item = new UI::Item(ITEM);
+    return item;
 }
 
 UI::AItem* UI::ItemFactory::instantiateBackground() {
-    return new UI::Item(ITEM);
+    UI::Item* item = new UI::Item(ITEM);
+    return item;
 }
 
 UI::AItem* UI::ItemFactory::instantiateBackgroundObject() {
-    return new UI::Item(ITEM);
+    UI::Item* item = new UI::Item(ITEM);
+    return item;
 }
 
-UI::AItem* UI::ItemFactory::instantiate(UI::itemType type) {
-    return itemMap.at(type)();
+UI::AItem* UI::ItemFactory::instantiate(UI::itemType type, const std::string& _texturePath) {
+    texturePath = _texturePath;
+    UI::AItem* item = itemMap.at(type)();
+    setTexture(dynamic_cast<UI::Item*>(item));
+    return item;
+}
+
+std::map<std::string, sf::Texture *> UI::ItemFactory::getTextureMap() {
+    return textureMap;
 }
