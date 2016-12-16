@@ -49,13 +49,14 @@ namespace client {
 
     void gameLoop();
 
-    void manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
-                               int16_t pos_y, int16_t hp);
+    void manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
+			   uint16_t entityId, int16_t pos_x, int16_t pos_y, int16_t hp);
     
     void manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp);
     
     void manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId,
-						  int16_t vecx, int16_t vecy, int16_t posx, int16_t posy);
+			  int16_t vecx, int16_t vecy, int16_t posx, int16_t posy);
+    
     void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
 
       void manageGameData(uint32_t tick, int64_t time);

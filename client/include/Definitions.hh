@@ -29,6 +29,6 @@ typedef std::pair<int16_t, int16_t>	vec_t;
 typedef uint32_t			tick;
 typedef uint16_t			ide_t;
 typedef uint16_t			typeide_t;
-typedef uint16_t			UIevent_t;
+typedef int16_t				UIevent_t;
 
 #endif
