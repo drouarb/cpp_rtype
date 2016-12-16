@@ -7,11 +7,14 @@
 
 #include <SFML/Window/Keyboard.hpp>
 #include "IEventHandler.hh"
+#include "GameClient.hh"
 
 namespace client {
     class EventManager : public IEventHandler {
+    private:
+        client::GameClient *gameClient;
     public:
-        EventManager();
+        EventManager(client::GameClient *gameclient);
 
         ~EventManager();
 

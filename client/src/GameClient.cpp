@@ -12,7 +12,7 @@ using namespace client;
 
 client::GameClient::GameClient() :manager(nullptr) , tickRateServer(TICKRATE), world(nullptr)
 {
-    handler = new EventManager;
+    handler = new EventManager(this);
     managerUi.init(1920, 1020);
     managerUi.getEventObserver()->setEventManager(handler);
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
