@@ -81,3 +81,7 @@ client/make.sh
 client/launch.sh
 client/debug.sh
 client/rtype_client
+client/src/*~
+client/include/*~
+*~
+\#*
