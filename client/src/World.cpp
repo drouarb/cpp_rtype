@@ -12,6 +12,14 @@ World::World()
 
 World::~World()
 {
+  std::map<ide_t, Entity*>::iterator it;
+
+  it = entitys.begin();
+  while (it != entitys.end())
+    {
+      delete it->second;
+      ++it;
+    }
 }
 
 void	World::spawnEntity(ide_t nid, pos_t pos, typeide_t idtype, UIevent_t nevent, tick nturn)
@@ -19,9 +27,9 @@ void	World::spawnEntity(ide_t nid, pos_t pos, typeide_t idtype, UIevent_t nevent
   worldEvents.insert(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, pos, idtype, nturn, nevent)));
 }
 
-void	World::moveEntity(vec_t vec, tick nturn, ide_t nid, UIevent_t nevent)
+void	World::moveEntity(vec_t vec, pos_t pos, tick nturn, ide_t nid, UIevent_t nevent)
 {
-  worldEvents.insert(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, vec, nturn, nevent)));
+  worldEvents.insert(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, vec, pos, nturn, nevent)));
 }
 
 void	World::updateEntity(int hp, tick nturn, ide_t nid, UIevent_t nevent)
@@ -51,7 +59,7 @@ void	World::applyTurn()
     {
       if (itEv->second.eventtype == SPAWN && (entitys.find(itEv->second.id) == entitys.end()))
 	{
-	  ent = new Entity(itEv->second.id, itEv->second.type, itEv->second.pos);
+	  ent = new Entity(itEv->second.id, itEv->second.type, itEv->second.pos, itEv->first);
 	  pos = ent->getPos();
 	  entitys.insert(std::pair<ide_t, Entity*>(itEv->second.id, ent));
 	}
@@ -65,7 +73,7 @@ void	World::applyTurn()
 	{
 	  ent = entitys.at(itEv->second.id);
 	  pos = ent->getPos();
-	  ent->moveEntity(itEv->second.vec, itEv->second.turn);
+	  ent->moveEntity(itEv->second.vec, itEv->second.pos, itEv->second.turn);
 	}
       else if (itEv->second.eventtype == DELETE && (entitys.find(itEv->second.id) != entitys.end()))
 	{
@@ -94,4 +102,14 @@ Entity			*World::getEntityById(ide_t nid)
 std::map<ide_t, Entity*>	World::getEntitys()
 {
   return (entitys);
+}
+
+std::vector<std::pair<UIevent_t, pos_t> >	World::getEvents()
+{
+  std::vector<std::pair<UIevent_t, pos_t> >	retVec;
+
+  retVec = UIevents;
+  UIevents.clear();
+  UIevents.reserve(RESERVE_UIEVENTS);
+  return (retVec);
 }

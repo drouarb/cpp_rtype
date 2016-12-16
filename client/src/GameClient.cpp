@@ -10,12 +10,15 @@
 
 using namespace client;
 
-client::GameClient::GameClient() :manager(nullptr) , tickRateServer(TICKRATE), world(nullptr)
+client::GameClient::GameClient()
 {
-    handler = new EventManager(this);
-    managerUi.init(1920, 1020);
-    managerUi.getEventObserver()->setEventManager(handler);
-    managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
+  handler = new EventManager;
+  managerUi.init(1920, 1020);
+  managerUi.getEventObserver()->setEventManager(handler);
+  managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
+  manager = nullptr;
+  tickRateClient = TICKRATE;
+  world = nullptr;
 }
 
 void client::GameClient::createNetworkManager(const std::string &ip, unsigned short port)
@@ -54,7 +57,15 @@ void	GameClient::readaptTickRate(int servTickRate,
 				    std::pair<tick, uint64_t> estiClientHoro,
 				    std::pair<tick, uint64_t> servHoro)
 {
-  // ici faire une formule pour gérer le tickrate et le réadapter sur le rythme du serveur
+  double	tickRateModif;
+  
+  tickRateModif = (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
+    * (((double)(estiClientHoro.first - servHoro.first)) * TICKCURRENTDIFFCONST)
+    * (((double)(estiClientHoro.second - servHoro.second)) * HORODIFFCONST);
+  if (tickRateModif < 0.0)
+    --tickRateClient;
+  else if (tickRateModif > 0.0)
+    ++tickRateClient;
 }
 
 int	GameClient::calcTickRate(int nbrLevel)
@@ -83,20 +94,31 @@ World *GameClient::getWorld() const {
     return world;
 }
 
-void GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
-                                   uint16_t pos_x, uint16_t pos_y) {
+void GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
+				   uint16_t entityId, uint16_t pos_x, uint16_t pos_y)
+{
+  typeide_t	type;
 
-
+  type = gameui.registerNewSprite(spriteName);
+  if (world != nullptr)
+    world->spawnEntity(entityId, pos_t(pos_x, pos_y), type, eventId, tick);
 }
 
-void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp) {
-
+void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp)
+{
+  if (world != nullptr)
+    world->updateEntity(hp, tick, entityId, eventId);
 }
 
-void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy) {
-
+void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId,
+				  uint16_t vecx, uint16_t vecy, int16_t posx, int16_t posy)
+{
+  if (world != nullptr)
+    world->moveEntity(vec_t(vecx, vecy), pos_t(posx, posy), tick, entityId, eventId);
 }
 
-void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) {
-
+void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId)
+{
+  if (world != nullptr)
+    world->deleteEntity(entityId, tick, eventId);
 }
