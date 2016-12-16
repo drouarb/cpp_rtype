@@ -252,20 +252,21 @@ void Game::checkCollisions()
 
 void Game::letEntitesAct()
 {
-    for (auto it = entities.begin(); it != entities.end(); ++it)
+    for (size_t i = 0; i != entities.size(); ++i)
     {
-        EntityAction * action = (*it)->obj->nextAction();
-        if (action->speedX != (*it)->data.getVectX())
+        auto it = entities.at(i);
+        EntityAction * action = it->obj->nextAction();
+        if (action->speedX != it->data.getVectX())
         {
-            (*it)->data.setVectX(action->speedX);
+            it->data.setVectX(action->speedX);
         }
-        if (action->speedY != (*it)->data.getVectY())
+        if (action->speedY != it->data.getVectY())
         {
-            (*it)->data.setVectY(action->speedY);
+            it->data.setVectY(action->speedY);
         }
-        if (action->hp != (*it)->data.getHp())
+        if (action->hp != it->data.getHp())
         {
-            (*it)->data.setHp(action->hp);
+            it->data.setHp(action->hp);
         }
         if (action->newEntity)
         {
@@ -274,7 +275,7 @@ void Game::letEntitesAct()
         }
         if (action->destroy)
         {
-            (*it)->data.setDestroyed(true);
+            it->data.setDestroyed(true);
         }
         delete action;
     }

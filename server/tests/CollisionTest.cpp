@@ -32,14 +32,12 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     packetPlayerAttack->setSource(42);
 
     packetPlayerMove->setTick(1);
-    packetPlayerMove->setVectX(4);
-    packetPlayerMove->setVectY(4);
+    packetPlayerMove->setVectX(0);
+    packetPlayerMove->setVectY(0);
 
-    packetPlayerAttack->setTick(1);
+    packetPlayerAttack->setTick(32);
     packetPlayerAttack->setAttackId(1);
 
-    assert(!status[NETWORK_MANAGER_clientPlayerAttack]);
-    assert(!status[NETWORK_MANAGER_clientPlayerMove]);
 
     networkManagerTest.clientConnect(42);
 
@@ -52,8 +50,8 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     
     try {
         join->notify(packetJoin);
-        playerAttack->notify(packetPlayerAttack);
         playerMove->notify(packetPlayerMove);
+        playerAttack->notify(packetPlayerAttack);
         assert(true);
     }catch (std::logic_error &e) {
         std::cerr << e.what() << std::endl;
@@ -63,15 +61,17 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
         assert(false);
     }
 
-    assert(status[NETWORK_MANAGER_clientPlayerAttack]);
-    assert(status[NETWORK_MANAGER_clientPlayerMove]);
 
     INFO("END OF TEST")
 
     IStopwatch *pStopwatch = IStopwatch::getInstance();
     pStopwatch->set();
+    uint32_t i = 0;
     while (pStopwatch->ellapsedMs() < 5000) {
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        ++i;
+        packetPlayerAttack->setTick(32 + i);
+        playerAttack->notify(packetPlayerAttack);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     thread->detach();
 
