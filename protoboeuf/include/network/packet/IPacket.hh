@@ -33,6 +33,7 @@ namespace network {
             ERROR_GAME              = 0x20,
             JOIN                    = 0x21,
             QUIT                    = 0x22,
+            GAME_DATA               = 0x23,
 
             EVENT_ERROR             = 0x30,
             CANCEL_EVENT            = 0x31,

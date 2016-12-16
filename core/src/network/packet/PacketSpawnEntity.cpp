@@ -4,8 +4,8 @@
 
 #include "network/packet/PacketSpawnEntity.hh"
 
-network::packet::PacketSpawnEntity::PacketSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
-                                                      uint16_t entityId, uint16_t pos_x, uint16_t pos_y) :
+network::packet::PacketSpawnEntity::PacketSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
+                                                      int16_t pos_y, int16_t hp) :
         APacket
                 (
                         SPAWN_ENTITY,
@@ -15,7 +15,8 @@ network::packet::PacketSpawnEntity::PacketSpawnEntity(uint32_t tick, uint32_t ev
                                 new utils::NetworkString(spriteName.c_str()),
                                 new utils::NetworkInteger(2, entityId),
                                 new utils::NetworkInteger(2, pos_x),
-                                new utils::NetworkInteger(2, pos_y)
+                                new utils::NetworkInteger(2, pos_y),
+                                new utils::NetworkInteger(2, hp)
                         }
                 )
 {
@@ -67,22 +68,31 @@ uint16_t network::packet::PacketSpawnEntity::getEntityId() const
     return GET_NETINT(schema, 3);
 }
 
-void network::packet::PacketSpawnEntity::setPosX(uint16_t pos_x)
+void network::packet::PacketSpawnEntity::setPosX(int16_t pos_x)
 {
     SET_NETINT(schema, 4, pos_x);
 }
 
-uint16_t network::packet::PacketSpawnEntity::getPosX() const
+int16_t network::packet::PacketSpawnEntity::getPosX() const
 {
     return GET_NETINT(schema, 4);
 }
 
-void network::packet::PacketSpawnEntity::setPosY(uint16_t pos_y)
+void network::packet::PacketSpawnEntity::setPosY(int16_t pos_y)
 {
     SET_NETINT(schema, 5 , pos_y);
 }
 
-uint16_t network::packet::PacketSpawnEntity::getPosY() const
+int16_t network::packet::PacketSpawnEntity::getPosY() const
 {
     return GET_NETINT(schema,5);
+}
+
+void network::packet::PacketSpawnEntity::setHp(int16_t hp) {
+    SET_NETINT(schema, 6 , hp);
+
+}
+
+int16_t network::packet::PacketSpawnEntity::getHp() const {
+    return GET_NETINT(schema, 6);
 }
