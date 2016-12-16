@@ -112,7 +112,7 @@ void NetworkManager::receiveLeaderBoard(std::vector<std::pair<uint32_t, std::str
 
 void
 NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy) {
-    gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy);
+  gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy, 0, 0);
 }
 
 void NetworkManager::receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {

@@ -11,6 +11,8 @@
 #ifndef WORLD_HH_
 # define WORLD_HH_
 
+#define RESERVE_UIEVENTS 10
+
 namespace client
 {
 
@@ -48,14 +50,15 @@ namespace client
   public:
     World();
     ~World();
-    void			spawnEntity(ide_t, pos_t, typeide_t, UIevent_t, tick);
-    void			moveEntity(vec_t, pos_t, tick, ide_t, UIevent_t);
-    void			updateEntity(int hp, tick, ide_t, UIevent_t);
-    void			deleteEntity(ide_t, tick, UIevent_t);
-    Entity			*getEntityById(ide_t nid);
-    std::map<ide_t, Entity*>	getEntitys();
-    void			applyTurn();
-    tick			getTick() const;
+    void					spawnEntity(ide_t, pos_t, typeide_t, UIevent_t, tick);
+    void					moveEntity(vec_t, pos_t, tick, ide_t, UIevent_t);
+    void					updateEntity(int hp, tick, ide_t, UIevent_t);
+    void					deleteEntity(ide_t, tick, UIevent_t);
+    Entity					*getEntityById(ide_t nid);
+    std::map<ide_t, Entity*>			getEntitys();
+    void					applyTurn();
+    tick					getTick() const;
+    std::vector<std::pair<UIevent_t, pos_t> >	getEvents();
   };
 }
 

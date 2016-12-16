@@ -10,6 +10,7 @@
 #include "World.hh"
 #include "Entity.hh"
 #include "NetworkManager.hh"
+#include "GameUIInterface.hh"
 #include "Definitions.hh"
 #include "UI/UIManager.hh"
 
@@ -19,47 +20,52 @@
 #define HORODIFFCONST (1.0 / 5000.0)
 
 namespace client {
-    class NetworkManager;
+  class NetworkManager;
 
-    class GameClient {
-    private:
-      World			*world;
-      UI::UIManager		managerUi;
-      IEventHandler		*handler;
-      std::mutex		client_mut;
-      NetworkManager		*manager;
-      tick			tickRateClient;
-      std::map<tick, uint64_t>	horodatageTick;
-    public:
+  class GameClient {
+  private:
+    World			*world;
+    UI::UIManager		managerUi;
+    IEventHandler		*handler;
+    std::mutex			client_mut;
+    NetworkManager		*manager;
+    tick			tickRateClient;
+    std::map<tick, uint64_t>	horodatageTick;
+    GameUIInterface		gameui;
+  public:
 
-    public:
-        GameClient();
+  public:
+    GameClient();
 
-        ~GameClient() {};
-        void manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
-                                uint16_t pos_x, uint16_t pos_y);
+    ~GameClient() {};
 
-        void manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp);
+    UI::UIManager *getUi(){
+      return &this->managerUi;
+    }
 
-        void createNetworkManager(const std::string &ip, unsigned short port);
+    void createNetworkManager(const std::string &ip, unsigned short port);
 
-        void deleteNetworkManager();
+    void deleteNetworkManager();
 
-        void gameLoop();
-        UI::UIManager *getUi(){
-            return &this->managerUi;
-        }
+    void gameLoop();
 
-        void manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy);
-        void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
-        World *getWorld() const;
-    private:
-        void readaptTickRate(int servTickRate,
-                             std::pair<tick, uint64_t> estiClientHoro,
-                             std::pair<tick, uint64_t> servHoro);
+    void manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
+			   uint16_t entityId, uint16_t pos_x, uint16_t pos_y);
+    
+    void manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp);
+    
+    void manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId,
+			  uint16_t vecx, uint16_t vecy, int16_t posx, int16_t posy);
+    void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
+    
+    World *getWorld() const;
+  private:
+    void readaptTickRate(int servTickRate,
+			 std::pair<tick, uint64_t> estiClientHoro,
+			 std::pair<tick, uint64_t> servHoro);
 
-        int calcTickRate(int nbrLevel);
-    };
+    int calcTickRate(int nbrLevel);
+  };
 }
 
 #endif //CPP_RTYPE_GAMECLIENT_HH

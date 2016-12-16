@@ -94,20 +94,31 @@ World *GameClient::getWorld() const {
     return world;
 }
 
-void GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
-                                   uint16_t pos_x, uint16_t pos_y) {
+void GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
+				   uint16_t entityId, uint16_t pos_x, uint16_t pos_y)
+{
+  typeide_t	type;
 
-
+  type = gameui.registerNewSprite(spriteName);
+  if (world != nullptr)
+    world->spawnEntity(entityId, pos_t(pos_x, pos_y), type, eventId, tick);
 }
 
-void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp) {
-
+void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp)
+{
+  if (world != nullptr)
+    world->updateEntity(hp, tick, entityId, eventId);
 }
 
-void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy) {
-
+void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId,
+				  uint16_t vecx, uint16_t vecy, int16_t posx, int16_t posy)
+{
+  if (world != nullptr)
+    world->moveEntity(vec_t(vecx, vecy), pos_t(posx, posy), tick, entityId, eventId);
 }
 
-void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) {
-
+void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId)
+{
+  if (world != nullptr)
+    world->deleteEntity(entityId, tick, eventId);
 }
