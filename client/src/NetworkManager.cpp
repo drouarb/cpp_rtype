@@ -23,6 +23,7 @@
 #include <network/packet/PacketJoin.hh>
 #include <network/packet/PacketPlayerMove.hh>
 #include <network/packet/PacketPlayerAttack.hh>
+#include <listener/ClientListenerGameData.hh>
 #include "NetworkManager.hh"
 
 using namespace client;
@@ -79,6 +80,7 @@ void NetworkManager::addListenerToPacketFactory()
     listeners.push_back(new client::ClientListenerQuit(this));
     listeners.push_back(new client::ClientListenerSpawnEntity(this));
     listeners.push_back(new client::ClientListenerUpdateEntity(this));
+    listeners.push_back(new client::ClientListenerGameData(this));
     for (auto it = listeners.begin(); it != listeners.end(); it++)
         packetFactory->registerListener(*it);
 }
@@ -111,8 +113,9 @@ void NetworkManager::receiveLeaderBoard(std::vector<std::pair<uint32_t, std::str
 }
 
 void
-NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy) {
-  gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy, 0, 0);
+NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t vecx, int16_t vecy,
+                                  int16_t posx, int16_t posy) {
+  gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy, posx, posy);
 }
 
 void NetworkManager::receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {
@@ -124,13 +127,13 @@ void NetworkManager::receiveQuit() {
 }
 
 void
-NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
-                                   uint16_t pos_x, uint16_t pos_y) {
-    gameClient->manageSpawnEntity(tick , eventId, spriteName, entityId, pos_x, pos_y);
+NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
+                                   int16_t pos_y, int16_t hp) {
+    gameClient->manageSpawnEntity(tick, eventId, spriteName, entityId, pos_x, pos_y, hp);
 
 }
 
-void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp) {
+void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp) {
     gameClient->manageUpdateEntity(tick, eventId, entityId, hp);
 }
 
@@ -168,5 +171,9 @@ void NetworkManager::sendPlayerMove(uint32_t tick, uint16_t vect_x, uint16_t vec
 void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
     network::packet::PacketPlayerAttack packetPlayerAttack(tick, attackId);
     packetFactory->send(packetPlayerAttack);
+}
+
+void NetworkManager::receiveGameData(uint32_t tick, int64_t time) {
+    gameClient->manageGameData(tick, time);
 }
 

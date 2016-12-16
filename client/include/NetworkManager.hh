@@ -42,17 +42,20 @@ namespace client {
 
         void receiveLeaderBoard(std::vector<std::pair<uint32_t, std::string>> LeaderBoard);
 
-        void receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t vecx, uint16_t vecy);
+        void receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t vecx, int16_t vecy,
+                                       int16_t posx, int16_t posy);
 
         void receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName);
 
         void receiveQuit();
 
-        void receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId,
-                                uint16_t pos_x, uint16_t pos_y);
+        void
+        receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
+                                   int16_t pos_y, int16_t hp);
 
-        void receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp);
+        void receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp);
 
+        void receiveGameData(uint32_t tick, int64_t time);
         void sendRegister(const std::string & name);
 
         void sendDisconnect();

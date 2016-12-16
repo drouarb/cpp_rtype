@@ -25,7 +25,7 @@ namespace client
 }
 
 typedef std::pair<int16_t, int16_t>	pos_t;
-typedef std::pair<uint16_t, uint16_t>	vec_t;
+typedef std::pair<int16_t, int16_t>	vec_t;
 typedef uint32_t			tick;
 typedef uint16_t			ide_t;
 typedef uint16_t			typeide_t;

@@ -12,7 +12,7 @@ using namespace client;
 
 client::GameClient::GameClient()
 {
-  handler = new EventManager;
+  handler = new EventManager(this);
   managerUi.init(1920, 1020);
   managerUi.getEventObserver()->setEventManager(handler);
   managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
@@ -94,8 +94,9 @@ World *GameClient::getWorld() const {
     return world;
 }
 
-void GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
-				   uint16_t entityId, uint16_t pos_x, uint16_t pos_y)
+void
+GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
+                              int16_t pos_y, int16_t hp)
 {
   typeide_t	type;
 
@@ -104,14 +105,14 @@ void GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::s
     world->spawnEntity(entityId, pos_t(pos_x, pos_y), type, eventId, tick);
 }
 
-void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp)
+void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp)
 {
   if (world != nullptr)
     world->updateEntity(hp, tick, entityId, eventId);
 }
 
 void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId,
-				  uint16_t vecx, uint16_t vecy, int16_t posx, int16_t posy)
+                                  int16_t vecx, int16_t vecy, int16_t posx, int16_t posy)
 {
   if (world != nullptr)
     world->moveEntity(vec_t(vecx, vecy), pos_t(posx, posy), tick, entityId, eventId);
@@ -121,4 +122,8 @@ void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t en
 {
   if (world != nullptr)
     world->deleteEntity(entityId, tick, eventId);
+}
+
+void GameClient::manageGameData(uint32_t tick, int64_t time) {
+
 }

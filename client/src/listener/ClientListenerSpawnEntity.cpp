@@ -16,5 +16,6 @@ ClientListenerSpawnEntity::~ClientListenerSpawnEntity()
 
 void ClientListenerSpawnEntity::notify(const network::packet::PacketSpawnEntity *packet)
 {
-    networkManager->receiveSpawnEntity(packet->getTick(), packet->getEventId(), packet->getSpriteName(), packet->getEntityId(), packet->getPosX(), packet->getPosY());
+    networkManager->receiveSpawnEntity(packet->getTick(), packet->getEventId(), packet->getSpriteName(),
+                                       packet->getEntityId(), packet->getPosX(), packet->getPosY(), packet->getHp());
 }
