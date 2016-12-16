@@ -21,12 +21,12 @@
 
 namespace client {
   class NetworkManager;
-
+    class EventManager;
   class GameClient {
   private:
     World			*world;
     UI::UIManager		managerUi;
-    IEventHandler		*handler;
+    EventManager		*handler;
     std::mutex			client_mut;
     NetworkManager		*manager;
     tick			tickRateClient;
@@ -49,15 +49,16 @@ namespace client {
 
     void gameLoop();
 
-    void manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
-			   uint16_t entityId, uint16_t pos_x, uint16_t pos_y);
+    void manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
+                               int16_t pos_y, int16_t hp);
     
-    void manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp);
+    void manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp);
     
     void manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId,
-			  uint16_t vecx, uint16_t vecy, int16_t posx, int16_t posy);
+						  int16_t vecx, int16_t vecy, int16_t posx, int16_t posy);
     void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
-    
+
+      void manageGameData(uint32_t tick, int64_t time);
     World *getWorld() const;
   private:
     void readaptTickRate(int servTickRate,
