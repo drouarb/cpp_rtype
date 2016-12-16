@@ -38,9 +38,9 @@ namespace client {
 
         void receiveEventError(const std::string &message);
 
-        void receiveGameList(const std::vector<std::pair<uint8_t, uint16_t >> GameList);
+        void receiveGameList(const std::vector<std::pair<uint8_t, uint16_t > > GameList);
 
-        void receiveLeaderBoard(std::vector<std::pair<uint32_t, std::string>> LeaderBoard);
+        void receiveLeaderBoard(std::vector<std::pair<uint32_t, std::string> > LeaderBoard);
 
         void receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t vecx, int16_t vecy,
                                        int16_t posx, int16_t posy);

@@ -12,7 +12,6 @@
 #include "NetworkManager.hh"
 #include "GameUIInterface.hh"
 #include "Definitions.hh"
-#include "UI/UIManager.hh"
 
 #define TICKRATE 60
 #define TICKRATEDIFFCONST 0.1
@@ -25,23 +24,18 @@ namespace client {
   class GameClient {
   private:
     World			*world;
-    UI::UIManager		managerUi;
     EventManager		*handler;
     std::mutex			client_mut;
     NetworkManager		*manager;
     tick			tickRateClient;
     std::map<tick, uint64_t>	horodatageTick;
-    GameUIInterface		gameui;
+    GameUIInterface		*gameui;
   public:
 
   public:
     GameClient();
 
     ~GameClient() {};
-
-    UI::UIManager *getUi(){
-      return &this->managerUi;
-    }
 
     void createNetworkManager(const std::string &ip, unsigned short port);
 
@@ -59,7 +53,20 @@ namespace client {
     
     void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
 
-      void manageGameData(uint32_t tick, int64_t time);
+    void manageGameData(uint32_t tick, uint64_t time);
+
+    void manageDisconnect();
+    
+    void manageCancelEvent(uint32_t eventId);
+    
+    void manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList);
+    
+    void manageLeaderBoard(std::vector<std::pair<uint32_t, std::string> > LeaderBoard);
+    
+    void managePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName);
+    
+    void manageQuit();
+    
     World *getWorld() const;
   private:
     void readaptTickRate(int servTickRate,
