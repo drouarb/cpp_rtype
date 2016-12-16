@@ -6,10 +6,10 @@
 
 
 void client::EventManager::onKeyPressed(short key) {
-
+event = key;
 }
 
-client::EventManager::EventManager(client::GameClient *gameclient)  : gameClient(gameclient){
+client::EventManager::EventManager(client::GameClient *gameclient)  : gameClient(gameclient), event(-42){
 
 }
 
@@ -22,5 +22,18 @@ void client::EventManager::onMouseRealease(short x, short y) {
 }
 
 void client::EventManager::onKeyRealease(short key) {
+event = key;
+}
+
+short client::EventManager::getEvent() {
+short buff = 0;
+    if (event != -42)
+    {
+        buff = event;
+        event = -42;
+    }
+    else
+        buff = event;
+    return (buff);
 
 }
