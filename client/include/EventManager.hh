@@ -13,6 +13,7 @@ namespace client {
     class EventManager : public IEventHandler {
     private:
         client::GameClient *gameClient;
+        short event;
     public:
         EventManager(client::GameClient *gameclient);
 
@@ -23,6 +24,8 @@ namespace client {
         void onKeyRealease(short key);
 
         void onMouseRealease(short x, short y);
+
+        short getEvent();
 
     };
 }

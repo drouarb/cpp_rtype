@@ -50,6 +50,7 @@ void	GameClient::gameLoop() {
     while (window->isOpen()) {
         window->display();
         eventObserver->getEvent();
+        std::cout << handler->getEvent() << std::endl;
     }
 }
 
