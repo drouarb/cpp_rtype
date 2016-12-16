@@ -11,6 +11,14 @@
 namespace client
 {
 
+  struct moveData
+  {
+    moveData(pos_t npos, vec_t nvec)
+    {pos = npos;vec = nvec;}
+    pos_t pos;
+    vec_t vec;
+  };
+  
   class Entity
   {
   private:
@@ -19,30 +27,28 @@ namespace client
     pos_t			pos;
     pos_t			posO;
     vec_t			vec;
-    std::map<tick, vec_t>	move;
+    std::map<tick, moveData>	move;
     int				hp;
     ide_t			id;
     typeide_t			idtype;
     tick			lastUpdate;
   public:
-    Entity(ide_t, typeide_t, pos_t);
+    Entity(ide_t, typeide_t, pos_t, tick);
     ~Entity();
     pos_t			getPos() const;
     pos_t			getOrigin() const;
     vec_t			getVec() const;
-    std::map<tick, vec_t>	getMove() const;
+    std::map<tick, moveData>	getMove() const;
     int				getHp() const;
     ide_t			getId() const;
     typeide_t			getTypeid() const;
-
-    /*
-    ** return true when the entity is dead false
-    ** when the entity is already alive
-    */
     
     void			applyVec(vec_t, tick);
-    void			moveEntity(vec_t, tick);
+    void			moveEntity(vec_t, pos_t, tick);
     void			updateEntity(int hp);
+    
+    void			correctMiddleVec(std::map<tick, moveData>::iterator, vec_t*, pos_t);
+    void			correctBeforeVec(std::map<tick, moveData>::iterator, vec_t, pos_t);
 
   private:
     void			recalcPos();

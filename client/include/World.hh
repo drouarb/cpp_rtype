@@ -22,8 +22,8 @@ namespace client
     WorldEvent(ide_t nid, int nhp, tick nturn, UIevent_t nevent)
     {id=nid;hp=nhp;UIevent=nevent;turn=nturn;eventtype=UPDATE;}
     
-    WorldEvent(ide_t nid, vec_t nvec, tick nturn, UIevent_t nevent)
-    {id=nid;vec=nvec,UIevent=nevent;turn=nturn;eventtype=MOVE;}
+    WorldEvent(ide_t nid, vec_t nvec, pos_t npos, tick nturn, UIevent_t nevent)
+    {id=nid;vec=nvec;pos=npos;UIevent=nevent;turn=nturn;eventtype=MOVE;}
     
     WorldEvent(ide_t nid, tick nturn, UIevent_t nevent)
     {id=nid;UIevent=nevent;turn=nturn;eventtype=DELETE;}
@@ -49,7 +49,7 @@ namespace client
     World();
     ~World();
     void			spawnEntity(ide_t, pos_t, typeide_t, UIevent_t, tick);
-    void			moveEntity(vec_t, tick, ide_t, UIevent_t);
+    void			moveEntity(vec_t, pos_t, tick, ide_t, UIevent_t);
     void			updateEntity(int hp, tick, ide_t, UIevent_t);
     void			deleteEntity(ide_t, tick, UIevent_t);
     Entity			*getEntityById(ide_t nid);
