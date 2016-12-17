@@ -24,10 +24,19 @@ UI::ItemFactory::~ItemFactory() {
     for (auto texture : textureMap) {
         delete(texture.second);
     }
-
 }
 
-
+void UI::ItemFactory::addTexture(UI::Item* item, UI::animationType type, std::string texturePath) {
+    if (textureMap.count(texturePath) > 0) {
+        item->setTexture(textureMap.at(texturePath));
+    }
+    else {
+        sf::Texture *texture = new sf::Texture();
+        texture->loadFromFile(texturePath);
+        textureMap.insert(std::pair<std::string, sf::Texture*>(texturePath, texture));
+        item->addTexture(textureMap.at(texturePath), type);
+    }
+}
 
 void UI::ItemFactory::setTexture(UI::Item* item) {
     if (textureMap.count(texturePath) > 0) {
@@ -66,6 +75,5 @@ UI::AItem* UI::ItemFactory::instantiate(UI::itemType type, const std::string& _t
     UI::AItem* item = itemMap.at(type)();
     setTexture(dynamic_cast<UI::Item*>(item));
     item->setID(id++);
-    std::cerr << item << " crée = " << item->getID() << std::endl;
     return item;
 }

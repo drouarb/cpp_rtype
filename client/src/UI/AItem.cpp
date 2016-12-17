@@ -8,6 +8,7 @@ void UI::AItem::playAnimation(animationType animationType) {
 
 UI::AItem::AItem(itemType t) {
     type = t;
+    status = UI::IDLE;
 }
 
 UI::AItem::~AItem() {
@@ -43,3 +44,6 @@ uint32_t UI::AItem::getID() {
     return id;
 }
 
+void UI::AItem::changeStatus(UI::animationType type) {
+    status = type;
+}

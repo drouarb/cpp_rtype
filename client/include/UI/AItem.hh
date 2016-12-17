@@ -28,9 +28,11 @@ namespace UI {
         AItem(itemType);
         virtual ~AItem();
         virtual void setImage(std::string filename) = 0;
+        virtual void setImage() = 0;
         virtual void setPosition(float posX, float posY) = 0;
         virtual void setRatio(float sizeXMax, float sizeYMax) = 0;
         virtual void setRatio(float ratio) = 0;
+        virtual void changeStatus(animationType type);
         void setID(uint32_t id);
         uint32_t getID();
         void addAnimation(UI::animationType animationType, Animation animation);
@@ -39,6 +41,7 @@ namespace UI {
 
     protected:
         itemType type;
+        animationType status;
         uint32_t id;
         //std::map<UI::animationType, Animation> sprites; //changer unsigned int dans un type plus générique ?
         //sf::Sprite createSprite(const std::string filename, unsigned long part);

@@ -21,6 +21,7 @@ namespace UI {
         ~ALayer();
 
         UI::AItem *addItem(UI::itemType type, const std::string& sprite, int posX, int posY);
+        void addTexture(UI::AItem *item, UI::animationType type, const std::string& sprite);
         UI::AItem *getItem(unsigned long itemID);
         void open();
         void close();

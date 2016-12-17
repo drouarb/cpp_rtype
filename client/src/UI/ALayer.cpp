@@ -22,7 +22,7 @@ std::vector<UI::AItem*>& UI::ALayer::getItems() {
 
 UI::AItem* UI::ALayer::addItem(UI::itemType type, const std::string& sprite, int posX, int posY) {
     AItem* item = itemFactory->instantiate(type, sprite);
-    item->setImage(sprite);
+    item->setImage();
     item->setPosition(posX, posY);
     items.push_back(item);
     return item;
@@ -38,4 +38,8 @@ void UI::ALayer::close() {
 
 void UI::ALayer::open() {
     visible = true;
+}
+
+void UI::ALayer::addTexture(UI::AItem *item, UI::animationType type, const std::string &path) {
+    itemFactory->addTexture(static_cast<Item*>(item), type, path);
 }

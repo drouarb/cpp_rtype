@@ -29,7 +29,7 @@ void UI::Window::setName(std::string name) {
 
 void UI::Window::render() {
     window->create(sf::VideoMode(length, width, 32), name);
-    window->setFramerateLimit(60);
+    window->setFramerateLimit(1);
     //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;
 }
 

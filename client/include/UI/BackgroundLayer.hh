@@ -11,8 +11,6 @@ namespace UI {
     class BackgroundLayer : public ALayer {
 
         BackgroundLayer();
-        std::vector<AItem *> getItems();
-        unsigned long addItem(itemType type, std::string sprite, int posX, int posY);
     };
 }
 
