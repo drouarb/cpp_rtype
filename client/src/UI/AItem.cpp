@@ -6,8 +6,8 @@ void UI::AItem::playAnimation(animationType animationType) {
     //sprites.at(animationType);
 }
 
-UI::AItem::AItem() {
-
+UI::AItem::AItem(itemType t) {
+    type = t;
 }
 
 UI::AItem::~AItem() {
@@ -29,5 +29,9 @@ UI::AItem::~AItem() {
 
 void UI::AItem::addAnimation(UI::animationType animationType, Animation animation) {
     //sprites.at(animationType) = animation;
+}
+
+UI::itemType UI::AItem::getType() {
+    return type;
 }
 

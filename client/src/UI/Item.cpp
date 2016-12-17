@@ -5,28 +5,49 @@
 #include <iostream>
 #include "../../include/UI/Item.hh"
 
-UI::Item::Item() /*: sprite()*/ {
+UI::Item::Item(itemType t) : AItem(t) {
 }
 
 void UI::Item::setImage(std::string filename) {
-    name = filename;
     if (!texture.loadFromFile(filename)) {
         std::cerr << "Failed to load : " << filename << std::endl; // essayer de charger un placeholder à la place
     } else {
-    sprite.setTexture(texture);
+        sprite.setTexture(texture);
     }
 }
 
-void UI::Item::setPosition(unsigned int x, unsigned int y) {
+void UI::Item::setPosition(float x, float y) {
     sprite.setPosition(x, y);
 }
 
 sf::Sprite UI::Item::getSprite() {
-    //std::cerr << name << std::endl;
-    //std::cerr << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
     return sprite;
+}
+
+void UI::Item::setTexture(sf::Texture* _texture) {
+    texture = *_texture;
 }
 
 UI::Item::~Item() {
 
+}
+
+void UI::Item::moveX(float range) {
+    sprite.setPosition(sprite.getPosition().x + range, sprite.getPosition().y);
+}
+
+void UI::Item::moveY(float range) {
+    sprite.setPosition(sprite.getPosition().x, sprite.getPosition().y + range);
+}
+
+void UI::Item::setRatio(float sizeXMax, float sizeYMax) {
+    if ((sizeXMax / sprite.getScale().x) < (sizeYMax / sprite.getScale().y)) {
+        sprite.setScale(sizeXMax / sprite.getScale().x, sizeXMax / sprite.getScale().x);
+    } else {
+        sprite.setScale(sizeYMax / sprite.getScale().y, sizeYMax / sprite.getScale().y);
+    }
+}
+
+void UI::Item::setRatio(float ratio) {
+    sprite.scale(ratio, ratio);
 }

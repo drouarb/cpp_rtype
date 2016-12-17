@@ -173,4 +173,3 @@ void GameClient::manageQuit()
       world = nullptr;
     }
   //informer la gameUI
-}

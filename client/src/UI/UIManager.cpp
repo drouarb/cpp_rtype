@@ -25,7 +25,7 @@ void UI::UIManager::init(short size_x, short size_y) {
     windows[MAIN_WINDOW]->addLayer(MENU);
     windows[MAIN_WINDOW]->addLayer(HUD);
     windows[MAIN_WINDOW]->addLayer(GAME);
-    windows[MAIN_WINDOW]->addLayer(BACKGROUND);
+    windows[MAIN_WINDOW]->addLayer(BACKGROUNDS);
 }
 
 UI::IWindow *UI::UIManager::getWindow(UI::windowType windowType) {

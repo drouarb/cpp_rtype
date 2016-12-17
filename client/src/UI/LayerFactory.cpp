@@ -10,7 +10,7 @@ const std::map<UI::layerType, UI::LayerFactory::instantiateLayer> UI::LayerFacto
         {MENU, &instantiateMenu},
         {HUD, &instantiateHUD},
         {GAME, &instantiateGame},
-        {BACKGROUND, &instantiateBackground},
+        {BACKGROUNDS, &instantiateBackground},
 };
 
 UI::LayerFactory::LayerFactory() {

@@ -5,6 +5,8 @@
 #ifndef CPP_RTYPE_ITEMFACTORY_HH
 #define CPP_RTYPE_ITEMFACTORY_HH
 
+#include <SFML/Graphics/Texture.hpp>
+#include "Item.hh"
 #include "AItem.hh"
 
 namespace UI {
@@ -13,13 +15,19 @@ namespace UI {
         ItemFactory();
         ~ItemFactory();
 
-        static AItem* instantiate(UI::itemType type);
+        AItem* instantiate(UI::itemType type, const std::string &texturePath);
         typedef UI::AItem* (*instantiateItem)();
 
     private:
         static AItem* instantiateButton();
         static AItem* instantiateNormalItem();
+        static AItem* instantiateBackgroundObject();
+        static AItem* instantiateBackground();
+        void setTexture(UI::Item* item);
+        std::map<std::string, sf::Texture*> getTextureMap();
         const static std::map<UI::itemType, instantiateItem> itemMap;
+        std::map<std::string, sf::Texture*> textureMap;
+        std::string texturePath;
     };
 }
 
