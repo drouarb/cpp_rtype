@@ -5,6 +5,7 @@
 #ifndef CPP_RTYPE_MOVE_HH
 #define CPP_RTYPE_MOVE_HH
 
+#include <ostream>
 #include "AGameEvent.hh"
 
 namespace server {
@@ -12,22 +13,22 @@ namespace server {
 
         class Move : public AGameEvent {
         private:
-            const int posX;
-            const int posY;
-            const int newVectX;
-            const int newVectY;
+            const speed_t newVectX;
+            const speed_t newVectY;
+            const pos_t posX;
+            const pos_t posY;
 
         public:
-            Move(const server::round_t tick, const server::entityId_t entityId, const int newVectX,
-                             const int newVectY, const int posX, const int posY);
+            Move(const server::round_t tick, const server::entityId_t entityId, const speed_t newVectX,
+                             const speed_t newVectY, const pos_t posX, const pos_t posY);
 
             IGameEvent *getParentEvent() override;
 
             entityId_t getEntityId() override;
 
             EventType getEventType() override;
-        };
 
+        };
     }
 }
 

@@ -3,17 +3,23 @@
 #include "definitions.hh"
 #include "Player.hh"
 
-namespace server
-{
-    class Controller
-    {
+namespace server {
+    class Controller {
     private:
-        server::APlayer *entity;
+        server::APlayer *player;
+        server::Entity *entity;
 
     public:
         void playMove(pos_t speedX, pos_t speedY);
+
         void playShoot(attackId_t attackId);
+
         void setEntity(Player *entity);
-        void destroy(); //TODO: the player's entity must return destroy=true in the next entityAction
+
+        void destroy(); //TODO: the player's player must return destroy=true in the next entityAction
+
+        Entity *getEntity() const;
+
+        void setEntity(Entity *entity);
     };
 }

@@ -1,6 +1,10 @@
 #include <algorithm>
 #include <iostream>
 #include <Player.hh>
+#include <events/Spawn.hh>
+#include <events/Move.hh>
+#include <events/ModHP.hh>
+#include <events/Destroy.hh>
 #include "Game.hh"
 
 using namespace server;
@@ -45,7 +49,8 @@ void Game::tick()
     checkCollisions();
     moveEntities();
     unspawn();
-    //TODO: run the simulation and send its data to the clients
+    this->sendData();
+    //TODO: run the simulation and //DONE send its data to the clients
 }
 
 gameId_t Game::getLobbyId()
@@ -67,14 +72,14 @@ void Game::progressLevel()
             Entity * entity = spawn.trigger(entityIdCount);
             if (entity == nullptr)
             {
-                ERROR("Game " << gameId << ": failed to create entity " << spawn.dlName << std::endl);
+                ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
             }
             else
             {
-                INFO("Game " << gameId << ": Adding new entity(" << spawn.dlName << " on: " << entity->data.getPosX() << ", " << entity->data.getPosY());
+                INFO("Game " << gameId << ": Adding new player(" << spawn.dlName << " on: " << entity->data.getPosX() << ", " << entity->data.getPosY());
                 entityIdCount++;
                 entities.push_back(entity);
-                //TODO: send to simulation: spawn
+                this->sim_spawn(entity);
             }
         }
     }
@@ -116,14 +121,14 @@ void Game::checkCollisions()
                         if (dist >= entities[i]->data.getVectX())
                         {
                             entities[i]->data.setVectX(entities[i]->data.getVectX() - dist);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                             dist = 0;
                         }
                         else
                         {
                             dist -= entities[i]->data.getVectX();
                             entities[i]->data.setVectX(0);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                     }
                     if (entities[j]->data.getVectX() >= 0)
@@ -131,12 +136,12 @@ void Game::checkCollisions()
                         if (-dist <= entities[j]->data.getVectX())
                         {
                             entities[j]->data.setVectX(entities[j]->data.getVectX() - -dist);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                         else
                         {
                             entities[j]->data.setVectX(0);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                     }
                 }
@@ -158,14 +163,14 @@ void Game::checkCollisions()
                         if (dist >= entities[j]->data.getVectX())
                         {
                             entities[j]->data.setVectX(entities[j]->data.getVectX() - dist);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                             dist = 0;
                         }
                         else
                         {
                             dist -= entities[j]->data.getVectX();
                             entities[j]->data.setVectX(0);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                     }
                     if (entities[i]->data.getVectX() >= 0)
@@ -173,12 +178,12 @@ void Game::checkCollisions()
                         if (-dist <= entities[i]->data.getVectX())
                         {
                             entities[i]->data.setVectX(entities[i]->data.getVectX() - -dist);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                         else
                         {
                             entities[i]->data.setVectX(0);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                     }
                 }
@@ -202,14 +207,14 @@ void Game::checkCollisions()
                         if (dist >= entities[i]->data.getVectY())
                         {
                             entities[i]->data.setVectY(entities[i]->data.getVectY() - dist);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                             dist = 0;
                         }
                         else
                         {
                             dist -= entities[i]->data.getVectY();
                             entities[i]->data.setVectY(0);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                     }
                     if (entities[j]->data.getVectY() >= 0)
@@ -217,12 +222,12 @@ void Game::checkCollisions()
                         if (-dist <= entities[j]->data.getVectY())
                         {
                             entities[j]->data.setVectY(entities[j]->data.getVectY() - -dist);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                         else
                         {
                             entities[j]->data.setVectY(0);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                     }
                 }
@@ -244,14 +249,14 @@ void Game::checkCollisions()
                         if (dist >= entities[j]->data.getVectY())
                         {
                             entities[j]->data.setVectY(entities[j]->data.getVectY() - dist);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                             dist = 0;
                         }
                         else
                         {
                             dist -= entities[j]->data.getVectY();
                             entities[j]->data.setVectY(0);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                     }
                     if (entities[i]->data.getVectY() >= 0)
@@ -259,12 +264,12 @@ void Game::checkCollisions()
                         if (-dist <= entities[i]->data.getVectY())
                         {
                             entities[i]->data.setVectY(entities[i]->data.getVectY() - -dist);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                         else
                         {
                             entities[i]->data.setVectY(0);
-                            //TODO: send to simulation: vectors
+                            this->sim_move(entities[i]);
                         }
                     }
                 }
@@ -282,28 +287,28 @@ void Game::letEntitesAct()
         if (action->speedX != it->data.getVectX())
         {
             it->data.setVectX(action->speedX);
-            //TODO: send to simulation: vectors
+            this->sim_move(entities[i]);
         }
         if (action->speedY != it->data.getVectY())
         {
             it->data.setVectY(action->speedY);
-            //TODO: send to simulation: vectors
+            this->sim_move(entities[i]);
         }
         if (action->hp != it->data.getHp())
         {
             it->data.setHp(action->hp);
-            //TODO: send to simulation: hp
+            this->sim_update(entities[i]);
         }
         if (action->newEntity)
         {
             entities.push_back(new Entity(action->newEntity, entityIdCount));
             entityIdCount++;
-            //TODO: send to simulation: spawn
+            this->sim_spawn(entities[i]);
         }
         if (action->destroy)
         {
             it->data.setDestroyed(true);
-            //TODO: send to simulation: destroy
+            this->sim_destroy(entities[i]);
         }
         delete action;
     }
@@ -315,7 +320,7 @@ void Game::moveEntities()
     {
         entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
         entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
-        std::cout << "entity " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
+        std::cout << "player " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
         //TODO: do this in checkCollisions, by creating entities of the player team, located on the borders?
         if (entity->data.getPosY() > FIELD_HEIGHT)
             entity->data.setPosY(FIELD_HEIGHT);
@@ -336,11 +341,11 @@ void Game::unspawn()
         {
             (*it)->data.setDestroyed(true);
             INFO("OUT OF RANGE : " << (*it)->data.getId())
-            //TODO: send to simulation: destroy
+            this->sim_destroy(*it);
         }
         if ((*it)->data.isDestroyed())
         {
-            INFO("delete entity : " << (*it)->data.getId())
+            INFO("delete player : " << (*it)->data.getId())
             destroyedEntities.push_back(*it);
             it = vect_erase(it, entities);
         }
@@ -361,12 +366,13 @@ void Game::newPlayer(Client *client) {
     this->clientList.push_back(client);
     Player *player = new Player();
     Entity *entity = new Entity();
+    controller->setEntity(entity);
     entity->initialize(player, entityIdCount);
     entityIdCount++;
     controller->setEntity(player);
     client->setController(controller);
     this->entities.push_back(entity);
-    //TODO: send to simulation: spawn
+    this->sim_spawn(entity);
 }
 
 void Game::removePlayer(Client *client) {
@@ -374,6 +380,7 @@ void Game::removePlayer(Client *client) {
     if (position == this->clientList.end()) {
         return;
     }
+    this->sim_destroy(client->getController()->getEntity());
     client->getController()->destroy();
     delete client->getController();
     client->setController(nullptr);
@@ -447,4 +454,28 @@ pos_t Game::fxp(size_t i)
 pos_t Game::fyp(size_t i)
 {
     return (entities[i]->data.getPosY() + entities[i]->data.getSprite().sizeY + entities[i]->data.getVectY());
+}
+
+void Game::sendData() {
+    INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
+    this->gameEvents.clear();
+}
+
+void Game::sim_spawn(Entity *entity) {
+    this->gameEvents.push_back(new server::event::Spawn(this->round, entity->data.getId(), entity->data.getPosX(),
+                                              entity->data.getPosY()));
+}
+
+void Game::sim_move(Entity *entity) {
+    this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX(),
+                                                       entity->data.getVectY(), entity->data.getPosX(),
+                                                       entity->data.getPosY()));
+}
+
+void Game::sim_update(Entity *entity) {
+    this->gameEvents.push_back(new server::event::ModHP(this->round, entity->data.getId(), entity->data.getHp()));
+}
+
+void Game::sim_destroy(Entity *entity) {
+    this->gameEvents.push_back(new server::event::Destroy(this->round, entity->data.getId()));
 }

@@ -6,8 +6,8 @@ namespace server {
     class Client {
     private:
         Controller *controller;
-        clientId_t clientId;
         std::string name;
+        clientId_t clientId;
     public:
         Client();
 

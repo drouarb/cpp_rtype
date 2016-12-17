@@ -5,6 +5,10 @@
 
 server::NetworkManager::NetworkManager(server::Core *core) : core(core), mutex(new Mutex()) {}
 
+server::NetworkManager::~NetworkManager() {
+
+}
+
 const std::list<server::Client> &server::NetworkManager::getClientList() const {
     return this->clientContainer.toStdList();
 }
@@ -15,7 +19,7 @@ void server::NetworkManager::sendGameState(int hp, server::clientId_t clientId) 
 
 void server::NetworkManager::sendMessage(const std::string &msg, server::clientId_t clientId) {
     Mutexer(this->mutex);
-    Client &client = this->clientContainer.get(clientId);
+//    Client &client = this->clientContainer.get(clientId);
 }
 
 void server::NetworkManager::clientRegister(int src, const std::string &name) {

@@ -14,13 +14,19 @@ namespace server {
     class Core;
 
     class NetworkManager : public server::IListenerHandler {
-    private:
-        IMutex *mutex;
+
+
     protected:
         ClientContainer clientContainer;
         Core *core;
+    private:
+        IMutex *mutex;
+
     public:
+
         NetworkManager(Core *core);
+
+        virtual ~NetworkManager();
 
         const std::list<Client> &getClientList() const;
 
@@ -41,5 +47,6 @@ namespace server {
         void clientPlayerMove(int src, speed_t vectX, speed_t vectY) override;
 
         void clientPlayerQuit(int src) override;
+
     };
 }
