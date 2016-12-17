@@ -1,16 +1,40 @@
+/*
+** trouve_b
+*/
+
 #include <thread>
 #include <unistd.h>
+#include <sstream>
 #include "GameClient.hh"
-#include "Menu.hh"
+#include "AMenu.hh"
 
 using  namespace client;
 
-int main()
+int main(int argc, char **argv)
 {
+  /*<<<<<<< 47fd50508c59bda1a7ddd96b90ef7068cbda6066
   GameClient toto;
- //toto.gameLoop();
+ toto.gameLoop();
 
-   Menu lolo();
+ //   AMenu lolo("config/menuTest.json");
+ =======*/
+  std::string	IP;
+  unsigned short		port;
+
+  if (argc < 3)
+    {
+      std::cerr << "usage : ./rtype_client IP port" << std::endl;
+      return (1);
+    }
+  IP = argv[1];
+  std::istringstream strm(argv[2]); strm >> port;
+  client::GameClient game;
+  game.createNetworkManager();
+  game.gameLoop();
+  return (0);
+    
+  //>>>>>>> prepare client for soutenance
+  //>>>>>>> prepare client for soutenance
     /*
   unsigned long item;
   

@@ -45,6 +45,9 @@ void	GameClient::gameLoop()
 {
   short	event;
   std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
+  std::string name = "jean patric";
+  manager->sendRegister(name);
+  manager->sendJoin(0);
   
   while (1)
     {

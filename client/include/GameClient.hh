@@ -21,8 +21,9 @@
 
 namespace client {
   class NetworkManager;
-    class EventManager;
-  class GameClient {
+  class EventManager;
+  class GameClient
+  {
   private:
     World			*world;
     EventManager		*handler;
@@ -31,13 +32,13 @@ namespace client {
     tick			tickRateClient;
     std::map<tick, uint64_t>	horodatageTick;
     GameUIInterface		*gameui;
-  public:
-
+    
   public:
     GameClient();
 
     ~GameClient() {};
 
+    void createNetworkManager(){};
     void createNetworkManager(const std::string &ip, unsigned short port);
 
     void deleteNetworkManager();
