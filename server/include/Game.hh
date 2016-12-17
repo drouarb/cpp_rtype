@@ -68,6 +68,20 @@ namespace server
         pos_t fxp(size_t);
         pos_t fy(size_t);
         pos_t fyp(size_t);
+
+        /**
+         * These functions are a way to signal that a certain aspect of the entity has changed.
+         * This change needs to be sent to the simulation, and eventually to the client.
+         * Several changes may happen for a single entity in a single round. In this case, the last signaled change overwrites the other ones.
+         */
+        void sim_spawn(Entity *);
+        void sim_move(Entity *); //vectors
+        void sim_update(Entity *); //hp
+        void sim_destroy(Entity *);
+        /**
+         * Sends data for this round to the clients.
+         */
+        void sendData();
     };
 }
 
