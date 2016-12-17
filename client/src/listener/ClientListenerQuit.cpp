@@ -5,7 +5,7 @@
 #include "listener/ClientListenerQuit.hh"
 
 using namespace client;
-ClientListenerQuit::ClientListenerQuit(NetworkManager *networkManager) : networkManager(networkManager), APacketListener(network::packet::QUIT)
+ClientListenerQuit::ClientListenerQuit(GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::QUIT)
 {
 
 }
@@ -17,5 +17,5 @@ ClientListenerQuit::~ClientListenerQuit()
 
 void ClientListenerQuit::notify(const network::packet::PacketQuit *packet)
 {
-    networkManager->receiveQuit();
+
 }

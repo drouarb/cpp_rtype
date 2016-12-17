@@ -8,20 +8,20 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketPlaySound.hh"
-#include "NetworkManager.hh"
+#include "GameClient.hh"
 namespace client {
     class ClientListenerPlaySound
             : public network::ListenerTemplate<network::packet::PacketPlaySound, network::packet::PLAY_SOUND> {
 
     public:
-        ClientListenerPlaySound(NetworkManager *networkManager);
+        ClientListenerPlaySound(GameClient *gameClient);
 
         ~ClientListenerPlaySound();
 
         void notify(const network::packet::PacketPlaySound *packet);
 
     private:
-        NetworkManager *networkManager;
+        GameClient *gameclient;
     };
 }
 #endif //CPP_RTYPE_CLIENTLISTENERPLAYSOUND_HH

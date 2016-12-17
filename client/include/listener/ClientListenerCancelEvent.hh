@@ -8,20 +8,20 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketCancelEvent.hh"
-#include "NetworkManager.hh"
+#include "GameClient.hh"
 namespace client {
     class ClientListenerCancelEvent
             : public network::ListenerTemplate<network::packet::PacketCancelEvent, network::packet::CANCEL_EVENT> {
 
     public:
-        ClientListenerCancelEvent(NetworkManager *networkManager);
+        ClientListenerCancelEvent(GameClient *gameClient);
 
         ~ClientListenerCancelEvent();
 
         void notify(const network::packet::PacketCancelEvent *packet);
 
     private:
-        NetworkManager *networkManager;
+        GameClient *gameclient;
     };
 
 }

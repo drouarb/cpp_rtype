@@ -8,20 +8,20 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketMoveEntity.hh"
-#include "NetworkManager.hh"
+#include "GameClient.hh"
 namespace client {
     class ClientListenerMoveEntity
             : public network::ListenerTemplate<network::packet::PacketMoveEntity, network::packet::MOVE_ENTITY> {
 
     public:
-        ClientListenerMoveEntity(NetworkManager *networkManager);
+        ClientListenerMoveEntity(GameClient *gameClient);
 
         ~ClientListenerMoveEntity();
 
         void notify(const network::packet::PacketMoveEntity *packet);
 
     private:
-        NetworkManager *networkManager;
+        GameClient *gameclient;
     };
 }
 

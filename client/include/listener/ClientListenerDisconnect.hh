@@ -8,17 +8,17 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketDisconnect.hh"
-#include "NetworkManager.hh"
+#include "GameClient.hh"
 namespace client {
 class ClientListenerDisconnect : public network::ListenerTemplate<network::packet::PacketDisconnect, network::packet::DISCONNECT>
 {
 public:
-    ClientListenerDisconnect(NetworkManager *networkManager);
+    ClientListenerDisconnect(GameClient *gameClient);
     ~ClientListenerDisconnect();
     void notify(const network::packet::PacketDisconnect * packet);
 
 private:
-    NetworkManager *networkManager;
+    GameClient *gameclient;
 };
 }
 
