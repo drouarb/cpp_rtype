@@ -9,10 +9,13 @@ UI::Item::Item(itemType t) : AItem(t) {
 }
 
 void UI::Item::setImage(std::string filename) {
-    if (!texture.loadFromFile(filename)) {
+    if (!texture->loadFromFile(filename)) {
         std::cerr << "Failed to load : " << filename << std::endl; // essayer de charger un placeholder à la place
     } else {
-        sprite.setTexture(texture);
+        for (int i = 0; i < UI::animationType::ANIMATIONS_NUMBER; i++) {
+            textures.push_back(texture);
+        }
+        sprite.setTexture(*texture);
     }
 }
 
@@ -25,7 +28,11 @@ sf::Sprite UI::Item::getSprite() {
 }
 
 void UI::Item::setTexture(sf::Texture* _texture) {
-    texture = *_texture;
+    texture = _texture;
+}
+
+void UI::Item::addTexture(sf::Texture* _texture, UI::animationType type) {
+    textures[type] = _texture;
 }
 
 UI::Item::~Item() {
@@ -50,4 +57,16 @@ void UI::Item::setRatio(float sizeXMax, float sizeYMax) {
 
 void UI::Item::setRatio(float ratio) {
     sprite.scale(ratio, ratio);
+}
+
+void UI::Item::setImage() {
+    for (int i = 0; i < UI::animationType::ANIMATIONS_NUMBER; i++) {
+        textures.push_back(texture);
+    }
+    sprite.setTexture(*texture);
+}
+
+void UI::Item::changeStatus(UI::animationType type) {
+    UI::AItem::changeStatus(type);
+    sprite.setTexture(*(textures[type]));
 }
