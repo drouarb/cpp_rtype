@@ -4,7 +4,7 @@
 
 #include <thread>
 #include <unistd.h>
-#include <stringstream>
+#include <sstream>
 #include "GameClient.hh"
 #include "AMenu.hh"
 
@@ -27,10 +27,10 @@ int main(int argc, char **argv)
       return (1);
     }
   IP = argv[1];
-  std::istringstream strm(argv[2]) >> port;
-  GameClient gameClient();
-  gameClient.createNetworkManager(ip, port)
-  toto.gameLoop();
+  std::istringstream strm(argv[2]); strm >> port;
+  client::GameClient game;
+  game.createNetworkManager();
+  game.gameLoop();
   return (0);
     
   //>>>>>>> prepare client for soutenance

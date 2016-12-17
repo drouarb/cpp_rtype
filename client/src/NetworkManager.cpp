@@ -56,7 +56,7 @@ bool NetworkManager::startPacketFactory()
 {
     try {
         if (packetFactory == nullptr)
-            return false;
+	  return false;
         packetFactory->run();
     }
     catch (std::exception & e)
