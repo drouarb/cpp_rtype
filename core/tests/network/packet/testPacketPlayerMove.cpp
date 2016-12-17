@@ -13,7 +13,7 @@ void testPacketPlayerMove()
 {
         std::cout << "====Packet Player Move Test====" << std::endl;
         t_rawdata data;
-        PacketPlayerMove *ack = new PacketPlayerMove(UINT32_MAX, INT16_MAX, INT16_MAX);
+        PacketPlayerMove *ack = new PacketPlayerMove(UINT32_MAX, INT16_MAX, INT16_MAX, 10, 10);
         ack->serialize(&data);
         PacketPlayerMove *ack2 = new PacketPlayerMove();
         ack2->deserialize(&data);
@@ -26,6 +26,10 @@ void testPacketPlayerMove()
         assert(ack->getVectY() == INT16_MAX);
         assert(ack->getVectY() == ack2->getVectY());
         std::cout << "SUCCESS getVectY()" << std::endl;
+        assert(ack->getPosX() == 10);
+        std::cout << "SUCCESS getPosX()" << std::endl;
+        assert(ack->getPosY() == 10);
+        std::cout << "SUCCESS getPosY()" << std::endl;
         std::cout << "DONE" << std::endl;
 }
 int main()
