@@ -29,12 +29,12 @@ void network::packet::PacketSynAck::setAck(uint16_t ack)
 
 uint16_t network::packet::PacketSynAck::getAck() const
 {
-    GET_NETINT(schema, 1);
+   return GET_NETINT(schema, 1);
 }
 
 uint16_t network::packet::PacketSynAck::getSyn() const
 {
-    GET_NETINT(schema, 0);
+    return GET_NETINT(schema, 0);
 }
 
 void network::packet::PacketSynAck::setSyn(uint16_t syn)

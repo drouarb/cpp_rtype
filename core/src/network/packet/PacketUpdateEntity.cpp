@@ -4,7 +4,7 @@
 
 #include "network/packet/PacketUpdateEntity.hh"
 
-network::packet::PacketUpdateEntity::PacketUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, uint16_t hp) :
+network::packet::PacketUpdateEntity::PacketUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp) :
         APacket
                 (
                         UPDATE_ENTITY,
@@ -53,12 +53,12 @@ uint16_t network::packet::PacketUpdateEntity::getEntityId() const
     return GET_NETINT(schema, 2);
 }
 
-void network::packet::PacketUpdateEntity::setHp(uint16_t hp)
+void network::packet::PacketUpdateEntity::setHp(int16_t hp)
 {
     SET_NETINT(schema, 3, hp);
 }
 
-uint16_t network::packet::PacketUpdateEntity::getHp() const
+int16_t network::packet::PacketUpdateEntity::getHp() const
 {
     return GET_NETINT(schema, 3);
 }
