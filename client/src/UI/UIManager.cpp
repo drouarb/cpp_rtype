@@ -16,7 +16,7 @@ UI::UIManager::~UIManager() {
     }
 }
 
-void UI::UIManager::init(short size_x, short size_y) {
+void UI::UIManager::init(unsigned int size_x, unsigned int size_y) {
     IWindow* mainWindow = new UI::Window();
     mainWindow->setName("rtype");
     mainWindow->setSize(size_x, size_y);

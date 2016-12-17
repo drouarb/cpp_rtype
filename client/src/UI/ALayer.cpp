@@ -16,7 +16,7 @@ UI::AItem* UI::ALayer::getItem(unsigned long itemID) {
     return items[itemID];
 }
 
-std::vector<UI::AItem*> UI::ALayer::getItems() {
+std::vector<UI::AItem*>& UI::ALayer::getItems() {
     return items;
 }
 

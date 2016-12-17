@@ -31,7 +31,15 @@ void UI::AItem::addAnimation(UI::animationType animationType, Animation animatio
     //sprites.at(animationType) = animation;
 }
 
+void    UI::AItem::setID(uint32_t id) {
+    this->id = id;
+}
+
 UI::itemType UI::AItem::getType() {
     return type;
+}
+
+uint32_t UI::AItem::getID() {
+    return id;
 }
 
