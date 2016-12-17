@@ -12,7 +12,8 @@ namespace UI {
     public:
         Button();
         ~Button();
-        void onHover();
+    private:
+        std::vector<sf::Sprite> *sprites;
     };
 }
 

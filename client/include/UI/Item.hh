@@ -16,6 +16,7 @@ namespace UI {
         Item(itemType type);
         virtual ~Item();
         void setImage(std::string filename);
+        void setImage();
         void setPosition(float posX, float posY);
         void setRatio(float ratio);
         void setRatio(float sizeXMax, float sizeYMax);
@@ -23,10 +24,13 @@ namespace UI {
         void moveY(float range);
         sf::Sprite getSprite();
         void setTexture(sf::Texture*);
+        void addTexture(sf::Texture *_texture, animationType type);
+        void changeStatus(animationType type);
 
     private:
         sf::Sprite sprite;
-        sf::Texture texture;
+        std::vector<sf::Texture*> textures;
+        sf::Texture *texture;
     };
 }
 

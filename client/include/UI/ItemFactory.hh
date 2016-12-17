@@ -16,6 +16,8 @@ namespace UI {
         ~ItemFactory();
 
         AItem* instantiate(UI::itemType type, const std::string &texturePath);
+        void setTexture(UI::Item* item);
+        void addTexture(Item *item, UI::animationType type, std::string texturePath);
         typedef UI::AItem* (*instantiateItem)();
 
     private:
@@ -23,8 +25,6 @@ namespace UI {
         static AItem* instantiateNormalItem();
         static AItem* instantiateBackgroundObject();
         static AItem* instantiateBackground();
-        void setTexture(UI::Item* item);
-        std::map<std::string, sf::Texture*> getTextureMap();
         const static std::map<UI::itemType, instantiateItem> itemMap;
         std::map<std::string, sf::Texture*> textureMap;
         std::string texturePath;

@@ -5,14 +5,9 @@
 #include <UI/Item.hh>
 #include "../../include/UI/Button.hh"
 
-UI::Button::Button() : Item(UI::BUTTON) {
-
+UI::Button::Button() : Item(UI::BUTTON){
 }
 
 UI::Button::~Button() {
-
 }
 
-void UI::Button::onHover() {
-    //UI::IDLE
-}
