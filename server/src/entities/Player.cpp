@@ -14,7 +14,7 @@ void Player::shoot(attackId_t) {
     this->attackQueue.push(new MagicMissile(this->data->getPosX() + 105, this->data->getPosY()));
 }
 
-Player::Player() : mustDestroy(false), vectX(0), vectY(0) {
+Player::Player() : mustDestroy(false), vectX(0), vectY(0), newHp(true) {
     INFO("Player created")
 }
 
@@ -56,7 +56,7 @@ EntityInitialization *Player::initialize() {
     ei->sprite.sizeX = 100;
     ei->sprite.sizeY = 100;
 
-    this->newHp = this->data->getHp();
+    this->newHp = DEFAULT_LIFE;
     return (ei);
 }
 

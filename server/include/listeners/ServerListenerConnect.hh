@@ -15,7 +15,7 @@ namespace server {
     public:
         ServerListenerConnect(IListenerHandler *listenerHandler);
 
-        void notify(int fd) override;
+        void notify(unsigned long fd) override;
     };
 
 }

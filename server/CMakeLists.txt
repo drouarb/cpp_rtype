@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(rtype_server)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wdelete-non-virtual-dtor")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wdelete-non-virtual-dtor -g")
 
 file(
         GLOB_RECURSE
@@ -29,8 +29,8 @@ if (CLIENT_TESTS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLOG_INFO=ON")
     add_library("${PROJECT_NAME}lib" STATIC ${SERVER_SRCS})
     IF ("${CMAKE_SYSTEM}" MATCHES "Linux")
-        target_link_libraries(${PROJECT_NAME} dl)
-        target_link_libraries(${PROJECT_NAME} pthread)
+        target_link_libraries("${PROJECT_NAME}lib" dl)
+        target_link_libraries("${PROJECT_NAME}lib" pthread)
     endif ()
     target_link_libraries("${PROJECT_NAME}lib" rtype_core)
 

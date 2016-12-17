@@ -51,7 +51,7 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     initialization->action.hp = DEFAULT_HP;
     initialization->team = server::Team::FOE;
 
-    INFO("I'm the vilain nasty player with id: " << this->data->getId())
+    INFO("I'm the vilain nasty player: ");
     return initialization;//TODO Add sprite
 }
 

@@ -8,6 +8,6 @@
 server::ServerListenerConnect::ServerListenerConnect(server::IListenerHandler *listenerHandler) : listenerHandler(
         listenerHandler) {}
 
-void server::ServerListenerConnect::notify(int fd) {
+void server::ServerListenerConnect::notify(unsigned long fd) {
     this->listenerHandler->clientConnect(fd);
 }
