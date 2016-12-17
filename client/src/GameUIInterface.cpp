@@ -76,7 +76,7 @@ void GameUIInterface::addEntity(Entity *listEntity) {
   gameItem[listEntity->getId()] = item;
 }
 
-void GameUIInterface::updateListEntity(std::vector<Entity *> listentity) { //TODO changer facon de faire
+void GameUIInterface::updateListEntity(std::vector<Entity *> listentity) {
   for (int i = 0; listentity[i] ; i++)
   {
     gameItem[listentity[i]->getId()]->setPosition(listentity[i]->getPos().first, listentity[i]->getPos().second);
