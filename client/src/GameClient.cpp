@@ -108,7 +108,10 @@ GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string
 
   type = gameui->registerNewSprite(spriteName);
   if (world != nullptr)
-    world->spawnEntity(entityId, pos_t(pos_x, pos_y), type, eventId, tick);
+    {
+      world->spawnEntity(entityId, pos_t(pos_x, pos_y), type, eventId, tick);
+      gameui->addEntity(world->getEntityById(entityId));
+    }
 }
 
 void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp)
@@ -127,7 +130,10 @@ void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t enti
 void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId)
 {
   if (world != nullptr)
-    world->deleteEntity(entityId, tick, eventId);
+    {
+      gameui->deleteEntity(world->getEntityById(entityId));
+      world->deleteEntity(entityId, tick, eventId);
+    }
 }
 
 void GameClient::manageGameData(uint32_t turn, uint64_t time)
@@ -137,7 +143,6 @@ void GameClient::manageGameData(uint32_t turn, uint64_t time)
       world = new World();
       horodatageTick.insert(std::pair<tick, uint64_t>(static_cast<tick>(turn), time));
       tickRateClient = TICKRATE;
-      //informer la gameUI
     }
   else
     horodatageTick.insert(std::pair<tick, uint64_t>(static_cast<tick>(turn), time));
@@ -148,6 +153,7 @@ void GameClient::manageDisconnect()
   manageQuit();
   deleteNetworkManager();
   // informer la gameUI
+  exit(0); // supr
 }
 
 void GameClient::manageCancelEvent(uint32_t eventId)
@@ -168,12 +174,15 @@ void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, uint16_t Sound
 {
 }
 
-void GameClient::manageQuit() {
-    if (world != nullptr) {
+void GameClient::manageQuit()
+{
+    if (world != nullptr)
+      {
         delete world;
         horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
-    }
+      }
+    exit(0); //supr
     //informer la gameUI
 }
