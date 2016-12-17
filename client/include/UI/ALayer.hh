@@ -29,7 +29,7 @@ namespace UI {
     protected:
         std::vector<AItem*> items;
         ItemFactory* itemFactory;
-        std::vector<AItem *> getItems();
+        std::vector<AItem *>& getItems();
     };
 }
 

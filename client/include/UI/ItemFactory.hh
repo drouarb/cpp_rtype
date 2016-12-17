@@ -24,7 +24,6 @@ namespace UI {
         static AItem* instantiateBackgroundObject();
         static AItem* instantiateBackground();
         void setTexture(UI::Item* item);
-        std::map<std::string, sf::Texture*> getTextureMap();
         const static std::map<UI::itemType, instantiateItem> itemMap;
         std::map<std::string, sf::Texture*> textureMap;
         std::string texturePath;

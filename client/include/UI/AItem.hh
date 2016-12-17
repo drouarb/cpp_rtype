@@ -31,12 +31,15 @@ namespace UI {
         virtual void setPosition(float posX, float posY) = 0;
         virtual void setRatio(float sizeXMax, float sizeYMax) = 0;
         virtual void setRatio(float ratio) = 0;
+        void setID(uint32_t id);
+        uint32_t getID();
         void addAnimation(UI::animationType animationType, Animation animation);
         void playAnimation(animationType animation);
         itemType getType();
 
     protected:
         itemType type;
+        uint32_t id;
         //std::map<UI::animationType, Animation> sprites; //changer unsigned int dans un type plus générique ?
         //sf::Sprite createSprite(const std::string filename, unsigned long part);
     };

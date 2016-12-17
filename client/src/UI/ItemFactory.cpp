@@ -3,7 +3,10 @@
 //
 
 #include <UI/Button.hh>
+#include <iostream>
 #include "../../include/UI/ItemFactory.hh"
+
+static uint32_t id = 0;
 
 const std::map<UI::itemType , UI::ItemFactory::instantiateItem> UI::ItemFactory::itemMap = {
         {BUTTON, &instantiateButton},
@@ -14,7 +17,7 @@ const std::map<UI::itemType , UI::ItemFactory::instantiateItem> UI::ItemFactory:
 
 
 UI::ItemFactory::ItemFactory() {
-
+    texturePath = "";
 }
 
 UI::ItemFactory::~ItemFactory() {
@@ -44,6 +47,7 @@ UI::AItem* UI::ItemFactory::instantiateButton() {
 
 UI::AItem* UI::ItemFactory::instantiateNormalItem() {
     UI::Item* item = new UI::Item(ITEM);
+    std::cerr << item->getID() << std::endl;
     return item;
 }
 
@@ -61,9 +65,7 @@ UI::AItem* UI::ItemFactory::instantiate(UI::itemType type, const std::string& _t
     texturePath = _texturePath;
     UI::AItem* item = itemMap.at(type)();
     setTexture(dynamic_cast<UI::Item*>(item));
+    item->setID(id++);
+    std::cerr << item << " crée = " << item->getID() << std::endl;
     return item;
-}
-
-std::map<std::string, sf::Texture *> UI::ItemFactory::getTextureMap() {
-    return textureMap;
 }

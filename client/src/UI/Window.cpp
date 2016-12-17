@@ -1,6 +1,7 @@
 #include <UI/Window.hh>
 #include <UI/Item.hh>
 #include <iostream>
+#include <algorithm>
 
 
 UI::Window::Window() {
@@ -60,4 +61,15 @@ UI::ILayer *UI::Window::getLayer(UI::layerType layer) {
 
 sf::RenderWindow *UI::Window::getWindow() {
     return window;
+}
+
+void UI::Window::deleteItem(AItem* item) {
+    for (auto layer : layers) {
+        auto iterator = std::find(layer->getItems().begin(), layer->getItems().end(), item);
+        if (iterator != layer->getItems().end()) {
+            layer->getItems().erase(iterator);
+            delete(item);
+            return;
+        }
+    }
 }

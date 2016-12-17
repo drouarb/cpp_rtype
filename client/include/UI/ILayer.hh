@@ -13,7 +13,7 @@ namespace UI {
         virtual ~ILayer(){};
         virtual AItem *addItem(UI::itemType type, const std::string& sprite, int posX, int posY) = 0;
         virtual AItem *getItem(unsigned long itemID) = 0;
-        virtual std::vector<AItem *> getItems() = 0;
+        virtual std::vector<AItem *>& getItems() = 0;
         virtual void open() = 0;
         virtual void close() = 0;
         virtual bool isVisible() = 0;

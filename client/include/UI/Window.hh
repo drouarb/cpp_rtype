@@ -20,6 +20,7 @@ namespace UI {
         void render();
         bool isOpen();
         void display();
+        void deleteItem(AItem* item);
         unsigned long addLayer(UI::layerType layer);
         ILayer* getLayer(UI::layerType layer);
         sf::RenderWindow *getWindow();
