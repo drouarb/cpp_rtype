@@ -10,7 +10,7 @@ UI::BackgroundLayer::BackgroundLayer() {
 }
 
 std::vector<UI::AItem*> UI::BackgroundLayer::getItems() {
-    for (auto item : items) {
+/*    for (auto item : items) {
         switch (item->getType()) {
             case BACKGROUND_SLOW:
                 static_cast<Item*>(item)->moveX(1);
@@ -24,12 +24,12 @@ std::vector<UI::AItem*> UI::BackgroundLayer::getItems() {
             default:
                 break;
         }
-    }
+    }*/
     return items;
 }
 
 unsigned long UI::BackgroundLayer::addItem(UI::itemType type, std::string sprite, int posX, int posY) {
-    AItem* item = itemFactory->instantiate(type);
+/*    AItem* item = itemFactory->instantiate(type);
     items.push_back(item);
-    return items.size() - 1;
+    return items.size() - 1;*/
 }

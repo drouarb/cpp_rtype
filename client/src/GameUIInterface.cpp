@@ -25,6 +25,7 @@ void		GameUIInterface::initUI()
 void		GameUIInterface::displaySimple()
 {
   window->display();
+  managerUi.getEventObserver()->getEvent(); //TODO à modifier
 }
 
 typeide_t	GameUIInterface::registerNewSprite(const std::string &str)

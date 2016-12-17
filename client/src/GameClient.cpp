@@ -163,13 +163,12 @@ void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, uint16_t Sound
 {
 }
 
-void GameClient::manageQuit()
-{
-  if (world != nullptr)
-    {
-      delete world;
-      horodatageTick.clear();
-      tickRateClient = 0;
-      world = nullptr;
+void GameClient::manageQuit() {
+    if (world != nullptr) {
+        delete world;
+        horodatageTick.clear();
+        tickRateClient = 0;
+        world = nullptr;
     }
-  //informer la gameUI
+    //informer la gameUI
+}
