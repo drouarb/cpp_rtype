@@ -14,7 +14,7 @@ class BasicEntity : public server::ADynamicObject {
 public:
     BasicEntity();
 
-//    friend std::ostream &operator<<(std::ostream &os, const BasicEntity &entity);
+//    friend std::ostream &operator<<(std::ostream &os, const BasicEntity &player);
 
     void collide(const server::Entity &) override ;
     server::EntityAction *nextAction() override ;

@@ -48,7 +48,7 @@ public:
 
     BasicNastyEntity();
 
-//    friend std::ostream &operator<<(std::ostream &os, const BasicNastyEntity &entity);
+//    friend std::ostream &operator<<(std::ostream &os, const BasicNastyEntity &player);
 
     void collide(const server::Entity &) override ;
     server::EntityAction *nextAction() override ;

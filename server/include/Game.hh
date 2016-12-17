@@ -4,6 +4,7 @@
 #include "Level.hh"
 #include "Client.hh"
 #include <list>
+#include <events/AGameEvent.hh>
 
 namespace server
 {
@@ -32,6 +33,8 @@ namespace server
         round_t round;
         gameId_t gameId;
         entityId_t entityIdCount;
+        std::vector<server::event::AGameEvent *> gameEvents;
+
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
@@ -70,14 +73,21 @@ namespace server
         pos_t fyp(size_t);
 
         /**
-         * These functions are a way to signal that a certain aspect of the entity has changed.
+         * \defgroup Simulations functions
+         * \brief These functions are a way to signal that a certain aspect of the entity has changed.
          * This change needs to be sent to the simulation, and eventually to the client.
          * Several changes may happen for a single entity in a single round. In this case, the last signaled change overwrites the other ones.
+         * @{
          */
-        void sim_spawn(Entity *);
-        void sim_move(Entity *); //vectors
-        void sim_update(Entity *); //hp
-        void sim_destroy(Entity *);
+
+        void sim_spawn(Entity *entity);
+        void sim_move(Entity *entity); //vectors
+        void sim_update(Entity *entity); //hp
+        void sim_destroy(Entity *entity);
+
+        /**@}*/
+
+
         /**
          * Sends data for this round to the clients.
          */

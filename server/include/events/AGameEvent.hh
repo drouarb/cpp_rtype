@@ -6,6 +6,7 @@
 #define CPP_RTYPE_AGAMEEVENT_HH
 
 #include <network/packet/IPacket.hh>
+#include <ostream>
 #include "IGameEvent.hh"
 
 namespace server {
@@ -18,7 +19,12 @@ namespace server {
         public:
             AGameEvent(const round_t tick, const entityId_t entityId);
             network::packet::IPacket *createPacket();
+
+            friend std::ostream &operator<<(std::ostream &os, const AGameEvent &event);
         };
+        std::ostream &operator<<(std::ostream &os, const AGameEvent &event);
+
+
     }
 }
 

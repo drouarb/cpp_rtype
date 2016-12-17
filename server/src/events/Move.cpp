@@ -4,8 +4,8 @@
 
 #include <events/Move.hh>
 
-server::event::Move::Move(const server::round_t tick, const server::entityId_t entityId, const int newVectX,
-                          const int newVectY, const int posX, const int posY)
+server::event::Move::Move(const server::round_t tick, const server::entityId_t entityId, const speed_t newVectX,
+                          const speed_t newVectY, const pos_t posX, const pos_t posY)
         : AGameEvent(tick, entityId), newVectX(newVectX), newVectY(newVectY), posX(posX), posY(posY) {
 }
 

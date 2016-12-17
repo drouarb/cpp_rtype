@@ -16,10 +16,10 @@ void BasicNastyEntity::collide(const server::Entity &entity) {
     this->notifyCollision = new server::EntityAction();
     this->notifyCollision->hp = this->data->getHp() - entity.obj->getDamage();
     std::cout << "COLIIIIIIIIIIIIIIIIIIIIIIIIIDE" << std::endl;
-    INFO("I'm the vilain nasty entity : COLLIDE")
+    INFO("I'm the vilain nasty player : COLLIDE")
     if (this->notifyCollision->hp <= 0) {
         this->notifyCollision->destroy = true;
-        INFO("I'm the vilain nasty entity : I'm ded WWZKKZZOWZKWZO")
+        INFO("I'm the vilain nasty player : I'm ded WWZKKZZOWZKWZO")
     }
 }
 
@@ -37,7 +37,7 @@ server::EntityAction *BasicNastyEntity::nextAction() {
     }
 
     if (this->stopwatch->ellapsedMs() > FIRE_FREQUENCY) {
-        INFO("I'm the vilain nasty entity : BOUM BIM BAM")
+        INFO("I'm the vilain nasty player : BOUM BIM BAM")
         this->stopwatch->set();
         VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3, this->data->getPosY());
         a->newEntity = projectile;
@@ -50,7 +50,7 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     initialization->action.hp = DEFAULT_HP;
     initialization->team = server::Team::FOE;
 
-    INFO("I'm the vilain nasty entity with id: " << this->data->getId())
+    INFO("I'm the vilain nasty player with id: " << this->data->getId())
     return initialization;//TODO Add sprite
 }
 

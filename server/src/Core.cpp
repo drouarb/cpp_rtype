@@ -41,7 +41,6 @@ server::Core::Core(const std::string &path) : sw(IStopwatch::getInstance())
 
 void server::Core::run()
 {
-    round_t r = 0;
     while (isRunning)
     {
 /*

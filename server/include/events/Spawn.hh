@@ -5,6 +5,7 @@
 #ifndef CPP_RTYPE_SPAWN_HH
 #define CPP_RTYPE_SPAWN_HH
 
+#include <ostream>
 #include "AGameEvent.hh"
 
 namespace server {
@@ -12,8 +13,8 @@ namespace server {
 
         class Spawn : public AGameEvent {
 
-            const int posX;
-            const int posY;
+            const pos_t posX;
+            const pos_t posY;
 
         public:
             Spawn(const round_t tick, const entityId_t entityId, pos_t posX, pos_t posY);
@@ -23,7 +24,9 @@ namespace server {
             entityId_t getEntityId() override;
 
             EventType getEventType() override;
+
         };
+
 
     }
 }
