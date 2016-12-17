@@ -26,12 +26,14 @@
 #include <network/packet/PacketLeaderBoard.hh>
 #include "network/PacketFactory.hh"
 
-network::PacketFactory::PacketFactory(unsigned short port) {
+network::PacketFactory::PacketFactory(unsigned short port): dataListener(*this) {
     socket = new socket::UnixUDPSocket(port);
+    socket->registerDataListener(&dataListener);
 }
 
-network::PacketFactory::PacketFactory(const std::string &address, unsigned short port) {
+network::PacketFactory::PacketFactory(const std::string &address, unsigned short port): dataListener(*this) {
     socket = new socket::UnixUDPSocket(address, port);
+    socket->registerDataListener(&dataListener);
 }
 
 network::PacketFactory::~PacketFactory() {

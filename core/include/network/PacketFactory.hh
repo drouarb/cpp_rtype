@@ -13,6 +13,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <network/listener/PacketFactoryDataListener.hh>
 
 namespace network {
     class PacketFactory {
@@ -44,6 +45,7 @@ namespace network {
 
     private:
         socket::ISocket *socket;
+        listener::PacketFactoryDataListener dataListener;
 
         template<class T>
         packet::IPacket *createPacket(unsigned long fd, const t_rawdata &data) const {
