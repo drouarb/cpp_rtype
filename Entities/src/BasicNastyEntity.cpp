@@ -42,6 +42,7 @@ server::EntityAction *BasicNastyEntity::nextAction() {
         VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3, this->data->getPosY());
         a->newEntity = projectile;
     }
+    INFO("Next action OK")
     return (a);
 }
 

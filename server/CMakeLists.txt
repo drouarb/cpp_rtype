@@ -16,17 +16,23 @@ include_directories(include/entities)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SERVER_SRCS})
-target_link_libraries(${PROJECT_NAME} dl)
+if (UNIX)
+    target_link_libraries(${PROJECT_NAME} dl)
+    target_link_libraries(${PROJECT_NAME} pthread)
+endif()
+
 target_link_libraries(${PROJECT_NAME} rtype_core)
-target_link_libraries(${PROJECT_NAME} pthread)
+
 
 if (CLIENT_TESTS)
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLOG_INFO=ON")
     add_library("${PROJECT_NAME}lib" STATIC ${SERVER_SRCS})
-    target_link_libraries("${PROJECT_NAME}lib" dl)
+    if (UNIX)
+        target_link_libraries(${PROJECT_NAME} dl)
+        target_link_libraries(${PROJECT_NAME} pthread)
+    endif()
     target_link_libraries("${PROJECT_NAME}lib" rtype_core)
-    target_link_libraries("${PROJECT_NAME}lib" pthread)
 
 
     enable_testing()
