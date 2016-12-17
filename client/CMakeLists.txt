@@ -22,6 +22,10 @@ target_link_libraries(${PROJECT_NAME} rtype_core)
 target_link_libraries(${PROJECT_NAME} protoboeuf)
 target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES})
 
+if (${UNIX})
+    target_link_libraries(${PROJECT_NAME} -lpthread)
+endif(${UNIX})
+
 if (CLIENT_TESTS)
     enable_testing()
     add_subdirectory(tests)
