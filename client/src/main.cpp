@@ -5,8 +5,9 @@
 #include <thread>
 #include <unistd.h>
 #include <sstream>
+#include <iostream>
 #include "GameClient.hh"
-#include "AMenu.hh"
+#include "Menu.hh"
 
 using  namespace client;
 
@@ -23,7 +24,7 @@ int main(int argc, char **argv)
 
   if (argc < 3)
     {
-      std::cerr << "usage : ./rtype_client IP port" << std::endl;
+        std::cerr << "usage : ./rtype_client IP port" << std::endl;
       return (1);
     }
   IP = argv[1];
