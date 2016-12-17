@@ -19,6 +19,7 @@ include_directories(include)
 include_directories(../server/include)
 include_directories(../server/include/entities)
 
+
 set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 foreach (entity_file ${ENTITIES_SRC_FILES})
