@@ -16,7 +16,7 @@ include_directories(include/entities)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SERVER_SRCS})
-if (UNIX)
+IF("${CMAKE_SYSTEM}" MATCHES "Linux")
     target_link_libraries(${PROJECT_NAME} dl)
     target_link_libraries(${PROJECT_NAME} pthread)
 endif()
