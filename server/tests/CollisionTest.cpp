@@ -14,6 +14,8 @@
 #include "ProjTester.hpp"
 
 
+static const int test_duration = 8000;
+
 void run(CoreTest *coreTest) {
     coreTest->run();
 }
@@ -62,12 +64,11 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     }
 
 
-    INFO("END OF TEST")
 
     IStopwatch *pStopwatch = IStopwatch::getInstance();
     pStopwatch->set();
     uint32_t i = 0;
-    while (pStopwatch->ellapsedMs() < 5000) {
+    while (pStopwatch->ellapsedMs() < test_duration) {
         ++i;
         packetPlayerAttack->setTick(32 + i);
         playerAttack->notify(packetPlayerAttack);
@@ -75,4 +76,5 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     }
     thread->detach();
 
+    INFO("END OF TEST")
 }

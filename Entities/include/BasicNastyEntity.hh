@@ -24,6 +24,8 @@ private:
         server::EntityAction *nextAction() override ;
         server::EntityInitialization *initialize() override ;
 
+        bool collideWith(const server::Entity &entity) override;
+
     private:
         server::damage_t getDamage() override;
 
@@ -42,6 +44,8 @@ private:
 
 
 public:
+    bool collideWith(const server::Entity &entity) override;
+
     BasicNastyEntity();
 
 //    friend std::ostream &operator<<(std::ostream &os, const BasicNastyEntity &entity);

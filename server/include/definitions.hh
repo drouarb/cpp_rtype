@@ -40,7 +40,7 @@ namespace server {
 #ifdef LOG_INFO
 #define ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr) std::cerr << expr << std::endl;
-#define INFO(expr) std::cerr << expr << std::endl;
+#define INFO(expr) std::cout << "---- INFO ----- " << expr << std::endl;
 #elif LOG_ERROR
 #define ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr)
@@ -50,7 +50,7 @@ namespace server {
 #define WARN(expr) std::cerr << expr << std::endl;
 #define INFO(expr)
 #else
-#define ERROR(expr)
+#define ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr)
 #define INFO(expr)
 #endif
