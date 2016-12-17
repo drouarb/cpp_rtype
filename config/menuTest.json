@@ -1,0 +1,29 @@
+{
+  "Name": "MenuStart",
+  "Layer" : "MENU",
+  "Default_Visibility" : 1,
+  "Buttons": [
+    {
+      "buttons_name": "Play",
+      "selected": "play.png",
+      "noselected": "play2.png",
+      "position": [
+        {
+          "x": 250,
+          "y": 250
+        }
+      ]
+    },
+    {
+      "buttons_name": "Crédit",
+      "selected": "credit.png",
+      "noselected": "credit2.png",
+      "position": [
+        {
+          "x": 250,
+          "y": 300
+        }
+      ]
+    }
+  ]
+}

@@ -54,8 +54,46 @@ void                GameUIInterface::feedGameList(std::vector<std::pair<uint8_t,
   gameList = ngameList;
 }
 
+
 typeide_t	GameUIInterface::getNextId()
 {
   static typeide_t	id = 0;
   return (id++);
+}
+
+void GameUIInterface::addListEntity(std::vector<Entity *> listentity) {
+  for (int i = 0; listentity[i] ; i++)
+  {
+   auto item =  window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listentity[i]->getTypeid()], listentity[i]->getPos().first, listentity[i]->getPos().second);
+    gameItem[listentity[i]->getId()] = item;
+  }
+}
+
+void GameUIInterface::addEntity(Entity *listEntity) {
+  auto item =  window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()], listEntity->getPos().first, listEntity->getPos().second);
+  gameItem[listEntity->getId()] = item;
+}
+
+void GameUIInterface::updateListEntity(std::vector<Entity *> listentity) {
+  for (int i = 0; listentity[i] ; i++)
+  {
+    gameItem[listentity[i]->getId()]->setPosition(listentity[i]->getPos().first, listentity[i]->getPos().second);
+  }
+}
+
+void GameUIInterface::updateEntity(Entity *entity) {
+  gameItem[entity->getId()]->setPosition(entity->getPos().first, entity->getPos().second);
+}
+
+void GameUIInterface::deleteListEntity(std::vector<Entity *> listentity) {
+  for (int i = 0; listentity[i] ; i++)
+  {
+    //TODO à rajouter delete item UI
+    gameItem.erase(listentity[i]->getId());
+  }
+}
+
+void GameUIInterface::deleteEntity(Entity *entity) {
+        //TODO à rajouter delete item UI
+        gameItem.erase(entity->getId());
 }

@@ -1,14 +1,16 @@
 #include <thread>
 #include <unistd.h>
 #include "GameClient.hh"
+#include "AMenu.hh"
 
 using  namespace client;
 
 int main()
 {
   GameClient toto;
-  toto.gameLoop();
-    
+ toto.gameLoop();
+
+ //   AMenu lolo("config/menuTest.json");
     /*
   unsigned long item;
   
