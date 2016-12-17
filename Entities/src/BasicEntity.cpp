@@ -48,3 +48,7 @@ EntityInitialization * BasicEntity::initialize()
 damage_t BasicEntity::getDamage() {
     return 0;
 }
+
+bool BasicEntity::collideWith(const Entity &entity) {
+    return this->data->getTeam() != entity.data.getTeam();
+}

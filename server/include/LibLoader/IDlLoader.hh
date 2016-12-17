@@ -1,7 +1,7 @@
 #pragma once
 
 
-#define DLL_FUN_NAME "create_entity"
+#define DLL_FUN_NAME "getInstance"
 #ifdef WIN32
 #define DLL_EXTENSION ""
 #else

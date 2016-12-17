@@ -93,7 +93,8 @@ void server::Core::run()
         mutex.unlock();
 
         if (sw->ellapsedMs() < ROUND_DURATION_MS)
-            usleep((ROUND_DURATION_MS - sw->ellapsedMs()) * 1000);
+//            usleep((ROUND_DURATION_MS - sw->ellapsedMs()) * 1000);  //usleep deprecated, use this_thread::sleep_for instead :)
+            std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - sw->ellapsedMs()));
     }
 }
 

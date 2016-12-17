@@ -67,11 +67,11 @@ void Game::progressLevel()
             Entity * entity = spawn.trigger(entityIdCount);
             if (entity == nullptr)
             {
-                std::cerr << "Game " << gameId << ": failed to create entity " << spawn.dlName << std::endl;
+                ERROR("Game " << gameId << ": failed to create entity " << spawn.dlName << std::endl);
             }
             else
             {
-                std::cout << entity->data.getPosX() << ", " << entity->data.getPosY();
+                INFO("Game " << gameId << ": Adding new entity(" << spawn.dlName << " on: " << entity->data.getPosX() << ", " << entity->data.getPosY());
                 entityIdCount++;
                 entities.push_back(entity);
                 //TODO: send to simulation: spawn
@@ -89,6 +89,11 @@ void Game::checkCollisions()
     {
         for (size_t j = i + 1; j < max; ++j)
         {
+            if (!entities[i]->obj->collideWith(*entities[j]) || entities[j]->obj->collideWith(*entities[i]))
+            {
+                continue;
+            }
+
             int dist;
 
             // calculations are based on entities[i]
@@ -330,10 +335,12 @@ void Game::unspawn()
         if ((*it)->data.getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN)
         {
             (*it)->data.setDestroyed(true);
+            INFO("OUT OF RANGE : " << (*it)->data.getId())
             //TODO: send to simulation: destroy
         }
         if ((*it)->data.isDestroyed())
         {
+            INFO("delete entity : " << (*it)->data.getId())
             destroyedEntities.push_back(*it);
             it = vect_erase(it, entities);
         }
@@ -344,9 +351,10 @@ void Game::unspawn()
 }
 
 void Game::newPlayer(Client *client) {
+    INFO("Adding player from " << client->getClientId())
     if (clientList.size() == 4)
     {
-        std::cout << "maximum number of players reached" << std::endl;
+        WARN("maximum number of players reached");
         return;
     }
     Controller *controller = new Controller();

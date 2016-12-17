@@ -19,6 +19,10 @@ public:
         this->thread = new std::thread(c, p);
     }
 
+    virtual ~Thread() {
+        delete (thread);
+    }
+
     bool joinable() override {
         return thread->joinable();
     }

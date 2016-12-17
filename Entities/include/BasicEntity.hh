@@ -22,6 +22,8 @@ public:
 
     server::damage_t getDamage() override;
 
+    bool collideWith(const server::Entity &entity) override;
+
 private:
     bool destroyed;
 };

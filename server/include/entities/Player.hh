@@ -23,6 +23,7 @@ namespace server
         bool mustDestroy;
         speed_t vectX;
         speed_t vectY;
+        int newHp;
 
     public:
 
@@ -30,6 +31,7 @@ namespace server
         void shoot(attackId_t attackId) override;
         void move(speed_t vectX, speed_t vectY) override;
 
+        bool collideWith(const Entity &entity) override;
 
         void collide(const Entity &entity) override;
         EntityAction *nextAction() override;
@@ -47,6 +49,8 @@ namespace server
             damage_t getDamage() override;
 
             MagicMissile(pos_t posX, pos_t posY);
+
+            bool collideWith(const Entity &entity) override;
 
         private:
             bool mustDestroy;

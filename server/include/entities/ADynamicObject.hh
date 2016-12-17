@@ -46,6 +46,8 @@ namespace server
          */
         virtual damage_t getDamage() = 0;
 
+        virtual bool collideWith(const Entity &) = 0;
+
         const EntityData * data;
     };
 }
