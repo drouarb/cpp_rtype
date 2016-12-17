@@ -24,7 +24,7 @@ namespace client {
         std::map<typeide_t, std::string> typeEntity;
         std::vector<std::pair<uint8_t, uint16_t> > gameList;
         std::vector<std::pair<uint32_t, std::string> > leaderBoard;
-        std::map<ide_t, UI::AItem *> gameItem;
+        std::map<Entity*, UI::AItem *> gameItem;
         std::vector<Menu*> listMenu;
         UI::UIManager managerUi;
         UI::IWindow *window;
@@ -49,7 +49,7 @@ namespace client {
 
         void addEntity(Entity *listEntity);
 
-        void updateListEntity(std::vector<Entity *> listentity);
+        void updateListEntity();
 
         void updateEntity(Entity *entity);
 
