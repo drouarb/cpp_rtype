@@ -44,6 +44,8 @@ void client::GameClient::deleteNetworkManager()
 void	GameClient::gameLoop()
 {
   short	event;
+  std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
+  
   while (1)
     {
       gameui->displaySimple();

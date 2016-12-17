@@ -12,6 +12,7 @@
 #include "NetworkManager.hh"
 #include "GameUIInterface.hh"
 #include "Definitions.hh"
+#include "Machine.hpp"
 
 #define TICKRATE 60
 #define TICKRATEDIFFCONST 0.1
