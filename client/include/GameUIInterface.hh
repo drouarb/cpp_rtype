@@ -5,12 +5,18 @@
 #ifndef GAMEUIINTERFACE_HH_
 # define GAMEUIINTERFACE_HH_
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
 #include <string>
 #include <map>
 #include "Definitions.hh"
 #include "Entity.hh"
 #include "IEventHandler.hh"
 #include "UI/UIManager.hh"
+#include "Menu.hh"
+
+using namespace boost::property_tree;
 
 namespace client {
     class GameUIInterface {
@@ -19,6 +25,7 @@ namespace client {
         std::vector<std::pair<uint8_t, uint16_t> > gameList;
         std::vector<std::pair<uint32_t, std::string> > leaderBoard;
         std::map<ide_t, UI::AItem *> gameItem;
+        std::vector<Menu*> listMenu;
         UI::UIManager managerUi;
         UI::IWindow *window;
     private:
@@ -50,6 +57,7 @@ namespace client {
 
         void deleteEntity(Entity *entity);
 
+        void addMenu(const std::string &path);
     private:
         typeide_t getNextId();
     };

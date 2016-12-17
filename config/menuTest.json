@@ -1,12 +1,12 @@
 {
   "Name": "MenuStart",
-  "Layer": "MENU",
   "Default_Visibility": 1,
   "Buttons": [
     {
       "buttons_name": "Play",
-      "selected": "play.png",
-      "noselected": "play2.png",
+      "selected": "play2.png",
+      "noselected": "play.png",
+      "default_selected" : 1,
       "position": [
         {
           "x": 250,
@@ -16,8 +16,9 @@
     },
     {
       "buttons_name": "Settings",
-      "selected": "setting.png",
-      "noselected": "setting2.png",
+      "selected": "setting2.png",
+      "noselected": "setting.png",
+      "default_selected" : 0,
       "position": [
         {
           "x": 250,
@@ -27,8 +28,9 @@
     },
     {
       "buttons_name": "Crédit",
-      "selected": "credit.png",
-      "noselected": "credit2.png",
+      "selected": "credit2.png",
+      "noselected": "credit.png",
+      "default_selected" : 0,
       "position": [
         {
           "x": 250,
@@ -38,8 +40,9 @@
     },
     {
       "buttons_name": "Quit",
-      "selected": "quit.png",
-      "noselected": "quit2.png",
+      "selected": "quit2.png",
+      "noselected": "quit.png",
+      "default_selected" : 0,
       "position": [
         {
           "x": 250,

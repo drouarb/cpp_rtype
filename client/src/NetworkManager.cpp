@@ -163,8 +163,8 @@ void NetworkManager::sendQuit() {
     packetFactory->send(quit);
 }
 
-void NetworkManager::sendPlayerMove(uint32_t tick, uint16_t vect_x, uint16_t vect_y) {
-    network::packet::PacketPlayerMove playerMove(tick, vect_x, vect_y);
+void NetworkManager::sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y) {
+    network::packet::PacketPlayerMove playerMove(tick, vect_x, vect_y, pos_x, pos_y);
     packetFactory->send(playerMove);
 }
 

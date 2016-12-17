@@ -2,6 +2,7 @@
 ** trouve_b
 */
 
+#include <iostream>
 #include "GameUIInterface.hh"
 
 using namespace client;
@@ -20,6 +21,7 @@ GameUIInterface::~GameUIInterface()
 void		GameUIInterface::initUI()
 {
   window = managerUi.getWindow(UI::MAIN_WINDOW);
+    addMenu("config/menuTest.json");
 }
 
 void		GameUIInterface::displaySimple()
@@ -74,7 +76,7 @@ void GameUIInterface::addEntity(Entity *listEntity) {
   gameItem[listEntity->getId()] = item;
 }
 
-void GameUIInterface::updateListEntity(std::vector<Entity *> listentity) {
+void GameUIInterface::updateListEntity(std::vector<Entity *> listentity) { //TODO changer facon de faire
   for (int i = 0; listentity[i] ; i++)
   {
     gameItem[listentity[i]->getId()]->setPosition(listentity[i]->getPos().first, listentity[i]->getPos().second);
@@ -88,12 +90,33 @@ void GameUIInterface::updateEntity(Entity *entity) {
 void GameUIInterface::deleteListEntity(std::vector<Entity *> listentity) {
   for (int i = 0; listentity[i] ; i++)
   {
-    //TODO à rajouter delete item UI
+    window->deleteItem(gameItem[listentity[i]->getId()]);
     gameItem.erase(listentity[i]->getId());
   }
 }
 
 void GameUIInterface::deleteEntity(Entity *entity) {
-        //TODO à rajouter delete item UI
+  window->deleteItem(gameItem[entity->getId()]);
         gameItem.erase(entity->getId());
+}
+
+void GameUIInterface::addMenu(const std::string &path) {
+  ptree root;
+  read_json(path, root);
+  Menu *temp = new Menu;
+  std::cout << root.get_child("Name").get_value<std::string>() << std::endl;
+    unsigned long id = window->addLayer(UI::MENU);
+    temp->setLayer_id(id);
+  std::cout << root.get_child("Default_Visibility").get_value<int>() << std::endl;
+  BOOST_FOREACH(ptree::value_type
+                        child, root.get_child("Buttons")) {
+                std::cout <<  child.second.get<std::string>("selected") << std::endl;
+                  std::cout <<  child.second.get<std::string>("noselected") << std::endl;
+                  std::cout <<  child.second.get<int>("default_selected") << std::endl;
+                  BOOST_FOREACH(const ptree::value_type &child2,
+                                child.second.get_child("position")) {
+                                  std::cout <<  child2.second.get<int>("x") << std::endl;
+                                  std::cout <<  child2.second.get<int>("y") << std::endl;
+                              }
+        }
 }

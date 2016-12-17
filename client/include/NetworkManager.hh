@@ -66,7 +66,7 @@ namespace client {
 
         void sendQuit();
         
-        void sendPlayerMove(uint32_t tick , uint16_t vect_x , uint16_t vect_y);
+        void sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y);
 
         void sendPlayerAttack(int32_t tick, uint8_t attackId);
     };
