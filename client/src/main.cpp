@@ -7,10 +7,10 @@ using  namespace client;
 
 int main()
 {
-  GameClient toto;
- toto.gameLoop();
+  //GameClient toto;
+ //toto.gameLoop();
 
- //   AMenu lolo("config/menuTest.json");
+   AMenu lolo("config/menuTest.json");
     /*
   unsigned long item;
   
