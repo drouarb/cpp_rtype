@@ -5,10 +5,12 @@
 #ifndef CPP_RTYPE_PACKETFACTORYDATALISTENER_HH
 #define CPP_RTYPE_PACKETFACTORYDATALISTENER_HH
 
-#include <network/PacketFactory.hh>
+#include <cstdint>
 #include "ISocketDataListener.hh"
 
 namespace network {
+    class PacketFactory;
+
     namespace listener {
         class PacketFactoryDataListener: public ISocketDataListener {
         public:

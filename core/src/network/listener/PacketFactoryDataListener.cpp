@@ -3,6 +3,7 @@
 //
 
 #include "network/listener/PacketFactoryDataListener.hh"
+#include <network/PacketFactory.hh>
 
 network::listener::PacketFactoryDataListener::PacketFactoryDataListener(const network::PacketFactory &pf): pf(pf) {
 }
