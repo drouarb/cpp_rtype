@@ -13,12 +13,12 @@
 class Projectile : public IDamager, public server::IEntity
 {
 private:
-    server::damage_t damage;
+    server::hp_t damage;
     unsigned int nbHits;
 public:
     Projectile(const server::entityId_t entityId);
 
-    server::damage_t getDamage();
+    server::hp_t getDamage();
     void collide(server::IEntity *);
 
     server::EntityAction *nextAction();

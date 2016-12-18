@@ -45,7 +45,7 @@ EntityInitialization * BasicEntity::initialize()
     return initialization;
 }
 
-damage_t BasicEntity::getDamage() {
+hp_t BasicEntity::getDamage() {
     return 0;
 }
 

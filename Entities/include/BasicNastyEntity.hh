@@ -27,7 +27,7 @@ private:
         bool collideWith(const server::Entity &entity) override;
 
     private:
-        server::damage_t getDamage() override;
+        server::hp_t getDamage() override;
 
         server::speed_t posX;
         server::speed_t posY;
@@ -54,7 +54,7 @@ public:
     server::EntityAction *nextAction() override ;
     server::EntityInitialization *initialize() override ;
 
-    server::damage_t getDamage() override;
+    server::hp_t getDamage() override;
 };
 
 

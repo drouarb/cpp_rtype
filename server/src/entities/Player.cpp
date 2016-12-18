@@ -55,6 +55,7 @@ EntityInitialization *Player::initialize() {
     ei->posY = FIELD_HEIGHT / 2;
     ei->sprite.sizeX = 100;
     ei->sprite.sizeY = 100;
+    ei->sprite.path = "media/references/5af.png";
 
     this->newHp = DEFAULT_LIFE;
     return (ei);
@@ -104,6 +105,7 @@ EntityInitialization *Player::MagicMissile::initialize() {
     initialization->team = server::Team::PLAYER;
     initialization->sprite.sizeX = 10;
     initialization->sprite.sizeY = 10;
+    initialization->sprite.path = "media/references/109.gif";
     return initialization;
 }
 

@@ -10,7 +10,7 @@
 class IDamager {
 
 public:
-    virtual server::damage_t getDamage()= 0;
+    virtual server::hp_t getDamage()= 0;
 
 };
 

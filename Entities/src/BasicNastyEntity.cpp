@@ -54,12 +54,13 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     initialization->action.speedY = 0;
     initialization->sprite.sizeX = 100;
     initialization->sprite.sizeY = 100;
+    initialization->sprite.path = "media/references/ALL_GONE.jpg";
 
     INFO("I'm the vilain nasty player: ");
     return initialization;//TODO Add sprite
 }
 
-server::damage_t BasicNastyEntity::getDamage() {
+server::hp_t BasicNastyEntity::getDamage() {
     return NASTY_COLLISION_DAMAGE;
 }
 
@@ -94,10 +95,11 @@ server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(
     initialization->team = server::Team::FOE;
     initialization->sprite.sizeX = 40;
     initialization->sprite.sizeY = 40;
+    initialization->sprite.path = "media/references/bf_110_br_schrodyus-d5u1r3c.gif";
     return initialization;
 }
 
-server::damage_t BasicNastyEntity::VeryNastyProjectile::getDamage() {
+server::hp_t BasicNastyEntity::VeryNastyProjectile::getDamage() {
     return NASTY_DAMAGE;
 }
 
