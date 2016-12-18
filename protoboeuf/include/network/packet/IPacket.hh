@@ -34,7 +34,7 @@ namespace network {
             JOIN                    = 0x21,
             QUIT                    = 0x22,
 	    PLAYER_DATA             = 0x23,
-            SYNCHRONISATION         = 0x24,
+            SYNCHRONIZATION         = 0x24,
 
             EVENT_ERROR             = 0x30,
             CANCEL_EVENT            = 0x31,
