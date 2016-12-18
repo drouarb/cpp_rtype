@@ -14,7 +14,7 @@
 #include "ProjTester.hpp"
 
 
-static const int test_duration = 1000;
+static const int test_duration = 100;
 
 void run(CoreTest *coreTest) {
     coreTest->run();
@@ -53,7 +53,7 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     try {
         join->notify(packetJoin);
         playerMove->notify(packetPlayerMove);
-//        playerAttack->notify(packetPlayerAttack);
+        playerAttack->notify(packetPlayerAttack);
         assert(true);
     }catch (std::logic_error &e) {
         std::cerr << e.what() << std::endl;

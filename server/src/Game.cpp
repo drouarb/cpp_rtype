@@ -96,7 +96,7 @@ void Game::checkCollisions()
     {
         for (size_t j = i + 1; j < max; ++j)
         {
-            if (!entities[i]->obj->collideWith(*entities[j]) || entities[j]->obj->collideWith(*entities[i]))
+            if (!(entities[i]->obj->collideWith(*entities[j]) || entities[j]->obj->collideWith(*entities[i])))
             {
                 continue;
             }

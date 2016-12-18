@@ -24,7 +24,7 @@ void BasicNastyEntity::collide(const server::Entity &entity) {
 }
 
 server::EntityAction *BasicNastyEntity::nextAction() {
-    INFO("Next action NastyEntity (hp: " << this->data->getHp() << ")")
+    INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ")")
     server::EntityAction * a;
     if (this->notifyCollision) {
         a = this->notifyCollision;
@@ -32,7 +32,7 @@ server::EntityAction *BasicNastyEntity::nextAction() {
     } else {
         a = new server::EntityAction();
         a->destroy = false;
-        a->speedX = this->data->getVectX() - 1;
+        a->speedX = this->data->getVectX();
         a->hp = this->data->getHp();
     }
 
@@ -50,6 +50,10 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     server::EntityInitialization *initialization = new server::EntityInitialization("");
     initialization->action.hp = DEFAULT_HP;
     initialization->team = server::Team::FOE;
+    initialization->action.speedX = 1;
+    initialization->action.speedY = 0;
+    initialization->sprite.sizeX = 100;
+    initialization->sprite.sizeY = 100;
 
     INFO("I'm the vilain nasty player: ");
     return initialization;//TODO Add sprite
@@ -88,6 +92,8 @@ server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(
     initialization->action.speedX = -3;
     initialization->action.speedY = 0;
     initialization->team = server::Team::FOE;
+    initialization->sprite.sizeX = 40;
+    initialization->sprite.sizeY = 40;
     return initialization;
 }
 

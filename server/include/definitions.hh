@@ -13,10 +13,10 @@ namespace server {
 
     enum Team : unsigned int
     {
-        NA      = 0,    //not applicable (non-actor entities)
-        PLAYER  = 1,    //players' team
-        FOE     = 2     //default team for enemies
-        // Other values greater than 2 may be used in the dynamic libraries. The server is not concerned by them.
+        NA      = 0,    //!not applicable (non-actor entities)
+        PLAYER  = 1,    //!players' team
+        FOE     = 2     //!default team for enemies
+        //! Other values greater than 2 may be used in the dynamic libraries. The server is not concerned by them.
     };
 
 
@@ -40,7 +40,7 @@ namespace server {
 
 #ifdef LOG_INFO
 #define ERROR(expr) std::cerr << expr << std::endl;
-#define WARN(expr) std::cerr << expr << std::endl;
+#define WARN(expr) std::cout << "---- WARN ----- " << expr << std::endl;
 #define INFO(expr) std::cout << "---- INFO ----- " << expr << std::endl;
 #elif LOG_ERROR
 #define ERROR(expr) std::cerr << expr << std::endl;

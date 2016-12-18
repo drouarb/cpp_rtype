@@ -101,6 +101,8 @@ EntityInitialization *Player::MagicMissile::initialize() {
     initialization->posX = this->posX;
     initialization->posY = this->posY;
     initialization->team = server::Team::PLAYER;
+    initialization->sprite.sizeX = 10;
+    initialization->sprite.sizeY = 10;
     return initialization;
 }
 
