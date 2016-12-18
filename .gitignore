@@ -77,3 +77,6 @@ fabric.properties
 
 .idea/
 build/
+client/*.sh
+*~
+client/rtype_client
