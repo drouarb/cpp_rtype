@@ -22,7 +22,7 @@ namespace UI {
         void display();
         void deleteItem(AItem* item);
         unsigned long addLayer(UI::layerType layer);
-        ILayer* getLayer(UI::layerType layer);
+        ILayer* getLayer(unsigned long layer);
         sf::RenderWindow *getWindow();
 
     private:

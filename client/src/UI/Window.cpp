@@ -55,7 +55,7 @@ unsigned long UI::Window::addLayer(UI::layerType layer) {
     return layers.size() - 1;
 }
 
-UI::ILayer *UI::Window::getLayer(UI::layerType layer) {
+UI::ILayer *UI::Window::getLayer(unsigned long layer) {
     return layers[layer];
 }
 
