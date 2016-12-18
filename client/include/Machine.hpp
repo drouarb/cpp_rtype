@@ -6,6 +6,7 @@
 # define MACHINE_HPP_
 
 #include "SL.hpp"
+#include "State.hpp"
 
 namespace FSM
 {
@@ -48,7 +49,63 @@ namespace FSM
     
     SL<S, T>		simplifySLs(SL<S, T> sl1, SL<S, T> sl2)
     {
-      SL<S, T>		slfinal;
+      SL<S, T>					slfinal;
+      typename std::map<S, State<S, T> >		tmpMap;
+      typename std::map<S, State<S, T> >::iterator	it;
+
+      tmpMap = sl1.getStates();
+      it = tmpMap.begin();
+      while (it != tmpMap.end())
+	{
+	  State<S, T> newstate;
+	  newstate.setNameId(it->second.getNameId());
+	  std::map<T, S> nexts;
+	  std::map<T, S> itN;
+	  nexts = it->second.getNexts();
+	  itN = nexts.begin();
+	  while (itN != nexts.end())
+	    {
+	      newstate.addNewNext(itN->second, itN->first);
+	      ++itN;
+	    }
+	  typename std::map<S, State<S, T> >::iterator it2 = sl2.getState(it->first);
+	  if (it2 != sl2.nothing())
+	    {
+	      std::map<T, S> nexts2;
+	      std::map<T, S> itN2;
+	      nexts2 = it2->second.getNexts();
+	      itN2 = nexts2.begin();
+	      while (itN2 != nexts2.end())
+		{
+		  newstate.addNewNext(itN2->second, itN2->first);
+		  ++itN2;
+		}
+	    }
+	  slfinal.addNewState(newstate);
+	  ++it;
+	}
+      tmpMap = sl2.getStates();
+      it != tmpMap.begin();
+      while (it != tmpMap.end())
+	{
+	  if (slfinal.getState(it->first) == slfinal.nothing())
+	    {
+	      State<S, T> newstate;
+	      newstate.setNameId(it->second.getNameId());
+	      std::map<T, S> nexts;
+	      std::map<T, S> itN;
+	      nexts = it->second.getNexts();
+	      itN = nexts.begin();
+	      while (itN != nexts.end())
+		{
+		  newstate.addNewNext(itN->second, itN->first);
+		  ++itN;
+		}
+	      slfinal.addNewState(newstate);
+	    }
+	  ++it;
+	}
+      return (slfinal);
     }
     
     Action		takeToken(T token)

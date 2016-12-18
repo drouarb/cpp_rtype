@@ -32,10 +32,10 @@ namespace FSM
       return (nameId);
     }
 
-    void	addNewNext(State<S, T> nstate, T tokenNeeded)
+    void	addNewNext(S nstate, T tokenNeeded)
     {
       if (nextId.find(tokenNeeded) == nextId.end())
-	nextId.insert(std::pair<T, S>(nstate.getNameId, tokenNeeded));
+	nextId.insert(std::pair<T, S>(nstate, tokenNeeded));
     }
 
     S		getNextwithToken(T token)
@@ -45,6 +45,11 @@ namespace FSM
 	  return (nextId.at(token));
 	}
       return (nameId);
+    }
+
+    std::map<T, S>	getNexts()
+    {
+      return (nextId);
     }
     
   };

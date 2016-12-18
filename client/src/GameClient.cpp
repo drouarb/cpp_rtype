@@ -51,7 +51,7 @@ void	GameClient::gameLoop()
   
   while (1)
     {
-      gameui->displaySimple();
+      gameui->updateListEntity();
       event = handler->getEvent();
       if (event != -42)
 	std::cout << event << std::endl;
@@ -136,7 +136,11 @@ void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t en
     }
 }
 
-void GameClient::manageGameData(uint32_t turn, uint64_t time)
+void GameClient::managePlayerData(uint16_t playerId, uint8_t nbAttackPlayer)
+{
+}
+
+void GameClient::manageSyncro(uint32_t turn, uint64_t time)
 {
   if (world == nullptr)
     {
@@ -146,6 +150,10 @@ void GameClient::manageGameData(uint32_t turn, uint64_t time)
     }
   else
     horodatageTick.insert(std::pair<tick, uint64_t>(static_cast<tick>(turn), time));
+}
+
+void GameClient::manageGameData()
+{
 }
 
 void GameClient::manageDisconnect()

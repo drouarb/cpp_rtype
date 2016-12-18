@@ -58,6 +58,11 @@ namespace FSM
     {
       return (States.end());
     }
+
+    std::map<S, State<S, T> >			getStates()
+    {
+      return (States);
+    }
   };
 }
 

@@ -112,6 +112,14 @@ void NetworkManager::receiveLeaderBoard(std::vector<std::pair<uint32_t, std::str
 
 }
 
+void NetworkManager::receiveSyncro(uint32_t tick, int64_t time)
+{
+}
+
+void NetworkManager::receivePlayerData(uint16_t playerId, uint8_t nbAttackPlayer)
+{
+}
+
 void
 NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t vecx, int16_t vecy,
                                   int16_t posx, int16_t posy) {
@@ -173,7 +181,6 @@ void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
     packetFactory->broadcast(packetPlayerAttack);
 }
 
-void NetworkManager::receiveGameData(uint32_t tick, int64_t time) {
-    gameClient->manageGameData(tick, time);
+void NetworkManager::receiveGameData() {
 }
 

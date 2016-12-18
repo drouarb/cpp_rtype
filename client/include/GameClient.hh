@@ -32,6 +32,8 @@ namespace client {
     tick			tickRateClient;
     std::map<tick, uint64_t>	horodatageTick;
     GameUIInterface		*gameui;
+    ide_t			playerId;
+    uint8_t			nbrAttack;
     
   public:
     GameClient();
@@ -55,7 +57,11 @@ namespace client {
     
     void manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
 
-    void manageGameData(uint32_t tick, uint64_t time);
+    void manageSyncro(uint32_t tick, int64_t time);
+
+    void managePlayerData(uint16_t playerId, uint8_t nbAttackPlayer);
+    
+    void manageGameData();
 
     void manageDisconnect();
     
