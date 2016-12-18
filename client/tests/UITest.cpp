@@ -64,5 +64,5 @@ int main()
             lermi = -200;
         eventObserver->getEvent();
     }
-    return 1;
+    return 0;
 }
