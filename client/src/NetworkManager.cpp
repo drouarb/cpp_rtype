@@ -140,37 +140,37 @@ void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16
 void NetworkManager::sendRegister(const std::string &name) {
 
     network::packet::PacketRegister packetRegister(name);
-    packetFactory->send(packetRegister);
+    packetFactory->broadcast(packetRegister);
 }
 
 void NetworkManager::sendDisconnect() {
     network::packet::PacketDisconnect disconnect;
-    packetFactory->send(disconnect);
+    packetFactory->broadcast(disconnect);
 }
 
 void NetworkManager::sendAskList() {
     network::packet::PacketAskList askList;
-    packetFactory->send(askList);
+    packetFactory->broadcast(askList);
 }
 
 void NetworkManager::sendJoin(uint8_t roomId) {
     network::packet::PacketJoin join(roomId);
-    packetFactory->send(join);
+    packetFactory->broadcast(join);
 }
 
 void NetworkManager::sendQuit() {
     network::packet::PacketQuit quit;
-    packetFactory->send(quit);
+    packetFactory->broadcast(quit);
 }
 
 void NetworkManager::sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y) {
     network::packet::PacketPlayerMove playerMove(tick, vect_x, vect_y, pos_x, pos_y);
-    packetFactory->send(playerMove);
+    packetFactory->broadcast(playerMove);
 }
 
 void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
     network::packet::PacketPlayerAttack packetPlayerAttack(tick, attackId);
-    packetFactory->send(packetPlayerAttack);
+    packetFactory->broadcast(packetPlayerAttack);
 }
 
 void NetworkManager::receiveGameData(uint32_t tick, int64_t time) {
