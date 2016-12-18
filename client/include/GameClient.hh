@@ -27,7 +27,7 @@ namespace client {
   private:
     World			*world;
     EventManager		*handler;
-    std::mutex			client_mut;
+    std::mutex			*client_mut;
     NetworkManager		*manager;
     tick			tickRateClient;
     std::map<tick, uint64_t>	horodatageTick;

@@ -43,12 +43,13 @@ namespace client
   class World
   {
   private:
+      std::mutex *world_mut;
     tick					turn;	
     std::map<ide_t, Entity*>			entitys;
     std::vector<std::pair<UIevent_t, pos_t> >	UIevents;
     std::map<tick, WorldEvent>			worldEvents;
   public:
-    World();
+    World(std::mutex *mmut);
     ~World();
     void					spawnEntity(ide_t, pos_t, typeide_t, UIevent_t, tick);
     void					moveEntity(vec_t, pos_t, tick, ide_t, UIevent_t);

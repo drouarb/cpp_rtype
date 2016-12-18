@@ -39,7 +39,7 @@ NetworkManager::NetworkManager(const std::string &ip, unsigned short port, GameC
     {
         this->packetFactory =  new network::PacketFactory(ip, port);
     }
-    catch (std::runtime_error & e)
+    catch (std::exception & e)
     {
         this->packetFactory = nullptr;
         std::cerr << e.what() << std::endl;
@@ -61,6 +61,7 @@ bool NetworkManager::startPacketFactory()
     }
     catch (std::exception & e)
     {
+        std::cout << "packet factory not running" << std::endl;
         throw (new std::runtime_error(e.what()));
     }
     return true;

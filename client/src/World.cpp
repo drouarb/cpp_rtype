@@ -2,12 +2,14 @@
 ** trouve_b
 */
 
+#include <mutex>
 #include "World.hh"
 
 using namespace client;
 
-World::World()
+World::World(std::mutex *mmut)
 {
+    world_mut = mmut;
 }
 
 World::~World()
@@ -24,22 +26,30 @@ World::~World()
 
 void	World::spawnEntity(ide_t nid, pos_t pos, typeide_t idtype, UIevent_t nevent, tick nturn)
 {
+    world_mut->lock();
   worldEvents.insert(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, pos, idtype, nturn, nevent)));
+    world_mut->unlock();
 }
 
 void	World::moveEntity(vec_t vec, pos_t pos, tick nturn, ide_t nid, UIevent_t nevent)
 {
+    world_mut->lock();
   worldEvents.insert(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, vec, pos, nturn, nevent)));
+    world_mut->unlock();
 }
 
 void	World::updateEntity(int hp, tick nturn, ide_t nid, UIevent_t nevent)
 {
+    world_mut->lock();
   worldEvents.insert(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, hp, nturn, nevent)));
+    world_mut->unlock();
 }
 
 void	World::deleteEntity(ide_t nid, tick nturn, UIevent_t nevent)
 {
+    world_mut->lock();
   worldEvents.insert(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, nturn, nevent)));
+    world_mut->unlock();
 }
 
 tick	World::getTick() const

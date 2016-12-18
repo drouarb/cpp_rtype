@@ -22,7 +22,7 @@ using namespace boost::property_tree;
 namespace client {
     class GameUIInterface {
     private:
-        std::mutex ui_mut;
+        std::mutex *ui_mut;
         std::map<typeide_t, std::string> typeEntity;
         std::vector<std::pair<uint8_t, uint16_t> > gameList;
         std::vector<std::pair<uint32_t, std::string> > leaderBoard;
@@ -33,7 +33,7 @@ namespace client {
     private:
         GameUIInterface() {};
     public:
-        GameUIInterface(IEventHandler *);
+        GameUIInterface(IEventHandler *, std::mutex *mut);
 
         ~GameUIInterface();
 

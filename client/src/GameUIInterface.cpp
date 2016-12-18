@@ -7,10 +7,12 @@
 
 using namespace client;
 
-GameUIInterface::GameUIInterface(IEventHandler *handler) {
+GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     managerUi.init(1920, 1020);
     managerUi.getEventObserver()->setEventManager(handler);
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
+    ui_mut = mut;
+
 }
 
 GameUIInterface::~GameUIInterface() {
@@ -18,7 +20,7 @@ GameUIInterface::~GameUIInterface() {
 
 void GameUIInterface::initUI() {
     window = managerUi.getWindow(UI::MAIN_WINDOW);
-    addMenu("config/menuStart.json");
+   // addMenu("config/menuStart.json");
 }
 
 void GameUIInterface::displaySimple() {
@@ -55,39 +57,52 @@ typeide_t GameUIInterface::getNextId() {
 }
 
 void GameUIInterface::addListEntity(std::vector<Entity *> listentity) {
+    ui_mut->lock();
     for (int i = 0; listentity[i]; i++) {
         auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listentity[i]->getTypeid()],
                                                         listentity[i]->getPos().first, listentity[i]->getPos().second);
         gameItem[listentity[i]] = item;
     }
+    ui_mut->unlock();
 }
 
 void GameUIInterface::addEntity(Entity *listEntity) {
+    ui_mut->lock();
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
     gameItem[listEntity] = item;
+    ui_mut->unlock();
 }
 
 void GameUIInterface::updateListEntity() {
+    ui_mut->lock();
     for (auto it = gameItem.begin(); it != gameItem.end(); it++) {
+
         it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
     }
+    ui_mut->unlock();
 }
 
 void GameUIInterface::updateEntity(Entity *entity) {
+    ui_mut->lock();
     gameItem[entity]->setPosition(entity->getPos().first, entity->getPos().second);
+    ui_mut->unlock();
 }
 
 void GameUIInterface::deleteListEntity(std::vector<Entity *> listentity) {
+    ui_mut->lock();
     for (int i = 0; listentity[i]; i++) {
         window->deleteItem(gameItem[listentity[i]]);
         gameItem.erase(listentity[i]);
     }
+    ui_mut->unlock();
 }
 
 void GameUIInterface::deleteEntity(Entity *entity) {
+    ui_mut->lock();
     window->deleteItem(gameItem[entity]);
     gameItem.erase(entity);
+    ui_mut->unlock();
 }
 
 void GameUIInterface::addMenu(const std::string &path) {

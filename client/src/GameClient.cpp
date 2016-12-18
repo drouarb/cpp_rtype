@@ -16,7 +16,8 @@ client::GameClient::GameClient()
   manager = nullptr;
   tickRateClient = 0;
   world = nullptr;
-  gameui = new GameUIInterface(handler);
+    client_mut = new std::mutex;
+  gameui = new GameUIInterface(handler, client_mut);
   gameui->initUI();
 }
 
@@ -31,7 +32,7 @@ void client::GameClient::createNetworkManager(const std::string &ip, unsigned sh
     catch (std::runtime_error &e)
     {
         manager = nullptr;
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.what()  << std::endl;
     }
 }
 
@@ -53,6 +54,7 @@ void	GameClient::gameLoop()
     {
       gameui->updateListEntity();
       event = handler->getEvent();
+        gameui->displaySimple();
       if (event != -42)
 	std::cout << event << std::endl;
     }
@@ -144,7 +146,7 @@ void GameClient::manageSyncro(uint32_t turn, int64_t time)
 {
   if (world == nullptr)
     {
-      world = new World();
+      world = new World(client_mut);
       horodatageTick.insert(std::pair<tick, uint64_t>(static_cast<tick>(turn), time));
       tickRateClient = TICKRATE;
     }
