@@ -3,6 +3,7 @@
 
 #include "Level.hh"
 #include "Client.hh"
+#include "network/PacketFactory.hh"
 #include <list>
 #include <events/AGameEvent.hh>
 
@@ -11,8 +12,8 @@ namespace server
     class Game
     {
     public:
-        Game(int lobbyId);
-        Game(int lobbyId, const Level &);
+        Game(network::PacketFactory & packetf, int lobbyId);
+        Game(network::PacketFactory & packetf, int lobbyId, const Level &);
         ~Game();
 
         bool operator==(const Game & other);
@@ -27,6 +28,7 @@ namespace server
         uint16_t getClientSize();
 
     private:
+        network::PacketFactory & packetf;
         std::list<Client *> clientList;
         const Level * lvl;
         std::vector<Entity*> entities;
@@ -64,10 +66,6 @@ namespace server
          */
         void unspawn();
         
-        pos_t fx(int);
-        pos_t fxp(int);
-        pos_t fy(int);
-        pos_t fyp(int);
         pos_t fx(size_t);
         pos_t fxp(size_t);
         pos_t fy(size_t);
@@ -93,6 +91,8 @@ namespace server
          * Sends data for this round to the clients.
          */
         void sendData();
+
+        void greetNewPlayer(const Client &);
     };
 }
 

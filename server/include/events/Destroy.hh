@@ -18,6 +18,8 @@ namespace server {
             entityId_t getEntityId() override;
 
             EventType getEventType() override;
+
+            network::packet::IPacket *createPacket();
         };
     }
 }

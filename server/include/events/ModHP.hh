@@ -11,15 +11,17 @@ namespace server {
     namespace event {
         class ModHP : public AGameEvent {
         private:
-            const int diff;
+            const int hp;
         public:
-            ModHP(const server::round_t tick, const server::entityId_t entityId, const int diff);
+            ModHP(const server::round_t tick, const server::entityId_t entityId, const int hp);
 
             IGameEvent *getParentEvent() override;
 
             entityId_t getEntityId() override;
 
             EventType getEventType() override;
+
+            network::packet::IPacket *createPacket();
         };
     }
 }

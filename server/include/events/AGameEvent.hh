@@ -15,16 +15,17 @@ namespace server {
         protected:
             const round_t tick;
             const entityId_t entityId;
+            eventId_t eventId;
+
+            static eventId_t lastId;
 
         public:
             AGameEvent(const round_t tick, const entityId_t entityId);
-            network::packet::IPacket *createPacket();
+            virtual network::packet::IPacket *createPacket() = 0;
 
             friend std::ostream &operator<<(std::ostream &os, const AGameEvent &event);
         };
         std::ostream &operator<<(std::ostream &os, const AGameEvent &event);
-
-
     }
 }
 

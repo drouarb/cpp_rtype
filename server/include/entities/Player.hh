@@ -37,7 +37,7 @@ namespace server
         void collide(const Entity &entity) override;
         EntityAction *nextAction() override;
         EntityInitialization * initialize() override;
-        damage_t getDamage() override;
+        hp_t getDamage() override;
 
         class MagicMissile : public ADynamicObject {
         public:
@@ -47,7 +47,7 @@ namespace server
 
             EntityInitialization *initialize() override;
 
-            damage_t getDamage() override;
+            hp_t getDamage() override;
 
             MagicMissile(pos_t posX, pos_t posY);
 

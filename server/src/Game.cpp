@@ -5,14 +5,16 @@
 #include <events/Move.hh>
 #include <events/ModHP.hh>
 #include <events/Destroy.hh>
+#include <network/packet/PacketSpawnEntity.hh>
+#include <network/packet/PacketMoveEntity.hh>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game(int lobbyId) : lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0)
 { }
 
-Game::Game(int lobbyId, const Level & lvl) : lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0)
 { }
 
 Game::~Game()
@@ -322,14 +324,14 @@ void Game::moveEntities()
         entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
         std::cout << "player " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
         //TODO: do this in checkCollisions, by creating entities of the player team, located on the borders?
-        if (entity->data.getPosY() > FIELD_HEIGHT)
+        /*if (entity->data.getPosY() > FIELD_HEIGHT)
             entity->data.setPosY(FIELD_HEIGHT);
         if (entity->data.getPosY() < 0)
             entity->data.setPosY(0);
         if (entity->data.getPosX() < FIELD_BORDER_LEFT - LEFT_MARGIN)
             entity->data.setPosX(FIELD_BORDER_LEFT - LEFT_MARGIN);
         if (entity->data.getPosX() > FIELD_BORDER_RIGHT + RIGHT_MARGIN)
-            entity->data.setPosX(FIELD_BORDER_RIGHT + RIGHT_MARGIN);
+            entity->data.setPosX(FIELD_BORDER_RIGHT + RIGHT_MARGIN);*/
     }
 }
 
@@ -373,6 +375,7 @@ void Game::newPlayer(Client *client) {
     client->setController(controller);
     this->entities.push_back(entity);
     this->sim_spawn(entity);
+    greetNewPlayer(*client);
 }
 
 void Game::removePlayer(Client *client) {
@@ -416,26 +419,6 @@ std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator
     return (it);
 }
 
-pos_t Game::fx(int i)
-{
-    return (entities[i]->data.getPosX() + entities[i]->data.getVectX());
-}
-
-pos_t Game::fy(int i)
-{
-    return (entities[i]->data.getPosY() + entities[i]->data.getVectY());
-}
-
-pos_t Game::fxp(int i)
-{
-    return (entities[i]->data.getPosX() + entities[i]->data.getSprite().sizeX + entities[i]->data.getVectX());
-}
-
-pos_t Game::fyp(int i)
-{
-    return (entities[i]->data.getPosY() + entities[i]->data.getSprite().sizeY + entities[i]->data.getVectY());
-}
-
 pos_t Game::fx(size_t i)
 {
     return (entities[i]->data.getPosX() + entities[i]->data.getVectX());
@@ -458,12 +441,21 @@ pos_t Game::fyp(size_t i)
 
 void Game::sendData() {
     INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
+    for (auto & event : gameEvents)
+    {
+        auto packet = event->createPacket();
+        for (auto & client : clientList)
+        {
+            packetf.send(*packet, client->getClientId());
+        }
+        delete packet;
+    }
     this->gameEvents.clear();
 }
 
 void Game::sim_spawn(Entity *entity) {
-    this->gameEvents.push_back(new server::event::Spawn(this->round, entity->data.getId(), entity->data.getPosX(),
-                                              entity->data.getPosY()));
+    this->gameEvents.push_back(new server::event::Spawn
+                                       (this->round, entity->data.getId(), entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
 }
 
 void Game::sim_move(Entity *entity) {
@@ -482,4 +474,36 @@ void Game::sim_destroy(Entity *entity) {
 
 uint16_t Game::getClientSize() {
     return this->clientList.size();
+}
+
+void Game::greetNewPlayer(const Client & client)
+{
+    //TODO
+    //this is temporary
+    //do this correctly when the simulation is done
+
+    int id = 0;
+    for (auto entity : entities)
+    {
+        auto pspawn = new network::packet::PacketSpawnEntity();
+        pspawn->setTick(round);
+        pspawn->setEventId(id);
+        pspawn->setEntityId(entity->data.getId());
+        pspawn->setHp(entity->data.getHp());
+        packetf.send(*pspawn, client.getClientId());
+        delete pspawn;
+        ++id;
+
+        auto pmove = new network::packet::PacketMoveEntity();
+        pmove->setTick(round);
+        pmove->setEventId(id);
+        pmove->setEntityId(entity->data.getId());
+        pmove->setPosX(entity->data.getPosX());
+        pmove->setPosY(entity->data.getPosY());
+        pmove->setVecX(entity->data.getVectX());
+        pmove->setVecY(entity->data.getVectY());
+        packetf.send(*pmove, client.getClientId());
+        delete pmove;
+        ++id;
+    }
 }

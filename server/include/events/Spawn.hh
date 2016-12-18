@@ -15,9 +15,11 @@ namespace server {
 
             const pos_t posX;
             const pos_t posY;
+            const int hp;
+            const std::string sprite;
 
         public:
-            Spawn(const round_t tick, const entityId_t entityId, pos_t posX, pos_t posY);
+            Spawn(const round_t tick, const entityId_t entityId, pos_t posX, pos_t posY, int hp, const std::string & sprite);
 
             IGameEvent *getParentEvent() override;
 
@@ -25,6 +27,7 @@ namespace server {
 
             EventType getEventType() override;
 
+            network::packet::IPacket *createPacket();
         };
 
 

@@ -47,7 +47,7 @@ namespace server
 
         void setVectY(speed_t vectY);
 
-        int getHp() const;
+        hp_t getHp() const;
 
         void setHp(int hp);
 
@@ -63,7 +63,7 @@ namespace server
         pos_t posY;
         speed_t vectX;
         speed_t vectY;
-        int hp;
+        hp_t hp;
         bool destroyed;
     };
 }

@@ -23,7 +23,7 @@ namespace server {
         ADynamicObject *newEntity;
         speed_t speedX;
         speed_t speedY;
-        int hp;
+        hp_t hp;
 
         EntityAction();
     };

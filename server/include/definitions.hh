@@ -23,11 +23,12 @@ namespace server {
     typedef uint32_t round_t;
     typedef float pos_t;
     typedef float speed_t;
-    typedef int32_t damage_t;
+    typedef int16_t hp_t;
     typedef uint8_t attackId_t;
     typedef unsigned long clientId_t;
     typedef int gameId_t;
     typedef uint32_t entityId_t;
+    typedef uint32_t eventId_t;
 }
 
 #define FIELD_WIDTH 800

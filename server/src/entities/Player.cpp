@@ -60,7 +60,7 @@ EntityInitialization *Player::initialize() {
     return (ei);
 }
 
-damage_t Player::getDamage() {
+hp_t Player::getDamage() {
     return (0);
 }
 
@@ -104,7 +104,7 @@ EntityInitialization *Player::MagicMissile::initialize() {
     return initialization;
 }
 
-damage_t Player::MagicMissile::getDamage() {
+hp_t Player::MagicMissile::getDamage() {
     return DAMAGE;
 }
 

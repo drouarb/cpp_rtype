@@ -95,7 +95,7 @@ void EntityData::setVectY(speed_t vectY)
     EntityData::vectY = vectY;
 }
 
-int EntityData::getHp() const
+hp_t EntityData::getHp() const
 {
     return hp;
 }

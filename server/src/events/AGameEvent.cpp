@@ -4,14 +4,14 @@
 
 #include "events/AGameEvent.hh"
 
-network::packet::IPacket *server::event::AGameEvent::createPacket() {
-    //TODO
-    return nullptr;
-}
+server::eventId_t server::event::AGameEvent::lastId = 0;
 
-server::event::AGameEvent::AGameEvent(const server::round_t tick, const server::entityId_t entityId) : tick(tick),
-                                                                                                       entityId(
-                                                                                                               entityId) {}
+server::event::AGameEvent::AGameEvent(const server::round_t tick, const server::entityId_t entityId) :
+        tick(tick), entityId(entityId)
+{
+    eventId = lastId;
+    ++lastId;
+}
 
 std::ostream &server::event::operator<<(std::ostream &os, const AGameEvent &event) {
     os << "tick: " << event.tick << " entityId: " << event.entityId;

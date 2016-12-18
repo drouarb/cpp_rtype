@@ -95,7 +95,7 @@ void server::Core::psetClient(server::Client &client, server::gameId_t gameId) {
         }
     }
 
-    games.push_back(new Game(gameId));
+    games.push_back(new Game(*packetFactory, gameId));
     games.back()->setLevel(levels[lastGameId % levels.size()]);
     ++lastGameId;
     games.back()->newPlayer(&client);

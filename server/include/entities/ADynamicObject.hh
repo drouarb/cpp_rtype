@@ -44,7 +44,7 @@ namespace server
          * Is typically used for projectiles.
          * May be negative (for a boon for instance).
          */
-        virtual damage_t getDamage() = 0;
+        virtual hp_t getDamage() = 0;
 
         virtual bool collideWith(const Entity &) = 0;
 

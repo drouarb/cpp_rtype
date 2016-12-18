@@ -28,6 +28,8 @@ namespace server {
 
             EventType getEventType() override;
 
+            network::packet::IPacket *createPacket();
+
         };
     }
 }
