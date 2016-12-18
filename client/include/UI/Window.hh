@@ -10,6 +10,9 @@
 #include "ALayer.hh"
 #include "LayerFactory.hh"
 
+#define WIDTH 800
+#define HEIGHT 600
+
 namespace UI {
     class Window : public IWindow {
     public:

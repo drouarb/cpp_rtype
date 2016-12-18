@@ -5,8 +5,12 @@
 #ifndef CPP_RTYPE_BACKGROUNDOBJECT_HH
 #define CPP_RTYPE_BACKGROUNDOBJECT_HH
 
+#include "Item.hh"
+
 namespace UI {
-    class BackgroundObject {
+    class BackgroundObject : Item {
+        BackgroundObject();
+        ~BackgroundObject();
     };
 }
 

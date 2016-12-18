@@ -4,10 +4,10 @@
 
 #include "../../include/UI/BackgroundObject.hh"
 
-UI::Background::~Background() {
+UI::BackgroundObject::BackgroundObject() : Item(UI::BACKGROUND_OBJECT) {
 
 }
 
-UI::Background::Background() : Item(UI::BACKGROUND) {
+UI::BackgroundObject::~BackgroundObject() {
 
 }

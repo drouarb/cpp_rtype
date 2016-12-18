@@ -7,6 +7,7 @@
 #include <UI/ItemFactory.cpp>
 #include <UI/AudioManager.cpp>
 #include <UI/GameLayer.cpp>
+#include <UI/BackgroundLayer.cpp>
 #include <UI/ALayer.cpp>
 #include <iostream>
 #include <stdlib.h>
@@ -30,6 +31,8 @@ int main()
     UI::AItem* item;
     UI::AItem* item2;
     UI::AItem* item3;
+    UI::AItem* item4;
+
     bool flag = true;
     int lermi = 100;
     ui->init(800, 600);
@@ -38,8 +41,9 @@ int main()
     ui->getAudioManager()->playMusic("/home/jonas_e/Work/Epitech/rtype/media/musics/Lady_Crimson.ogg");
     ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
     item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/ALL_GONE.jpg", 250, 250);
-    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/fire.png", 300, 300);
-    item3 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready.png", 100, 400);
+    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/fire.png", 300, 300);
+    item3 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready.png", 100, 400);
+    static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "/home/jonas_e/Work/Epitech/rtype/media/references/background.png");
     ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addTexture(item3, UI::ACTIVE, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready2.png");
     UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);
     UI::IEventObserver* eventObserver = ui->getEventObserver();
