@@ -18,8 +18,8 @@ namespace network {
         public:
             virtual ~APacket();
 
-            virtual int getSource() const;
-            virtual void setSource(int src);
+            virtual unsigned long getSource() const;
+            virtual void setSource(unsigned long src);
             virtual PacketId getPacketId() const;
             virtual uint16_t getSize() const;
             virtual void serialize(t_rawdata *data) const;
@@ -27,7 +27,7 @@ namespace network {
             virtual t_rawdata::iterator deserialize(t_rawdata *data, t_rawdata::iterator it);
 
         protected:
-            int src;
+            unsigned long src;
             const utils::NetworkInteger packetId;
             const std::vector<utils::INetworkUtil *> schema;
         };
