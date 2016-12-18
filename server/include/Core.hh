@@ -7,6 +7,7 @@
 #include <Level.hh>
 #include <Game.hh>
 #include <mutex>
+#include <network/PacketFactory.hh>
 
 namespace server
 {
@@ -17,6 +18,7 @@ namespace server
     {
     private:
         NetworkManager *networkManager;
+        network::PacketFactory *packetFactory;
         std::mutex mutex;
         std::vector<Level> levels;
         std::vector<Game *> games;
@@ -31,13 +33,19 @@ namespace server
          *
          * @param path to a folder
          */
-        Core(const std::string &path);
+        Core(const std::string &path, const unsigned short port);
+        ~Core();
+
 
         virtual void setClient(Client &, gameId_t);
 
         virtual void removeClient(Client &);
 
         virtual void run();
+
+        const std::vector<Game *> &getGames() const;
+
+        network::PacketFactory *getPacketFactory() const;
 
         /**
          *      ______                 _                _
@@ -53,7 +61,6 @@ namespace server
          */
 
         Core(const std::string &path, NetworkManager *networkManager);
-        ~Core();
 
     private:
 

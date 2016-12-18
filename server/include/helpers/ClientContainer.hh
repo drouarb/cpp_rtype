@@ -11,15 +11,15 @@
 
 namespace server {
 
-    class ClientContainer : protected std::map<int, Client> {
+    class ClientContainer : protected std::map<clientId_t , Client> {
         std::list<Client> clientList;
 
     public:
-        Client &get(int id);
+        Client &get(clientId_t id);
 
-        Client &create(int id);
+        Client &create(unsigned long id);
 
-        void remove(int id);
+        void remove(clientId_t id);
 
         const std::list<Client> &toStdList() const;
     };

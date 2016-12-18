@@ -7,7 +7,7 @@
 #include "listeners/ServerListenerAskList.hh"
 
 void server::ServerListenerAskList::notify(const network::packet::PacketAskList *packet) {
-
+    this->iListenerHandler->askGame(packet->getSource());
 }
 
 server::ServerListenerAskList::ServerListenerAskList(IListenerHandler *iListenerHandler) : iListenerHandler(

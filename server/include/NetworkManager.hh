@@ -3,6 +3,8 @@
 #include <list>
 #include <map>
 #include <listeners/IListenerHandler.hh>
+#include "network/listener/ISocketConnectionListener.hh"
+#include "network/listener/ISocketDisconnectionListener.hh"
 #include <helpers/ClientContainer.hh>
 #include <thread/IMutex.hh>
 #include "definitions.hh"
@@ -14,13 +16,33 @@ namespace server {
     class Core;
 
     class NetworkManager : public server::IListenerHandler {
-
-
     protected:
         ClientContainer clientContainer;
         Core *core;
     private:
         IMutex *mutex;
+
+        class ConnectionListener : public network::listener::ISocketConnectionListener {
+        private:
+            ClientContainer &clientContainer;
+        public:
+            ConnectionListener(ClientContainer &clientContainer);
+
+            void notify(unsigned long fd) override;
+        };
+
+        class DisconnectionListener : public network::listener::ISocketDisconnectionListener {
+        private:
+            ClientContainer &clientContainer;
+        public:
+            DisconnectionListener(server::ClientContainer &clientContainer);
+
+            void notify(unsigned long fd) override;
+        };
+
+
+        ConnectionListener      *connectionListener;
+        DisconnectionListener   *disconnectionListener;
 
     public:
 
@@ -48,5 +70,10 @@ namespace server {
 
         void clientPlayerQuit(int src) override;
 
+        void askGame(int src) override;
+
+        ConnectionListener *getConnectionListener() const;
+
+        DisconnectionListener *getDisconnectionListener() const;
     };
 }

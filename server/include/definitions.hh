@@ -25,7 +25,7 @@ namespace server {
     typedef float speed_t;
     typedef int32_t damage_t;
     typedef uint8_t attackId_t;
-    typedef int clientId_t;
+    typedef unsigned long clientId_t;
     typedef int gameId_t;
     typedef uint32_t entityId_t;
 }

@@ -6,9 +6,23 @@
 #include <iostream>
 #include <unistd.h>
 #include <cassert>
+#include <listeners/ServerListenerSyn.hh>
+#include <listeners/ServerListenerAck.hh>
+#include <listeners/ServerListenerAskLeaderboard.hh>
+#include <listeners/ServerListenerAskList.hh>
+#include <listeners/ServerListenerConnect.hh>
+#include <listeners/ServerListenerDisconnect.hh>
+#include <listeners/ServerListenerErrorHandshake.hh>
+#include <listeners/ServerListenerJoin.hh>
+#include <listeners/ServerListenerPlayerAttack.hh>
+#include <listeners/ServerListenerPlayerMove.hh>
+#include <listeners/ServerListenerPong.hh>
+#include <listeners/ServerListenerQuit.hh>
+#include <listeners/ServerListenerRegister.hh>
 
-server::Core::Core(const std::string &path) : sw(IStopwatch::getInstance())
-{
+server::Core::Core(const std::string &path, const unsigned short port)
+        : sw(IStopwatch::getInstance()), packetFactory(nullptr), networkManager(
+        nullptr) {
     FolderExplorer fileExplorer(path);
 
     lastGameId = 0;
@@ -16,76 +30,46 @@ server::Core::Core(const std::string &path) : sw(IStopwatch::getInstance())
     fileExplorer.loadFolder();
     this->networkManager = new NetworkManager(this);
     const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
-    for (auto f : vector)
-    {
-        if (f.name.find(".json") == std::string::npos)
-        {
+    for (auto f : vector) {
+        if (f.name.find(".json") == std::string::npos) {
             continue;
         }
-        try
-        {
+        try {
             this->levels.push_back(Level(path + f.name));
         }
-        catch (std::runtime_error &e)
-        {
+        catch (std::runtime_error &e) {
             std::cerr << e.what() << std::endl;
             return;
         }
     }
-    if (levels.empty())
-    {
+    if (levels.empty()) {
         std::cerr << "No levels. Aborting." << std::endl;
         return;
     }
+    this->packetFactory = new network::PacketFactory(port);
+    this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
+    this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
+//    this->packetFactory->registerListener(new ServerListenerAck());
+    this->packetFactory->registerListener(new ServerListenerAskLeaderboard());
+    this->packetFactory->registerListener(new ServerListenerAskList(this->networkManager));
+    this->packetFactory->registerListener(new ServerListenerDisconnect(this->networkManager));
+//    this->packetFactory->registerListener(new ServerListenerErrorHandshake());
+    this->packetFactory->registerListener(new ServerListenerJoin(this->networkManager));
+    this->packetFactory->registerListener(new ServerListenerPlayerAttack());
+    this->packetFactory->registerListener(new ServerListenerPlayerMove());
+//    this->packetFactory->registerListener(new ServerListenerPong());
+    this->packetFactory->registerListener(new ServerListenerQuit());
+    this->packetFactory->registerListener(new ServerListenerRegister());
+//    this->packetFactory->registerListener(new ServerListenerSyn());
 }
 
-void server::Core::run()
-{
-    while (isRunning)
-    {
-/*
-        if (r == 2)
-        {
-            networkManager->clientConnect(14);
-            ++r;
-        }
-        if (r == 6)
-        {
-            networkManager->clientJoin(14, 2);
-            ++r;
-        }
-        if (r == 9)
-        {
-            networkManager->clientPlayerAttack(14, 8, 0);
-            networkManager->clientPlayerMove(14, 3, 0);
-            ++r;
-        }
-        if (r == 12)
-        {
-            ++r;
-        }
-        if (r == 14)
-        {
-            networkManager->clientJoin(14, 3);
-            ++r;
-        }
-        if (r == 20)
-        {
-            networkManager->clientDisconnect(14);
-            ++r;
-        }
-        if (r == 22)
-            return;
-        ++r;
-*/
-
-
+void server::Core::run() {
+    while (isRunning) {
         sw->set();
         mutex.lock();
 
         std::cout << "- round - - - - - - - - - - - - - - - - - -" << std::endl;
-        for (auto &game : games)
-        {
+        for (auto &game : games) {
             std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
             game->tick();
         }
@@ -96,20 +80,16 @@ void server::Core::run()
     }
 }
 
-void server::Core::setClient(server::Client &client, server::gameId_t gameId)
-{
+void server::Core::setClient(server::Client &client, server::gameId_t gameId) {
     mutex.lock();
     psetClient(client, gameId);
     mutex.unlock();
 }
 
-void server::Core::psetClient(server::Client &client, server::gameId_t gameId)
-{
+void server::Core::psetClient(server::Client &client, server::gameId_t gameId) {
     premoveClient(client);
-    for (auto &game : games)
-    {
-        if (game->getLobbyId() == gameId)
-        {
+    for (auto &game : games) {
+        if (game->getLobbyId() == gameId) {
             game->newPlayer(&client);
             return;
         }
@@ -122,21 +102,17 @@ void server::Core::psetClient(server::Client &client, server::gameId_t gameId)
 }
 
 
-void server::Core::removeClient(server::Client &client)
-{
+void server::Core::removeClient(server::Client &client) {
     mutex.lock();
     premoveClient(client);
     mutex.unlock();
 }
 
-void server::Core::premoveClient(server::Client &client)
-{
+void server::Core::premoveClient(server::Client &client) {
     auto game = getClientsGame(client);
-    if (game)
-    {
+    if (game) {
         game->removePlayer(&client);
-        if (game->empty())
-        {
+        if (game->empty()) {
             auto it = std::find(games.begin(), games.end(), game);
             delete *it;
             games.erase(it);
@@ -144,27 +120,59 @@ void server::Core::premoveClient(server::Client &client)
     }
 }
 
-server::Game *server::Core::getClientsGame(const server::Client &client)
-{
-    for (auto &game : games)
-    {
+server::Game *server::Core::getClientsGame(const server::Client &client) {
+    for (auto &game : games) {
         if (game->hasClient(client))
             return (game);
     }
     return (nullptr);
 }
 
-server::Core::Core(const std::string &path, server::NetworkManager *networkManager) : Core(path)
-{
-    delete (this->networkManager);
+server::Core::Core(const std::string &path, server::NetworkManager *networkManager) : sw(IStopwatch::getInstance()),
+                                                                                      packetFactory(nullptr),
+                                                                                      networkManager(
+                                                                                              nullptr) {
     this->networkManager = networkManager;
+    FolderExplorer fileExplorer(path);
+
+    lastGameId = 0;
+    this->isRunning = true;
+    fileExplorer.loadFolder();
+    this->networkManager = new NetworkManager(this);
+    const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
+    for (auto f : vector) {
+        if (f.name.find(".json") == std::string::npos) {
+            continue;
+        }
+        try {
+            this->levels.push_back(Level(path + f.name));
+        }
+        catch (std::runtime_error &e) {
+            std::cerr << e.what() << std::endl;
+            return;
+        }
+    }
+    if (levels.empty()) {
+        std::cerr << "No levels. Aborting." << std::endl;
+        return;
+    }
 }
 
-server::Core::~Core()
-{
+server::Core::~Core() {
     mutex.lock();
     mutex.unlock();
     delete sw;
     if (networkManager)
         delete networkManager;
+    if (packetFactory) {
+        delete packetFactory;
+    }
+}
+
+const std::vector<server::Game *> &server::Core::getGames() const {
+    return games;
+}
+
+network::PacketFactory *server::Core::getPacketFactory() const {
+    return packetFactory;
 }

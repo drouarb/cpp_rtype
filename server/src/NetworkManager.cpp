@@ -2,8 +2,11 @@
 #include <iostream>
 #include <thread/Mutexer.hh>
 #include <thread/Mutex.hh>
+#include <network/packet/PacketGameList.hh>
 
-server::NetworkManager::NetworkManager(server::Core *core) : core(core), mutex(new Mutex()) {}
+server::NetworkManager::NetworkManager(server::Core *core) : core(core), mutex(new Mutex()), connectionListener(
+        new ConnectionListener(this->clientContainer)), disconnectionListener(
+        new DisconnectionListener(this->clientContainer)) {}
 
 server::NetworkManager::~NetworkManager() {
 
@@ -70,4 +73,41 @@ void server::NetworkManager::clientPlayerQuit(int src) {
     Mutexer(this->mutex);
     Client &client = this->clientContainer.get(src);
     core->removeClient(client);
+}
+
+server::NetworkManager::ConnectionListener *server::NetworkManager::getConnectionListener() const {
+    return connectionListener;
+}
+
+server::NetworkManager::DisconnectionListener *server::NetworkManager::getDisconnectionListener() const {
+    return disconnectionListener;
+}
+
+void server::NetworkManager::askGame(int src) {
+    const std::vector<Game *> &games = this->core->getGames();
+    network::PacketFactory *pFactory = this->core->getPacketFactory();
+
+
+    std::vector<std::pair<uint8_t , uint16_t >> serializedVector;
+    for (auto game : games) {
+        serializedVector.push_back(std::pair<uint8_t, uint16_t >(game->getLobbyId(), game->getClientSize()));
+    }
+    network::packet::PacketGameList list = network::packet::PacketGameList();
+    pFactory->send(list, src);
+}
+
+server::NetworkManager::ConnectionListener::ConnectionListener(server::ClientContainer &clientContainer)
+        : clientContainer(clientContainer) {}
+
+void server::NetworkManager::ConnectionListener::notify(unsigned long fd) {
+    this->clientContainer.create(fd);
+}
+
+server::NetworkManager::DisconnectionListener::DisconnectionListener(server::ClientContainer &clientContainer)
+        : clientContainer(clientContainer) {
+
+}
+
+void server::NetworkManager::DisconnectionListener::notify(unsigned long fd) {
+    this->clientContainer.remove(fd);
 }

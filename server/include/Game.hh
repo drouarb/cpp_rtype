@@ -24,6 +24,7 @@ namespace server
         gameId_t getLobbyId();
         bool hasClient(const Client &);
         bool empty();
+        uint16_t getClientSize();
 
     private:
         std::list<Client *> clientList;
