@@ -17,22 +17,23 @@ int main(int argc, char **argv)
   GameClient toto;
  toto.gameLoop();
 
- //   AMenu lolo("config/menuTest.json");
+ //   AMenu lolo("config/menuStart.json");
  =======*/
   std::string	IP;
   unsigned short		port;
 
-  if (argc < 3)
-    {
+    if (argc < 3) {
         std::cerr << "usage : ./rtype_client IP port" << std::endl;
-      return (1);
+        return (1);
     }
-  IP = argv[1];
-  std::istringstream strm(argv[2]); strm >> port;
-  client::GameClient game;
-  game.createNetworkManager();
-  game.gameLoop();
-  return (0);
+    IP = argv[1];
+    std::istringstream strm(argv[2]);
+    strm >> port;
+    client::GameClient game;
+    game.createNetworkManager();
+    game.gameLoop();
+    return (0);
+
     
   //>>>>>>> prepare client for soutenance
   //>>>>>>> prepare client for soutenance

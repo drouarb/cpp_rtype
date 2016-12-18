@@ -1,6 +1,8 @@
 {
   "Name": "MenuStart",
-  "Default_Visibility": 1,
+  "Default_Visibility": 0,
+  "padding_up" : 100,
+  "padding_left" : 600,
   "Buttons": [
     {
       "buttons_name": "Play",
@@ -9,20 +11,20 @@
       "default_selected" : 1,
       "position": [
         {
-          "x": 250,
-          "y": 250
+          "x": 0,
+          "y": 0
         }
       ]
     },
     {
       "buttons_name": "Settings",
-      "selected": "setting2.png",
-      "noselected": "setting.png",
+      "selected": "settings2.png",
+      "noselected": "settings.png",
       "default_selected" : 0,
       "position": [
         {
-          "x": 250,
-          "y": 300
+          "x": 0,
+          "y": 200
         }
       ]
     },
@@ -33,8 +35,8 @@
       "default_selected" : 0,
       "position": [
         {
-          "x": 250,
-          "y": 350
+          "x": 0,
+          "y": 400
         }
       ]
     },
@@ -45,8 +47,8 @@
       "default_selected" : 0,
       "position": [
         {
-          "x": 250,
-          "y": 400
+          "x": 0,
+          "y": 600
         }
       ]
     }

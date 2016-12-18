@@ -18,7 +18,7 @@ GameUIInterface::~GameUIInterface() {
 
 void GameUIInterface::initUI() {
     window = managerUi.getWindow(UI::MAIN_WINDOW);
-    addMenu("config/menuTest.json");
+    addMenu("config/menuStart.json");
 }
 
 void GameUIInterface::displaySimple() {
@@ -94,19 +94,32 @@ void GameUIInterface::addMenu(const std::string &path) {
     ptree root;
     read_json(path, root);
     Menu *temp = new Menu;
-    std::cout << root.get_child("Name").get_value<std::string>() << std::endl;
     unsigned long id = window->addLayer(UI::MENU);
     temp->setLayer_id(id);
-    std::cout << root.get_child("Default_Visibility").get_value<int>() << std::endl;
+    if (root.get_child("Default_Visibility").get_value<int>() == 0)
+        window->getLayer(id)->open();
+    else
+        window->getLayer(id)->close();
+     int x = 0;
+    int y = 0;
+    int padding_up = root.get_child("padding_up").get_value<int>();
+    int padding_left = root.get_child("padding_left").get_value<int>();
     BOOST_FOREACH(ptree::value_type
                           child, root.get_child("Buttons")) {
-                    std::cout << child.second.get<std::string>("selected") << std::endl;
-                    std::cout << child.second.get<std::string>("noselected") << std::endl;
-                    std::cout << child.second.get<int>("default_selected") << std::endl;
-                    BOOST_FOREACH(const ptree::value_type &child2,
+                     BOOST_FOREACH(const ptree::value_type &child2,
                                   child.second.get_child("position")) {
-                                    std::cout << child2.second.get<int>("x") << std::endl;
-                                    std::cout << child2.second.get<int>("y") << std::endl;
+                                    x = child2.second.get<int>("x");
+                                    y = child2.second.get<int>("y");
                                 }
+                  auto item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" + child.second.get<std::string>("noselected"), x + padding_left , y + padding_up);
+                    window->getLayer(id)->addTexture(item, UI::ACTIVE ,"media/menu/" + child.second.get<std::string>("selected"));
+                    if (child.second.get<int>("default_selected") == 0)
+                        item->changeStatus(UI::IDLE);
+                    else {
+                        temp->setCurrent_selected(item);
+                        item->changeStatus(UI::ACTIVE);
+                    }
+                        temp->addButtons(item);
                 }
+    listMenu.push_back(temp);
 }

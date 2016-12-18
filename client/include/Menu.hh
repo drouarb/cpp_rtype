@@ -9,13 +9,19 @@
 class Menu {
 private:
     unsigned  long layer_id;
+
+    UI::AItem *current_selected;
+public:
+    UI::AItem *getCurrent_selected() const;
+
+    void setCurrent_selected(UI::AItem *current_selected);
+
 public:
     unsigned long getLayer_id() const;
 
     void setLayer_id(unsigned long layer_id);
 
     const std::vector<UI::AItem *> &getListItem() const;
-
 
     void addButtons(UI::AItem *);
 
@@ -24,7 +30,8 @@ private:
 public:
     Menu();
     ~Menu(){};
-
+    void selectedNext();
+    void selectedPrev();
 };
 
 

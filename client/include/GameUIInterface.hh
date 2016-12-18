@@ -9,6 +9,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 #include <string>
+#include <mutex>
 #include <map>
 #include "Definitions.hh"
 #include "Entity.hh"
@@ -21,6 +22,7 @@ using namespace boost::property_tree;
 namespace client {
     class GameUIInterface {
     private:
+        std::mutex ui_mut;
         std::map<typeide_t, std::string> typeEntity;
         std::vector<std::pair<uint8_t, uint16_t> > gameList;
         std::vector<std::pair<uint32_t, std::string> > leaderBoard;

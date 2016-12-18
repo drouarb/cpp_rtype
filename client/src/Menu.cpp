@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Menu.hh"
 
-Menu::Menu() {
+Menu::Menu() : current_selected(nullptr){
 
 }
 
@@ -23,4 +23,38 @@ const std::vector<UI::AItem *> &Menu::getListItem() const {
 
 void Menu::addButtons(UI::AItem *item) {
     listItem.push_back(item);
+}
+
+void Menu::selectedNext() {
+    for (int i = 0; listItem[i] ; i++)
+    {
+        if (listItem[i] == current_selected && i + 1 != listItem.size())
+        {
+            listItem[i]->changeStatus(UI::IDLE);
+            listItem[i + 1]->changeStatus(UI::ACTIVE);
+            current_selected = listItem[i + 1];
+            break;
+        }
+    }
+}
+
+UI::AItem *Menu::getCurrent_selected() const {
+    return current_selected;
+}
+
+void Menu::setCurrent_selected(UI::AItem *curret_selected) {
+    current_selected = curret_selected;
+}
+
+void Menu::selectedPrev() {
+    for (int i = 0; listItem[i] ; i++)
+    {
+        if (listItem[i] == current_selected && i - 1 != -1)
+        {
+            listItem[i]->changeStatus(UI::IDLE);
+            listItem[i - 1]->changeStatus(UI::ACTIVE);
+            current_selected = listItem[i - 1];
+            break;
+        }
+    }
 }
