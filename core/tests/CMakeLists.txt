@@ -28,7 +28,6 @@ file(
         network/packet/testPacketSyn.cpp
         network/packet/testPacketSynAck.cpp
         network/packet/testPacketUpdateEntity.cpp
-        network/packet/testPacketGameData.cpp
 
 )
 
