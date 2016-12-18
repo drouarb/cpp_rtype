@@ -46,8 +46,9 @@ namespace FSM
       StateCurrent = SLFinal.getInitial();
     }
     
-    SL<S, T>		simplifySLs(SL<S, T>, SL<S, T>)
+    SL<S, T>		simplifySLs(SL<S, T> sl1, SL<S, T> sl2)
     {
+      SL<S, T>		slfinal;
     }
     
     Action		takeToken(T token)
