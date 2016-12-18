@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <UI/EventObserver.cpp>
 #include <EventManager.cpp>
+#include <UI/Background.cpp>
 
 
 int testshitfunction(int modifier, UI::UIManager *neue) {

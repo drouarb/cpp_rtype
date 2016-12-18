@@ -11,3 +11,11 @@ UI::Background::Background() : Item(UI::BACKGROUND) {
 UI::Background::~Background() {
 
 }
+
+float UI::Background::getSpeed() const {
+    return speed;
+}
+
+void UI::Background::setSpeed(float speed) {
+    Background::speed = -speed;
+}
