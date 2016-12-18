@@ -92,7 +92,7 @@ bool networkManager::sendSyn(uint16_t syn_va_value)
         return (false);
     }
     network::packet::PacketSyn syn(syn_va_value);
-    this->packetFactory->send(syn);
+    this->packetFactory->broadcast(syn);
     return (true);
 }
 
@@ -104,7 +104,7 @@ bool networkManager::sendAck(uint16_t ack_value)
         return (false);
     }
     network::packet::PacketAck ack(ack_value);
-    this->packetFactory->send(ack);
+    this->packetFactory->broadcast(ack);
     return (true);
 }
 
@@ -116,6 +116,6 @@ bool networkManager::sendErrorHandshake(const std::string &message)
         return (false);
     }
     network::packet::PacketErrorHandshake errorHandshake (message);
-    this->packetFactory->send(errorHandshake);
+    this->packetFactory->broadcast(errorHandshake);
     return (true);
 }

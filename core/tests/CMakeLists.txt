@@ -28,13 +28,18 @@ file(
         network/packet/testPacketSyn.cpp
         network/packet/testPacketSynAck.cpp
         network/packet/testPacketUpdateEntity.cpp
-
+        network/PacketFactoryTest.cpp
 )
 
 foreach(test ${CORE_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
     add_executable(${test_name} ${test})
-        target_link_libraries(${test_name} protoboeuf)
+    target_link_libraries(${test_name} rtype_core protoboeuf pthread)
     add_test(${test_name} ${test_name})
 endforeach(test)
 
+if (NOT WIN32)
+    add_executable(UnixUDPSocketTest network/socket/UnixUDPSocketTest.cpp)
+    target_link_libraries(UnixUDPSocketTest rtype_core protoboeuf pthread)
+    add_test(UnixUDPSocketTest UnixUDPSocketTest)
+endif(NOT WIN32)

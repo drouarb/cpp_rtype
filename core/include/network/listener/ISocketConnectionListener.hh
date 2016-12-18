@@ -11,7 +11,7 @@ namespace network {
         public:
             virtual ~ISocketConnectionListener() { };
 
-            virtual void notify(int fd) = 0;
+            virtual void notify(unsigned long fd) = 0;
         };
     }
 }
