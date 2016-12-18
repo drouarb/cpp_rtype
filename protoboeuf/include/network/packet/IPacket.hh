@@ -56,8 +56,8 @@ namespace network {
         public:
             virtual ~IPacket() {};
 
-            virtual int getSource() const = 0;
-            virtual void setSource(int src) = 0;
+            virtual unsigned long getSource() const = 0;
+            virtual void setSource(unsigned long src) = 0;
             virtual uint16_t getSize() const = 0;
             virtual PacketId getPacketId() const = 0;
             virtual void serialize(t_rawdata *data) const = 0;

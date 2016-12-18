@@ -58,10 +58,10 @@ network::packet::PacketId network::packet::APacket::getPacketId() const {
     return static_cast<PacketId>(packetId.getValue());
 }
 
-void network::packet::APacket::setSource(int src) {
+void network::packet::APacket::setSource(unsigned long src) {
     this->src = src;
 }
 
-int network::packet::APacket::getSource() const {
+unsigned long network::packet::APacket::getSource() const {
     return this->src;
 }
