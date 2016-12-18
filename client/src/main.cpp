@@ -26,6 +26,7 @@ int main(int argc, char **argv)
         std::cerr << "usage : ./rtype_client IP port" << std::endl;
         return (1);
     }
+    //<<<<<<< 6faf4ea3aa5e41712e896bfd09a28deda37425f9
     IP = argv[1];
     std::istringstream strm(argv[2]);
     strm >> port;
@@ -35,6 +36,14 @@ int main(int argc, char **argv)
     game.gameLoop();
     return (0);
 
+    /*=======
+  IP = argv[1];
+  std::istringstream strm(argv[2]); strm >> port;
+  client::GameClient game;
+  game.createNetworkManager(IP, port);
+  game.gameLoop();
+  return (0);
+  >>>>>>> maj*/
     
   //>>>>>>> prepare client for soutenance
   //>>>>>>> prepare client for soutenance
