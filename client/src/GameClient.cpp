@@ -140,7 +140,7 @@ void GameClient::managePlayerData(uint16_t playerId, uint8_t nbAttackPlayer)
 {
 }
 
-void GameClient::manageSyncro(uint32_t turn, uint64_t time)
+void GameClient::manageSyncro(uint32_t turn, int64_t time)
 {
   if (world == nullptr)
     {

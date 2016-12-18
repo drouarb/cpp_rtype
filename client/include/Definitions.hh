@@ -7,6 +7,8 @@
 
 #include <tuple>
 
+#define PLAYERSPEED 10
+
 namespace client
 {
   enum	Team

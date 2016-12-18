@@ -42,7 +42,9 @@ namespace client {
 
         void receiveLeaderBoard(std::vector<std::pair<uint32_t, std::string> > LeaderBoard);
 
-      void receiveSyncro(uint32_t tick, int64_t time);
+        void receiveSyncro(uint32_t tick, int64_t time);
+
+      void receivePlayerData(uint16_t playerId, uint8_t nbAttack);
 
         void receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t vecx, int16_t vecy,
                                        int16_t posx, int16_t posy);
@@ -57,7 +59,7 @@ namespace client {
 
         void receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp);
 
-        void receiveGameData(uint32_t tick, int64_t time);
+        void receiveGameData();
       
         void sendRegister(const std::string & name);
 

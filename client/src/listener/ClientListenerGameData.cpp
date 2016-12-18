@@ -16,5 +16,5 @@ ClientListenerGameData::~ClientListenerGameData()
 
 void ClientListenerGameData::notify(const network::packet::PacketGameData *packet)
 {
-    networkManager->receiveGameData(packet->getTick(), packet->getTime());
+    networkManager->receiveGameData();
 }

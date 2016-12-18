@@ -90,10 +90,11 @@ void NetworkManager::receiveDeleteEntity(uint32_t tick, uint32_t eventId, uint16
 }
 
 void NetworkManager::receiveDisconnect() {
+  gameClient->manageDisconnect();
 }
 
 void NetworkManager::receiveCancelEvent(uint32_t eventId) {
-
+  gameClient->manageCancelEvent(eventId);
 }
 
 void NetworkManager::receiveErrorList(const std::string &message) {
@@ -104,20 +105,22 @@ void NetworkManager::receiveEventError(const std::string &message) {
 
 }
 
-void NetworkManager::receiveGameList(const std::vector<std::pair<uint8_t, uint16_t >> GameList) {
-
+void NetworkManager::receiveGameList(const std::vector<std::pair<uint8_t, uint16_t> > GameList) {
+  gameClient->manageGameList(GameList);
 }
 
 void NetworkManager::receiveLeaderBoard(std::vector<std::pair<uint32_t, std::string>> LeaderBoard) {
-
+  gameClient->manageLeaderBoard(LeaderBoard);
 }
 
 void NetworkManager::receiveSyncro(uint32_t tick, int64_t time)
 {
+  gameClient->manageSyncro(tick, time);
 }
 
 void NetworkManager::receivePlayerData(uint16_t playerId, uint8_t nbAttackPlayer)
 {
+  gameClient->managePlayerData(playerId, nbAttackPlayer);
 }
 
 void
@@ -127,11 +130,11 @@ NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t enti
 }
 
 void NetworkManager::receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {
-
+  gameClient->managePlaySound(tick, eventId, SoundName);
 }
 
 void NetworkManager::receiveQuit() {
-
+  gameClient->manageQuit();
 }
 
 void
@@ -182,5 +185,5 @@ void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
 }
 
 void NetworkManager::receiveGameData() {
+  gameClient->manageGameData();
 }
-
