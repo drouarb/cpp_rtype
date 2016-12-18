@@ -71,8 +71,9 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     while (pStopwatch->ellapsedMs() < test_duration) {
         ++i;
         packetPlayerAttack->setTick(32 + i);
-        playerAttack->notify(packetPlayerAttack);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        if (i < 5)
+            playerAttack->notify(packetPlayerAttack);
+//        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
     thread->detach();
 

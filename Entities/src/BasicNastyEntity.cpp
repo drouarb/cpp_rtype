@@ -15,7 +15,7 @@ BasicNastyEntity::BasicNastyEntity() : notifyCollision(nullptr), stopwatch(IStop
 void BasicNastyEntity::collide(const server::Entity &entity) {
     this->notifyCollision = new server::EntityAction();
     this->notifyCollision->hp = this->data->getHp() - entity.obj->getDamage();
-    std::cout << "COLIIIIIIIIIIIIIIIIIIIIIIIIIDE" << std::endl;
+    std::cout << "COLIIIIIIIIIIIIIIIIIIIIIIIIIDE with: " << entity.data.getId() << std::endl;
     INFO("I'm the vilain nasty player : COLLIDE")
     if (this->notifyCollision->hp <= 0) {
         this->notifyCollision->destroy = true;

@@ -48,9 +48,9 @@ void Game::tick()
     round++;
     progressLevel();
     letEntitesAct();
+    unspawn();
     checkCollisions();
     moveEntities();
-    unspawn();
     this->sendData();
     //TODO: run the simulation and //DONE send its data to the clients
 }
@@ -96,10 +96,13 @@ void Game::checkCollisions()
     {
         for (size_t j = i + 1; j < max; ++j)
         {
+
             if (!(entities[i]->obj->collideWith(*entities[j]) || entities[j]->obj->collideWith(*entities[i])))
             {
                 continue;
             }
+
+            INFO("Un debug i=" << i << ", j=" << j << ", " << entities[i]->data.getId()  << " + " << entities[j]->data.getId());
 
             int dist;
 
@@ -157,7 +160,9 @@ void Game::checkCollisions()
                 std::cout << "right dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
+                    INFO("J'appelle le collide entre " << entities[i]->data.getId() << " et " << entities[j]->data.getId())
                     entities[i]->obj->collide(*entities[j]);
+                    INFO("J'appelle le collide entre " << entities[j]->data.getId() << " et " << entities[i]->data.getId())
                     entities[j]->obj->collide(*entities[i]);
 
                     if (entities[j]->data.getVectX() <= 0)
