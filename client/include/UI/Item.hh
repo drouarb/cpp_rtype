@@ -8,6 +8,7 @@
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <list>
 #include "AItem.hh"
 
 namespace UI {
@@ -24,12 +25,17 @@ namespace UI {
         void moveY(float range);
         sf::Sprite getSprite();
         void setTexture(sf::Texture*);
-        void addTexture(sf::Texture *_texture, animationType type);
-        void changeStatus(animationType type);
+        void addTexture(sf::Texture *_texture, UI::animationType type);
+        void changeStatus(UI::animationType type);
+        void addAnimation(UI::animationType animationType, short frames, unsigned int posX, unsigned int posY, unsigned int width,
+                          unsigned int height);
+        void addAnimation(UI::animationType animationType, short frames, unsigned int size);
 
     private:
-        sf::Sprite sprite;
+        sf::Sprite sprite; // le changer en pointeur pour faciliter l'échange
         std::vector<sf::Texture*> textures;
+        std::vector<std::list<sf::Sprite*>> animations;
+        std::list<sf::Sprite*> *animation;
         sf::Texture *texture;
     };
 }

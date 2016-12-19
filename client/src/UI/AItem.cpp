@@ -9,6 +9,7 @@ void UI::AItem::playAnimation(animationType animationType) {
 UI::AItem::AItem(itemType t) {
     type = t;
     status = UI::IDLE;
+    animated = false;
 }
 
 UI::AItem::~AItem() {
@@ -27,10 +28,6 @@ UI::AItem::~AItem() {
         }
     }
 }*/
-
-void UI::AItem::addAnimation(UI::animationType animationType, Animation animation) {
-    //sprites.at(animationType) = animation;
-}
 
 void    UI::AItem::setID(uint32_t id) {
     this->id = id;

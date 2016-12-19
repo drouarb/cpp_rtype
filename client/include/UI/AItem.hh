@@ -35,7 +35,6 @@ namespace UI {
         virtual void changeStatus(animationType type);
         void setID(uint32_t id);
         uint32_t getID();
-        void addAnimation(UI::animationType animationType, Animation animation);
         void playAnimation(animationType animation);
         itemType getType();
 
@@ -43,6 +42,7 @@ namespace UI {
         itemType type;
         animationType status;
         uint32_t id;
+        bool animated;
         //std::map<UI::animationType, Animation> sprites; //changer unsigned int dans un type plus générique ?
         //sf::Sprite createSprite(const std::string filename, unsigned long part);
     };

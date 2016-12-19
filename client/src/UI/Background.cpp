@@ -17,5 +17,5 @@ float UI::Background::getSpeed() const {
 }
 
 void UI::Background::setSpeed(float speed) {
-    Background::speed = -speed;
+    this->speed = -speed;
 }

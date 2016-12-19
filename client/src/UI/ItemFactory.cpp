@@ -4,6 +4,7 @@
 
 #include <UI/Button.hh>
 #include <iostream>
+#include <UI/Background.hh>
 #include "../../include/UI/ItemFactory.hh"
 
 static uint32_t id = 0;
@@ -56,12 +57,11 @@ UI::AItem* UI::ItemFactory::instantiateButton() {
 
 UI::AItem* UI::ItemFactory::instantiateNormalItem() {
     UI::Item* item = new UI::Item(ITEM);
-    std::cerr << item->getID() << std::endl;
     return item;
 }
 
 UI::AItem* UI::ItemFactory::instantiateBackground() {
-    UI::Item* item = new UI::Item(ITEM);
+    UI::Item* item = new UI::Background();
     return item;
 }
 
@@ -75,5 +75,6 @@ UI::AItem* UI::ItemFactory::instantiate(UI::itemType type, const std::string& _t
     UI::AItem* item = itemMap.at(type)();
     setTexture(dynamic_cast<UI::Item*>(item));
     item->setID(id++);
+    std::cerr << item->getID() << std::endl;
     return item;
 }
