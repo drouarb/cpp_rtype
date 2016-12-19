@@ -22,10 +22,10 @@ void UI::UIManager::init(unsigned int size_x, unsigned int size_y) {
     mainWindow->setSize(size_x, size_y);
     mainWindow->render();
     windows.push_back(mainWindow);
-    windows[MAIN_WINDOW]->addLayer(MENU);
-    windows[MAIN_WINDOW]->addLayer(HUD);
-    windows[MAIN_WINDOW]->addLayer(GAME);
     windows[MAIN_WINDOW]->addLayer(BACKGROUNDS);
+    windows[MAIN_WINDOW]->addLayer(GAME);
+    windows[MAIN_WINDOW]->addLayer(HUD);
+    windows[MAIN_WINDOW]->addLayer(MENU);
 }
 
 UI::IWindow *UI::UIManager::getWindow(UI::windowType windowType) {

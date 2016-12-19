@@ -4,10 +4,18 @@
 
 #include "../../include/UI/Background.hh"
 
+UI::Background::Background() : Item(UI::BACKGROUND) {
+
+}
+
 UI::Background::~Background() {
 
 }
 
-UI::Background::Background() : Item(UI::BACKGROUND) {
+float UI::Background::getSpeed() const {
+    return speed;
+}
 
+void UI::Background::setSpeed(float speed) {
+    this->speed = -speed;
 }

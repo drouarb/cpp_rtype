@@ -9,8 +9,13 @@
 
 namespace UI {
     class Background : public Item {
+    public:
         Background();
         ~Background();
+        float getSpeed() const;
+        void setSpeed(float speed);
+    private:
+        float speed;
     };
 }
 

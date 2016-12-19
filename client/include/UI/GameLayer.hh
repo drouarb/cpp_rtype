@@ -12,6 +12,7 @@ namespace UI {
     public:
         GameLayer();
         ~GameLayer();
+        void action();
     };
 }
 

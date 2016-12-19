@@ -40,11 +40,13 @@ bool UI::Window::isOpen() {
 void UI::Window::display() {
     window->clear();
     for (auto layer : layers) {
-        if (layer->isVisible())
+        if (layer->isVisible()) {
+            layer->action();
             for (auto item : layer->getItems()) {
                 //std::cerr << "Debug: " << (static_cast<Item*>(item)->getSprite()).getPosition().x << std::endl;
                 window->draw(static_cast<Item*>(item)->getSprite());
             }
+        }
     }
     window->display();
     //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;

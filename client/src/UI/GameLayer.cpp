@@ -10,3 +10,7 @@ UI::GameLayer::GameLayer() {
 UI::GameLayer::~GameLayer() {
 
 }
+
+void UI::GameLayer::action() {
+
+}

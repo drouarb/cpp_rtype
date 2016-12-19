@@ -4,6 +4,7 @@
 
 #include <UI/UIManager.hh>
 #include <UI/GameLayer.hh>
+#include <UI/BackgroundLayer.hh>
 #include "../../include/UI/LayerFactory.hh"
 
 const std::map<UI::layerType, UI::LayerFactory::instantiateLayer> UI::LayerFactory::layerMap = {
@@ -34,7 +35,7 @@ UI::ILayer *UI::LayerFactory::instantiateGame() {
 }
 
 UI::ILayer *UI::LayerFactory::instantiateBackground() {
-    return static_cast<ILayer*>(new GameLayer());
+    return static_cast<ILayer*>(new BackgroundLayer());
 }
 
 UI::ILayer *UI::LayerFactory::instantiate(UI::layerType type) {

@@ -8,10 +8,10 @@
 namespace UI {
 
     enum layerType {
-        MENU,
-        HUD,
-        GAME,
         BACKGROUNDS,
+        GAME,
+        HUD,
+        MENU,
         LAYERS_NUMBER
     };
 
@@ -25,6 +25,7 @@ namespace UI {
         UI::AItem *getItem(unsigned long itemID);
         void open();
         void close();
+        virtual void action() = 0;
         bool isVisible();
 
     protected:
