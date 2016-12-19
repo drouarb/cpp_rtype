@@ -18,9 +18,12 @@ void event::Timeline::addEvent(event::AGameEvent *event)
     {
         //rewind
     }
-    if (event->getTick() >= events.size())
+    else
     {
-        events.resize(event->getTick() + 1);
+        if (event->getTick() >= events.size())
+        {
+            events.resize(event->getTick() + 1);
+        }
+        events[event->getTick()].push_back(event);
     }
-    events[event->getTick()].push_back(event);
 }

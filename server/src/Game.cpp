@@ -312,7 +312,7 @@ void Game::letEntitesAct()
         {
             entities.push_back(new Entity(action->newEntity, entityIdCount));
             entityIdCount++;
-            this->sim_spawn(entities[i]);
+            this->sim_spawn(entities.back());
         }
         if (action->destroy)
         {
@@ -465,6 +465,7 @@ void Game::sendData() {
 void Game::sim_spawn(Entity *entity) {
     this->gameEvents.push_back(new server::event::Spawn
                                        (this->round, entity->data.getId(), entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
+    INFO("spawn " << std::to_string(gameEvents.back()->getEntityId()))
 }
 
 void Game::sim_move(Entity *entity) {
