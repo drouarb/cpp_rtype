@@ -42,11 +42,27 @@ int main()
     ui->getAudioManager()->playMusic("/home/jonas_e/Work/Epitech/rtype/media/musics/Lady_Crimson.ogg");
     ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
     item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/ALL_GONE.jpg", 250, 250);
-    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/5af.png", 300, 300);
+    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/5af.png", 300, 360);
     item3 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready.png", 100, 400);
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png", 300, 10);
-    static_cast<UI::Item*>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
+
+        item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM,
+                                                                           "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png",
+                                                                           50 , 200);
+        static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 4 * 65, 0, 64, 64);
+        item4->changeStatus(UI::IDLE);
+
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM,
+                                                                       "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png",
+                                                                       50 , 100);
+    static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 2 * 4 * 65, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
+
+        item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM,
+                                                                       "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png",
+                                                                       50 , 300);
+        static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
+        item4->changeStatus(UI::IDLE);
+
     static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "/home/jonas_e/Work/Epitech/rtype/media/references/background.png");
     ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addTexture(item3, UI::ACTIVE, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready2.png");
     UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);

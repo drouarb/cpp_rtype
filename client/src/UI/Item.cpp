@@ -6,6 +6,7 @@
 #include "../../include/UI/Item.hh"
 
 UI::Item::Item(itemType t) : AItem(t) {
+    animationTick = 0;
     animation = new std::list<sf::Sprite*>{&sprite};
     for (int i = 0; i < UI::animationType::ANIMATIONS_NUMBER; i++) {
         animations.push_back(*animation);
@@ -24,13 +25,19 @@ void UI::Item::setImage(std::string filename) {
 }
 
 void UI::Item::setPosition(float x, float y) {
+    px = x;
+    py = y;
     sprite.setPosition(x, y);
 }
 
 sf::Sprite UI::Item::getSprite() {
     if (animated) {
-        animation->push_front(animation->back());
-        animation->pop_back();
+        if (animationTick == 4) {
+            animationTick = 0;
+            animation->push_front(animation->back());
+            animation->pop_back();
+        }
+        animationTick++;
         return *(animation->front());
     }
     return sprite;
@@ -81,6 +88,7 @@ void UI::Item::addAnimation(UI::animationType animationType, short frames, unsig
     for (int i = 0; i < frames; i++) {
         sf::Sprite *frame = new sf::Sprite();
         frame->setTexture(*texture);
+        frame->setPosition(px, py);
         //std::cerr << "x: " << (i * width) + posX << " y:" << posY << " width:" << width << " height:" << height << " size:" << animations[animationType].size() << std::endl;
         frame->setTextureRect(sf::IntRect((i * width) + posX, posY, width, height));
         animations[animationType].push_back(frame);

@@ -37,6 +37,9 @@ namespace UI {
         std::vector<std::list<sf::Sprite*>> animations;
         std::list<sf::Sprite*> *animation;
         sf::Texture *texture;
+        float px;
+        float py;
+        unsigned short animationTick;
     };
 }
 
