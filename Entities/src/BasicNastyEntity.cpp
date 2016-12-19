@@ -97,7 +97,7 @@ server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(
     initialization->team = server::Team::FOE;
     initialization->sprite.sizeX = 40;
     initialization->sprite.sizeY = 40;
-    initialization->sprite.path = "media/references/bf_110_br_schrodyus-d5u1r3c.gif";
+    initialization->sprite.path = "media/references/homemade_wibel.png";
     return initialization;
 }
 
