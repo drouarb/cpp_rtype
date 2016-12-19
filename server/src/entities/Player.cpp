@@ -55,7 +55,7 @@ EntityInitialization *Player::initialize() {
     ei->posY = FIELD_HEIGHT / 2;
     ei->sprite.sizeX = 100;
     ei->sprite.sizeY = 100;
-    ei->sprite.path = "media/references/5af.png";
+    ei->sprite.path = "media/references/e_100.png";
 
     this->newHp = DEFAULT_LIFE;
     return (ei);
