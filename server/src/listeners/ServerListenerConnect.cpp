@@ -9,5 +9,6 @@ server::ServerListenerConnect::ServerListenerConnect(server::IListenerHandler *l
         listenerHandler) {}
 
 void server::ServerListenerConnect::notify(unsigned long fd) {
-    this->listenerHandler->clientConnect(fd);
+//    this->listenerHandler->clientConnect(fd);
+    throw "YOLO";
 }

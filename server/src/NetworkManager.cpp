@@ -6,7 +6,7 @@
 
 server::NetworkManager::NetworkManager(server::Core *core) : core(core), mutex(new Mutex()), connectionListener(
         new ConnectionListener(this->clientContainer)), disconnectionListener(
-        new DisconnectionListener(this->clientContainer)) {}
+        new DisconnectionListener(this->clientContainer, core)) {}
 
 server::NetworkManager::~NetworkManager() {
 
@@ -25,53 +25,48 @@ void server::NetworkManager::sendMessage(const std::string &msg, server::clientI
 //    Client &client = this->clientContainer.get(clientId);
 }
 
-void server::NetworkManager::clientRegister(int src, const std::string &name) {
+void server::NetworkManager::clientRegister(clientId_t src, const std::string &name) {
     Mutexer(this->mutex);
-    try {
-        Client &client = this->clientContainer.get(src);
-        client.setName(name);
-    } catch (std::logic_error &e) {
-        Client &client = this->clientContainer.create(src);
-        client.setName(name);
-    }
+    Client &client = this->clientContainer.get((src));
+    client.setName(name);
 }
 
-void server::NetworkManager::clientDisconnect(int src) {
+void server::NetworkManager::clientDisconnect(clientId_t src) {
     Mutexer(this->mutex);
-    Client &client = this->clientContainer.get(src);
+    Client &client = this->clientContainer.get((src));
     core->removeClient(client);
-    this->clientContainer.remove(src);
+    this->clientContainer.remove((src));
 }
 
-void server::NetworkManager::clientConnect(int src) {
+void server::NetworkManager::clientConnect(clientId_t src) {
     Mutexer(this->mutex);
-    clientContainer.create(src);
+    clientContainer.create((src));
 }
 
-void server::NetworkManager::clientJoin(int src, gameId_t game) {
+void server::NetworkManager::clientJoin(clientId_t src, gameId_t game) {
     Mutexer(this->mutex);
-    Client &client = this->clientContainer.get(src);
+    Client &client = this->clientContainer.get((src));
     core->setClient(client, game);
 }
 
-void server::NetworkManager::clientPlayerAttack(int src, attackId_t attackId, round_t tick) {
+void server::NetworkManager::clientPlayerAttack(clientId_t src, attackId_t attackId, round_t tick) {
     //TODO Use tick
     Mutexer(this->mutex);
-    Client &client = this->clientContainer.get(src);
+    Client &client = this->clientContainer.get((src));
     if (client.getController())
         client.getController()->playShoot(attackId);
 }
 
-void server::NetworkManager::clientPlayerMove(int src, speed_t vectX, speed_t vectY) {
+void server::NetworkManager::clientPlayerMove(clientId_t src, speed_t vectX, speed_t vectY) {
     Mutexer(this->mutex);
-    Client &client = this->clientContainer.get(src);
+    Client &client = this->clientContainer.get((src));
     if (client.getController())
         client.getController()->playMove(vectX, vectY);
 }
 
-void server::NetworkManager::clientPlayerQuit(int src) {
+void server::NetworkManager::clientPlayerQuit(clientId_t src) {
     Mutexer(this->mutex);
-    Client &client = this->clientContainer.get(src);
+    Client &client = this->clientContainer.get((src));
     core->removeClient(client);
 }
 
@@ -83,31 +78,37 @@ server::NetworkManager::DisconnectionListener *server::NetworkManager::getDiscon
     return disconnectionListener;
 }
 
-void server::NetworkManager::askGame(int src) {
+void server::NetworkManager::askGame(clientId_t src) {
     const std::vector<Game *> &games = this->core->getGames();
     network::PacketFactory *pFactory = this->core->getPacketFactory();
 
 
-    std::vector<std::pair<uint8_t , uint16_t >> serializedVector;
+    std::vector<std::pair<uint8_t, uint16_t >> serializedVector;
     for (auto game : games) {
-        serializedVector.push_back(std::pair<uint8_t, uint16_t >(game->getLobbyId(), game->getClientSize()));
+        serializedVector.push_back(std::pair<uint8_t, uint16_t>(game->getLobbyId(), game->getClientSize()));
     }
     network::packet::PacketGameList list = network::packet::PacketGameList();
-    pFactory->send(list, src);
+    pFactory->send(list, (src));
 }
 
 server::NetworkManager::ConnectionListener::ConnectionListener(server::ClientContainer &clientContainer)
         : clientContainer(clientContainer) {}
 
 void server::NetworkManager::ConnectionListener::notify(unsigned long fd) {
+    INFO("new client: " << std::to_string(fd));
     this->clientContainer.create(fd);
 }
 
-server::NetworkManager::DisconnectionListener::DisconnectionListener(server::ClientContainer &clientContainer)
-        : clientContainer(clientContainer) {
+server::NetworkManager::DisconnectionListener::DisconnectionListener(server::ClientContainer &clientContainer,
+                                                                     server::Core *core)
+        : clientContainer(clientContainer), core(core) {
 
 }
 
 void server::NetworkManager::DisconnectionListener::notify(unsigned long fd) {
+    INFO("delete client");
+    Client &client = this->clientContainer.get(fd);
+    core->removeClient(client);
     this->clientContainer.remove(fd);
+
 }

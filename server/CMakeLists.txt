@@ -9,9 +9,11 @@ file(
         src/*.cpp
         include/*.hh
         include/*.hpp
+        tests/ProjTester.cpp
 )
 
 include_directories(include)
+include_directories(tests)
 include_directories(include/entities)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 

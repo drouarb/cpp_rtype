@@ -30,5 +30,6 @@ const std::list<server::Client> &server::ClientContainer::toStdList() const {
 server::Client &server::ClientContainer::create(unsigned long id) {
     (*this)[id] = Client(id);
     this->clientList.push_back((*this)[id]);
+    INFO("Create client for " << id)
     return (*this)[id];
 }

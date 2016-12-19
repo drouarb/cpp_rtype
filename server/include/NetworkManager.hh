@@ -34,8 +34,9 @@ namespace server {
         class DisconnectionListener : public network::listener::ISocketDisconnectionListener {
         private:
             ClientContainer &clientContainer;
+            server::Core *core;
         public:
-            DisconnectionListener(server::ClientContainer &clientContainer);
+            DisconnectionListener(server::ClientContainer &clientContainer, server::Core *core);
 
             void notify(unsigned long fd) override;
         };
@@ -56,21 +57,21 @@ namespace server {
 
         void sendMessage(const std::string &msg, clientId_t clientId);
 
-        void clientRegister(int src, const std::string &name) override;
+        void clientRegister(clientId_t src, const std::string &name) override;
 
-        void clientDisconnect(int src) override;
+        void clientDisconnect(clientId_t src) override;
 
-        void clientConnect(int src);
+        void clientConnect(clientId_t src);
 
-        void clientJoin(int src, gameId_t game) override;
+        void clientJoin(clientId_t src, gameId_t game) override;
 
-        void clientPlayerAttack(int src, attackId_t attackId, round_t tick) override;
+        void clientPlayerAttack(clientId_t src, attackId_t attackId, round_t tick) override;
 
-        void clientPlayerMove(int src, speed_t vectX, speed_t vectY) override;
+        void clientPlayerMove(clientId_t src, speed_t vectX, speed_t vectY) override;
 
-        void clientPlayerQuit(int src) override;
+        void clientPlayerQuit(clientId_t src) override;
 
-        void askGame(int src) override;
+        void askGame(clientId_t src) override;
 
         ConnectionListener *getConnectionListener() const;
 

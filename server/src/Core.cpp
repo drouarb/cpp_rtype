@@ -19,6 +19,7 @@
 #include <listeners/ServerListenerPong.hh>
 #include <listeners/ServerListenerQuit.hh>
 #include <listeners/ServerListenerRegister.hh>
+#include <ProjTester.hpp>
 
 server::Core::Core(const std::string &path, const unsigned short port)
         : sw(IStopwatch::getInstance()), packetFactory(nullptr), networkManager(
@@ -46,7 +47,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
         std::cerr << "No levels. Aborting." << std::endl;
         return;
     }
-    this->packetFactory = new network::PacketFactory(port);
+    this->packetFactory = new PacketFactoryTest(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
 //    this->packetFactory->registerListener(new ServerListenerAck());
@@ -55,12 +56,13 @@ server::Core::Core(const std::string &path, const unsigned short port)
     this->packetFactory->registerListener(new ServerListenerDisconnect(this->networkManager));
 //    this->packetFactory->registerListener(new ServerListenerErrorHandshake());
     this->packetFactory->registerListener(new ServerListenerJoin(this->networkManager));
-    this->packetFactory->registerListener(new ServerListenerPlayerAttack());
-    this->packetFactory->registerListener(new ServerListenerPlayerMove());
+    this->packetFactory->registerListener(new ServerListenerPlayerAttack(this->networkManager));
+    this->packetFactory->registerListener(new ServerListenerPlayerMove(this->networkManager));
 //    this->packetFactory->registerListener(new ServerListenerPong());
-    this->packetFactory->registerListener(new ServerListenerQuit());
-    this->packetFactory->registerListener(new ServerListenerRegister());
+    this->packetFactory->registerListener(new ServerListenerQuit(this->networkManager));
+    this->packetFactory->registerListener(new ServerListenerRegister(this->networkManager));
 //    this->packetFactory->registerListener(new ServerListenerSyn());
+    this->packetFactory->run();
 }
 
 void server::Core::run() {
@@ -68,7 +70,7 @@ void server::Core::run() {
         sw->set();
         mutex.lock();
 
-        std::cout << "- round - - - - - - - - - - - - - - - - - -" << std::endl;
+//        std::cout << "- round - - - - - - - - - - - - - - - - - -" << std::endl;
         for (auto &game : games) {
             std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
             game->tick();

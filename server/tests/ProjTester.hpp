@@ -29,18 +29,18 @@ public:
 
     void setCore(server::Core *core);;
 
-    void clientRegister(int src, const std::string &name) override;
+    void clientRegister(server::clientId_t src, const std::string &name) override;
 
-    void clientDisconnect(int src) override;
+    void clientDisconnect(server::clientId_t src) override;
 
-    void clientJoin(int src, server::gameId_t game) override;
+    void clientJoin(server::clientId_t src, server::gameId_t game) override;
 
-    void clientPlayerAttack(int src, server::attackId_t attackId, server::round_t tick) override;
+    void clientPlayerAttack(server::clientId_t src, server::attackId_t attackId, server::round_t tick) override;
 
-    void clientPlayerMove(int src, server::speed_t vectX, server::speed_t vectY) override;
+    void clientPlayerMove(server::clientId_t src, server::speed_t vectX, server::speed_t vectY) override;
 
 
-    void clientPlayerQuit(int src) override;
+    void clientPlayerQuit(server::clientId_t src) override;
 };
 
 class CoreTest : public server::Core {
@@ -54,6 +54,13 @@ public:
     void run() override;
 
     void run(server::round_t maxTick);
+};
+
+class PacketFactoryTest : public network::PacketFactory {
+public:
+    PacketFactoryTest(unsigned short port);
+
+    void send(const network::packet::IPacket &packet, unsigned long fd) const override;
 };
 
 #endif //CPP_RTYPE_CORETEST_HPP

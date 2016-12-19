@@ -15,21 +15,21 @@ namespace server {
      */
     class IListenerHandler {
     public:
-        virtual void clientConnect(int src) = 0;
+        virtual void clientConnect(clientId_t src) = 0;
 
-        virtual void clientRegister(int src, const std::string &name)= 0;
+        virtual void clientRegister(clientId_t src, const std::string &name)= 0;
 
-        virtual void clientDisconnect(int src)= 0;
+        virtual void clientDisconnect(clientId_t src)= 0;
 
-        virtual void clientJoin(int src, gameId_t game)= 0;
+        virtual void clientJoin(clientId_t src, gameId_t game)= 0;
 
-        virtual void clientPlayerAttack(int src, attackId_t attackId, round_t tick)= 0;
+        virtual void clientPlayerAttack(clientId_t src, attackId_t attackId, round_t tick)= 0;
 
-        virtual void clientPlayerMove(int src, speed_t vectX, speed_t vectY)= 0;
+        virtual void clientPlayerMove(clientId_t src, speed_t vectX, speed_t vectY)= 0;
 
-        virtual void clientPlayerQuit(int src)= 0;
+        virtual void clientPlayerQuit(clientId_t src)= 0;
 
-        virtual void askGame(int src)= 0;
+        virtual void askGame(clientId_t src)= 0;
     };
 }
 
