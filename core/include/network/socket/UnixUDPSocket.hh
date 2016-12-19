@@ -11,7 +11,7 @@
 #include <arpa/inet.h>
 #include <poll.h>
 #include <thread>
-#include "helpers/Stopwatch.hh"
+#include <helpers/UnixStopwatch.hh>
 #include "ISocket.hh"
 
 namespace network {
@@ -25,9 +25,9 @@ namespace network {
             struct s_UDPClient {
                 int npings;
                 unsigned short ack;
-                helpers::Stopwatch sw;
                 e_socketStatus status;
                 struct sockaddr_in client;
+                helpers::UnixStopwatch sw;
             };
 
             enum e_handshakeState {
@@ -95,7 +95,7 @@ namespace network {
             //Client stuffs
             int npings;
             unsigned short syn;
-            helpers::Stopwatch sw;
+            helpers::UnixStopwatch sw;
 
             //Server Stuffs
             std::list<struct s_UDPClient> clients;
