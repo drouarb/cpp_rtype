@@ -63,7 +63,7 @@ int main()
     item4->changeStatus(UI::IDLE);
 
     item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/bf109.png", 200 , 100);
-    static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 16, 0, 0, 350, 100);
+    item4->addAnimation(UI::IDLE, 16, 350);
     item4->changeStatus(UI::IDLE);
 
     static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "/home/jonas_e/Work/Epitech/rtype/media/references/background.png");

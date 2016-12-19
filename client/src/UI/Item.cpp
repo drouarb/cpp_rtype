@@ -106,12 +106,14 @@ void UI::Item::addAnimation(UI::animationType animationType, short frames, unsig
 }
 
 void UI::Item::addAnimation(UI::animationType animationType, short frames, unsigned int size) {
-    while (animation[animationType].size() > 0)
-        animation[animationType].pop_back();
+    while (animations[animationType].size() > 0)
+        animations[animationType].pop_back();
     for (int i = 0; i < frames; i++) {
         sf::Sprite *frame = new sf::Sprite();
         frame->setTexture(*texture);
-        frame->setTextureRect(sf::IntRect(i * size, 0, size * i, 0));
+        //std::cerr << "x: " << (i * width) + posX << " y:" << posY << " width:" << width << " height:" << height << " size:" << animations[animationType].size() << std::endl;
+        frame->setTextureRect(sf::IntRect((i * size) + 0, 0, size, size));
+        frame->setScale(scale, scale);
         animations[animationType].push_back(frame);
     }
     animated = true;

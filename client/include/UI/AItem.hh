@@ -33,6 +33,9 @@ namespace UI {
         virtual void setRatio(float sizeXMax, float sizeYMax) = 0;
         virtual void setRatio(float ratio) = 0;
         virtual void changeStatus(animationType type);
+        virtual void addAnimation(UI::animationType animationType, short frames, unsigned int size) = 0;
+        virtual void addAnimation(UI::animationType animationType, short frames, unsigned int posX, unsigned int posY, unsigned int width,
+                          unsigned int height) = 0;
         void setID(uint32_t id);
         uint32_t getID();
         void playAnimation(animationType animation);
