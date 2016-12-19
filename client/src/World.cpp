@@ -3,6 +3,7 @@
 */
 
 #include <mutex>
+#include <iostream>
 #include "World.hh"
 
 using namespace client;
