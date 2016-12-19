@@ -117,7 +117,7 @@ EntityInitialization *Player::MagicMissile::initialize() {
     initialization->team = server::Team::PLAYER;
     initialization->sprite.sizeX = 10;
     initialization->sprite.sizeY = 10;
-    initialization->sprite.path = "media/references/e_100.png";
+    initialization->sprite.path = "media/sprites/magicBullet.png";
     return initialization;
 }
 
