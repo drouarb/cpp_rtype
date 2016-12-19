@@ -14,7 +14,7 @@
 #include "ProjTester.hpp"
 
 
-static const int test_duration = 5000;
+static const int test_duration = 30000;
 
 void run(CoreTest *coreTest) {
     coreTest->run();
@@ -71,8 +71,8 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
     while (pStopwatch->ellapsedMs() < test_duration) {
         ++i;
         packetPlayerAttack->setTick(32 + i);
-        if (i < 6)
-            playerAttack->notify(packetPlayerAttack);
+//        if (i < 6)
+//            playerAttack->notify(packetPlayerAttack);
 //        std::this_thread::sleep_for(std::chrono::milliseconds(1));
    }
     thread->detach();

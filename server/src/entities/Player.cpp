@@ -19,6 +19,7 @@ Player::Player() : mustDestroy(0), vectX(0), vectY(0), newHp(0) {
 }
 
 void Player::collide(const Entity &entity, server::round_t current_round) {
+    INFO("Collide test")
     if (entity.data.getTeam() == server::Team::PLAYER) {
         return;
     }
@@ -30,6 +31,7 @@ EntityAction *Player::act(round_t current_round) {
 //    while (!attackQueue.empty()) {
 //        attackQueue.pop();
 //    }
+    INFO("Player hp: " << this->data->getHp())
     EntityAction *act = new EntityAction();
     if (!attackQueue.empty()) {
         ADynamicObject *&pObject = attackQueue.front();
