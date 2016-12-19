@@ -163,9 +163,7 @@ void Game::checkCollisions()
                 std::cout << "right dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
-                    INFO("J'appelle le collide entre " << entities[i]->data.getId() << " et " << entities[j]->data.getId())
                     entities[i]->obj->collide(*entities[j], this->round);
-                    INFO("J'appelle le collide entre " << entities[j]->data.getId() << " et " << entities[i]->data.getId())
                     entities[j]->obj->collide(*entities[i], this->round);
 
                     if (entities[j]->data.getVectX() <= 0)

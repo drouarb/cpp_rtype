@@ -58,8 +58,8 @@ EntityInitialization *Player::initialize() {
     ei->action.hp = 5;
     ei->posX = 0;
     ei->posY = FIELD_HEIGHT / 2;
-    ei->sprite.sizeX = 100;
-    ei->sprite.sizeY = 100;
+    ei->sprite.sizeX = 400;
+    ei->sprite.sizeY = 400;
     ei->action.hp = DEFAULT_LIFE;
     ei->sprite.path = "media/references/e_100.png";
 
@@ -99,13 +99,17 @@ EntityAction *Player::MagicMissile::act(round_t current_round) {
         INFO("MagicMassile ded" << this->data->getId() << ", x:" << this->data->getPosX() << ", y: "
                                 << this->data->getPosY())
     }
+/*
     auto circle_speed = 2;
-    auto x_speed = -2;
+    auto x_speed = 2;
     auto rad = (current_round % 31) * 0.2;
     auto vectX = cos(rad) * circle_speed + x_speed;
     auto vectY = sin(rad) * circle_speed;
     entityAction->speedX = static_cast<speed_t >(vectX);
     entityAction->speedY = static_cast<speed_t >(vectY);
+  */
+    entityAction->speedX = 3;
+    entityAction->speedY = 0;
     return entityAction;
 }
 
@@ -115,8 +119,8 @@ EntityInitialization *Player::MagicMissile::initialize() {
     initialization->posX = this->posX;
     initialization->posY = this->posY;
     initialization->team = server::Team::PLAYER;
-    initialization->sprite.sizeX = 10;
-    initialization->sprite.sizeY = 10;
+    initialization->sprite.sizeX = 50;
+    initialization->sprite.sizeY = 50;
     initialization->sprite.path = "media/sprites/magicBullet.png";
     return initialization;
 }

@@ -54,8 +54,8 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     initialization->team = server::Team::FOE;
     initialization->action.speedX = 0;
     initialization->action.speedY = 0;
-    initialization->sprite.sizeX = 100;
-    initialization->sprite.sizeY = 100;
+    initialization->sprite.sizeX = 400;
+    initialization->sprite.sizeY = 400;
     initialization->sprite.path = "media/references/ALL_GONE.jpg";
 
     INFO("I'm the vilain nasty player: ");
@@ -71,16 +71,18 @@ bool BasicNastyEntity::collideWith(const server::Entity &entity) {
 }
 
 void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity, server::round_t current_round) {
+    INFO("TEST COLLISION")
     if (entity.data.getTeam() == server::Team::FOE) {
         return;
     }
+    INFO("MISSILE COLLIDE EXPLOSION (round : " << current_round << ")");
     this->isCollide = current_round;
 }
 
 server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round)
 {
     server::EntityAction * a = new server::EntityAction();
-    if (this->isCollide && this->isCollide == (current_round + 1)) {
+    if (this->isCollide) {
         a->destroy = true;
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
@@ -96,8 +98,8 @@ server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(
     initialization->action.speedX = -3;
     initialization->action.speedY = 0;
     initialization->team = server::Team::FOE;
-    initialization->sprite.sizeX = 40;
-    initialization->sprite.sizeY = 40;
+    initialization->sprite.sizeX = 50;
+    initialization->sprite.sizeY = 50;
     initialization->sprite.path = "media/sprites/magicBullet.png";
     return initialization;
 }
