@@ -21,10 +21,10 @@ namespace server
 
         //        std::queue<attackId_t> __attribute__((deprecated)) attackQueue;
         std::queue<ADynamicObject *>  attackQueue;
-        bool mustDestroy;
+        round_t mustDestroy;
         speed_t vectX;
         speed_t vectY;
-        int newHp;
+        hp_t newHp;
 
     public:
 
@@ -34,14 +34,14 @@ namespace server
 
         bool collideWith(const Entity &entity) override;
 
-        void collide(const Entity &entity) override;
+        void collide(const Entity &entity, server::round_t current_round) override;
         EntityAction *act(round_t round) override;
         EntityInitialization * initialize() override;
         hp_t getDamage() override;
 
         class MagicMissile : public ADynamicObject {
         public:
-            void collide(const Entity &entity) override;
+            void collide(const Entity &entity, server::round_t current_round) override;
 
             EntityAction *act(round_t current_round) override;
 
@@ -54,7 +54,7 @@ namespace server
             bool collideWith(const Entity &entity) override;
 
         private:
-            bool mustDestroy;
+            round_t mustDestroy;
 
             pos_t posX;
             pos_t posY;

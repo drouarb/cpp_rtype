@@ -14,19 +14,19 @@ void Player::shoot(attackId_t) {
     this->attackQueue.push(new MagicMissile(this->data->getPosX() + 105, this->data->getPosY()));
 }
 
-Player::Player() : mustDestroy(false), vectX(0), vectY(0), newHp(true) {
+Player::Player() : mustDestroy(0), vectX(0), vectY(0), newHp(0) {
     INFO("Player created")
 }
 
-void Player::collide(const Entity &entity) {
+void Player::collide(const Entity &entity, server::round_t current_round) {
     if (entity.data.getTeam() == server::Team::PLAYER) {
         return;
     }
     std::cout << "Player " << this->data->getId() << " collides with player id " << entity.data.getId() << std::endl;
-    this->newHp -= entity.obj->getDamage();
+    this->newHp = entity.obj->getDamage();
 }
 
-EntityAction *Player::act(round_t) {
+EntityAction *Player::act(round_t current_round) {
 //    while (!attackQueue.empty()) {
 //        attackQueue.pop();
 //    }
@@ -37,13 +37,15 @@ EntityAction *Player::act(round_t) {
         attackQueue.pop();
         INFO("PLayer " << this->data->getId() << " : BOUM /!\\")
     }
-    if (mustDestroy || this->newHp < 0) {
+    if ((mustDestroy && mustDestroy + 1 == current_round) || this->data->getHp()) {
         INFO("PLayer " << this->data->getId() << " : DED /!\\")
         act->destroy = true;
     }
     act->speedX = vectX;
     act->speedY = vectY;
+    act->hp = this->data->getHp() - this->newHp;
 
+    this->newHp = 0;
     return act;
 }
 
@@ -55,9 +57,10 @@ EntityInitialization *Player::initialize() {
     ei->posY = FIELD_HEIGHT / 2;
     ei->sprite.sizeX = 100;
     ei->sprite.sizeY = 100;
+    ei->action.hp = DEFAULT_LIFE;
     ei->sprite.path = "media/references/e_100.png";
 
-    this->newHp = DEFAULT_LIFE;
+    this->newHp = 0;
     return (ei);
 }
 
@@ -74,7 +77,7 @@ bool Player::collideWith(const Entity &) {
     return true;
 }
 
-void Player::MagicMissile::collide(const Entity &entity) {
+void Player::MagicMissile::collide(const Entity &entity, server::round_t current_round) {
     if (entity.data.getTeam() == server::Team::PLAYER) {
         INFO("MagicMissile collide with PLAYERRRRRR " << entity.data.getId())
         INFO("PLAYER POS {x: " << entity.data.getPosX() << ", y:" << entity.data.getPosY());
@@ -82,14 +85,14 @@ void Player::MagicMissile::collide(const Entity &entity) {
         return;
     }
     INFO("MagicMissile collide with : " << entity.data.getId() <<  "(id: " << this->data->getId() << ")" )
-    this->mustDestroy = true;
+    this->mustDestroy = current_round;
 }
 
 EntityAction *Player::MagicMissile::act(round_t current_round)
 {
     server::EntityAction *entityAction = new server::EntityAction();
 
-    if (this->mustDestroy) {
+    if (this->mustDestroy != 0 && this->mustDestroy + 1 == current_round) {
         entityAction->destroy = true;
         INFO("MagicMassile ded" << this->data->getId() <<", x:" << this->data->getPosX() << ", y: " << this->data->getPosY())
     }
@@ -114,7 +117,7 @@ hp_t Player::MagicMissile::getDamage() {
     return DAMAGE;
 }
 
-Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY) : mustDestroy(false), posX(posX), posY(posY) {}
+Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY) : mustDestroy(0), posX(posX), posY(posY) {}
 
 bool Player::MagicMissile::collideWith(const Entity &entity) {
     return entity.data.getTeam() != server::Team::PLAYER;

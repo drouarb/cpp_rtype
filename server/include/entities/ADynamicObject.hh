@@ -24,7 +24,7 @@ namespace server
          * If the instance where collide() is called is an actor, it should check the colliding entity for damage.
          * This method may be called multiple times before nextAction() is called, if there are multiple collisions.
          */
-        virtual void collide(const Entity &) = 0;
+        virtual void collide(const server::Entity &, server::round_t current_round) = 0;
         /**
          * This method is called at each game round. Here, the entity can chose to do anything (or nothing).
          * The returned EntityAction contains all that the entity wants to do.

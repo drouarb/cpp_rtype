@@ -23,7 +23,7 @@ namespace network {
     public:
         PacketFactory(unsigned short port);
         PacketFactory(const std::string &address, unsigned short port);
-        ~PacketFactory();
+        virtual ~PacketFactory();
 
         void run();
         void poll();

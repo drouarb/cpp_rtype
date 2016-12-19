@@ -21,7 +21,7 @@ BasicEntity::BasicEntity() : destroyed(false)
 { }
 
 
-void BasicEntity::collide(const Entity &)
+void BasicEntity::collide(const server::Entity &entity, server::round_t current_round)
 {
     this->destroyed = true;
 }

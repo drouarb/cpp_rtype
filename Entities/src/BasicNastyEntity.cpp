@@ -12,7 +12,8 @@ BasicNastyEntity::BasicNastyEntity() : notifyCollision(nullptr), stopwatch(IStop
     this->stopwatch->set();
 }
 
-void BasicNastyEntity::collide(const server::Entity &entity) {
+void BasicNastyEntity::collide(const server::Entity &entity, server::round_t current_round) {
+    this->damage_time = current_round;
     this->notifyCollision = new server::EntityAction();
     this->notifyCollision->hp = this->data->getHp() - entity.obj->getDamage();
     std::cout << "COLIIIIIIIIIIIIIIIIIIIIIIIIIDE with: " << entity.data.getId() << std::endl;
@@ -27,7 +28,7 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
 {
     INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ")")
     server::EntityAction * a;
-    if (this->notifyCollision) {
+    if (this->notifyCollision && this->damage_time + 1 == current_round) {
         a = this->notifyCollision;
         this->notifyCollision = nullptr;
     } else {
@@ -58,7 +59,7 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     initialization->sprite.path = "media/references/ALL_GONE.jpg";
 
     INFO("I'm the vilain nasty player: ");
-    return initialization;//TODO Add sprite
+    return initialization;
 }
 
 server::hp_t BasicNastyEntity::getDamage() {
@@ -69,17 +70,17 @@ bool BasicNastyEntity::collideWith(const server::Entity &entity) {
     return this->data->getTeam() != entity.data.getTeam();
 }
 
-void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity) {
+void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity, server::round_t current_round) {
     if (entity.data.getTeam() == server::Team::FOE) {
         return;
     }
-    this->isCollide = true;
+    this->isCollide = current_round;
 }
 
 server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round)
 {
     server::EntityAction * a = new server::EntityAction();
-    if (this->isCollide) {
+    if (this->isCollide && this->isCollide == (current_round + 1)) {
         a->destroy = true;
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
@@ -106,7 +107,7 @@ server::hp_t BasicNastyEntity::VeryNastyProjectile::getDamage() {
 }
 
 BasicNastyEntity::VeryNastyProjectile::VeryNastyProjectile(server::speed_t posX, server::speed_t posY)
-        : isCollide(false) {
+        : isCollide(0) {
     this->posX = posX;
     this->posY = posY;
 }

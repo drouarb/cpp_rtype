@@ -16,7 +16,7 @@ public:
 
 //    friend std::ostream &operator<<(std::ostream &os, const BasicEntity &player);
 
-    void collide(const server::Entity &) override ;
+    void collide(const server::Entity &entity, server::round_t current_round) override ;
     server::EntityAction *act(server::round_t current_round) override ;
     server::EntityInitialization *initialize() override ;
 
