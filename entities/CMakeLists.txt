@@ -18,7 +18,7 @@ file(
 include_directories(include)
 include_directories(../server/include)
 include_directories(../server/include/entities)
-
+include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS} ${RTYPE_SERVER_INCLUDE_DIRS})
 
 set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 

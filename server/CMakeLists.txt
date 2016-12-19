@@ -25,6 +25,7 @@ endif ()
 
 target_link_libraries(${PROJECT_NAME} rtype_core)
 
+set(RTYPE_SERVER_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 if (CLIENT_TESTS)
 

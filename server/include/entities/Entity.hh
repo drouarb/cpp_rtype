@@ -5,6 +5,7 @@
 #ifndef CPP_RTYPE_ENTITY_HH
 #define CPP_RTYPE_ENTITY_HH
 
+#include <helpers/libloader/IDlLoader.hh>
 #include "ADynamicObject.hh"
 
 namespace server

@@ -3,7 +3,7 @@
 //
 
 #include "Entity.hh"
-#include "LibLoader/getDlLoader.hpp"
+#include <helpers/libloader/getDlLoader.hpp>
 #include <iostream>
 
 using namespace server;
