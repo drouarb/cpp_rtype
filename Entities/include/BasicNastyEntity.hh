@@ -43,7 +43,7 @@ private:
 
     static const int NASTY_DAMAGE = 10;
     static const int NASTY_COLLISION_DAMAGE = 5;
-    static const int FIRE_FREQUENCY = 5000;
+    static const int FIRE_FREQUENCY = 5;
     static const int DEFAULT_HP = 100;
 
 
