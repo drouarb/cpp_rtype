@@ -38,7 +38,15 @@ add_library(${PROJECT_NAME} STATIC ${CORE_SRCS})
 
 target_link_libraries(${PROJECT_NAME} protoboeuf)
 
-set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+if (NOT WIN32)
+    set(DL_LIBRARY dl)
+endif(NOT WIN32)
+
+set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include ${PROTOBOEUF_INCLUDE_DIRS}
+        CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+
+set(RTYPE_CORE_LIBS ${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} ${PROTOBOEUF_LIBS} ${DL_LIBRARY}
+        CACHE INTERNAL "${PROJECT_NAME}: Libraries" FORCE)
 
 if (CORE_TESTS)
     enable_testing()

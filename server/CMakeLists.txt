@@ -12,32 +12,19 @@ file(
         tests/ProjTester.cpp
 )
 
-include_directories(include)
 include_directories(tests)
+include_directories(include)
 include_directories(include/entities)
-include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
+include_directories(${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SERVER_SRCS})
-if ("${CMAKE_SYSTEM}" MATCHES "Linux")
-    target_link_libraries(${PROJECT_NAME} dl)
-    target_link_libraries(${PROJECT_NAME} pthread)
-endif ()
 
-target_link_libraries(${PROJECT_NAME} rtype_core)
+target_link_libraries(${PROJECT_NAME} ${RTYPE_CORE_LIBS})
 
-set(RTYPE_SERVER_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+set(RTYPE_SERVER_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include ${RTYPE_CORE_INCLUDE_DIRS}
+        CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
-if (CLIENT_TESTS)
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLOG_INFO=ON")
-    add_library("${PROJECT_NAME}lib" STATIC ${SERVER_SRCS})
-    IF ("${CMAKE_SYSTEM}" MATCHES "Linux")
-        target_link_libraries("${PROJECT_NAME}lib" dl)
-        target_link_libraries("${PROJECT_NAME}lib" pthread)
-    endif ()
-    target_link_libraries("${PROJECT_NAME}lib" rtype_core)
-
-
+if (SERVER_TESTS)
     enable_testing()
     add_subdirectory(tests)
-endif (CLIENT_TESTS)
+endif (SERVER_TESTS)
