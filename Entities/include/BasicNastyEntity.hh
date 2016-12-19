@@ -21,7 +21,7 @@ private:
         VeryNastyProjectile(server::speed_t posX, server::speed_t posY);
 
         void collide(const server::Entity &) override ;
-        server::EntityAction *nextAction() override ;
+        server::EntityAction *act(server::round_t current_round) override ;
         server::EntityInitialization *initialize() override ;
 
         bool collideWith(const server::Entity &entity) override;
@@ -51,7 +51,7 @@ public:
 //    friend std::ostream &operator<<(std::ostream &os, const BasicNastyEntity &player);
 
     void collide(const server::Entity &) override ;
-    server::EntityAction *nextAction() override ;
+    server::EntityAction *act(server::round_t current_round) override ;
     server::EntityInitialization *initialize() override ;
 
     server::hp_t getDamage() override;

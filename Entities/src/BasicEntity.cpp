@@ -26,7 +26,7 @@ void BasicEntity::collide(const Entity &)
     this->destroyed = true;
 }
 
-EntityAction *BasicEntity::nextAction()
+EntityAction *BasicEntity::act(round_t current_round)
 {
     EntityAction * a = new EntityAction();
     if (this->destroyed) {

@@ -27,11 +27,12 @@ namespace server
         virtual void collide(const Entity &) = 0;
         /**
          * This method is called at each game round. Here, the entity can chose to do anything (or nothing).
-         * Playing a sound, destroying oneself or creating a new entity must be done via EntityAction.
-         * Any other action can be done from inside the class. The server will then detect the action automatically comparing the fields to the previous ones.
-         * The returned EntityAction must be dynamically alloc'd, and will be deleted by the caller.
+         * The returned EntityAction contains all that the entity wants to do.
+         * It must be dynamically alloc'd, and will be deleted by the caller. Must not be null.
+         * The parameter is the current game round. It allows the entity to know the current 'time' of the game.
+         * This 'round' can increment (as the game goes) or go back a few steps in case of a rewind of the simulation.
          */
-        virtual EntityAction * nextAction() = 0;
+        virtual EntityAction *act(round_t current_round) = 0;
         /**
          * This method is called when the object is first created.
          * The X and Y coordinates given in the EntityInitilization will be ignored if the entity was created by the level.

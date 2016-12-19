@@ -35,7 +35,7 @@ namespace server
         bool collideWith(const Entity &entity) override;
 
         void collide(const Entity &entity) override;
-        EntityAction *nextAction() override;
+        EntityAction *act(round_t round) override;
         EntityInitialization * initialize() override;
         hp_t getDamage() override;
 
@@ -43,7 +43,7 @@ namespace server
         public:
             void collide(const Entity &entity) override;
 
-            EntityAction *nextAction() override;
+            EntityAction *act(round_t current_round) override;
 
             EntityInitialization *initialize() override;
 

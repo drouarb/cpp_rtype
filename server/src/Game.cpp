@@ -292,7 +292,7 @@ void Game::letEntitesAct()
     for (size_t i = 0; i != entities.size(); ++i)
     {
         auto it = entities.at(i);
-        EntityAction * action = it->obj->nextAction();
+        EntityAction * action = it->obj->act(0);
         if (action->speedX != it->data.getVectX())
         {
             it->data.setVectX(action->speedX);

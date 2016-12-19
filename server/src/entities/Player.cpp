@@ -26,7 +26,7 @@ void Player::collide(const Entity &entity) {
     this->newHp -= entity.obj->getDamage();
 }
 
-EntityAction *Player::nextAction() {
+EntityAction *Player::act(round_t) {
 //    while (!attackQueue.empty()) {
 //        attackQueue.pop();
 //    }
@@ -85,7 +85,8 @@ void Player::MagicMissile::collide(const Entity &entity) {
     this->mustDestroy = true;
 }
 
-EntityAction *Player::MagicMissile::nextAction() {
+EntityAction *Player::MagicMissile::act(round_t current_round)
+{
     server::EntityAction *entityAction = new server::EntityAction();
 
     if (this->mustDestroy) {

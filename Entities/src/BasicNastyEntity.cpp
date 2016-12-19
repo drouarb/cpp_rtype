@@ -23,7 +23,8 @@ void BasicNastyEntity::collide(const server::Entity &entity) {
     }
 }
 
-server::EntityAction *BasicNastyEntity::nextAction() {
+server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
+{
     INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ")")
     server::EntityAction * a;
     if (this->notifyCollision) {
@@ -75,7 +76,8 @@ void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity
     this->isCollide = true;
 }
 
-server::EntityAction *BasicNastyEntity::VeryNastyProjectile::nextAction() {
+server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round)
+{
     server::EntityAction * a = new server::EntityAction();
     if (this->isCollide) {
         a->destroy = true;
