@@ -21,4 +21,4 @@ set(SERVER_TESTS ${RTYPE_TESTS})
 add_subdirectory(server)
 
 set(ENTITIES_TEST ${RTYPE_TESTS})
-add_subdirectory(entities)
+add_subdirectory(entity)

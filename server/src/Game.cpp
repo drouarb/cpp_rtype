@@ -109,7 +109,7 @@ void Game::checkCollisions()
 
             int dist;
 
-            // calculations are based on entities[i]
+            // calculations are based on entity[i]
 
             // --- x axis
 
@@ -330,7 +330,7 @@ void Game::moveEntities()
         entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
         entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
         std::cout << "player " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
-        //TODO: do this in checkCollisions, by creating entities of the player team, located on the borders?
+        //TODO: do this in checkCollisions, by creating entity of the player team, located on the borders?
         /*if (entity->data.getPosY() > FIELD_HEIGHT)
             entity->data.setPosY(FIELD_HEIGHT);
         if (entity->data.getPosY() < 0)

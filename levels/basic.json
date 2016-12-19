@@ -3,7 +3,7 @@
   spawns:
   [
     {
-      dlName: "build/Entities/libBasicNastyEntity",
+      dlName: "build/entity/libBasicNastyEntity",
       time: "10",
       posX: "600",
       posY: "300"
