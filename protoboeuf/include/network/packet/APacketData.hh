@@ -18,8 +18,8 @@ namespace network {
         public:
             virtual ~APacketData();
 
-            virtual int getSource() const;
-            virtual void setSource(int src);
+            virtual unsigned long getSource() const;
+            virtual void setSource(unsigned long src);
             virtual uint16_t getSize() const;
             virtual PacketId getPacketId() const;
             virtual void serialize(t_rawdata *data) const;
@@ -30,7 +30,7 @@ namespace network {
             const t_rawdata& getData() const;
 
         protected:
-            int src;
+            unsigned long src;
             t_rawdata data;
             const utils::NetworkInteger packetId;
         };

@@ -33,7 +33,8 @@ namespace network {
             ERROR_GAME              = 0x20,
             JOIN                    = 0x21,
             QUIT                    = 0x22,
-            GAME_DATA               = 0x23,
+	    PLAYER_DATA             = 0x23,
+            SYNCHRONIZATION         = 0x24,
 
             EVENT_ERROR             = 0x30,
             CANCEL_EVENT            = 0x31,
@@ -56,8 +57,8 @@ namespace network {
         public:
             virtual ~IPacket() {};
 
-            virtual int getSource() const = 0;
-            virtual void setSource(int src) = 0;
+            virtual unsigned long getSource() const = 0;
+            virtual void setSource(unsigned long src) = 0;
             virtual uint16_t getSize() const = 0;
             virtual PacketId getPacketId() const = 0;
             virtual void serialize(t_rawdata *data) const = 0;

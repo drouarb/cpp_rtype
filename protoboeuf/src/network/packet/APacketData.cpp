@@ -60,10 +60,10 @@ network::packet::PacketId network::packet::APacketData::getPacketId() const {
     return static_cast<PacketId>(packetId.getValue());
 }
 
-void network::packet::APacketData::setSource(int src) {
+void network::packet::APacketData::setSource(unsigned long src) {
     this->src = src;
 }
 
-int network::packet::APacketData::getSource() const {
+unsigned long network::packet::APacketData::getSource() const {
     return this->src;
 }

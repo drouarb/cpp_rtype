@@ -85,3 +85,6 @@ client/src/*~
 client/include/*~
 *~
 \#*
+client/*.sh
+*~
+client/rtype_client
