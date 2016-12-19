@@ -3,6 +3,7 @@
 */
 
 #include <iostream>
+#include <UI/BackgroundLayer.hh>
 #include "GameUIInterface.hh"
 
 using namespace client;
@@ -11,7 +12,8 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     managerUi.init(1920, 1020);
     managerUi.getEventObserver()->setEventManager(handler);
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
-    ui_mut = mut;
+    static_cast<UI::BackgroundLayer*>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "media/references/background.png");
+     ui_mut = mut;
 
 }
 
