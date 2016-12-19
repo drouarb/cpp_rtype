@@ -37,7 +37,7 @@ EntityAction *Player::act(round_t current_round) {
         attackQueue.pop();
         INFO("PLayer " << this->data->getId() << " : BOUM /!\\")
     }
-    if ((mustDestroy && mustDestroy + 1 == current_round) || this->data->getHp()) {
+    if ((mustDestroy && mustDestroy + 1 == current_round) || this->data->getHp() <= 0) {
         INFO("PLayer " << this->data->getId() << " : DED /!\\")
         act->destroy = true;
     }
