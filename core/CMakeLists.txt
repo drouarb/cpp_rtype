@@ -25,6 +25,7 @@ else (WIN32)
             GLOB_RECURSE
             CORE_SRCS
             ${CORE_SRCS}
+            src/network/socket/UnixUDPSocket.cpp
             src/helpers/UnixStopwatch.cpp
     )
 endif (WIN32)
