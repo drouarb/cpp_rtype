@@ -84,6 +84,12 @@ void GameClient::gameLoop() {
 
                 else if (event == sf::Keyboard::Key::Space) {
                     manager->sendPlayerAttack(world->getTick(), 0);
+                } else if ((world->getTick() / (tickRateClient / 2)) == 0){
+                    world->getEntityById(playerId)->setVec(vec_t(0, 0));
+                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+                                            world->getEntityById(playerId)->getVec().second,
+                                            world->getEntityById(playerId)->getPos().first,
+                                            world->getEntityById(playerId)->getPos().second);
                 }
 
             }
