@@ -82,7 +82,7 @@ void Game::progressLevel()
             else
             {
                 INFO("Game " << gameId << ": Adding new player(" << spawn.dlName << " on: " << entity->data.getPosX() << ", " << entity->data.getPosY());
-                entityIdCount += 2;
+                entityIdCount++;
                 entities.push_back(entity);
                 this->sim_spawn(entity);
             }
@@ -535,6 +535,9 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pspawn->setEventId(id);
         pspawn->setEntityId(entity->data.getId());
         pspawn->setHp(entity->data.getHp());
+        pspawn->setSpriteName(entity->data.getSprite().path);
+        pspawn->setPosX(entity->data.getPosX());
+        pspawn->setPosY(entity->data.getPosY());
         packetf.send(*pspawn, client.getClientId());
         delete pspawn;
         ++id;

@@ -6,7 +6,10 @@
 #include "events/Spawn.hh"
 
 server::event::Spawn::Spawn(const round_t tick, const entityId_t entityId, pos_t posX, pos_t posY, int hp, const std::string & sprite) :
-        AGameEvent(tick, entityId), posX(posX), posY(posY), hp(hp), sprite(sprite) {}
+        AGameEvent(tick, entityId), posX(posX), posY(posY), hp(hp), sprite(sprite)
+{
+    lastId++; //inc another time for simulation
+}
 
 server::event::IGameEvent *server::event::Spawn::getParentEvent() {
     return nullptr;
