@@ -85,7 +85,7 @@ server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
     }
-    a->speedX = -20;
+    a->speedX = -1;
     return (a);
 }
 
