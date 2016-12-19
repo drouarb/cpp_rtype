@@ -1,5 +1,5 @@
 //
-// IThread.hpp for IThread in /home/trouve_b/Desktop/CPP_project/cpp_plazza/tests_thr_pool
+// IThread.hpp for IThread in /home/trouve_b/Desktop/CPP_project/cpp_rtype/tests_thr_pool
 // 
 // Made by Alexis Trouve
 // Login   <trouve_b@epitech.net>

@@ -4,19 +4,12 @@
 #include <algorithm>
 #include <thread>
 #include <iostream>
-#include <unistd.h>
 #include <cassert>
-#include <listeners/ServerListenerSyn.hh>
-#include <listeners/ServerListenerAck.hh>
 #include <listeners/ServerListenerAskLeaderboard.hh>
 #include <listeners/ServerListenerAskList.hh>
-#include <listeners/ServerListenerConnect.hh>
-#include <listeners/ServerListenerDisconnect.hh>
-#include <listeners/ServerListenerErrorHandshake.hh>
 #include <listeners/ServerListenerJoin.hh>
 #include <listeners/ServerListenerPlayerAttack.hh>
 #include <listeners/ServerListenerPlayerMove.hh>
-#include <listeners/ServerListenerPong.hh>
 #include <listeners/ServerListenerQuit.hh>
 #include <listeners/ServerListenerRegister.hh>
 #include <ProjTester.hpp>
@@ -50,18 +43,13 @@ server::Core::Core(const std::string &path, const unsigned short port)
     this->packetFactory = new PacketFactoryTest(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
-//    this->packetFactory->registerListener(new ServerListenerAck());
     this->packetFactory->registerListener(new ServerListenerAskLeaderboard());
     this->packetFactory->registerListener(new ServerListenerAskList(this->networkManager));
-    this->packetFactory->registerListener(new ServerListenerDisconnect(this->networkManager));
-//    this->packetFactory->registerListener(new ServerListenerErrorHandshake());
     this->packetFactory->registerListener(new ServerListenerJoin(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerPlayerAttack(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerPlayerMove(this->networkManager));
-//    this->packetFactory->registerListener(new ServerListenerPong());
     this->packetFactory->registerListener(new ServerListenerQuit(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerRegister(this->networkManager));
-//    this->packetFactory->registerListener(new ServerListenerSyn());
     this->packetFactory->run();
 }
 

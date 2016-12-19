@@ -3,10 +3,10 @@
 
 #include "NetworkManager.hh"
 #include "helpers/IStopwatch.hh"
+#include "thread/Mutex.hh"
 #include <string>
 #include <Level.hh>
 #include <Game.hh>
-#include <mutex>
 #include <network/PacketFactory.hh>
 
 namespace server
@@ -19,7 +19,7 @@ namespace server
     private:
         NetworkManager *networkManager;
         network::PacketFactory *packetFactory;
-        std::mutex mutex;
+        Mutex mutex;
         std::vector<Level> levels;
         std::vector<Game *> games;
         gameId_t lastGameId;

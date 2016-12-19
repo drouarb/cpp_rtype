@@ -1,5 +1,5 @@
 //
-// Json.hpp for plazza in /home/lewis_e/rendu/cpp/cpp_plazza
+// Json.hpp for rtype in /home/lewis_e/rendu/cpp/cpp_rtype
 // 
 // Made by Esteban Lewis
 // Login   <lewis_e@epitech.net>

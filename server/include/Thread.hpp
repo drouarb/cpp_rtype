@@ -4,8 +4,8 @@
 
 
 
-#ifndef CPP_PLAZZA_THREAD_HPP
-#define CPP_PLAZZA_THREAD_HPP
+#ifndef CORE_THREAD_HPP
+#define CORE_THREAD_HPP
 
 #include <pthread.h>
 #include <stdarg.h>

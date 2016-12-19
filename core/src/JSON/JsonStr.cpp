@@ -39,8 +39,6 @@ JSON::JsonStr::Serialize(int level)
     return (serialized);
 }
 
-#include <iostream>
-
 int
 JSON::JsonStr::ParseFrom(std::string const &text)
 {

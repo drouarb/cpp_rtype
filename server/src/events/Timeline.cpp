@@ -17,6 +17,12 @@ void event::Timeline::addEvent(event::AGameEvent *event)
     if (event->getTick() < game.getTick())
     {
         //rewind
+        //send cancels for every packet
+        //undo spawns and destroys
+        //once at the sought round, find latest update and move for every entity (or spawn if none)
+        //tick until the right round
+
+        //TODO: if a received player control packet is too old, ignore it
     }
     else
     {

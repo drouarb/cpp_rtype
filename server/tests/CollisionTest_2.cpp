@@ -2,7 +2,6 @@
 // Created by greg on 15/12/2016.
 //
 
-#include <listeners/ServerListenerDisconnect.hh>
 #include <listeners/ServerListenerJoin.hh>
 #include <cassert>
 #include <network/packet/PacketPlayerAttack.hh>

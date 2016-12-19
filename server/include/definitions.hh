@@ -7,7 +7,7 @@
 
 #include "cstdint"
 
-#define ROUND_DURATION_MS 30
+#define ROUND_DURATION_MS 4
 
 namespace server {
 

@@ -5,9 +5,6 @@
 #ifndef CPP_RTYPE_PLAYER_HH
 #define CPP_RTYPE_PLAYER_HH
 
-
-static const int DEFAULT_LIFE = 200;
-
 #include <queue>
 #include "APlayer.hh"
 

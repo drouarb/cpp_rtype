@@ -2,7 +2,6 @@
 // Created by greg on 15/12/2016.
 //
 
-#include <listeners/ServerListenerDisconnect.hh>
 #include <listeners/ServerListenerJoin.hh>
 #include <cassert>
 #include <network/packet/PacketPlayerAttack.hh>
@@ -14,7 +13,7 @@
 #include "ProjTester.hpp"
 
 
-static const int test_duration = 30000;
+static const int test_duration = 5000;
 
 void run(CoreTest *coreTest) {
     coreTest->run();

@@ -50,10 +50,10 @@ void Game::tick()
 {
     round++;
     progressLevel();
-    letEntitesAct();
-    unspawn();
-    checkCollisions();
+    checkCollisions(); //must be before moveEntities
     moveEntities();
+    letEntitesAct();
+    unspawn(); //must be after letEntitiesAct
     this->sendData();
     //TODO: run the simulation and //DONE send its data to the clients
 }
@@ -82,7 +82,7 @@ void Game::progressLevel()
             else
             {
                 INFO("Game " << gameId << ": Adding new player(" << spawn.dlName << " on: " << entity->data.getPosX() << ", " << entity->data.getPosY());
-                entityIdCount++;
+                entityIdCount += 2;
                 entities.push_back(entity);
                 this->sim_spawn(entity);
             }

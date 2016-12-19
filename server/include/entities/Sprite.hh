@@ -5,7 +5,7 @@
 #ifndef CPP_RTYPE_SPRITE_HH
 #define CPP_RTYPE_SPRITE_HH
 
-#include "../definitions.hh"
+#include "definitions.hh"
 #include <string>
 
 namespace server
