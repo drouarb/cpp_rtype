@@ -52,7 +52,7 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     server::EntityInitialization *initialization = new server::EntityInitialization("");
     initialization->action.hp = DEFAULT_HP;
     initialization->team = server::Team::FOE;
-    initialization->action.speedX = 1;
+    initialization->action.speedX = 0;
     initialization->action.speedY = 0;
     initialization->sprite.sizeX = 100;
     initialization->sprite.sizeY = 100;

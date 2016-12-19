@@ -9,6 +9,7 @@
 #include <network/packet/PacketMoveEntity.hh>
 #include <network/packet/PacketSynchronization.hh>
 #include <ctime>
+#include <network/packet/PacketPlayerData.hh>
 #include "Game.hh"
 
 using namespace server;
@@ -317,7 +318,6 @@ void Game::letEntitesAct()
         if (action->destroy)
         {
             it->data.setDestroyed(true);
-            this->sim_destroy(entities[i]);
         }
         delete action;
     }
@@ -350,11 +350,11 @@ void Game::unspawn()
         {
             (*it)->data.setDestroyed(true);
             INFO("OUT OF RANGE : " << (*it)->data.getId())
-            this->sim_destroy(*it);
         }
         if ((*it)->data.isDestroyed())
         {
             INFO("delete player : " << (*it)->data.getId())
+            this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
             it = vect_erase(it, entities);
         }
@@ -382,9 +382,7 @@ void Game::newPlayer(Client *client) {
     client->setController(controller);
     this->entities.push_back(entity);
     this->sim_spawn(entity);
-    sendPacketSync(client);
-    if (clientList.size() > 1) //if not first client
-        greetNewPlayer(*client);
+    greetNewPlayer(*client);
 }
 
 void Game::removePlayer(Client *client) {
@@ -511,6 +509,19 @@ void Game::sendPacketSync(const Client * client)
 }
 
 void Game::greetNewPlayer(const Client & client)
+{
+    auto packetPlayerData = new network::packet::PacketPlayerData();
+    packetPlayerData->setNbAttack(1);
+    packetPlayerData->setPlayerId(client.getController()->getEntity()->data.getId());
+    packetf.send(*packetPlayerData, client.getClientId());
+    delete packetPlayerData;
+
+    sendPacketSync(&client);
+    if (clientList.size() > 1) //if not first client
+        sendSimToNewNotFirst(client);
+}
+
+void Game::sendSimToNewNotFirst(const Client &client)
 {
     //TODO
     //this is temporary

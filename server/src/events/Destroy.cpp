@@ -24,7 +24,7 @@ network::packet::IPacket *server::event::Destroy::createPacket()
 {
     auto packet = new network::packet::PacketDeleteEntity();
     packet->setEntityId(this->entityId);
-    packet->setEntityId(this->eventId);
+    packet->setEventId(this->eventId);
     packet->setTick(this->tick);
     return (packet);
 }

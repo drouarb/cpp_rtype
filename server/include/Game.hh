@@ -96,6 +96,8 @@ namespace server
         void sendPacketSync(const Client * client);
 
         void greetNewPlayer(const Client &);
+
+        void sendSimToNewNotFirst(const Client & client);
     };
 }
 
