@@ -3,6 +3,7 @@
 //
 
 
+#include <iostream>
 #include "listener/ClientListenerMoveEntity.hh"
 using namespace client;
 ClientListenerMoveEntity::ClientListenerMoveEntity(NetworkManager *networkManager) : networkManager(networkManager), APacketListener(network::packet::MOVE_ENTITY)

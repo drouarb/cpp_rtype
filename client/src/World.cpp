@@ -8,9 +8,10 @@
 
 using namespace client;
 
-World::World(std::mutex *mmut)
+World::World(std::mutex *mmut, GameUIInterface *ngame)
 {
     world_mut = mmut;
+    gameui = ngame;
 }
 
 World::~World()
@@ -70,39 +71,38 @@ void	World::applyTurn()
   pos_t					pos;
 
   itEv = worldEvents.begin();
-  std::cout << " ----- turn(" << turn << ") -----" << std::endl;
   while (itEv->first < turn && itEv != worldEvents.end())
     {
       if (itEv->second.eventtype == SPAWN && (entitys.find(itEv->second.id) == entitys.end()))
 	{
-	  std::cout << "spawn" << std::endl;
 	  ent = new Entity(itEv->second.id, itEv->second.type, itEv->second.pos, itEv->first);
 	  pos = ent->getPos();
 	  entitys.insert(std::pair<ide_t, Entity*>(itEv->second.id, ent));
+        gameui->addEntity(getEntityById(itEv->second.id));
 	}
       else if (itEv->second.eventtype == UPDATE && (entitys.find(itEv->second.id) != entitys.end()))
 	{
-	  std::cout << "update" << std::endl;
+        std::cout << "update" << std::endl;
 	  ent = entitys.at(itEv->second.id);
 	  pos = ent->getPos();
 	  ent->updateEntity(itEv->second.hp);
 	}
       else if (itEv->second.eventtype == MOVE && (entitys.find(itEv->second.id) != entitys.end()))
 	{
-	  std::cout << "move" << std::endl;
 	  ent = entitys.at(itEv->second.id);
 	  pos = ent->getPos();
 	  ent->moveEntity(itEv->second.vec, itEv->second.pos, itEv->second.turn);
 	}
       else if (itEv->second.eventtype == DELETE && (entitys.find(itEv->second.id) != entitys.end()))
 	{
-	  std::cout << "delete" << std::endl;
+        gameui->deleteEntity(entitys.at(itEv->second.id));
 	  ent = entitys.at(itEv->second.id);
 	  pos = ent->getPos();
 	  entitys.erase(itEv->second.id);
 	  delete ent;
 	}
       UIevents.push_back(std::pair<UIevent_t, pos_t>(itEv->second.UIevent, pos));
+        worldEvents.erase(itEv->first);
       ++itEv;
     }
   it = entitys.begin();
@@ -111,12 +111,14 @@ void	World::applyTurn()
       it->second->applyVec(it->second->getVec(), turn);
       ++it;
     }
+    ++turn;
 }
 
 Entity			*World::getEntityById(ide_t nid)
 {
-  if (entitys.find(nid) != entitys.end())
-    return (entitys.at(nid));
+  if (entitys.find(nid) != entitys.end()) { //TODO
+      return (entitys.at(nid));
+  }
 }
 
 std::map<ide_t, Entity*>	World::getEntitys()

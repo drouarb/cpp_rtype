@@ -1,0 +1,32 @@
+{
+  "Name": "MenuConnect",
+  "Default_Visibility": 1,
+  "padding_up" : 100,
+  "padding_left" : 600,
+  "Buttons": [
+    {
+      "buttons_name": "server",
+      "selected": "servers.png",
+      "noselected": "servers.png",
+      "default_selected" : 0,
+      "position": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "buttons_name": "back",
+      "selected": "back2.png",
+      "noselected": "back.png",
+      "default_selected" : 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 200
+        }
+      ]
+    }
+  ]
+}

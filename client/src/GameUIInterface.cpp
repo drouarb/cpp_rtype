@@ -20,7 +20,7 @@ GameUIInterface::~GameUIInterface() {
 
 void GameUIInterface::initUI() {
     window = managerUi.getWindow(UI::MAIN_WINDOW);
-   // addMenu("config/menuStart.json");
+//    addMenu("config/menuConnection.json");
 }
 
 void GameUIInterface::displaySimple() {
@@ -68,16 +68,17 @@ void GameUIInterface::addListEntity(std::vector<Entity *> listentity) {
 
 void GameUIInterface::addEntity(Entity *listEntity) {
     ui_mut->lock();
+    std::cout << "add entity  " << typeEntity[listEntity->getId()] << "pos_x  :" << listEntity->getPos().first  << "pos_y "  << listEntity->getPos().second<< std::endl ;
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
     gameItem[listEntity] = item;
+    item->setRatio(0.2);
     ui_mut->unlock();
 }
 
 void GameUIInterface::updateListEntity() {
     ui_mut->lock();
     for (auto it = gameItem.begin(); it != gameItem.end(); it++) {
-
         it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
     }
     ui_mut->unlock();

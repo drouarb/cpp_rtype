@@ -22,7 +22,7 @@ void client::EventManager::onMouseRealease(short x, short y) {
 }
 
 void client::EventManager::onKeyRealease(short key) {
-event = key;
+event = -42;
 }
 
 short client::EventManager::getEvent() {

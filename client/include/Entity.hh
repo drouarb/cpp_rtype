@@ -27,7 +27,11 @@ namespace client
     pos_t			pos;
     pos_t			posO;
     vec_t			vec;
-    std::map<tick, moveData>	move;
+  public:
+      void setVec(const vec_t &vec);
+
+  private:
+      std::map<tick, moveData>	move;
     int				hp;
     ide_t			id;
     typeide_t			idtype;

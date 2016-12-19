@@ -1,11 +1,11 @@
 {
-  "Name": "MenuStart",
+  "Name": "MenuConnection",
   "Default_Visibility": 0,
   "padding_up" : 100,
   "padding_left" : 600,
   "Buttons": [
     {
-      "buttons_name": "Play",
+      "buttons_name": "s",
       "selected": "play2.png",
       "noselected": "play.png",
       "default_selected" : 1,
@@ -14,6 +14,7 @@
           "x": 0,
           "y": 0
         }
+
       ]
     },
     {
