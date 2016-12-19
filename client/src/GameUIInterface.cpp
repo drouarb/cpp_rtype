@@ -115,6 +115,7 @@ void GameUIInterface::addMenu(const std::string &path) {
         window->getLayer(id)->open();
     else
         window->getLayer(id)->close();
+    temp->setLayer(window->getLayer(id));
      int x = 0;
     int y = 0;
     int padding_up = root.get_child("padding_up").get_value<int>();

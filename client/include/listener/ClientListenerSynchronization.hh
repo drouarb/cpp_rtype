@@ -6,18 +6,18 @@
 #define CPP_RTYPE_CLIENTLISTENERGAMEDATA_HH
 
 #include <network/listener/ListenerTemplate.hpp>
-#include "network/packet/PacketGameData.hh"
+#include "network/packet/PacketSynchronization.hh"
 #include "NetworkManager.hh"
 namespace client {
-    class ClientListenerGameData
-            : public network::ListenerTemplate<network::packet::PacketGameData, network::packet::GAME_DATA> {
+    class ClientListenerSynchronization
+            : public network::ListenerTemplate<network::packet::PacketSynchronization, network::packet::SYNCHRONIZATION> {
 
     public:
-        ClientListenerGameData(NetworkManager *networkManager);
+        ClientListenerSynchronization(NetworkManager *networkManager);
 
-        ~ClientListenerGameData();
+        ~ClientListenerSynchronization();
 
-        void notify(const network::packet::PacketGameData *packet);
+        void notify(const network::packet::PacketSynchronization *packet);
 
     private:
         NetworkManager *networkManager;

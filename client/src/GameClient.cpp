@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <future>
+#include <cstdint>
 #include "EventManager.hh"
 #include "GameClient.hh"
 

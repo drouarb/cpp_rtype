@@ -17,7 +17,7 @@ ClientListenerSpawnEntity::~ClientListenerSpawnEntity()
 
 void ClientListenerSpawnEntity::notify(const network::packet::PacketSpawnEntity *packet)
 {
-    std::cout << "lloo" << std::endl;
+    std::cout << "receive spawn entity" << std::endl;
     networkManager->receiveSpawnEntity(packet->getTick(), packet->getEventId(), packet->getSpriteName(),
                                        packet->getEntityId(), packet->getPosX(), packet->getPosY(), packet->getHp());
 }

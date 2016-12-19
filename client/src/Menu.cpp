@@ -6,7 +6,7 @@
 #include "Menu.hh"
 
 Menu::Menu() : current_selected(nullptr){
-
+layer = nullptr;
 }
 
 unsigned long Menu::getLayer_id() const {
@@ -58,3 +58,20 @@ void Menu::selectedPrev() {
         }
     }
 }
+
+void Menu::putMenu() {
+    layer->open();
+}
+
+void Menu::popMenu() {
+    layer->close();
+}
+
+UI::ILayer *Menu::getLayer() const {
+    return layer;
+}
+
+void Menu::setLayer(UI::ILayer *laye) {
+    layer = laye;
+}
+

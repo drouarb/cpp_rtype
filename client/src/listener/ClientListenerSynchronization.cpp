@@ -2,19 +2,22 @@
 // Created by celeriy on 16/12/16.
 //
 
-#include "listener/ClientListenerGameData.hh"
+#include <network/packet/IPacket.hh>
+#include <iostream>
+#include "listener/ClientListenerSynchronization.hh"
 using namespace client;
-ClientListenerGameData::ClientListenerGameData(NetworkManager *networkManager) : networkManager(networkManager), APacketListener(network::packet::GAME_DATA)
+ClientListenerSynchronization::ClientListenerSynchronization(NetworkManager *networkManager) : networkManager(networkManager), APacketListener(network::packet::SYNCHRONIZATION)
 {
 
 }
 
-ClientListenerGameData::~ClientListenerGameData()
+ClientListenerSynchronization::~ClientListenerSynchronization()
 {
 
 }
 
-void ClientListenerGameData::notify(const network::packet::PacketGameData *packet)
+void ClientListenerSynchronization::notify(const network::packet::PacketSynchronization *packet)
 {
-    networkManager->receiveGameData();
+    std::cout << "receive synchro" << std::endl;
+    networkManager->receiveSynchronization(packet->getTick(), packet->getTime());
 }

@@ -5,11 +5,18 @@
 #ifndef CPP_RTYPE_AMENU_HH
 #define CPP_RTYPE_AMENU_HH
 
+#include <UI/ILayer.hh>
 #include "UI/AItem.hh"
 class Menu {
 private:
     unsigned  long layer_id;
+    UI::ILayer *layer;
+public:
+    UI::ILayer *getLayer() const;
 
+    void setLayer(UI::ILayer *layer);
+
+private:
     UI::AItem *current_selected;
 public:
     UI::AItem *getCurrent_selected() const;
@@ -32,6 +39,8 @@ public:
     ~Menu(){};
     void selectedNext();
     void selectedPrev();
+    void putMenu();
+    void popMenu();
 };
 
 

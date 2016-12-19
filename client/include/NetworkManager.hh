@@ -59,7 +59,7 @@ namespace client {
 
         void receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp);
 
-        void receiveGameData();
+        void receiveSynchronization(uint32_t turn, int64_t time);
       
         void sendRegister(const std::string & name);
 

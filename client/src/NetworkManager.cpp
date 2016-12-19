@@ -23,7 +23,7 @@
 #include <network/packet/PacketJoin.hh>
 #include <network/packet/PacketPlayerMove.hh>
 #include <network/packet/PacketPlayerAttack.hh>
-#include <listener/ClientListenerGameData.hh>
+#include <listener/ClientListenerSynchronization.hh>
 #include "NetworkManager.hh"
 
 using namespace client;
@@ -81,7 +81,7 @@ void NetworkManager::addListenerToPacketFactory()
     listeners.push_back(new client::ClientListenerQuit(this));
     listeners.push_back(new client::ClientListenerSpawnEntity(this));
     listeners.push_back(new client::ClientListenerUpdateEntity(this));
-    listeners.push_back(new client::ClientListenerGameData(this));
+    listeners.push_back(new client::ClientListenerSynchronization(this));
     for (auto it = listeners.begin(); it != listeners.end(); it++)
         packetFactory->registerListener(*it);
 }
@@ -185,6 +185,6 @@ void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
     packetFactory->broadcast(packetPlayerAttack);
 }
 
-void NetworkManager::receiveGameData() {
-  gameClient->manageGameData();
+void NetworkManager::receiveSynchronization(uint32_t turn, int64_t time) {
+  gameClient->manageSyncro(turn, time);
 }
