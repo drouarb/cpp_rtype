@@ -17,7 +17,6 @@ namespace server
     namespace event
     {
         //stores all events
-        //stores events that must be sent
         //possibility to go back to a past round
         //possibility to go forward a certain number of rounds, sending all event packets
         class Timeline

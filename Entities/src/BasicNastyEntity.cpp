@@ -33,7 +33,7 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
     } else {
         a = new server::EntityAction();
         a->destroy = false;
-        a->speedX = this->data->getVectX();
+        a->speedX = -1;
         a->hp = this->data->getHp();
     }
 
@@ -84,7 +84,7 @@ server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
     }
-    a->speedX = this->data->getVectX() - 10;
+    a->speedX = -20;
     return (a);
 }
 

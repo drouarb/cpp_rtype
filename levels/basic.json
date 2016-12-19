@@ -5,7 +5,7 @@
     {
       dlName: "build/Entities/libBasicNastyEntity",
       time: "10",
-      posX: "400",
+      posX: "600",
       posY: "300"
     }
   ]
