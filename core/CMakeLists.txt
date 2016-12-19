@@ -6,11 +6,29 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 file(
         GLOB_RECURSE
         CORE_SRCS
-        src/*.cpp
-        src/listener/*.cpp
+        src/helpers/Stopwatch.cpp
+        src/network/packet/*.cpp
+        src/network/listener/*.cpp
+        src/network/PacketFactory.cpp
         include/*.hh
         include/*.hpp
 )
+
+if (WIN32)
+    file(
+            GLOB_RECURSE
+            CORE_SRCS
+            ${CORE_SRCS}
+            src/network/socket/WindowsUDPSocket.cpp
+    )
+else (WIN32)
+    file(
+            GLOB_RECURSE
+            CORE_SRCS
+            ${CORE_SRCS}
+            src/network/socket/UnixUDPSocket.cpp
+    )
+endif (WIN32)
 
 include_directories(include)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS})
