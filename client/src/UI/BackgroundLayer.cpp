@@ -30,13 +30,13 @@ void    UI::BackgroundLayer::setBackground(UI::itemType type, const std::string 
     AItem* item = itemFactory->instantiate(type, sprite);
     item->setImage();
     item->setPosition(0, 0);
-    item->setRatio(600 / static_cast<UI::Item*>(item)->getSprite().getGlobalBounds().height);
+    item->setRatio(1080 / static_cast<UI::Item*>(item)->getSprite().getGlobalBounds().height);
     backgroundOrigin = static_cast<UI::Background*>(item);
     backgroundOrigin->setSpeed(1);
     item = itemFactory->instantiate(type, sprite);
     item->setImage();
     item->setPosition(static_cast<UI::Item*>(item)->getSprite().getGlobalBounds().width, 0);
-    item->setRatio(600 / static_cast<UI::Item*>(item)->getSprite().getGlobalBounds().height);
+    item->setRatio(1080 / static_cast<UI::Item*>(item)->getSprite().getGlobalBounds().height);
     backgroundDupplication = static_cast<UI::Background*>(item);
     backgroundDupplication->setSpeed(1);
     delete(items[0]);

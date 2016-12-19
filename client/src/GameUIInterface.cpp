@@ -74,7 +74,6 @@ void GameUIInterface::addEntity(Entity *listEntity) {
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
     gameItem[listEntity] = item;
-    item->setRatio(0.05);
     ui_mut->unlock();
 }
 
