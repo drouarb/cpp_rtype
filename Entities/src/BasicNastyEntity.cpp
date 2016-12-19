@@ -33,7 +33,7 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
     } else {
         a = new server::EntityAction();
         a->destroy = false;
-        a->speedX = -1;
+        a->speedX = 0;
         a->hp = this->data->getHp();
     }
 
