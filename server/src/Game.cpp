@@ -121,8 +121,8 @@ void Game::checkCollisions()
                 std::cout << "left dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
-                    entities[i]->obj->collide(*entities[j], 0);
-                    entities[j]->obj->collide(*entities[i], 0);
+                    entities[i]->obj->collide(*entities[j], this->round);
+                    entities[j]->obj->collide(*entities[i], this->round);
 
                     if (entities[i]->data.getVectX() <= 0)
                     {
@@ -164,9 +164,9 @@ void Game::checkCollisions()
                 if (dist <= 0)
                 {
                     INFO("J'appelle le collide entre " << entities[i]->data.getId() << " et " << entities[j]->data.getId())
-                    entities[i]->obj->collide(*entities[j], 0);
+                    entities[i]->obj->collide(*entities[j], this->round);
                     INFO("J'appelle le collide entre " << entities[j]->data.getId() << " et " << entities[i]->data.getId())
-                    entities[j]->obj->collide(*entities[i], 0);
+                    entities[j]->obj->collide(*entities[i], this->round);
 
                     if (entities[j]->data.getVectX() <= 0)
                     {
@@ -209,8 +209,8 @@ void Game::checkCollisions()
                 std::cout << "up dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
-                    entities[i]->obj->collide(*entities[j], 0);
-                    entities[j]->obj->collide(*entities[i], 0);
+                    entities[i]->obj->collide(*entities[j], this->round);
+                    entities[j]->obj->collide(*entities[i], this->round);
 
                     if (entities[i]->data.getVectY() <= 0)
                     {
@@ -251,8 +251,8 @@ void Game::checkCollisions()
                 std::cout << "down dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
-                    entities[i]->obj->collide(*entities[j], 0);
-                    entities[j]->obj->collide(*entities[i], 0);
+                    entities[i]->obj->collide(*entities[j], this->round);
+                    entities[j]->obj->collide(*entities[i], this->round);
 
                     if (entities[j]->data.getVectY() <= 0)
                     {

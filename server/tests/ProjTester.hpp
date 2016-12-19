@@ -39,7 +39,6 @@ public:
 
     void clientPlayerMove(server::clientId_t src, server::speed_t vectX, server::speed_t vectY) override;
 
-
     void clientPlayerQuit(server::clientId_t src) override;
 };
 
@@ -59,6 +58,13 @@ public:
 class PacketFactoryTest : public network::PacketFactory {
 public:
     PacketFactoryTest(unsigned short port);
+
+    void send(const network::packet::IPacket &packet, unsigned long fd) const override;
+};
+
+class PacketFactoryNoNetwork : public network::PacketFactory {
+public:
+    PacketFactoryNoNetwork(unsigned short port);
 
     void send(const network::packet::IPacket &packet, unsigned long fd) const override;
 };

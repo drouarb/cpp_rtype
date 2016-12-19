@@ -158,6 +158,7 @@ server::Core::Core(const std::string &path, server::NetworkManager *networkManag
         std::cerr << "No levels. Aborting." << std::endl;
         return;
     }
+    this->packetFactory = new PacketFactoryNoNetwork(6000);
 }
 
 server::Core::~Core() {

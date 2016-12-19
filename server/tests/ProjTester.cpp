@@ -71,3 +71,11 @@ void PacketFactoryTest::send(const network::packet::IPacket &packet, unsigned lo
     std::cout << "SENDIIIIIIIIIIIIIIIING " << packet.getPacketId() << " to " << fd << std::endl;
     network::PacketFactory::send(packet, fd);
 }
+
+PacketFactoryNoNetwork::PacketFactoryNoNetwork(unsigned short port) : PacketFactory(port) {
+    this->run();
+}
+
+void PacketFactoryNoNetwork::send(const network::packet::IPacket &packet, unsigned long fd) const {
+    std::cout << "SENDIIIIIIIIIIIIIIIING " << packet.getPacketId() << " to " << fd << std::endl;
+}

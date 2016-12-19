@@ -16,7 +16,7 @@ void BasicNastyEntity::collide(const server::Entity &entity, server::round_t cur
     this->damage_time = current_round;
     this->notifyCollision = new server::EntityAction();
     this->notifyCollision->hp = this->data->getHp() - entity.obj->getDamage();
-    std::cout << "COLIIIIIIIIIIIIIIIIIIIIIIIIIDE with: " << entity.data.getId() << std::endl;
+    INFO("COLIIIIIIIIIIIIIIIIIIIIIIIIIDE with: " << entity.data.getId() << ", at round:" << current_round);
     INFO("I'm the vilain nasty player : COLLIDE")
     if (this->notifyCollision->hp <= 0) {
         this->notifyCollision->destroy = true;
@@ -26,7 +26,7 @@ void BasicNastyEntity::collide(const server::Entity &entity, server::round_t cur
 
 server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
 {
-    INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ")")
+    INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ", round:" << current_round << ")")
     server::EntityAction * a;
     if (this->notifyCollision && this->damage_time + 1 == current_round) {
         a = this->notifyCollision;
