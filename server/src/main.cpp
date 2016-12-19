@@ -10,4 +10,5 @@ int main() {
         return -1;
     }
     core->run();
+    return (0);
 }

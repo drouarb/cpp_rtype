@@ -17,3 +17,8 @@ std::ostream &server::event::operator<<(std::ostream &os, const AGameEvent &even
     os << "tick: " << event.tick << " entityId: " << event.entityId;
     return os;
 }
+
+server::round_t server::event::AGameEvent::getTick()
+{
+    return (tick);
+}

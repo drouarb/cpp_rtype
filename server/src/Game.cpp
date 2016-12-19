@@ -7,6 +7,8 @@
 #include <events/Destroy.hh>
 #include <network/packet/PacketSpawnEntity.hh>
 #include <network/packet/PacketMoveEntity.hh>
+#include <network/packet/PacketSynchronization.hh>
+#include <ctime>
 #include "Game.hh"
 
 using namespace server;
@@ -380,7 +382,9 @@ void Game::newPlayer(Client *client) {
     client->setController(controller);
     this->entities.push_back(entity);
     this->sim_spawn(entity);
-    greetNewPlayer(*client);
+    sendPacketSync(client);
+    if (clientList.size() > 1) //if not first client
+        greetNewPlayer(*client);
 }
 
 void Game::removePlayer(Client *client) {
@@ -479,6 +483,30 @@ void Game::sim_destroy(Entity *entity) {
 
 uint16_t Game::getClientSize() {
     return this->clientList.size();
+}
+
+round_t Game::getTick()
+{
+    return (round);
+}
+
+void Game::sendPacketSync(const Client * client)
+{
+    auto packet_syn = new network::packet::PacketSynchronization();
+    packet_syn->setTick(round);
+    packet_syn->setTime(static_cast<int64_t>(std::time(nullptr)));
+    if (client == nullptr)
+    {
+        for (auto client_it : clientList)
+        {
+            packetf.send(*packet_syn, client_it->getClientId());
+        }
+    }
+    else
+    {
+        packetf.send(*packet_syn, client->getClientId());
+    }
+    delete packet_syn;
 }
 
 void Game::greetNewPlayer(const Client & client)

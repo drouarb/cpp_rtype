@@ -4,8 +4,8 @@
 #include "Level.hh"
 #include "Client.hh"
 #include "network/PacketFactory.hh"
+#include "events/Timeline.hh"
 #include <list>
-#include <events/AGameEvent.hh>
 
 namespace server
 {
@@ -26,6 +26,7 @@ namespace server
         bool hasClient(const Client &);
         bool empty();
         uint16_t getClientSize();
+        round_t getTick();
 
     private:
         network::PacketFactory & packetf;
@@ -91,6 +92,8 @@ namespace server
          * Sends data for this round to the clients.
          */
         void sendData();
+
+        void sendPacketSync(const Client * client);
 
         void greetNewPlayer(const Client &);
     };

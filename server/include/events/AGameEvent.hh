@@ -23,6 +23,8 @@ namespace server {
             AGameEvent(const round_t tick, const entityId_t entityId);
             virtual network::packet::IPacket *createPacket() = 0;
 
+            round_t getTick();
+
             friend std::ostream &operator<<(std::ostream &os, const AGameEvent &event);
         };
         std::ostream &operator<<(std::ostream &os, const AGameEvent &event);
