@@ -61,7 +61,7 @@ EntityInitialization *Player::initialize() {
     ei->sprite.sizeX = 400;
     ei->sprite.sizeY = 400;
     ei->action.hp = DEFAULT_LIFE;
-    ei->sprite.path = "media/references/e_100.png";
+    ei->sprite.path = "media/sprites/magicalGirlD.png";
 
     this->newHp = 0;
     return (ei);

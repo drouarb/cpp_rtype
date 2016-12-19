@@ -8,6 +8,8 @@ file(
         CORE_SRCS
         src/network/packet/*.cpp
         src/network/listener/*.cpp
+        src/thread/*.cpp
+        src/JSON/*.cpp
         src/network/PacketFactory.cpp
         include/*.hh
         include/*.hpp
