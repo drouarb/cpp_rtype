@@ -38,7 +38,7 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
         a->hp = this->data->getHp();
     }
 
-    if (this->stopwatch->ellapsedMs() > FIRE_FREQUENCY) {
+    if (current_round % (6 * FIRE_FREQUENCY) == 0) {
         INFO("I'm the vilain nasty player : BOUM BIM BAM")
         this->stopwatch->set();
         VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3, this->data->getPosY());
