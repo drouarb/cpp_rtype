@@ -39,6 +39,7 @@ namespace UI {
         sf::Texture *texture;
         float px;
         float py;
+        float scale;
         unsigned short animationTick;
     };
 }

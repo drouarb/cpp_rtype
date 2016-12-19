@@ -45,6 +45,7 @@ int main()
     item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/5af.png", 300, 360);
     item3 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready.png", 100, 400);
 
+
     item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png", 50 , 200);
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 4 * 65, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
@@ -54,6 +55,10 @@ int main()
     item4->changeStatus(UI::IDLE);
 
     item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png", 50 , 300);
+    static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
+    item4->changeStatus(UI::IDLE);
+
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/magicalGirlD.png", 50 , 0);
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
 

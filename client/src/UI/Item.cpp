@@ -6,6 +6,7 @@
 #include "../../include/UI/Item.hh"
 
 UI::Item::Item(itemType t) : AItem(t) {
+    scale = 1;
     animationTick = 0;
     animation = new std::list<sf::Sprite*>{&sprite};
     for (int i = 0; i < UI::animationType::ANIMATIONS_NUMBER; i++) {
@@ -38,7 +39,8 @@ sf::Sprite UI::Item::getSprite() {
             animation->pop_back();
         }
         animationTick++;
-        return *(animation->front());
+        animation->front()->setPosition(px, py);
+        return *animation->front();
     }
     return sprite;
 }
@@ -56,10 +58,12 @@ UI::Item::~Item() {
 }
 
 void UI::Item::moveX(float range) {
+    //px += range;
     sprite.setPosition(sprite.getPosition().x + range, sprite.getPosition().y);
 }
 
 void UI::Item::moveY(float range) {
+    //py += range;
     sprite.setPosition(sprite.getPosition().x, sprite.getPosition().y + range);
 }
 
@@ -72,6 +76,10 @@ void UI::Item::setRatio(float sizeXMax, float sizeYMax) {
 }
 
 void UI::Item::setRatio(float ratio) {
+    scale = ratio;
+    if (animated)
+        for (auto frame : animation[type])
+            frame->setScale(ratio, ratio);
     sprite.scale(ratio, ratio);
 }
 
@@ -88,9 +96,9 @@ void UI::Item::addAnimation(UI::animationType animationType, short frames, unsig
     for (int i = 0; i < frames; i++) {
         sf::Sprite *frame = new sf::Sprite();
         frame->setTexture(*texture);
-        frame->setPosition(px, py);
         //std::cerr << "x: " << (i * width) + posX << " y:" << posY << " width:" << width << " height:" << height << " size:" << animations[animationType].size() << std::endl;
         frame->setTextureRect(sf::IntRect((i * width) + posX, posY, width, height));
+        frame->setScale(scale, scale);
         animations[animationType].push_back(frame);
     }
 
@@ -112,8 +120,10 @@ void UI::Item::addAnimation(UI::animationType animationType, short frames, unsig
 void UI::Item::changeStatus(UI::animationType type) {
     UI::AItem::changeStatus(type);
 
-    if (animated)
+    if (animated) {
         animation = &animations[type];
+        //sprite.setTexture(*animation->front()->getTexture());
+    }
     else
         sprite.setTexture(*(textures[type]));
     //std::cerr << "merde:" << animations[type].size() << std::endl;
