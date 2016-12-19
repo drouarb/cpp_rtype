@@ -2,9 +2,9 @@
 // Created by lewis_e on 13/12/16.
 //
 
-#include "Entity.hh"
 #include <helpers/libloader/getDlLoader.hpp>
 #include <iostream>
+#include <entities/Entity.hh>
 
 using namespace server;
 

@@ -1,7 +1,7 @@
 #ifndef RTYPE_SPAWN_HH_
 #define RTYPE_SPAWN_HH_
 
-#include "definitions.hh"
+#include "Definitions.hh"
 #include "Entity.hh"
 
 namespace server

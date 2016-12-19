@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <iostream>
-#include <Player.hh>
+#include <entities/Player.hh>
 #include <events/Spawn.hh>
 #include <events/Move.hh>
 #include <events/ModHP.hh>

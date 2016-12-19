@@ -14,7 +14,7 @@ file(
 
 include_directories(tests)
 include_directories(include)
-include_directories(include/entities)
+include_directories(../core/include/entities)
 include_directories(${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SERVER_SRCS})

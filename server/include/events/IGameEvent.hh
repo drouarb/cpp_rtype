@@ -5,7 +5,7 @@
 #ifndef CPP_RTYPE_IGAMEEVENT_HH
 #define CPP_RTYPE_IGAMEEVENT_HH
 
-#include "definitions.hh"
+#include "Definitions.hh"
 
 namespace server {
     namespace event {

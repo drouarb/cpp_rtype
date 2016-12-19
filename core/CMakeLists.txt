@@ -6,11 +6,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 file(
         GLOB_RECURSE
         CORE_SRCS
+        src/entities/*.cpp
+        src/helpers/Stopwatch.cpp
+        src/JSON/*.cpp
         src/network/packet/*.cpp
         src/network/listener/*.cpp
-        src/thread/*.cpp
-        src/JSON/*.cpp
         src/network/PacketFactory.cpp
+        src/thread/*.cpp
         include/*.hh
         include/*.hpp
 )
@@ -37,8 +39,7 @@ include_directories(include/JSON)
 include_directories(${PROTOBOEUF_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} STATIC ${CORE_SRCS})
-
-target_link_libraries(${PROJECT_NAME} protoboeuf)
+set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 if (NOT WIN32)
     set(DL_LIBRARY dl)

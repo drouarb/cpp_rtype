@@ -2,7 +2,7 @@
 // Created by lewis_e on 15/12/16.
 //
 
-#include "Sprite.hh"
+#include <entities/Sprite.hh>
 
 using namespace server;
 

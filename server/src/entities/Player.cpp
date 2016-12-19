@@ -2,8 +2,8 @@
 // Created by greg on 02/12/2016.
 //
 
-#include <definitions.hh>
-#include <Player.hh>
+#include <Definitions.hh>
+#include <entities/Player.hh>
 #include <iostream>
 #include <cmath>
 #include "Entity.hh"

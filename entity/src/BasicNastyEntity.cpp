@@ -4,11 +4,11 @@
 
 #define LOG_INFO
 
-#include "definitions.hh"
+#include "Definitions.hh"
 #include <BasicNastyEntity.hh>
 #include <iostream>
 
-BasicNastyEntity::BasicNastyEntity() : notifyCollision(nullptr), stopwatch(IStopwatch::getInstance()) {
+BasicNastyEntity::BasicNastyEntity() : notifyCollision(nullptr), stopwatch(helpers::IStopwatch::getInstance()) {
     this->stopwatch->set();
 }
 

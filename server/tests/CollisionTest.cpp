@@ -64,10 +64,10 @@ void toTest(NetworkManagerTest &networkManagerTest, CoreTest &coreTest)
 
 
 
-    IStopwatch *pStopwatch = IStopwatch::getInstance();
+    helpers::IStopwatch *pStopwatch = helpers::IStopwatch::getInstance();
     pStopwatch->set();
     uint32_t i = 0;
-    while (pStopwatch->ellapsedMs() < test_duration) {
+    while (pStopwatch->elapsedMs() < test_duration) {
         ++i;
         packetPlayerAttack->setTick(32 + i);
 //        if (i < 6)

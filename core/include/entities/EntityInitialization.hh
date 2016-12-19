@@ -6,7 +6,7 @@
 #define CPP_RTYPE_ENTITYINIT_HH
 
 #include "EntityAction.hh"
-#include "definitions.hh"
+#include "Definitions.hh"
 #include "Sprite.hh"
 
 namespace server

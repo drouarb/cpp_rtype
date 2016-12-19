@@ -23,7 +23,7 @@ namespace server
         std::vector<Level> levels;
         std::vector<Game *> games;
         gameId_t lastGameId;
-        IStopwatch * sw;
+        helpers::IStopwatch * sw;
 
     protected:
         bool isRunning;

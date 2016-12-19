@@ -5,7 +5,7 @@
 #ifndef CPP_RTYPE_ENTITYDATA_HH
 #define CPP_RTYPE_ENTITYDATA_HH
 
-#include "definitions.hh"
+#include "Definitions.hh"
 #include "EntityInitialization.hh"
 #include "Sprite.hh"
 

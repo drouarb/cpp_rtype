@@ -7,7 +7,7 @@
 
 #include <string>
 #include <ostream>
-#include "definitions.hh"
+#include "Definitions.hh"
 
 namespace server {
 

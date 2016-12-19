@@ -5,7 +5,7 @@
 #ifndef CPP_RTYPE_IDAMAGER_HH
 #define CPP_RTYPE_IDAMAGER_HH
 
-#include "definitions.hh"
+#include "Definitions.hh"
 
 class IDamager {
 

@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "ProjTester.hpp"
-#include "definitions.hh"
+#include "Definitions.hh"
 
 
 std::map<METHOD_CALLED, bool> status;

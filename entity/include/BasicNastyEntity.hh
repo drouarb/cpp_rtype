@@ -37,7 +37,7 @@ private:
 
 private:
     server::EntityAction *notifyCollision;
-    IStopwatch *stopwatch;
+    helpers::IStopwatch *stopwatch;
     server::round_t damage_time;
 
 

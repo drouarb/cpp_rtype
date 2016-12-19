@@ -6,7 +6,7 @@
 #define CPP_RTYPE_TIMELINE_HH
 
 #include "AGameEvent.hh"
-#include "definitions.hh"
+#include "Definitions.hh"
 #include <vector>
 #include <list>
 

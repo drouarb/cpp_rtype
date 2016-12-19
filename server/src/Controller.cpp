@@ -1,5 +1,5 @@
 #include <Controller.hh>
-#include "Player.hh"
+#include "entities/Player.hh"
 
 void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY) {
     this->player->move(speedX, speedY);

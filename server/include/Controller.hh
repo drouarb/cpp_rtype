@@ -1,7 +1,7 @@
 #pragma once
 
-#include "definitions.hh"
-#include "Player.hh"
+#include "Definitions.hh"
+#include "entities/Player.hh"
 
 namespace server {
     class Controller {

@@ -15,7 +15,7 @@
 #include <ProjTester.hpp>
 
 server::Core::Core(const std::string &path, const unsigned short port)
-        : sw(IStopwatch::getInstance()), packetFactory(nullptr), networkManager(
+        : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(
         nullptr) {
     FolderExplorer fileExplorer(path);
 
@@ -65,8 +65,8 @@ void server::Core::run() {
         }
         mutex.unlock();
 
-        if (sw->ellapsedMs() < ROUND_DURATION_MS)
-            std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - sw->ellapsedMs()));
+        if (sw->elapsedMs() < ROUND_DURATION_MS)
+            std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - sw->elapsedMs()));
     }
 }
 
@@ -118,7 +118,7 @@ server::Game *server::Core::getClientsGame(const server::Client &client) {
     return (nullptr);
 }
 
-server::Core::Core(const std::string &path, server::NetworkManager *networkManager) : sw(IStopwatch::getInstance()),
+server::Core::Core(const std::string &path, server::NetworkManager *networkManager) : sw(helpers::IStopwatch::getInstance()),
                                                                                       packetFactory(nullptr),
                                                                                       networkManager(
                                                                                               nullptr) {

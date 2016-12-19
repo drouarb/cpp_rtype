@@ -7,7 +7,7 @@
 #include "network/listener/ISocketDisconnectionListener.hh"
 #include <helpers/ClientContainer.hh>
 #include <thread/IMutex.hh>
-#include "definitions.hh"
+#include "Definitions.hh"
 #include "Client.hh"
 #include "Core.hh"
 

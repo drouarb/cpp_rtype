@@ -16,19 +16,12 @@ file(
 )
 
 include_directories(include)
-include_directories(../server/include)
-include_directories(../server/include/entities)
-include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS} ${RTYPE_SERVER_INCLUDE_DIRS})
-
-set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+include_directories(${RTYPE_CORE_INCLUDE_DIRS})
 
 foreach (entity_file ${ENTITIES_SRC_FILES})
     get_filename_component(entity_name ${entity_file} NAME_WE)
-    add_library(${entity_name} SHARED ${entity_file} ${ENTITIES_HEADER_FILES} ../server/src/entities/EntityAction.cpp ../server/src/entities/EntityData.cpp ../server/src/entities/EntityInitialization.cpp ../server/src/entities/Entity.cpp ../server/src/entities/Sprite.cpp ../server/src/helpers/Stopwatch.cpp ../server/src/helpers/UnixStopwatch.cpp ../server/src/helpers/WindowsStopwatch.cpp ../server/src/helpers/Stopwatch.cpp)
-    if (UNIX)
-        message("Adding dl library")
-        target_link_libraries(${entity_name} dl)
-    endif ()
+    add_library(${entity_name} SHARED ${entity_file} ${ENTITIES_HEADER_FILES})
+    target_link_libraries(${entity_name} ${RTYPE_CORE_LIBS})
 endforeach (entity_file)
 
 if (ENTITIES_TEST)

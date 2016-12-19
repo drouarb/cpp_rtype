@@ -8,7 +8,7 @@
 
 #include <ostream>
 #include "entities/ADynamicObject.hh"
-#include "definitions.hh"
+#include "Definitions.hh"
 
 class BasicEntity : public server::ADynamicObject {
 public:

@@ -11,6 +11,8 @@ namespace helpers {
         virtual ~IStopwatch() { }
         virtual void set() = 0;
         virtual long elapsedMs() = 0;
+
+        static IStopwatch *getInstance();
     };
 }
 

@@ -8,7 +8,7 @@
 
 #include <IEntity.hh>
 #include "IDamager.hh"
-#include <definitions.hh>
+#include <Definitions.hh>
 
 class Projectile : public IDamager, public server::IEntity
 {
