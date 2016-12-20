@@ -98,8 +98,8 @@ server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(
     initialization->action.speedX = -3;
     initialization->action.speedY = 0;
     initialization->team = server::Team::FOE;
-    initialization->sprite.sizeX = 50;
-    initialization->sprite.sizeY = 50;
+    initialization->sprite.sizeX = 25;
+    initialization->sprite.sizeY = 25;
     initialization->sprite.path = "media/sprites/magicBullet.png";
     return initialization;
 }

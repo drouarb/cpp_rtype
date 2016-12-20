@@ -56,8 +56,8 @@ EntityInitialization *Player::initialize() {
     EntityInitialization *ei = new EntityInitialization();
     ei->team = PLAYER;
     ei->action.hp = 5;
-    ei->sprite.sizeX = 200;
-    ei->sprite.sizeY = 200;
+    ei->sprite.sizeX = 50;
+    ei->sprite.sizeY = 50;
     ei->posX = ei->sprite.sizeX;
     ei->posY = FIELD_HEIGHT / 2;
     ei->action.hp = DEFAULT_LIFE;
@@ -119,8 +119,8 @@ EntityInitialization *Player::MagicMissile::initialize() {
     initialization->posX = this->posX;
     initialization->posY = this->posY;
     initialization->team = server::Team::PLAYER;
-    initialization->sprite.sizeX = 50;
-    initialization->sprite.sizeY = 50;
+    initialization->sprite.sizeX = 25;
+    initialization->sprite.sizeY = 25;
     initialization->sprite.path = "media/sprites/magicBullet.png";
     return initialization;
 }
