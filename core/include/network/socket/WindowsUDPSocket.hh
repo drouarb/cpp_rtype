@@ -9,10 +9,9 @@
 #include <list>
 #include <forward_list>
 #include <io.h>
-#include <winsock.h>
 #include <thread>
 #include <WinSock2.h>
-#include "helpers/Stopwatch.hh"
+#include "helpers/WindowsStopwatch.hh"
 #include "ISocket.hh"
 
 namespace network {
@@ -26,7 +25,7 @@ namespace network {
             struct s_UDPClient {
                 int npings;
                 unsigned short ack;
-                helpers::Stopwatch sw;
+                helpers::WindowsStopwatch sw;
                 e_socketStatus status;
                 struct sockaddr_in client;
             };
@@ -94,7 +93,7 @@ namespace network {
             //Client stuffs
             int npings;
             unsigned short syn;
-            helpers::Stopwatch sw;
+            helpers::WindowsStopwatch sw;
 
             //Server Stuffs
             std::list<struct s_UDPClient> clients;
