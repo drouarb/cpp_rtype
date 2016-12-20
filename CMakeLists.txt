@@ -3,7 +3,9 @@ project(cpp_rtype)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-find_package(Threads REQUIRED)
+if (NOT WIN32)
+    find_package(Threads REQUIRED)
+endif (NOT WIN32)
 
 option(RTYPE_TESTS "Enable test compilation" OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
