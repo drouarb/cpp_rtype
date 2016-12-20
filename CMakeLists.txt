@@ -1,10 +1,15 @@
 cmake_minimum_required(VERSION 2.8)
 project(cpp_rtype)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+find_package(Threads REQUIRED)
+
 option(RTYPE_TESTS "Enable test compilation" OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
 
 include(CTest)
+
 set(PROTOBOEUF_TESTS ${RTYPE_TESTS})
 add_subdirectory(protoboeuf)
 
@@ -16,3 +21,6 @@ add_subdirectory(client)
 
 set(SERVER_TESTS ${RTYPE_TESTS})
 add_subdirectory(server)
+
+set(ENTITIES_TEST ${RTYPE_TESTS})
+add_subdirectory(entity)

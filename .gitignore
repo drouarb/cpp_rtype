@@ -77,14 +77,8 @@ fabric.properties
 
 .idea/
 build/
-client/make.sh
-client/launch.sh
-client/debug.sh
-client/rtype_client
-client/src/*~
-client/include/*~
-*~
-\#*
+
+cmake-build-debug
 client/*.sh
 *~
 client/rtype_client
