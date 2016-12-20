@@ -13,12 +13,18 @@ namespace server {
 
     enum Team : unsigned int
     {
-        NA      = 0,    //!not applicable (non-actor entities)
-        PLAYER  = 1,    //!players' team
-        FOE     = 2     //!default team for enemies
+        NEUTRAL = 0,    //! not applicable (non-actor entities)
+        PLAYER  = 1,    //! players' team
+        FOE     = 2     //! default team for enemies
         //! Other values greater than 2 may be used in the dynamic libraries. The server is not concerned by them.
     };
 
+    enum Tribool : int8_t
+    {
+        FALSE   = false,
+        TRUE    = true,
+        NA      = -1
+    };
 
     typedef uint32_t round_t;
     typedef float pos_t;

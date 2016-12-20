@@ -100,13 +100,10 @@ void Game::checkCollisions()
     {
         for (size_t j = i + 1; j < max; ++j)
         {
-
-            if (!(entities[i]->obj->collideWith(*entities[j]) || entities[j]->obj->collideWith(*entities[i])))
-            {
+            if (entities[i]->obj->collidesWith(*entities[j]) == FALSE && entities[j]->obj->collidesWith(*entities[i]) == FALSE)
                 continue;
-            }
-
-            INFO("Un debug i=" << i << ", j=" << j << ", " << entities[i]->data.getId()  << " + " << entities[j]->data.getId());
+            if (entities[i]->obj->collidesWith(*entities[j]) == NA || entities[j]->obj->collidesWith(*entities[i]) == NA)
+                continue;
 
             int dist;
 

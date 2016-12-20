@@ -15,8 +15,8 @@
 #include <ProjTester.hpp>
 
 server::Core::Core(const std::string &path, const unsigned short port)
-        : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(
-        nullptr) {
+        : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(nullptr)
+{
     FolderExplorer fileExplorer(path);
 
     lastGameId = 0;
@@ -40,7 +40,9 @@ server::Core::Core(const std::string &path, const unsigned short port)
         std::cerr << "No levels. Aborting." << std::endl;
         return;
     }
-    this->packetFactory = new PacketFactoryTest(port);
+
+    //this->packetFactory = new PacketFactoryTest(port);
+    this->packetFactory = new network::PacketFactory(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
     this->packetFactory->registerListener(new ServerListenerAskLeaderboard());

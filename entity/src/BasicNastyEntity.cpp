@@ -67,7 +67,7 @@ server::hp_t BasicNastyEntity::getDamage() {
     return 0;
 }
 
-bool BasicNastyEntity::collideWith(const server::Entity &entity) {
+Tribool BasicNastyEntity::collidesWith(const server::Entity &entity) {
     return this->data->getTeam() != entity.data.getTeam();
 }
 
@@ -115,7 +115,7 @@ BasicNastyEntity::VeryNastyProjectile::VeryNastyProjectile(server::speed_t posX,
     this->posY = posY;
 }
 
-bool BasicNastyEntity::VeryNastyProjectile::collideWith(const server::Entity &entity) {
+Tribool BasicNastyEntity::VeryNastyProjectile::collidesWith(const server::Entity &entity) {
     return this->data->getTeam() != entity.data.getTeam();
 }
 

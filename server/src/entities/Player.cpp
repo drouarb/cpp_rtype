@@ -13,13 +13,13 @@
 
 using namespace server;
 
+Player::Player() : mustDestroy(0), vectX(0), vectY(0), newHp(0) {
+    INFO("Player created")
+}
+
 void Player::shoot(attackId_t attack) {
     //TODO Create map of <attackId_t, ADynamicObject *>
     this->attackQueue.push(attack);
-}
-
-Player::Player() : mustDestroy(0), vectX(0), vectY(0), newHp(0) {
-    INFO("Player created")
 }
 
 void Player::collide(const Entity &entity, server::round_t current_round) {
@@ -32,9 +32,6 @@ void Player::collide(const Entity &entity, server::round_t current_round) {
 }
 
 EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) {
-//    while (!attackQueue.empty()) {
-//        attackQueue.pop();
-//    }
     INFO("Player hp: " << this->data->getHp())
     EntityAction *act = new EntityAction();
     if (!attackQueue.empty()) {
@@ -79,17 +76,15 @@ void Player::move(speed_t vectX, speed_t vectY) {
     this->vectY = vectY;
 }
 
-bool Player::collideWith(const Entity &) {
-    return true;
+Tribool Player::collidesWith(const Entity &) {
+    return TRUE;
 }
 
+Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY), startRound(startRound)
+{ }
+
+
 void Player::MagicMissile::collide(const Entity &entity, server::round_t current_round) {
-    if (entity.data.getTeam() == server::Team::PLAYER) {
-        INFO("MagicMissile collide with PLAYERRRRRR " << entity.data.getId())
-        INFO("PLAYER POS {x: " << entity.data.getPosX() << ", y:" << entity.data.getPosY());
-        INFO("MISSILE POS {x: " << this->data->getPosX() << ", y:" << this->data->getPosY());
-        return;
-    }
     INFO("MagicMissile collide with : " << entity.data.getId() << "(id: " << this->data->getId() << ")")
     this->mustDestroy = current_round;
 }
@@ -135,46 +130,6 @@ hp_t Player::MagicMissile::getDamage() {
     return DAMAGE;
 }
 
-Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY), startRound(startRound)
-{ }
-
-bool Player::MagicMissile::collideWith(const Entity &entity) {
-    return entity.data.getTeam() != server::Team::PLAYER;
-}
-
-void Player::CirclingMissile::collide(const server::Entity &entity, server::round_t current_round) {
-    if (entity.data.getTeam() == server::Team::PLAYER) {
-        INFO("CirclingMissile collide with PLAYERRRRRR " << entity.data.getId())
-        INFO("PLAYER POS {x: " << entity.data.getPosX() << ", y:" << entity.data.getPosY());
-        INFO("MISSILE POS {x: " << this->data->getPosX() << ", y:" << this->data->getPosY());
-        return;
-    }
-    INFO("CirclingMissile collide with : " << entity.data.getId() << "(id: " << this->data->getId() << ")")
-    this->mustDestroy = current_round;
-}
-
-EntityAction *Player::CirclingMissile::act(round_t current_round, const std::vector<Entity *> &)
-{
-    server::EntityAction *entityAction = new server::EntityAction();
-
-    if (this->mustDestroy != 0 && this->mustDestroy + 1 == current_round) {
-        entityAction->destroy = true;
-        INFO("CirclingMissile ded" << this->data->getId() << ", x:" << this->data->getPosX() << ", y: "
-                                   << this->data->getPosY())
-    }
-    entityAction->speedX = 10;
-    entityAction->speedY = 0;
-    return entityAction;
-}
-
-EntityInitialization *Player::CirclingMissile::initialize() {
-    return nullptr;
-}
-
-hp_t Player::CirclingMissile::getDamage() {
-    return DAMAGE;
-}
-
-bool Player::CirclingMissile::collideWith(const Entity &entity) {
-    return entity.data.getTeam() != server::Team::PLAYER;
+Tribool Player::MagicMissile::collidesWith(const Entity &entity) {
+    return (entity.data.getTeam() != server::Team::PLAYER ? TRUE : FALSE);
 }

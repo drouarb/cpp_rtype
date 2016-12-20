@@ -25,7 +25,7 @@ private:
         server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
         server::EntityInitialization *initialize() override;
 
-        bool collideWith(const server::Entity &entity) override;
+        Tribool collidesWith(const server::Entity &entity) override;
 
     private:
         server::hp_t getDamage() override;
@@ -50,7 +50,7 @@ private:
 
 
 public:
-    bool collideWith(const server::Entity &entity) override;
+    Tribool collidesWith(const server::Entity &entity) override;
 
     BasicNastyEntity();
 

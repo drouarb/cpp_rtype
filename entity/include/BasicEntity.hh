@@ -22,7 +22,7 @@ public:
 
     server::hp_t getDamage() override;
 
-    bool collideWith(const server::Entity &entity) override;
+    Tribool collidesWith(const server::Entity &entity) override;
 
 private:
     bool destroyed;

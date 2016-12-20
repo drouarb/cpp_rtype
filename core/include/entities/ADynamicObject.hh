@@ -48,8 +48,11 @@ namespace server
          * May be negative (for a boon for instance).
          */
         virtual hp_t getDamage() = 0;
-
-        virtual bool collideWith(const Entity &) = 0;
+        /**
+         * In this function, the object must return whether or not it should collide with the given entity.
+         * Visuals effects and object that do not interact with any other entity can return NA.
+         */
+        virtual Tribool collidesWith(const Entity &) = 0;
 
         const EntityData * data;
     };

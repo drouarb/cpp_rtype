@@ -49,6 +49,6 @@ hp_t BasicEntity::getDamage() {
     return 0;
 }
 
-bool BasicEntity::collideWith(const Entity &entity) {
+Tribool BasicEntity::collidesWith(const Entity &entity) {
     return this->data->getTeam() != entity.data.getTeam();
 }
