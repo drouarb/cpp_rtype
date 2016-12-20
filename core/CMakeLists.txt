@@ -22,6 +22,7 @@ if (WIN32)
             GLOB_RECURSE
             CORE_SRCS
             ${CORE_SRCS}
+            src/network/socket/WindowsUDPSocket.cpp
             src/helpers/WindowsStopwatch.cpp
     )
 else (WIN32)
