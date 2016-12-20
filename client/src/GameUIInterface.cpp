@@ -94,7 +94,8 @@ void GameUIInterface::addEntity(Entity *listEntity) {
     std::cout << "add entity  " << typeEntity[listEntity->getId()] << "pos_x  :" << listEntity->getPos().first  << "pos_y "  << listEntity->getPos().second<< std::endl ;
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
-    if ("media/sprites/magicalGirlD.png" == typeEntity[listEntity->getId()])
+
+    if (typeEntity[listEntity->getId()].find("magical") != std::string::npos)
     {
         static_cast<UI::Item *>(item)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
         item->changeStatus(UI::IDLE);

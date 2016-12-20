@@ -98,9 +98,7 @@ void World::applyTurn() {
                 pos = ent->getPos();
                 entitys.erase(itEv->second.id);
                 delete ent;
-            } /*else if (itEv->second.eventtype == DELETE){
-            std::cout << "OMFG ON DELETE DU : " << itEv->second.id << std::endl;
-        }*/
+            }
             //UIevents.push_back(std::pair<UIevent_t, pos_t>(itEv->second.UIevent, pos));
             worldEvents.erase(itEv);
             itEv = worldEvents.begin();

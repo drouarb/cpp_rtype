@@ -83,14 +83,14 @@ void GameClient::gameLoop() {
                                             world->getEntityById(playerId)->getPos().second);
                 } else if (event == sf::Keyboard::Key::Space) {
                     manager->sendPlayerAttack(world->getTick(), 0);
-                } /*else if ((world->getTick() / (tickRateClient / 2)) == 0) {
+                } else if (event == sf::Keyboard::RControl) {
                     std::cout << "Stop player in course" << std::endl;
                     world->getEntityById(playerId)->setVec(vec_t(0, 0));
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,
                                             world->getEntityById(playerId)->getPos().second);
-                }*/
+                }
 
             }
             if (sw->elapsedMs() < 1000 / tickRateClient) {
