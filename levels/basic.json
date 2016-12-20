@@ -1,0 +1,12 @@
+{
+  name: "basic",
+  spawns:
+  [
+    {
+      dlName: "build/entity/libBasicNastyEntity",
+      time: "10",
+      posX: "600",
+      posY: "300"
+    }
+  ]
+}

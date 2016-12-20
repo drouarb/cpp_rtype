@@ -23,14 +23,15 @@ namespace network {
     public:
         PacketFactory(unsigned short port);
         PacketFactory(const std::string &address, unsigned short port);
-        ~PacketFactory();
+        virtual ~PacketFactory();
 
         void run();
         void poll();
         void stop();
 
         void broadcast(const packet::IPacket &packet) const;
-        void send(const packet::IPacket &packet, unsigned long fd) const;
+
+        virtual void send(const packet::IPacket &packet, unsigned long fd) const;
 
         void dataCallback(unsigned long fd, const std::vector<uint8_t> &data) const;
 

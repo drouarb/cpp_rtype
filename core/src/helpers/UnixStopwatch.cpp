@@ -6,7 +6,7 @@
 #include "helpers/UnixStopwatch.hh"
 
 helpers::UnixStopwatch::UnixStopwatch() {
-    this->set();
+	this->set();
 }
 
 helpers::UnixStopwatch::~UnixStopwatch() {
@@ -14,13 +14,13 @@ helpers::UnixStopwatch::~UnixStopwatch() {
 }
 
 void helpers::UnixStopwatch::set() {
-    gettimeofday(&startTime, NULL);
+	gettimeofday(&startTime, NULL);
 }
 
 long helpers::UnixStopwatch::elapsedMs() {
-    struct timeval checkTime;
+	struct timeval checkTime;
 
-    gettimeofday(&checkTime, NULL);
-    return ((checkTime.tv_sec - startTime.tv_sec) * 1000 +
-            (checkTime.tv_usec - startTime.tv_usec) / 1000);
+	gettimeofday(&checkTime, NULL);
+	return ((checkTime.tv_sec - startTime.tv_sec) * 1000 +
+			(checkTime.tv_usec - startTime.tv_usec) / 1000);
 }

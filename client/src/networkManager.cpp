@@ -21,6 +21,10 @@
 #include <listener/ClientListenerErrorHandShake.hh>
 #include <iostream>
 #include <network/packet/PacketAck.hh>
+#include <list>
+#include <listener/ClientListenerErrorHandShake.hh>
+#include <iostream>
+#include <network/packet/PacketAck.hh>
 #include "networkManager.hh"
 
 using namespace client;

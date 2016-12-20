@@ -22,6 +22,8 @@ namespace helpers {
          * @return time in ms
          */
         virtual long elapsedMs() = 0;
+
+        static IStopwatch *getInstance();
     };
 }
 
