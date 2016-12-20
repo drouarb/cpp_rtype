@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 project(rtype_server)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wdelete-non-virtual-dtor -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+if (NOT WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdelete-non-virtual-dtor -g")
+endif(NOT WIN32)
 
 file(
         GLOB_RECURSE
