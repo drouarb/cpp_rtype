@@ -10,8 +10,13 @@ include_directories(${RTYPE_SERVER_INCLUDE_DIRS})
 file(
         GLOB_RECURSE
         SERVER_TESTS_SOURCES
-        *Test.cpp
+        JoinQuitTest.cpp
+        PlayerAttackAndMoveTest.cpp
 )
+
+if (NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/levels ${CMAKE_BINARY_DIR}/server/tests/levels)
+endif(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 
 foreach(test ${SERVER_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
@@ -19,3 +24,6 @@ foreach(test ${SERVER_TESTS_SOURCES})
     target_link_libraries(${test_name} lib${PROJECT_NAME} ${RTYPE_CORE_LIBS})
     add_test(${test_name} ${test_name})
 endforeach(test)
+
+add_executable(CollisionTest CollisionTest.cpp)
+target_link_libraries(CollisionTest lib${PROJECT_NAME} ${RTYPE_CORE_LIBS})
