@@ -10,6 +10,10 @@
 #include "IStopwatch.hh"
 
 namespace helpers {
+    /*!
+     * @class WindowsStopwatch
+     * @brief Windows implementation of IStopwatch
+    */
     class WindowsStopwatch: public IStopwatch {
     public:
         WindowsStopwatch();
