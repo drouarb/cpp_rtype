@@ -34,7 +34,7 @@ file(
 foreach(test ${CORE_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
     add_executable(${test_name} ${test})
-    target_link_libraries(${test_name} rtype_core protoboeuf pthread)
+    target_link_libraries(${test_name} ${RTYPE_CORE_LIBS})
     add_test(${test_name} ${test_name})
 endforeach(test)
 
