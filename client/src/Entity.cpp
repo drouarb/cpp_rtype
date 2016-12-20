@@ -16,7 +16,7 @@ Entity::Entity(ide_t nid, typeide_t nidtype, pos_t npos, tick nturn) {
     id = nid;
     idtype = nidtype;
     vec = vec_t(0, 0);
-    move.insert(std::pair<tick, moveData>(nturn - 1, moveData(npos, vec_t(0, 0))));
+    move.insert(std::pair<tick, moveData>(nturn, moveData(npos, vec_t(0, 0))));
     hp = 0;
     lastUpdate = 0;
 }
@@ -39,11 +39,11 @@ ide_t Entity::getId() const { return id; }
 typeide_t Entity::getTypeid() const { return idtype; }
 
 void Entity::applyVec(vec_t nvec, tick tick) {
-    //std::cout << "id : " << id << " vec = [" << nvec.first << ":" << nvec.second << "]" << std::endl;
     pos.first += nvec.first;
     pos.second += nvec.second;
     vec = nvec;
     lastUpdate = tick;
+    std::cout << "id : " << id << " vec = [" << nvec.first << ":" << nvec.second << "] pos : [" << pos.first << ":" << pos.second << "]" << std::endl;
 }
 
 void Entity::updateEntity(int nhp) {
@@ -58,21 +58,27 @@ void Entity::moveEntity(vec_t nvec, pos_t npos, tick nturn) {
         return;
     }
     it = move.begin();
+    while (it != move.end())
+    {
+        std::cout << "DUMPid : " << id << " first : " << it->first << " second " << it->second.vec.first << ":" << it->second.vec.second << std::endl;
+        ++it;
+    }
+    it = move.begin();
     while (it != move.end() && it->first > nturn)
         ++it;
-    ++it;
-    std::cout << "id : " << id << " mytick : " << it->first << " worldturn : " << nturn << std::endl;
+    //++it;
+    std::cout << "id : " << id << " mytick : " << it->first << " worldturn : " << nturn << "  vec : [" << nvec.first << ":" << nvec.second << "]" <<std::endl;
     if (it == move.end() || it->first < nturn) {
         if (it == move.end()) {
             std::cout << "id : " << id << " before" << std::endl;
             --it;
-            correctBeforeVec(it, nvec, npos);
+            correctBeforeVec(it, nvec, npos, nturn);
             vec = nvec;
             pos = npos;
             lastUpdate = nturn;
         } else {
             std::cout << "id : " << id << " middle" << std::endl;
-            correctMiddleVec(it, &nvec, npos);
+            correctMiddleVec(it, &nvec, npos, nturn);
         }
         if (it->second.vec != nvec)
             move.insert(std::pair<tick, moveData>(nturn, moveData(npos, nvec)));
@@ -80,20 +86,20 @@ void Entity::moveEntity(vec_t nvec, pos_t npos, tick nturn) {
     }
 }
 
-void Entity::correctMiddleVec(std::map<tick, moveData>::iterator itO, vec_t *nvec, pos_t npos) {
+void Entity::correctMiddleVec(std::map<tick, moveData>::iterator itO, vec_t *nvec, pos_t npos, tick nturn) {
     std::map<tick, moveData>::iterator itA;
 
-    itO->second.vec.first = npos.first - itO->second.pos.first;
-    itO->second.vec.second = npos.second - itO->second.pos.second;
+    itO->second.vec.first = (npos.first - itO->second.pos.first) / (nturn - itO->first);
+    itO->second.vec.second = (npos.second - itO->second.pos.second) / (nturn - itO->first);
     itA = itO;
     ++itA;
-    nvec->first = itA->second.pos.first - npos.first;
-    nvec->second = itA->second.pos.second - npos.second;
+    nvec->first = (itA->second.pos.first - npos.first) / (itA->first - nturn);
+    nvec->second = (itA->second.pos.second - npos.second) / (itA->first - nturn);
 }
 
-void Entity::correctBeforeVec(std::map<tick, moveData>::iterator itO, vec_t nvec, pos_t npos) {
-    itO->second.vec.first = npos.first - itO->second.pos.first;
-    itO->second.vec.second = npos.second - itO->second.pos.second;
+void Entity::correctBeforeVec(std::map<tick, moveData>::iterator itO, vec_t nvec, pos_t npos, tick nturn) {
+    itO->second.vec.first = (npos.first - itO->second.pos.first) / (nturn - itO->first);
+    itO->second.vec.second = (npos.second - itO->second.pos.second) / (nturn - itO->first);
 }
 
 void Entity::recalcPos() {

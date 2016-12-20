@@ -12,24 +12,27 @@
 #ifndef WORLD_HH_
 # define WORLD_HH_
 
+#include <iostream>
+
 #define RESERVE_UIEVENTS 10
 
 namespace client
 {
 
-  struct WorldEvent
+  class WorldEvent
   {
+  public:
     WorldEvent(ide_t nid, pos_t npos, typeide_t nidtype, tick nturn, UIevent_t nevent)
-    {id=nid;pos=npos;type=nidtype;UIevent=nevent;turn=nturn;eventtype=SPAWN;}
+    {std::cout<<"WOWlespawn"<<std::endl;id=nid;pos=npos;type=nidtype;UIevent=nevent;turn=nturn;eventtype=worldEventType::SPAWN;}
     
     WorldEvent(ide_t nid, int nhp, tick nturn, UIevent_t nevent)
-    {id=nid;hp=nhp;UIevent=nevent;turn=nturn;eventtype=UPDATE;}
+    {std::cout<<"WOWleupdate"<<std::endl;id=nid;hp=nhp;UIevent=nevent;turn=nturn;eventtype=worldEventType::UPDATE;}
     
     WorldEvent(ide_t nid, vec_t nvec, pos_t npos, tick nturn, UIevent_t nevent)
-    {id=nid;vec=nvec;pos=npos;UIevent=nevent;turn=nturn;eventtype=MOVE;}
+    {std::cout<<"WOWlemove"<<std::endl;id=nid;vec=nvec;pos=npos;UIevent=nevent;turn=nturn;eventtype=worldEventType::MOVE;}
     
     WorldEvent(ide_t nid, tick nturn, UIevent_t nevent)
-    {id=nid;UIevent=nevent;turn=nturn;eventtype=DELETE;}
+    {std::cout<<"WOWledelete"<<std::endl;id=nid;UIevent=nevent;turn=nturn;eventtype=worldEventType::DELETE;}
     
     worldEventType	eventtype;
     tick		turn;
@@ -48,7 +51,7 @@ namespace client
     tick					turn;	
     std::map<ide_t, Entity*>			entitys;
     std::vector<std::pair<UIevent_t, pos_t> >	UIevents;
-    std::map<tick, WorldEvent>			worldEvents;
+    std::list<std::pair<tick, WorldEvent> >			worldEvents;
       GameUIInterface *gameui;
   public:
     World(std::mutex *mmut, GameUIInterface *ngameui);

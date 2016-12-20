@@ -19,10 +19,10 @@ namespace client
 
   enum	worldEventType
     {
-      SPAWN,
-      UPDATE,
-      MOVE,
-      DELETE
+      SPAWN = 0x01,
+      UPDATE = 0x02,
+      MOVE = 0x03,
+      DELETE = 0x04
     };
 }
 

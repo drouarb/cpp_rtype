@@ -70,9 +70,35 @@ void GameUIInterface::addListEntity(std::vector<Entity *> listentity) {
 
 void GameUIInterface::addEntity(Entity *listEntity) {
     ui_mut->lock();
+
+/*    int n = 0;
+    int n1 = 0;
+
+    std::string  final = typeEntity[listEntity->getId()];
+
+    if (final.find(".gif") != std::string::npos) {
+        final = final.replace(final.find(".gif"), 4, ".txt");
+    }
+    if (final.find(".png") != std::string::npos) {
+        final = final.replace(final.find(".png"), 4, ".txt");
+    }
+
+    std::ifstream ifs = std::ifstream(final, std::ifstream::in);
+
+    if (ifs.is_open()) {
+        ifs >> n;
+        ifs >> n1;
+    }*/
+
+
     std::cout << "add entity  " << typeEntity[listEntity->getId()] << "pos_x  :" << listEntity->getPos().first  << "pos_y "  << listEntity->getPos().second<< std::endl ;
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
+    if ("media/sprites/magicalGirlD.png" == typeEntity[listEntity->getId()])
+    {
+        static_cast<UI::Item *>(item)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
+        item->changeStatus(UI::IDLE);
+    }
     gameItem[listEntity] = item;
     ui_mut->unlock();
 }

@@ -51,8 +51,8 @@ namespace client
     void			moveEntity(vec_t, pos_t, tick);
     void			updateEntity(int hp);
     
-    void			correctMiddleVec(std::map<tick, moveData>::iterator, vec_t*, pos_t);
-    void			correctBeforeVec(std::map<tick, moveData>::iterator, vec_t, pos_t);
+    void			correctMiddleVec(std::map<tick, moveData>::iterator, vec_t*, pos_t, tick);
+    void			correctBeforeVec(std::map<tick, moveData>::iterator, vec_t, pos_t, tick);
 
   private:
     void			recalcPos();
