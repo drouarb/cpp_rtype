@@ -7,6 +7,8 @@
 #include "events/Timeline.hh"
 #include <list>
 
+#define ROUNDS_BETWEEN_SYN 30
+
 namespace server
 {
     class Game
@@ -38,6 +40,7 @@ namespace server
         gameId_t gameId;
         entityId_t entityIdCount;
         std::vector<server::event::AGameEvent *> gameEvents;
+        round_t lastSyn;
 
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
@@ -87,19 +90,12 @@ namespace server
 
         /**@}*/
 
-
-        /**
-         * Sends data for this round to the clients.
-         */
         void sendData();
-
         void sendPacketSync(const Client * client);
-
         void greetNewPlayer(const Client &);
-
         void sendSimToNewNotFirst(const Client & client);
-
         void sendAllMoves();
+        void sendSound(const std::string & soundfile);
     };
 }
 

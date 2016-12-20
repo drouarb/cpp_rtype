@@ -9,6 +9,7 @@
 #include <entities/ADynamicObject.hh>
 #include <entities/Entity.hh>
 #include <helpers/IStopwatch.hh>
+#include <vector>
 
 class BasicNastyEntity : public server::ADynamicObject {
 private:
@@ -21,7 +22,7 @@ private:
         VeryNastyProjectile(server::speed_t posX, server::speed_t posY);
 
         void collide(const server::Entity &, server::round_t current_round) override;
-        server::EntityAction *act(server::round_t current_round) override;
+        server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
         server::EntityInitialization *initialize() override;
 
         bool collideWith(const server::Entity &entity) override;
@@ -56,7 +57,7 @@ public:
 //    friend std::ostream &operator<<(std::ostream &os, const BasicNastyEntity &player);
 
     void collide(const server::Entity &entity, server::round_t current_round) override;
-    server::EntityAction *act(server::round_t current_round) override;
+    server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
     server::EntityInitialization *initialize() override;
 
     server::hp_t getDamage() override;

@@ -15,7 +15,7 @@ namespace server {
         static const int DEFAULT_LIFE = 500;
 
         //        std::queue<attackId_t> __attribute__((deprecated)) attackQueue;
-        std::queue<ADynamicObject *> attackQueue;
+        std::queue<attackId_t> attackQueue;
         round_t mustDestroy;
         speed_t vectX;
         speed_t vectY;
@@ -33,7 +33,7 @@ namespace server {
 
         void collide(const Entity &entity, server::round_t current_round) override;
 
-        EntityAction *act(round_t round) override;
+        EntityAction *act(round_t round, const std::vector<Entity *> &) override;
 
         EntityInitialization *initialize() override;
 
@@ -43,18 +43,19 @@ namespace server {
         public:
             void collide(const Entity &entity, server::round_t current_round) override;
 
-            EntityAction *act(round_t current_round) override;
+            EntityAction *act(round_t current_round, const std::vector<Entity *> &) override;
 
             EntityInitialization *initialize() override;
 
             hp_t getDamage() override;
 
-            MagicMissile(pos_t posX, pos_t posY);
+            MagicMissile(pos_t posX, pos_t posY, round_t startRound);
 
             bool collideWith(const Entity &entity) override;
 
         private:
             round_t mustDestroy;
+            round_t startRound;
 
             pos_t posX;
             pos_t posY;
@@ -66,7 +67,7 @@ namespace server {
         public:
             void collide(const server::Entity &entity, server::round_t current_round) override;
 
-            EntityAction *act(round_t current_round) override;
+            EntityAction *act(round_t current_round, const std::vector<Entity *> &) override;
 
             EntityInitialization *initialize() override;
 

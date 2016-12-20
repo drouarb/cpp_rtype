@@ -26,7 +26,7 @@ void BasicEntity::collide(const server::Entity &entity, server::round_t current_
     this->destroyed = true;
 }
 
-EntityAction *BasicEntity::act(round_t current_round)
+EntityAction *BasicEntity::act(round_t current_round, const std::vector<Entity *> &)
 {
     EntityAction * a = new EntityAction();
     if (this->destroyed) {

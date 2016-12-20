@@ -7,6 +7,7 @@
 #include "Definitions.hh"
 #include <BasicNastyEntity.hh>
 #include <iostream>
+#include <vector>
 
 BasicNastyEntity::BasicNastyEntity() : notifyCollision(nullptr), stopwatch(helpers::IStopwatch::getInstance()) {
     this->stopwatch->set();
@@ -24,7 +25,7 @@ void BasicNastyEntity::collide(const server::Entity &entity, server::round_t cur
     }
 }
 
-server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
+server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const std::vector<server::Entity *> &)
 {
     INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ", round:" << current_round << ")")
     server::EntityAction * a;
@@ -79,7 +80,7 @@ void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity
     this->isCollide = current_round;
 }
 
-server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round)
+server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round, const std::vector<server::Entity *> &)
 {
     server::EntityAction * a = new server::EntityAction();
     if (this->isCollide) {

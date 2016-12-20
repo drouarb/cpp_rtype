@@ -10,14 +10,15 @@
 #include <network/packet/PacketSynchronization.hh>
 #include <ctime>
 #include <network/packet/PacketPlayerData.hh>
+#include <network/packet/PacketPlaySound.hh>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0)
 { }
 
-Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0)
 { }
 
 Game::~Game()
@@ -291,7 +292,7 @@ void Game::letEntitesAct()
     for (size_t i = 0; i != entities.size(); ++i)
     {
         auto it = entities.at(i);
-        EntityAction * action = it->obj->act(this->round);
+        EntityAction * action = it->obj->act(this->round, entities);
         if (action->speedX != it->data.getVectX())
         {
             it->data.setVectX(action->speedX);
@@ -316,6 +317,10 @@ void Game::letEntitesAct()
         if (action->destroy)
         {
             it->data.setDestroyed(true);
+        }
+        if (action->soundToPlay != "")
+        {
+            sendSound(action->soundToPlay);
         }
         delete action;
     }
@@ -458,6 +463,9 @@ void Game::sendData() {
     this->gameEvents.clear();
 
     sendAllMoves();
+
+    if (round - lastSyn > ROUNDS_BETWEEN_SYN)
+        sendPacketSync(nullptr);
 }
 
 void Game::sim_spawn(Entity *entity) {
@@ -498,6 +506,7 @@ void Game::sendPacketSync(const Client * client)
     packet_syn->setTime(static_cast<int64_t>(std::time(nullptr)));
     if (client == nullptr)
     {
+        lastSyn = round;
         for (auto client_it : clientList)
         {
             packetf.send(*packet_syn, client_it->getClientId());
@@ -577,4 +586,17 @@ void Game::sendAllMoves()
             delete pmove;
         }
     }
+}
+
+void Game::sendSound(const std::string &soundfile)
+{
+    auto packet = new network::packet::PacketPlaySound();
+    packet->setTick(round);
+    packet->setEventId(0);
+    /*packet->setSoundName(soundfile);*/ //TODO
+    for (auto client : clientList)
+    {
+        packetf.send(*packet, client->getClientId());
+    }
+    delete (packet);
 }
