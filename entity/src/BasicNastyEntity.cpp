@@ -75,7 +75,7 @@ void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity
     if (entity.data.getTeam() == server::Team::FOE) {
         return;
     }
-    INFO("MISSILE COLLIDE EXPLOSION (round : " << current_round << ")");
+    INFO("MISSILE COLLIDE EXPLOSION (entity=" << entity.data.getId() << " me=" << data->getId() << " round : " << current_round << ")");
     this->isCollide = current_round;
 }
 

@@ -456,6 +456,8 @@ void Game::sendData() {
         delete packet;
     }
     this->gameEvents.clear();
+
+    sendAllMoves();
 }
 
 void Game::sim_spawn(Entity *entity) {
@@ -551,5 +553,26 @@ void Game::sendSimToNewNotFirst(const Client &client)
         packetf.send(*pmove, client.getClientId());
         delete pmove;
         ++id;
+    }
+}
+
+void Game::sendAllMoves()
+{
+    //TODO
+    for (auto client : clientList)
+    {
+        for (auto entity : entities)
+        {
+            auto pmove = new network::packet::PacketMoveEntity();
+            pmove->setTick(round);
+            pmove->setEventId(0);
+            pmove->setEntityId(entity->data.getId());
+            pmove->setPosX(entity->data.getPosX());
+            pmove->setPosY(entity->data.getPosY());
+            pmove->setVecX(entity->data.getVectX());
+            pmove->setVecY(entity->data.getVectY());
+            packetf.send(*pmove, client->getClientId());
+            delete pmove;
+        }
     }
 }

@@ -56,10 +56,10 @@ EntityInitialization *Player::initialize() {
     EntityInitialization *ei = new EntityInitialization();
     ei->team = PLAYER;
     ei->action.hp = 5;
-    ei->posX = 0;
+    ei->sprite.sizeX = 200;
+    ei->sprite.sizeY = 200;
+    ei->posX = ei->sprite.sizeX;
     ei->posY = FIELD_HEIGHT / 2;
-    ei->sprite.sizeX = 400;
-    ei->sprite.sizeY = 400;
     ei->action.hp = DEFAULT_LIFE;
     ei->sprite.path = "media/sprites/magicalGirlD.png";
 

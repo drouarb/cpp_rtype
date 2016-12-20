@@ -98,6 +98,8 @@ namespace server
         void greetNewPlayer(const Client &);
 
         void sendSimToNewNotFirst(const Client & client);
+
+        void sendAllMoves();
     };
 }
 
