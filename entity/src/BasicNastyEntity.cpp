@@ -41,7 +41,7 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
     if (current_round % (6 * FIRE_FREQUENCY) == 0) {
         INFO("I'm the vilain nasty player : BOUM BIM BAM")
         this->stopwatch->set();
-        VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3, this->data->getPosY());
+        VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3, this->data->getPosY() + this->data->getSprite().sizeY / 2);
         a->newEntity = projectile;
     }
     INFO("Next action OK")
@@ -54,8 +54,8 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     initialization->team = server::Team::FOE;
     initialization->action.speedX = 0;
     initialization->action.speedY = 0;
-    initialization->sprite.sizeX = 400;
-    initialization->sprite.sizeY = 400;
+    initialization->sprite.sizeX = 120;
+    initialization->sprite.sizeY = 120;
     initialization->sprite.path = "media/references/ALL_GONE.jpg";
 
     INFO("I'm the vilain nasty player: ");
@@ -63,7 +63,7 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
 }
 
 server::hp_t BasicNastyEntity::getDamage() {
-    return NASTY_COLLISION_DAMAGE;
+    return 0;
 }
 
 bool BasicNastyEntity::collideWith(const server::Entity &entity) {
@@ -87,19 +87,19 @@ server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
     }
-    a->speedX = -1;
+    a->speedX = -3;
     return (a);
 }
 
 server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize() {
     server::EntityInitialization *initialization = new server::EntityInitialization(""); //TODO Add sprite
-    initialization->posX = this->posX;
-    initialization->posY = this->posY;
     initialization->action.speedX = -3;
     initialization->action.speedY = 0;
     initialization->team = server::Team::FOE;
-    initialization->sprite.sizeX = 25;
-    initialization->sprite.sizeY = 25;
+    initialization->sprite.sizeX = 20;
+    initialization->sprite.sizeY = 20;
+    initialization->posX = this->posX;
+    initialization->posY = this->posY - initialization->sprite.sizeY / 2;
     initialization->sprite.path = "media/sprites/magicBullet.png";
     return initialization;
 }

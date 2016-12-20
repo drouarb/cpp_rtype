@@ -99,17 +99,19 @@ EntityAction *Player::MagicMissile::act(round_t current_round) {
         INFO("MagicMassile ded" << this->data->getId() << ", x:" << this->data->getPosX() << ", y: "
                                 << this->data->getPosY())
     }
-/*
-    auto circle_speed = 2;
-    auto x_speed = 2;
-    auto rad = (current_round % 31) * 0.2;
+    auto circle_speed = 15;
+    auto x_speed = 5;
+    auto rad = (current_round % 15) * 0.4;
     auto vectX = cos(rad) * circle_speed + x_speed;
     auto vectY = sin(rad) * circle_speed;
     entityAction->speedX = static_cast<speed_t >(vectX);
     entityAction->speedY = static_cast<speed_t >(vectY);
-  */
-    entityAction->speedX = 3;
+
+/*
+    entityAction->speedX = 5;
     entityAction->speedY = 0;
+*/
+
     return entityAction;
 }
 
