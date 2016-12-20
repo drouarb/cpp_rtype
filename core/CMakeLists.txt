@@ -6,7 +6,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 file(
         GLOB_RECURSE
         CORE_SRCS
-        src/helpers/Stopwatch.cpp
         src/network/packet/*.cpp
         src/network/listener/*.cpp
         src/network/PacketFactory.cpp
@@ -20,6 +19,7 @@ if (WIN32)
             CORE_SRCS
             ${CORE_SRCS}
             src/network/socket/WindowsUDPSocket.cpp
+            src/helpers/WindowsStopwatch.cpp
     )
 else (WIN32)
     file(
@@ -27,6 +27,7 @@ else (WIN32)
             CORE_SRCS
             ${CORE_SRCS}
             src/network/socket/UnixUDPSocket.cpp
+            src/helpers/UnixStopwatch.cpp
     )
 endif (WIN32)
 

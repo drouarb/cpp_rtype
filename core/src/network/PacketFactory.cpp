@@ -29,6 +29,8 @@
 #include <network/packet/PacketErrorScore.hh>
 #include <network/packet/PacketAskLeaderBoard.hh>
 #include <network/packet/PacketLeaderBoard.hh>
+#include <network/packet/PacketSynchronization.hh>
+#include <network/packet/PacketPlayerData.hh>
 #include "network/PacketFactory.hh"
 
 network::PacketFactory::PacketFactory(unsigned short port): dataListener(*this) {
@@ -148,6 +150,8 @@ const std::map<network::packet::PacketId, network::PacketFactory::createPacketFu
         {packet::ERROR_GAME,      &PacketFactory::createPacket < packet::PacketErrorGame > },
         {packet::JOIN,            &PacketFactory::createPacket < packet::PacketJoin > },
         {packet::QUIT,            &PacketFactory::createPacket < packet::PacketQuit > },
+        {packet::PLAYER_DATA,            &PacketFactory::createPacket < packet::PacketPlayerData > },
+        {packet::SYNCHRONIZATION,            &PacketFactory::createPacket < packet::PacketSynchronization>},
 
         {packet::EVENT_ERROR,     &PacketFactory::createPacket < packet::PacketEventError > },
         {packet::CANCEL_EVENT,    &PacketFactory::createPacket < packet::PacketCancelEvent > },
