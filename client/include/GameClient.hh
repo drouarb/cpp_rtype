@@ -13,7 +13,7 @@
 #include "GameUIInterface.hh"
 #include "Definitions.hh"
 #include "Machine.hpp"
-#include "helpers/Stopwatch.hh"
+#include "helpers/IStopwatch.hh"
 
 #define TICKRATE 30
 #define TICKRATEDIFFCONST 0.1
@@ -35,7 +35,7 @@ namespace client {
     GameUIInterface		*gameui;
     ide_t			playerId;
     uint8_t			nbrAttack;
-	  helpers::Stopwatch * sw;
+	  helpers::IStopwatch * sw;
 
 
   public:

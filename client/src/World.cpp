@@ -45,10 +45,6 @@ void World::moveEntity(vec_t vec, pos_t pos, tick nturn, ide_t nid, UIevent_t ne
     worldEvents.push_back(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, vec, pos, nturn, nevent)));
     std::list<std::pair<tick, WorldEvent> >::iterator it;
     it = worldEvents.begin();
-    while (it != worldEvents.end()) {
-        std::cout << "t=" << it->first << " id=" << it->second.id << " eventid=" << it->second.eventtype << std::endl;
-        ++it;
-    }
     world_mut->unlock();
 }
 
@@ -77,6 +73,7 @@ void World::applyTurn() {
     pos_t pos;
 
     itEv = worldEvents.begin();
+    //world_mut->lock();
     while (itEv != worldEvents.end()) {
         //std::cout << "event for id : " << itEv->second.id << " event : " << itEv->second.eventtype << std::endl;
         if (itEv->first < turn) {
@@ -110,6 +107,7 @@ void World::applyTurn() {
         }
         ++itEv;
     }
+    //world_mut->unlock();
     it = entitys.begin();
     while (it != entitys.end()) {
         it->second->applyVec(it->second->getVec(), turn);

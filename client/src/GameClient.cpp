@@ -17,6 +17,7 @@ client::GameClient::GameClient() {
     tickRateClient = TICKRATE;
     world = nullptr;
     client_mut = new std::mutex;
+    sw = helpers::IStopwatch::getInstance();
     gameui = new GameUIInterface(handler, client_mut);
     gameui->initUI();
 }
@@ -46,7 +47,7 @@ void GameClient::gameLoop() {
     manager->sendJoin(0);
 
     while (1) {
-        //sw->set();
+        sw->set();
         gameui->updateListEntity();
         event = handler->getEvent();
         gameui->displaySimple();
@@ -80,11 +81,9 @@ void GameClient::gameLoop() {
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,
                                             world->getEntityById(playerId)->getPos().second);
-                }
-
-                else if (event == sf::Keyboard::Key::Space) {
+                } else if (event == sf::Keyboard::Key::Space) {
                     manager->sendPlayerAttack(world->getTick(), 0);
-                } /*else if ((world->getTick() / (tickRateClient / 2)) == 0){
+                } /*else if ((world->getTick() / (tickRateClient / 2)) == 0) {
                     std::cout << "Stop player in course" << std::endl;
                     world->getEntityById(playerId)->setVec(vec_t(0, 0));
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
@@ -94,9 +93,9 @@ void GameClient::gameLoop() {
                 }*/
 
             }
-            /*     if (sw->elapsedMs() < 1000 / tickRateClient) {
-                     std::this_thread::sleep_for(std::chrono::milliseconds(1000 / tickRateClient - sw->elapsedMs()));
-                 }*/
+            if (sw->elapsedMs() < 1000 / tickRateClient) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000 / tickRateClient - sw->elapsedMs()));
+            }
         }
     }
 }

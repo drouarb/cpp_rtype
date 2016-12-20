@@ -51,7 +51,7 @@ void Entity::updateEntity(int nhp) {
 }
 
 void Entity::moveEntity(vec_t nvec, pos_t npos, tick nturn) {
-    std::map<tick, moveData>::iterator it;
+    /*std::map<tick, moveData>::iterator it;
 
     if ((it = move.find(nturn)) != move.end()) {
         std::cerr << "readaptation de move sur tick identique à faire" << std::endl;
@@ -83,7 +83,9 @@ void Entity::moveEntity(vec_t nvec, pos_t npos, tick nturn) {
         if (it->second.vec != nvec)
             move.insert(std::pair<tick, moveData>(nturn, moveData(npos, nvec)));
         recalcPos();
-    }
+    }*/
+    pos = npos;
+    vec = nvec;
 }
 
 void Entity::correctMiddleVec(std::map<tick, moveData>::iterator itO, vec_t *nvec, pos_t npos, tick nturn) {
