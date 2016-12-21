@@ -11,11 +11,13 @@
 #include <string>
 #include <mutex>
 #include <map>
+#include <SFML/Window/Keyboard.hpp>
 #include "Definitions.hh"
 #include "Entity.hh"
 #include "IEventHandler.hh"
 #include "UI/UIManager.hh"
 #include "Menu.hh"
+#include "TouchDefinition.hh"
 
 using namespace boost::property_tree;
 
@@ -30,6 +32,9 @@ namespace client {
         std::vector<Menu*> listMenu;
         UI::UIManager managerUi;
         UI::IWindow *window;
+        Menu *currentMenu;
+        std::map<std::string ,client::Key>nav_map;
+        static const std::map<sf::Keyboard::Key, client::Key> keymap;
     private:
         GameUIInterface() {};
     public:
@@ -60,6 +65,14 @@ namespace client {
         void deleteEntity(Entity *entity);
 
         void addMenu(const std::string &path);
+
+        void addNavMap(const std::string & path);
+
+        void manageInput(short key);
+
+        std::string isNavKey(client::Key);
+
+        void manageNavkey(const std::string &res);
     private:
         typeide_t getNextId();
     };

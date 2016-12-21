@@ -14,7 +14,8 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
     static_cast<UI::BackgroundLayer*>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "media/references/background.png");
      ui_mut = mut;
-
+currentMenu = nullptr;
+    addNavMap("config/navigation.json");
 }
 
 GameUIInterface::~GameUIInterface() {
@@ -22,7 +23,8 @@ GameUIInterface::~GameUIInterface() {
 
 void GameUIInterface::initUI() {
     window = managerUi.getWindow(UI::MAIN_WINDOW);
-//    addMenu("config/menuConnection.json");
+    addMenu("config/menuStart.json");
+
 }
 
 void GameUIInterface::displaySimple() {
@@ -94,9 +96,11 @@ void GameUIInterface::addEntity(Entity *listEntity) {
     std::cout << "add entity  " << typeEntity[listEntity->getId()] << "pos_x  :" << listEntity->getPos().first  << "pos_y "  << listEntity->getPos().second<< std::endl ;
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
+    std::cerr << typeEntity[listEntity->getId()] <<"ici" << std::endl;
 
     if (typeEntity[listEntity->getId()].find("magical") != std::string::npos)
     {
+
         static_cast<UI::Item *>(item)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
         item->changeStatus(UI::IDLE);
     }
@@ -140,6 +144,9 @@ void GameUIInterface::addMenu(const std::string &path) {
     Menu *temp = new Menu;
     unsigned long id = window->addLayer(UI::MENU);
     temp->setLayer_id(id);
+
+    temp->setName(root.get_child("Name").get_value<std::string>());
+    temp->setType(static_cast<MenuType >(root.get_child("type").get_value<int>()));
     if (root.get_child("Default_Visibility").get_value<int>() == 0)
         window->getLayer(id)->open();
     else
@@ -167,4 +174,44 @@ void GameUIInterface::addMenu(const std::string &path) {
                         temp->addButtons(item);
                 }
     listMenu.push_back(temp);
+    currentMenu = temp;
+}
+
+void GameUIInterface::addNavMap(const std::string &path) {
+    ptree root;
+    read_json(path, root);
+    nav_map["Next"] = static_cast<client::Key>(root.get_child("Next").get_value<int>());
+    nav_map["Prev"] = static_cast<client::Key>(root.get_child("Prev").get_value<int>());
+}
+
+void GameUIInterface::manageInput(short key1) {
+
+    std::string res;
+    sf::Keyboard::Key key = static_cast<sf::Keyboard::Key >(key1);
+    if (keymap.find(key) != keymap.end())
+    {
+        client::Key tmp = keymap.at(key);
+        if (currentMenu->getType() == DEFAULT)
+        {
+            if (( res = isNavKey(tmp)) != "")
+                manageNavkey(res);
+        }
+    }
+}
+
+std::string GameUIInterface::isNavKey(client::Key key) {
+    for (auto it  = nav_map.begin() ; it != nav_map.end(); it++)
+    {
+        if (it->second == key)
+            return it->first;
+    }
+    return std::string("");
+}
+
+void GameUIInterface::manageNavkey(const std::string &res) {
+    if (res == "Next")
+        currentMenu->selectedNext();
+    else
+        currentMenu->selectedPrev();
+
 }

@@ -7,41 +7,63 @@
 
 #include <UI/ILayer.hh>
 #include "UI/AItem.hh"
-class Menu {
-private:
-    unsigned  long layer_id;
-    UI::ILayer *layer;
-public:
-    UI::ILayer *getLayer() const;
 
-    void setLayer(UI::ILayer *layer);
+namespace client {
+    enum MenuType : int
+    {
+        DEFAULT = 0,
+        GAME = 1
+    };
+    class Menu {
+    private:
+        unsigned long layer_id;
+        UI::ILayer *layer;
+        std::string name;
+        MenuType type;
+        UI::AItem *current_selected;
+    public:
+        MenuType getType() const;
 
-private:
-    UI::AItem *current_selected;
-public:
-    UI::AItem *getCurrent_selected() const;
+        void setType(MenuType type);
 
-    void setCurrent_selected(UI::AItem *current_selected);
+        const std::string &getName() const;
 
-public:
-    unsigned long getLayer_id() const;
+        void setName(const std::string &name);
 
-    void setLayer_id(unsigned long layer_id);
+        UI::ILayer *getLayer() const;
 
-    const std::vector<UI::AItem *> &getListItem() const;
+        void setLayer(UI::ILayer *layer);
 
-    void addButtons(UI::AItem *);
+    public:
+        UI::AItem *getCurrent_selected() const;
 
-private:
-    std::vector<UI::AItem*> listItem;
-public:
-    Menu();
-    ~Menu(){};
-    void selectedNext();
-    void selectedPrev();
-    void putMenu();
-    void popMenu();
-};
+        void setCurrent_selected(UI::AItem *current_selected);
+
+    public:
+        unsigned long getLayer_id() const;
+
+        void setLayer_id(unsigned long layer_id);
+
+        const std::vector<UI::AItem *> &getListItem() const;
+
+        void addButtons(UI::AItem *);
+
+    private:
+        std::vector<UI::AItem *> listItem;
+    public:
+        Menu();
+
+        ~Menu() {};
+
+        void selectedNext();
+
+        void selectedPrev();
+
+        void putMenu();
+
+        void popMenu();
+    };
+}
 
 
 #endif //CPP_RTYPE_AMENU_HH

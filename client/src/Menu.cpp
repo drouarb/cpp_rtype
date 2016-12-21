@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Menu.hh"
 
+using namespace client;
 Menu::Menu() : current_selected(nullptr){
 layer = nullptr;
 }
@@ -73,5 +74,21 @@ UI::ILayer *Menu::getLayer() const {
 
 void Menu::setLayer(UI::ILayer *laye) {
     layer = laye;
+}
+
+const std::string &Menu::getName() const {
+    return name;
+}
+
+void Menu::setName(const std::string &name) {
+    Menu::name = name;
+}
+
+MenuType Menu::getType() const {
+    return type;
+}
+
+void Menu::setType(MenuType type) {
+    Menu::type = type;
 }
 

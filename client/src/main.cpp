@@ -31,8 +31,8 @@ int main(int argc, char **argv)
     std::istringstream strm(argv[2]);
     strm >> port;
     client::GameClient game;
-    game.createNetworkManager(IP, port);
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+   // game.createNetworkManager(IP, port);
+   // std::this_thread::sleep_for(std::chrono::seconds(1));
     game.gameLoop();
     return (0);
 

@@ -68,7 +68,7 @@ bool NetworkManager::startPacketFactory()
     return true;
 }
 
-void NetworkManager::addListenerToPacketFactory()
+void NetworkManager:: addListenerToPacketFactory()
 {
     listeners.push_back(new client::ClientListenerCancelEvent(this));
     listeners.push_back(new client::ClientListenerDeleteEntity(this));
