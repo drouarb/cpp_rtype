@@ -9,6 +9,7 @@
 #include "IWindow.hh"
 #include "ALayer.hh"
 #include "LayerFactory.hh"
+#include "Text.hh"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -24,12 +25,14 @@ namespace UI {
         bool isOpen();
         void display();
         void deleteItem(AItem* item);
+        void alert(const std::string& string);
         unsigned long addLayer(UI::layerType layer);
         ILayer* getLayer(unsigned long layer);
         sf::RenderWindow *getWindow();
 
     private:
         sf::RenderWindow *window;
+        UI::Text alertText;
         unsigned int length;
         unsigned int width;
         std::string name;

@@ -11,6 +11,8 @@ UI::Window::Window() {
     width = 600;
     name = "rtype";
     window = new sf::RenderWindow(sf::VideoMode(length, width, 32), name);
+    alertText.setPosition(0, 0);
+    alertText.setString("");
 }
 
 UI::Window::~Window() {
@@ -49,6 +51,7 @@ void UI::Window::display() {
             }
         }
     }
+    window->draw(*alertText.getText());
     window->display();
     //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;
 }
@@ -78,4 +81,8 @@ void UI::Window::deleteItem(AItem* item) {
             return;
         }
     }
+}
+
+void UI::Window::alert(const std::string &string) {
+    alertText.setString(string);
 }
