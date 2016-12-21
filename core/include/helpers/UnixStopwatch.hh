@@ -9,6 +9,10 @@
 #include "IStopwatch.hh"
 
 namespace helpers {
+    /*!
+     * @class UnixStopwatch
+     * @brief Unix implementation of IStopwatch
+     */
     class UnixStopwatch: public IStopwatch {
     public:
         UnixStopwatch();

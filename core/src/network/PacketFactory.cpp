@@ -2,7 +2,12 @@
 // Created by drouar_b on 11/29/16.
 //
 
+#ifdef _WIN32
+#include <network/socket/WindowsUDPSocket.hh>
+#else
 #include <network/socket/UnixUDPSocket.hh>
+#endif
+
 #include <network/packet/PacketErrorHandshake.hh>
 #include <network/packet/PacketRegister.hh>
 #include <network/packet/PacketDisconnect.hh>
@@ -29,12 +34,20 @@
 #include "network/PacketFactory.hh"
 
 network::PacketFactory::PacketFactory(unsigned short port): dataListener(*this) {
+#ifdef _WIN32
+    socket = new socket::WindowsUDPSocket(port);
+#else
     socket = new socket::UnixUDPSocket(port);
+#endif
     socket->registerDataListener(&dataListener);
 }
 
 network::PacketFactory::PacketFactory(const std::string &address, unsigned short port): dataListener(*this) {
+#ifdef _WIN32
+    socket = new socket::WindowsUDPSocket(address, port);
+#else
     socket = new socket::UnixUDPSocket(address, port);
+#endif
     socket->registerDataListener(&dataListener);
 }
 
