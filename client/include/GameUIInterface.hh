@@ -73,6 +73,11 @@ namespace client {
         std::string isNavKey(client::Key);
 
         void manageNavkey(const std::string &res);
+
+        void manageEnter();
+
+        void changeMenu(const std::string & ne);
+
     private:
         typeide_t getNextId();
     };

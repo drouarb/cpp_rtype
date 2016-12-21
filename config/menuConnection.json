@@ -1,8 +1,9 @@
 {
-  "Name": "MenuConnect",
+  "Name": "MenuConnection",
   "Default_Visibility": 1,
   "padding_up" : 100,
   "padding_left" : 600,
+  "type" : 0,
   "Buttons": [
     {
       "buttons_name": "server",
@@ -14,7 +15,8 @@
           "x": 0,
           "y": 0
         }
-      ]
+      ],
+      "type" : 0
     },
     {
       "buttons_name": "back",
@@ -26,7 +28,9 @@
           "x": 0,
           "y": 200
         }
-      ]
+      ],
+      "type" : 1,
+      "goto" : "MenuStart"
     }
   ]
 }

@@ -14,7 +14,7 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
     static_cast<UI::BackgroundLayer*>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "media/references/background.png");
      ui_mut = mut;
-currentMenu = nullptr;
+    currentMenu = nullptr;
     addNavMap("config/navigation.json");
 }
 
@@ -24,7 +24,8 @@ GameUIInterface::~GameUIInterface() {
 void GameUIInterface::initUI() {
     window = managerUi.getWindow(UI::MAIN_WINDOW);
     addMenu("config/menuStart.json");
-
+    addMenu("config/menuConnection.json");
+    currentMenu = listMenu[0];
 }
 
 void GameUIInterface::displaySimple() {
@@ -168,13 +169,16 @@ void GameUIInterface::addMenu(const std::string &path) {
                     if (child.second.get<int>("default_selected") == 0)
                         item->changeStatus(UI::IDLE);
                     else {
+                        temp->setDefault_selected(item);
                         temp->setCurrent_selected(item);
                         item->changeStatus(UI::ACTIVE);
                     }
-                        temp->addButtons(item);
+                    ButtonsType  typeB = static_cast<ButtonsType >(child.second.get<int>("type"));
+                    if (typeB == GOTO)
+                        temp->addButtonsType(child.second.get<std::string>("goto"), item);
+                    temp->addButtons(item, typeB);
                 }
     listMenu.push_back(temp);
-    currentMenu = temp;
 }
 
 void GameUIInterface::addNavMap(const std::string &path) {
@@ -195,6 +199,8 @@ void GameUIInterface::manageInput(short key1) {
         {
             if (( res = isNavKey(tmp)) != "")
                 manageNavkey(res);
+            if (tmp == client::KEY_ENTER)
+                manageEnter();
         }
     }
 }
@@ -214,4 +220,26 @@ void GameUIInterface::manageNavkey(const std::string &res) {
     else
         currentMenu->selectedPrev();
 
+}
+
+void GameUIInterface::manageEnter() {
+
+    if (currentMenu->getType(currentMenu->getCurrent_selected()) == GOTO)
+    {
+        changeMenu(currentMenu->getMenuName(currentMenu->getCurrent_selected()));
+    }
+}
+
+void GameUIInterface::changeMenu(const std::string &ne) {
+    for(int i = 0; listMenu[i]  ; i++)
+    {
+        if (listMenu[i]->getName() == ne)
+        {
+             currentMenu->popMenu();
+            currentMenu->reloadCurrent();
+            currentMenu = listMenu[i];
+            currentMenu->putMenu();
+            break;
+        }
+    }
 }
