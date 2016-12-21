@@ -12,8 +12,9 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     managerUi.init(1920, 1020);
     managerUi.getEventObserver()->setEventManager(handler);
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
-    static_cast<UI::BackgroundLayer*>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "media/references/background.png");
-     ui_mut = mut;
+    static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
+            UI::BACKGROUND, "media/references/background.png");
+    ui_mut = mut;
     currentMenu = nullptr;
     addNavMap("config/navigation.json");
 }
@@ -94,13 +95,13 @@ void GameUIInterface::addEntity(Entity *listEntity) {
     }*/
 
 
-    std::cout << "add entity  " << typeEntity[listEntity->getId()] << "pos_x  :" << listEntity->getPos().first  << "pos_y "  << listEntity->getPos().second<< std::endl ;
+    std::cout << "add entity  " << typeEntity[listEntity->getId()] << "pos_x  :" << listEntity->getPos().first
+              << "pos_y " << listEntity->getPos().second << std::endl;
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
-    std::cerr << typeEntity[listEntity->getId()] <<"ici" << std::endl;
+    std::cerr << typeEntity[listEntity->getId()] << "ici" << std::endl;
 
-    if (typeEntity[listEntity->getId()].find("magical") != std::string::npos)
-    {
+    if (typeEntity[listEntity->getId()].find("magical") != std::string::npos) {
 
         static_cast<UI::Item *>(item)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
         item->changeStatus(UI::IDLE);
@@ -152,19 +153,22 @@ void GameUIInterface::addMenu(const std::string &path) {
     else
         window->getLayer(id)->close();
     temp->setLayer(window->getLayer(id));
-     int x = 0;
+    int x = 0;
     int y = 0;
     int padding_up = root.get_child("padding_up").get_value<int>();
     int padding_left = root.get_child("padding_left").get_value<int>();
     BOOST_FOREACH(ptree::value_type
                           child, root.get_child("Buttons")) {
-                     BOOST_FOREACH(const ptree::value_type &child2,
+                    BOOST_FOREACH(const ptree::value_type &child2,
                                   child.second.get_child("position")) {
                                     x = child2.second.get<int>("x");
                                     y = child2.second.get<int>("y");
                                 }
-                  auto item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" + child.second.get<std::string>("noselected"), x + padding_left , y + padding_up);
-                    window->getLayer(id)->addTexture(item, UI::ACTIVE ,"media/menu/" + child.second.get<std::string>("selected"));
+                    auto item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" +
+                                                                        child.second.get<std::string>("noselected"),
+                                                              x + padding_left, y + padding_up);
+                    window->getLayer(id)->addTexture(item, UI::ACTIVE,
+                                                     "media/menu/" + child.second.get<std::string>("selected"));
                     if (child.second.get<int>("default_selected") == 0)
                         item->changeStatus(UI::IDLE);
                     else {
@@ -173,7 +177,7 @@ void GameUIInterface::addMenu(const std::string &path) {
                         item->changeStatus(UI::ACTIVE);
                     }
                     temp->setButtonsStats(item, static_cast<ButtonsStats >(child.second.get<int>("lock")));
-                    ButtonsType  typeB = static_cast<ButtonsType >(child.second.get<int>("type"));
+                    ButtonsType typeB = static_cast<ButtonsType >(child.second.get<int>("type"));
                     if (typeB == GOTO)
                         temp->addButtonsType(child.second.get<std::string>("goto"), item);
                     temp->addButtons(item, typeB);
@@ -192,12 +196,10 @@ void GameUIInterface::manageInput(short key1) {
 
     std::string res;
     sf::Keyboard::Key key = static_cast<sf::Keyboard::Key >(key1);
-    if (keymap.find(key) != keymap.end())
-    {
+    if (keymap.find(key) != keymap.end()) {
         client::Key tmp = keymap.at(key);
-        if (currentMenu->getType() == DEFAULT)
-        {
-            if (( res = isNavKey(tmp)) != "")
+        if (currentMenu->getType() == DEFAULT) {
+            if ((res = isNavKey(tmp)) != "")
                 manageNavkey(res);
             if (tmp == client::KEY_ENTER)
                 manageEnter();
@@ -206,8 +208,7 @@ void GameUIInterface::manageInput(short key1) {
 }
 
 std::string GameUIInterface::isNavKey(client::Key key) {
-    for (auto it  = nav_map.begin() ; it != nav_map.end(); it++)
-    {
+    for (auto it = nav_map.begin(); it != nav_map.end(); it++) {
         if (it->second == key)
             return it->first;
     }
@@ -224,18 +225,15 @@ void GameUIInterface::manageNavkey(const std::string &res) {
 
 void GameUIInterface::manageEnter() {
 
-    if (currentMenu->getType(currentMenu->getCurrent_selected()) == GOTO)
-    {
+    if (currentMenu->getType(currentMenu->getCurrent_selected()) == GOTO) {
         changeMenu(currentMenu->getMenuName(currentMenu->getCurrent_selected()));
     }
 }
 
 void GameUIInterface::changeMenu(const std::string &ne) {
-    for(int i = 0; listMenu[i]  ; i++)
-    {
-        if (listMenu[i]->getName() == ne)
-        {
-             currentMenu->popMenu();
+    for (int i = 0; listMenu[i]; i++) {
+        if (listMenu[i]->getName() == ne) {
+            currentMenu->popMenu();
             currentMenu->reloadCurrent();
             currentMenu = listMenu[i];
             currentMenu->putMenu();

@@ -34,7 +34,6 @@ namespace client {
         UI::AItem *default_selected;
         std::string text;
         std::map<UI::AItem*, ButtonsStats> buttonsStats;
-
     public:
         const std::string &getText() const;
 
