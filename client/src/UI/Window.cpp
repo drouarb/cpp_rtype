@@ -2,6 +2,7 @@
 #include <UI/Item.hh>
 #include <iostream>
 #include <algorithm>
+#include <UI/MenuLayer.hh>
 
 
 UI::Window::Window() {
@@ -54,6 +55,9 @@ void UI::Window::display() {
 
 unsigned long UI::Window::addLayer(UI::layerType layer) {
     layers.push_back(layerFactory->instantiate(layer));
+    if (layer == MENU) {
+        static_cast<UI::MenuLayer*>(layers.back())->init(window);
+    }
     return layers.size() - 1;
 }
 

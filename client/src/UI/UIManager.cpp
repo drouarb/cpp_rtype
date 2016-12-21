@@ -3,6 +3,7 @@
 #include <UI/Window.hh>
 #include <UI/AudioManager.hh>
 #include <UI/EventObserver.hh>
+#include <UI/MenuLayer.hh>
 
 
 UI::UIManager::UIManager() {

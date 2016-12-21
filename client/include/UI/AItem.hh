@@ -14,6 +14,7 @@ namespace UI {
         ITEM,
         BACKGROUND,
         BACKGROUND_OBJECT,
+        TEXT,
         ITEMS_NUMBER
     };
 
