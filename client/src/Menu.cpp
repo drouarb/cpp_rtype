@@ -33,12 +33,13 @@ void Menu::selectedNext() {
         return;
     for (int i = 0; listItem[i] ; i++)
     {
-        if (listItem[i] == current_selected && i + 1 != listItem.size())
-        {
-            listItem[i]->changeStatus(UI::IDLE);
-            listItem[i + 1]->changeStatus(UI::ACTIVE);
-            current_selected = listItem[i + 1];
-            break;
+            if (listItem[i] == current_selected && i + 1 != listItem.size()) {
+                if (buttonsStats[listItem[i + 1]] == UNLOCK) {
+                listItem[i]->changeStatus(UI::IDLE);
+                listItem[i + 1]->changeStatus(UI::ACTIVE);
+                current_selected = listItem[i + 1];
+                break;
+            }
         }
     }
 }
@@ -58,10 +59,12 @@ void Menu::selectedPrev() {
     {
         if (listItem[i] == current_selected && i - 1 != -1)
         {
-            listItem[i]->changeStatus(UI::IDLE);
-            listItem[i - 1]->changeStatus(UI::ACTIVE);
-            current_selected = listItem[i - 1];
-            break;
+            if (buttonsStats[listItem[i - 1]] == UNLOCK) {
+                listItem[i]->changeStatus(UI::IDLE);
+                listItem[i - 1]->changeStatus(UI::ACTIVE);
+                current_selected = listItem[i - 1];
+                break;
+            }
         }
     }
 }
@@ -129,5 +132,9 @@ const std::string &Menu::getText() const {
 
 void Menu::setText(const std::string &text) {
     Menu::text = text;
+}
+
+void Menu::setButtonsStats(UI::AItem *item, ButtonsStats type) {
+    buttonsStats[item] = type;
 }
 

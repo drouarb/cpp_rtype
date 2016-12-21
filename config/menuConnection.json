@@ -10,6 +10,7 @@
       "selected": "servers.png",
       "noselected": "servers.png",
       "default_selected" : 0,
+      "lock" : 0,
       "position": [
         {
           "x": 0,
@@ -23,6 +24,7 @@
       "selected": "back2.png",
       "noselected": "back.png",
       "default_selected" : 1,
+      "lock" : 1,
       "position": [
         {
           "x": 0,

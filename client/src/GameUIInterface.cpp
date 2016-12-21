@@ -145,7 +145,6 @@ void GameUIInterface::addMenu(const std::string &path) {
     Menu *temp = new Menu;
     unsigned long id = window->addLayer(UI::MENU);
     temp->setLayer_id(id);
-
     temp->setName(root.get_child("Name").get_value<std::string>());
     temp->setType(static_cast<MenuType >(root.get_child("type").get_value<int>()));
     if (root.get_child("Default_Visibility").get_value<int>() == 0)
@@ -173,6 +172,7 @@ void GameUIInterface::addMenu(const std::string &path) {
                         temp->setCurrent_selected(item);
                         item->changeStatus(UI::ACTIVE);
                     }
+                    temp->setButtonsStats(item, static_cast<ButtonsStats >(child.second.get<int>("lock")));
                     ButtonsType  typeB = static_cast<ButtonsType >(child.second.get<int>("type"));
                     if (typeB == GOTO)
                         temp->addButtonsType(child.second.get<std::string>("goto"), item);

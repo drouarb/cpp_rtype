@@ -20,6 +20,11 @@ namespace client {
         GOTO  = 1,
         TEXTBOX = 2
     };
+    enum ButtonsStats : int
+    {
+        LOCK = 0,
+        UNLOCK = 1
+    };
     class Menu {
     private:
         unsigned long layer_id;
@@ -28,6 +33,8 @@ namespace client {
         MenuType type;
         UI::AItem *default_selected;
         std::string text;
+        std::map<UI::AItem*, ButtonsStats> buttonsStats;
+
     public:
         const std::string &getText() const;
 
@@ -72,6 +79,7 @@ namespace client {
 
         const std::string &getMenuName(UI::AItem*);
 
+        void setButtonsStats(UI::AItem *item, ButtonsStats type);
         void reloadCurrent();
     private:
         std::vector<UI::AItem *> listItem;

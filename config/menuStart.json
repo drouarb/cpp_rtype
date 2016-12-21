@@ -9,6 +9,7 @@
       "buttons_name": "Play",
       "selected": "play2.png",
       "noselected": "play.png",
+      "lock" : 1,
       "default_selected" : 1,
       "position": [
         {
@@ -25,6 +26,7 @@
       "selected": "settings2.png",
       "noselected": "settings.png",
       "default_selected" : 0,
+      "lock" : 1,
       "type" : 0,
       "position": [
         {
@@ -38,6 +40,7 @@
       "selected": "credit2.png",
       "noselected": "credit.png",
       "default_selected" : 0,
+      "lock" : 1,
       "type" : 0,
       "position": [
         {
@@ -51,6 +54,7 @@
       "selected": "quit2.png",
       "noselected": "quit.png",
       "default_selected" : 0,
+      "lock" : 1,
       "type" : 0,
       "position": [
         {
