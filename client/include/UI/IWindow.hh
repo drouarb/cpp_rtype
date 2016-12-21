@@ -20,6 +20,7 @@ namespace UI {
         virtual bool isOpen() = 0;
         virtual void display() = 0;
         virtual void deleteItem(AItem* item) = 0;
+        virtual void alert(const std::string& string) = 0;
         virtual unsigned long addLayer(UI::layerType layer) = 0;
         virtual ILayer* getLayer(unsigned long layer) = 0;
     };

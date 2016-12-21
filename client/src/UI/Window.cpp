@@ -2,6 +2,7 @@
 #include <UI/Item.hh>
 #include <iostream>
 #include <algorithm>
+#include <UI/MenuLayer.hh>
 
 
 UI::Window::Window() {
@@ -10,6 +11,8 @@ UI::Window::Window() {
     width = 600;
     name = "rtype";
     window = new sf::RenderWindow(sf::VideoMode(length, width, 32), name);
+    alertText.setPosition(0, 0);
+    alertText.setString("");
 }
 
 UI::Window::~Window() {
@@ -48,12 +51,16 @@ void UI::Window::display() {
             }
         }
     }
+    window->draw(*alertText.getText());
     window->display();
     //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;
 }
 
 unsigned long UI::Window::addLayer(UI::layerType layer) {
     layers.push_back(layerFactory->instantiate(layer));
+    if (layer == MENU) {
+        static_cast<UI::MenuLayer*>(layers.back())->init(window);
+    }
     return layers.size() - 1;
 }
 
@@ -74,4 +81,8 @@ void UI::Window::deleteItem(AItem* item) {
             return;
         }
     }
+}
+
+void UI::Window::alert(const std::string &string) {
+    alertText.setString(string);
 }

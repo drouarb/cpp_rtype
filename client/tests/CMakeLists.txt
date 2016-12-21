@@ -23,4 +23,3 @@ file(
 
 add_executable(UITest ${UI_TEST_SOURCES})
 target_link_libraries(UITest ${SFML_LIBRARIES})
-add_test(UITest UITest)
