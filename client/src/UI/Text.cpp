@@ -5,7 +5,7 @@
 #include <bitset>
 #include "../../include/UI/Text.hh"
 
-UI::Text::Text() {
+UI::Text::Text() : AItem(UI::TEXT) {
     initStatus = font.loadFromFile("/home/jonas_e/Work/Epitech/rtype/media/font/Pixeled.ttf");
     text.setFont(font);
     text.setCharacterSize(24);
@@ -44,4 +44,33 @@ void UI::Text::setCharacterSize(unsigned int size) {
 
 sf::Text *UI::Text::getText() {
     return &text;
+}
+
+void UI::Text::setImage(std::string filename) {
+
+}
+
+void UI::Text::setImage() {
+
+}
+
+void UI::Text::setRatio(float sizeXMax, float sizeYMax) {
+
+}
+
+void UI::Text::setRatio(float ratio) {
+
+}
+
+void UI::Text::changeStatus(UI::animationType type) {
+    AItem::changeStatus(type);
+}
+
+void UI::Text::addAnimation(UI::animationType animationType, short frames, unsigned int size) {
+
+}
+
+void UI::Text::addAnimation(UI::animationType animationType, short frames, unsigned int posX, unsigned int posY,
+                            unsigned int width, unsigned int height) {
+
 }
