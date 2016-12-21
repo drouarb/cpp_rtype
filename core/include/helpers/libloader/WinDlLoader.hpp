@@ -3,6 +3,7 @@
 #include "IDlLoader.hh"
 #include "Windows.h"
 #include <wchar.h>
+#include <stdexcept>
 
 template<typename T>
 class WinDlLoader : public IDlLoader<T>

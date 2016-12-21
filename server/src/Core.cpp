@@ -17,13 +17,13 @@
 server::Core::Core(const std::string &path, const unsigned short port)
         : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(nullptr)
 {
-    FolderExplorer fileExplorer(path);
+    IExplorer *fileExplorer = IExplorer::getInstance();
 
     lastGameId = 0;
     this->isRunning = true;
-    fileExplorer.loadFolder();
+    fileExplorer->loadFolder(path);
     this->networkManager = new NetworkManager(this);
-    const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
+    const std::vector<IExplorer::File> &vector = fileExplorer->getFiles();
     for (auto f : vector) {
         if (f.name.find(".json") == std::string::npos) {
             continue;
@@ -125,13 +125,13 @@ server::Core::Core(const std::string &path, server::NetworkManager *networkManag
                                                                                       networkManager(
                                                                                               nullptr) {
     this->networkManager = networkManager;
-    FolderExplorer fileExplorer(path);
+    IExplorer *fileExplorer = IExplorer::getInstance();
 
     lastGameId = 0;
     this->isRunning = true;
-    fileExplorer.loadFolder();
+    fileExplorer->loadFolder(path);
     this->networkManager = new NetworkManager(this);
-    const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
+    const std::vector<IExplorer::File> &vector = fileExplorer->getFiles();
     for (auto f : vector) {
         if (f.name.find(".json") == std::string::npos) {
             continue;
