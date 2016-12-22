@@ -6,7 +6,7 @@
 #include "../../include/UI/Text.hh"
 
 UI::Text::Text() : AItem(UI::TEXT) {
-    initStatus = font.loadFromFile("/home/jonas_e/Work/Epitech/rtype/media/font/Pixeled.ttf");
+    initStatus = font.loadFromFile("media/font/Pixeled.ttf");
     text.setFont(font);
     text.setCharacterSize(24);
     text.setOutlineColor(sf::Color::Red);
@@ -27,7 +27,7 @@ void UI::Text::setString(const std::string &string) {
 }
 
 void UI::Text::getString() {
-    text.getString();
+     text.getString();
 }
 
 void UI::Text::setFont(const std::string &string) {

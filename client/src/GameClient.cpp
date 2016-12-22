@@ -24,19 +24,19 @@ client::GameClient::GameClient() {
 
 void client::GameClient::createNetworkManager(const std::string &ip, unsigned short port) {
     try {
+        deleteNetworkManager();
         manager = new NetworkManager(ip, port, this);
         manager->addListenerToPacketFactory();
         manager->startPacketFactory();
     }
     catch (std::runtime_error &e) {
         manager = nullptr;
-        std::cerr << e.what() << std::endl;
     }
 }
 
 void client::GameClient::deleteNetworkManager() {
     delete (manager);
-    manager = NULL;
+    manager = nullptr;
 }
 
 
@@ -136,6 +136,7 @@ void GameClient::manageCancelEvent(uint32_t eventId) {
 }
 
 void GameClient::manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList) {
+    std::cout << "jai recu la game list" << std::endl;
     gameui->feedGameList(gameList);
 }
 
@@ -164,7 +165,7 @@ void GameClient::gameLoop() {
     std::string name = "jean patric";
 //    manager->sendRegister(name);
   //  manager->sendJoin(0);
-
+    s_info *receive = nullptr;
     while (1) {
         sw->set();
         gameui->updateListEntity();
@@ -173,7 +174,13 @@ void GameClient::gameLoop() {
         if (world != nullptr)
             world->applyTurn();
         if (event != -42) {
-            gameui->manageInput(event);
+            receive = gameui->manageInput(event);
+            if (receive != nullptr)
+            {
+                    sendAll(receive);
+                delete(receive);
+                receive = nullptr;
+            }
 /*            if (world != nullptr) {
                 if (event == sf::Keyboard::Key::Right) {
                     world->getEntityById(playerId)->setVec(vec_t(3, 0));
@@ -218,4 +225,25 @@ void GameClient::gameLoop() {
             } */
         }
     }
+}
+
+void GameClient::sendAll(struct s_info *info) {
+ switch (info->info)
+ {
+     case I_CONNECTION: {
+         createNetworkManager(static_cast<s_connection *>(info)->ip, static_cast<s_connection *>(info)->port);
+        if (manager != nullptr)
+            gameui->changeMenu("MenuRegister");
+     }
+         break;
+     case I_REGISTER: {
+        if (manager != nullptr) {
+            manager->sendRegister(static_cast<s_register *>(info)->name);
+            manager->sendAskList();
+        }
+     }
+         break;
+     default:
+         break;
+ }
 }

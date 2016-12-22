@@ -6,6 +6,7 @@
 #define CPP_RTYPE_AMENU_HH
 
 #include <UI/ILayer.hh>
+#include <UI/Text.hh>
 #include "UI/AItem.hh"
 
 namespace client {
@@ -34,6 +35,9 @@ namespace client {
         UI::AItem *default_selected;
         std::string text;
         std::map<UI::AItem*, ButtonsStats> buttonsStats;
+        std::map<UI::AItem*, std::string> textBox;
+        std::map<UI::AItem*, int>SendInfo;
+
     public:
         const std::string &getText() const;
 
@@ -79,7 +83,18 @@ namespace client {
         const std::string &getMenuName(UI::AItem*);
 
         void setButtonsStats(UI::AItem *item, ButtonsStats type);
+
+        void changeTextBox(UI::AItem *box, const std::string &c);
+
         void reloadCurrent();
+
+        void errasefromTextBox(UI::AItem *box);
+
+        void addInfo(UI::AItem *item, int info);
+
+        int getInfo(UI::AItem *item);
+
+        const  std::string &getTextFromtextBox(UI::AItem *item);
     private:
         std::vector<UI::AItem *> listItem;
     public:

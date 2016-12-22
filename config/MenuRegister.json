@@ -1,5 +1,5 @@
 {
-  "Name": "MenuConnection",
+  "Name": "MenuRegister",
   "Default_Visibility": 1,
   "padding_up" : 100,
   "padding_left" : 600,
@@ -7,8 +7,8 @@
   "Buttons": [
     {
       "buttons_name": "server",
-      "selected": "servers.png",
-      "noselected": "servers.png",
+      "selected": "ready.png",
+      "noselected": "ready.png",
       "default_selected" : 0,
       "lock" : 0,
       "position": [
@@ -19,10 +19,8 @@
       ],
       "type" : 0
     },
-     {
+    {
       "buttons_name": "port",
-      "selected": "ready2.png",
-      "noselected": "ready.png",
       "default_selected" : 0,
       "lock" : 1,
       "position": [
@@ -32,7 +30,7 @@
         }
       ],
       "type" : 2,
-      "send" : 8
+      "send" : 2
     },
     {
       "buttons_name": "back",
@@ -47,7 +45,7 @@
         }
       ],
       "type" : 1,
-      "goto" : "MenuStart"
+      "goto" : "MenuConnection"
     }
   ]
 }

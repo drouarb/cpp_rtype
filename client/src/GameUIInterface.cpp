@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <UI/BackgroundLayer.hh>
+#include <UI/MenuLayer.hh>
 #include "GameUIInterface.hh"
 
 using namespace client;
@@ -26,6 +27,7 @@ void GameUIInterface::initUI() {
     window = managerUi.getWindow(UI::MAIN_WINDOW);
     addMenu("config/menuStart.json");
     addMenu("config/menuConnection.json");
+    addMenu("config/MenuRegister.json");
     currentMenu = listMenu[0];
 }
 
@@ -164,11 +166,21 @@ void GameUIInterface::addMenu(const std::string &path) {
                                     x = child2.second.get<int>("x");
                                     y = child2.second.get<int>("y");
                                 }
-                    auto item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" +
-                                                                        child.second.get<std::string>("noselected"),
-                                                              x + padding_left, y + padding_up);
-                    window->getLayer(id)->addTexture(item, UI::ACTIVE,
-                                                     "media/menu/" + child.second.get<std::string>("selected"));
+                    ButtonsType typeB = static_cast<ButtonsType >(child.second.get<int>("type"));
+                    UI::AItem *item;
+                    if (typeB == TEXTBOX) {
+                        item = static_cast<UI::AItem *>(static_cast<UI::MenuLayer *>(window->getLayer(id))->addTextBox(
+                                x + padding_left, y + padding_up));
+
+                        temp->addInfo(item, child.second.get<int>("send"));
+                    } else {
+                        item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" +
+                                                                       child.second.get<std::string>("noselected"),
+                                                             x + padding_left, y + padding_up);
+                        window->getLayer(id)->addTexture(item, UI::ACTIVE,
+                                                         "media/menu/" + child.second.get<std::string>("selected"));
+
+                    }
                     if (child.second.get<int>("default_selected") == 0)
                         item->changeStatus(UI::IDLE);
                     else {
@@ -177,7 +189,6 @@ void GameUIInterface::addMenu(const std::string &path) {
                         item->changeStatus(UI::ACTIVE);
                     }
                     temp->setButtonsStats(item, static_cast<ButtonsStats >(child.second.get<int>("lock")));
-                    ButtonsType typeB = static_cast<ButtonsType >(child.second.get<int>("type"));
                     if (typeB == GOTO)
                         temp->addButtonsType(child.second.get<std::string>("goto"), item);
                     temp->addButtons(item, typeB);
@@ -192,7 +203,7 @@ void GameUIInterface::addNavMap(const std::string &path) {
     nav_map["Prev"] = static_cast<client::Key>(root.get_child("Prev").get_value<int>());
 }
 
-void GameUIInterface::manageInput(short key1) {
+s_info * GameUIInterface::manageInput(short key1) {
 
     std::string res;
     sf::Keyboard::Key key = static_cast<sf::Keyboard::Key >(key1);
@@ -201,10 +212,13 @@ void GameUIInterface::manageInput(short key1) {
         if (currentMenu->getType() == DEFAULT) {
             if ((res = isNavKey(tmp)) != "")
                 manageNavkey(res);
-            if (tmp == client::KEY_ENTER)
-                manageEnter();
+            else if (tmp == client::KEY_ENTER)
+                return(manageEnter());
+            else
+                manageTouch(tmp);
         }
     }
+    return (nullptr);
 }
 
 std::string GameUIInterface::isNavKey(client::Key key) {
@@ -223,11 +237,15 @@ void GameUIInterface::manageNavkey(const std::string &res) {
 
 }
 
-void GameUIInterface::manageEnter() {
+s_info * GameUIInterface::manageEnter() {
 
     if (currentMenu->getType(currentMenu->getCurrent_selected()) == GOTO) {
         changeMenu(currentMenu->getMenuName(currentMenu->getCurrent_selected()));
+    } else if (currentMenu->getType(currentMenu->getCurrent_selected()) == TEXTBOX) {
+        return (client::parse(static_cast<information>(currentMenu->getInfo(currentMenu->getCurrent_selected())),
+                      currentMenu->getTextFromtextBox(currentMenu->getCurrent_selected())));
     }
+    return nullptr;
 }
 
 void GameUIInterface::changeMenu(const std::string &ne) {
@@ -239,5 +257,17 @@ void GameUIInterface::changeMenu(const std::string &ne) {
             currentMenu->putMenu();
             break;
         }
+    }
+}
+
+void GameUIInterface::manageTouch(client::Key key) {
+    if (currentMenu->getType(currentMenu->getCurrent_selected()) == TEXTBOX) {
+        if (key < 255) {
+            std::string res;
+            res.push_back(key);
+            currentMenu->changeTextBox(currentMenu->getCurrent_selected(), res);
+        }
+        if (key == client::Key::KEY_BACKSPACE)
+            currentMenu->errasefromTextBox(currentMenu->getCurrent_selected());
     }
 }

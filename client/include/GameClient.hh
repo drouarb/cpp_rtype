@@ -13,6 +13,7 @@
 #include "GameUIInterface.hh"
 #include "Definitions.hh"
 #include "Machine.hpp"
+#include "Information.hh"
 #include "helpers/IStopwatch.hh"
 
 #define TICKRATE 30
@@ -67,7 +68,8 @@ namespace client {
     void manageGameData();
 
     void manageDisconnect();
-    
+
+      void sendAll(struct s_info* info);
     void manageCancelEvent(uint32_t eventId);
     
     void manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList);
@@ -79,6 +81,7 @@ namespace client {
     void manageQuit();
     
     World *getWorld() const;
+
   private:
     void readaptTickRate(int servTickRate,
 			 std::pair<tick, uint64_t> estiClientHoro,

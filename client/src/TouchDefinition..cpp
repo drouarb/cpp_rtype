@@ -61,6 +61,9 @@ const std::map<sf::Keyboard::Key, client::Key> client::GameUIInterface::keymap =
         {sf::Keyboard::Key::Numpad6,   client::KEY_6},
         {sf::Keyboard::Key::Numpad7,   client::KEY_7},
         {sf::Keyboard::Key::Numpad8,   client::KEY_8},
-        {sf::Keyboard::Key::Numpad9,   client::KEY_9}
+        {sf::Keyboard::Key::Numpad9,   client::KEY_9},
+        {sf::Keyboard::Key::SemiColon,   client::KEY_POINT},
+        {sf::Keyboard::Key::Slash,   client::KEY_DOUBLE_POINT},
+        {sf::Keyboard::Key::BackSpace,   client::KEY_BACKSPACE}
 
 };

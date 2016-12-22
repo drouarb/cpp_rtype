@@ -6,8 +6,9 @@
 #include "Menu.hh"
 
 using namespace client;
-Menu::Menu() : current_selected(nullptr){
-layer = nullptr;
+
+Menu::Menu() : current_selected(nullptr) {
+    layer = nullptr;
     default_selected = nullptr;
 }
 
@@ -31,15 +32,18 @@ void Menu::addButtons(UI::AItem *item, ButtonsType type) {
 void Menu::selectedNext() {
     if (current_selected == nullptr)
         return;
-    for (int i = 0; listItem[i] ; i++)
-    {
-            if (listItem[i] == current_selected && i + 1 != listItem.size()) {
+    for (int i = 0; listItem[i]; i++) {
+        if (listItem[i] == current_selected) {
+            while (i + 1 != listItem.size()) {
                 if (buttonsStats[listItem[i + 1]] == UNLOCK) {
-                listItem[i]->changeStatus(UI::IDLE);
-                listItem[i + 1]->changeStatus(UI::ACTIVE);
-                current_selected = listItem[i + 1];
-                break;
+                    current_selected->changeStatus(UI::IDLE);
+                    listItem[i + 1]->changeStatus(UI::ACTIVE);
+                    current_selected = listItem[i + 1];
+                    break;
+                }
+                i++;
             }
+            break;
         }
     }
 }
@@ -55,16 +59,18 @@ void Menu::setCurrent_selected(UI::AItem *curret_selected) {
 void Menu::selectedPrev() {
     if (current_selected == nullptr)
         return;
-    for (int i = 0; listItem[i] ; i++)
-    {
-        if (listItem[i] == current_selected && i - 1 != -1)
-        {
-            if (buttonsStats[listItem[i - 1]] == UNLOCK) {
-                listItem[i]->changeStatus(UI::IDLE);
-                listItem[i - 1]->changeStatus(UI::ACTIVE);
-                current_selected = listItem[i - 1];
-                break;
+    for (int i = 0; listItem[i]; i++) {
+        if (listItem[i] == current_selected) {
+            while (i - 1 != -1) {
+                if (buttonsStats[listItem[i - 1]] == UNLOCK) {
+                    current_selected->changeStatus(UI::IDLE);
+                    listItem[i - 1]->changeStatus(UI::ACTIVE);
+                    current_selected = listItem[i - 1];
+                    break;
+                }
+                i--;
             }
+            break;
         }
     }
 }
@@ -85,7 +91,7 @@ void Menu::setLayer(UI::ILayer *laye) {
     layer = laye;
 }
 
- std::string Menu::getName() const {
+std::string Menu::getName() const {
     return name;
 }
 
@@ -110,7 +116,7 @@ const std::string &Menu::getMenuName(UI::AItem *item) {
 }
 
 ButtonsType Menu::getType(UI::AItem *item) {
-    return  this->TypeMap[item];
+    return this->TypeMap[item];
 }
 
 void Menu::setDefault_selected(UI::AItem *default_selected) {
@@ -126,6 +132,7 @@ void Menu::reloadCurrent() {
     }
 }
 
+
 const std::string &Menu::getText() const {
     return text;
 }
@@ -136,5 +143,37 @@ void Menu::setText(const std::string &text) {
 
 void Menu::setButtonsStats(UI::AItem *item, ButtonsStats type) {
     buttonsStats[item] = type;
+}
+
+void Menu::changeTextBox(UI::AItem *box, const std::string &c) {
+
+    std::string res = "";
+    if (textBox.find(box) != textBox.end())
+        res = textBox[box];
+    if (res.size() < 16)
+        textBox[box] = res  + c;
+    static_cast<UI::Text *>(box)->setString(textBox[box]);
+}
+
+void Menu::errasefromTextBox(UI::AItem *box) {
+    std::string res = "";
+    if (textBox.find(box) != textBox.end()) {
+        if (textBox[box].size() > 0) {
+            textBox[box].pop_back();
+            static_cast<UI::Text *>(box)->setString(textBox[box]);
+        }
+    }
+}
+
+void Menu::addInfo(UI::AItem *item, int info) {
+    this->SendInfo[item] = info;
+}
+
+int Menu::getInfo(UI::AItem *item) {
+    return SendInfo[item];
+}
+
+const std::string &Menu::getTextFromtextBox(UI::AItem *item) {
+    return textBox[item];
 }
 

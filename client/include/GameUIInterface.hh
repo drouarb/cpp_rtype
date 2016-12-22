@@ -18,7 +18,7 @@
 #include "UI/UIManager.hh"
 #include "Menu.hh"
 #include "TouchDefinition.hh"
-
+#include "Information.hh"
 using namespace boost::property_tree;
 
 namespace client {
@@ -68,15 +68,17 @@ namespace client {
 
         void addNavMap(const std::string & path);
 
-        void manageInput(short key);
+        s_info * manageInput(short key);
 
         std::string isNavKey(client::Key);
 
         void manageNavkey(const std::string &res);
 
-        void manageEnter();
+        s_info * manageEnter();
 
         void changeMenu(const std::string & ne);
+
+        void manageTouch(client::Key);
 
     private:
         typeide_t getNextId();

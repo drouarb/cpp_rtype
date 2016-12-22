@@ -52,6 +52,7 @@ namespace client
         KEY_LEFT = 1005,
         KEY_SPACE = 1006,
         KEY_POINT = '.',
+        KEY_BACKSPACE = 1007,
         KEY_DOUBLE_POINT =':'
         
     };
