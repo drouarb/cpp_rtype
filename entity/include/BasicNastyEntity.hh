@@ -37,10 +37,8 @@ private:
     };
 
 private:
-    server::EntityAction *notifyCollision;
-    helpers::IStopwatch *stopwatch;
-    server::round_t damage_time;
-
+    server::hp_t lostHp;
+    bool mustDestroy;
 
     static const int NASTY_DAMAGE = 10;
     static const int NASTY_COLLISION_DAMAGE = 5;

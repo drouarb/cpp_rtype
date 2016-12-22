@@ -96,6 +96,8 @@ namespace server
         void sendSimToNewNotFirst(const Client & client);
         void sendAllMoves();
         void sendSound(const std::string & soundfile);
+
+        void endGame();
     };
 }
 

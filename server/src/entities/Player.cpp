@@ -86,14 +86,14 @@ Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) :
 
 void Player::MagicMissile::collide(const Entity &entity, server::round_t current_round) {
     INFO("MagicMissile collide with : " << entity.data.getId() << "(id: " << this->data->getId() << ")")
-    this->mustDestroy = current_round;
+    this->mustDestroy = true;
 }
 
 EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector<Entity *> &)
 {
     server::EntityAction *entityAction = new server::EntityAction();
 
-    if (this->mustDestroy != 0 && this->mustDestroy + 1 == current_round) {
+    if (this->mustDestroy) {
         entityAction->destroy = true;
         INFO("MagicMassile ded" << this->data->getId() << ", x:" << this->data->getPosX() << ", y: "
                                 << this->data->getPosY())

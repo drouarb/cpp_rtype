@@ -44,7 +44,7 @@ namespace server {
             Tribool collidesWith(const Entity &entity) override;
 
         private:
-            round_t mustDestroy;
+            bool mustDestroy;
             round_t startRound;
 
             pos_t posX;

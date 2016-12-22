@@ -11,6 +11,7 @@
 #include <ctime>
 #include <network/packet/PacketPlayerData.hh>
 #include <network/packet/PacketPlaySound.hh>
+#include <network/packet/PacketLeaderBoard.hh>
 #include "Game.hh"
 
 using namespace server;
@@ -150,6 +151,8 @@ void Game::checkCollisions()
                             this->sim_move(entities[i]);
                         }
                     }
+
+                    continue;
                 }
             }
 
@@ -192,6 +195,8 @@ void Game::checkCollisions()
                             this->sim_move(entities[i]);
                         }
                     }
+
+                    continue;
                 }
             }
 
@@ -236,6 +241,8 @@ void Game::checkCollisions()
                             this->sim_move(entities[i]);
                         }
                     }
+
+                    continue;
                 }
             }
 
@@ -278,6 +285,8 @@ void Game::checkCollisions()
                             this->sim_move(entities[i]);
                         }
                     }
+
+                    continue;
                 }
             }
         }
@@ -357,6 +366,9 @@ void Game::unspawn()
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
             it = vect_erase(it, entities);
+
+            if (entities.empty() && lvl->isOver(round))
+                endGame();
         }
         else
             ++it;
@@ -596,4 +608,16 @@ void Game::sendSound(const std::string &soundfile)
         packetf.send(*packet, client->getClientId());
     }
     delete (packet);
+}
+
+void Game::endGame()
+{
+    std::vector<std::pair<uint32_t, std::string>> vect;
+    //TODO: scores
+
+    network::packet::PacketLeaderBoard packet(vect);
+    for (auto client : clientList)
+    {
+        packetf.send(packet, client->getClientId());
+    }
 }
