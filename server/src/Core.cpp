@@ -60,7 +60,6 @@ void server::Core::run() {
         sw->set();
         mutex.lock();
 
-//        std::cout << "- round - - - - - - - - - - - - - - - - - -" << std::endl;
         for (auto &game : games) {
             std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
             game->tick();
