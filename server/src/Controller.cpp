@@ -5,12 +5,12 @@ void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY) {
     this->player->move(speedX, speedY);
 }
 
-void server::Controller::playShoot(server::attackId_t attackId) {
+void server::Controller::playShoot(attackId_t attackId, round_t tick) {
     if (!player)
     {
         return;
     }
-    player->shoot(attackId);
+    player->shoot(tick); //TODO add attack id
 }
 
 void server::Controller::setEntity(server::Player *entity) {

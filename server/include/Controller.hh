@@ -12,7 +12,7 @@ namespace server {
     public:
         void playMove(pos_t speedX, pos_t speedY);
 
-        void playShoot(attackId_t attackId);
+        void playShoot(attackId_t attackId, round_t tick);
 
         void setEntity(Player *entity);
 

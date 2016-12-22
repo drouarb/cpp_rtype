@@ -6,10 +6,8 @@
 #include <entities/Player.hh>
 #include <iostream>
 #include <cmath>
-#include "Entity.hh"
+#include "entities/Entity.hh"
 
-#define CIRCLE_RADIUS 15
-#define BULLET_SIZE 25
 
 using namespace server;
 
@@ -17,9 +15,9 @@ Player::Player() : mustDestroy(0), vectX(0), vectY(0), newHp(0) {
     INFO("Player created")
 }
 
-void Player::shoot(attackId_t attack) {
+void Player::shoot(round_t current_round) {
     //TODO Create map of <attackId_t, ADynamicObject *>
-    this->attackQueue.push(attack);
+    this->attackQueue.push(new MagicMissile(this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(), current_round));
 }
 
 void Player::collide(const Entity &entity, server::round_t current_round) {
@@ -35,7 +33,7 @@ EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) 
     INFO("Player hp: " << this->data->getHp())
     EntityAction *act = new EntityAction();
     if (!attackQueue.empty()) {
-        ADynamicObject *pObject = new MagicMissile(this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(), current_round);
+        ADynamicObject *pObject = attackQueue.back();
         act->newEntity = pObject;
         attackQueue.pop();
         INFO("PLayer " << this->data->getId() << " : BOUM /!\\")

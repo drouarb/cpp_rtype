@@ -14,18 +14,24 @@ namespace server {
     private:
 
         static const int DEFAULT_LIFE = 500;
+        static const int MAX_ATTACK_QUEUE = 10;
+        static const int CIRCLE_RADIUS = 15;
+        static const int DEFAULT_PLAYER_SPEED = 1;
 
-        std::queue<attackId_t> attackQueue;
         round_t mustDestroy;
         speed_t vectX;
         speed_t vectY;
         hp_t newHp;
 
+    protected:
+        std::queue<ADynamicObject *> attackQueue;
+        static const int BULLET_SIZE = 25;
+
     public:
 
         Player();
 
-        void shoot(attackId_t attackId) override;
+        void shoot(round_t attackId) override;
         void move(speed_t vectX, speed_t vectY) override;
         Tribool collidesWith(const Entity &entity) override;
         void collide(const Entity &entity, server::round_t current_round) override;
@@ -50,7 +56,6 @@ namespace server {
             pos_t posX;
             pos_t posY;
             static const int DAMAGE = 20;
-
         };
     };
 }

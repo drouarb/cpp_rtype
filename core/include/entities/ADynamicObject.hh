@@ -20,14 +20,15 @@ namespace server
         virtual ~ADynamicObject() { }
 
         /**
-         * This method is always called just before act() (in the same game round).
+         * \brief This method is always called just before act() (in the same game round).
          * It informs the entity that it just collided with the Entity passed as parameter.
          * If the instance where collide() is called is an actor, it should check the colliding entity for damage.
          * This method may be called multiple times before act() is called, if there are multiple collisions.
          */
         virtual void collide(const server::Entity &, server::round_t current_round) = 0;
         /**
-         * This method is called at each game round. Here, the entity can choose to do anything (or nothing).
+         *
+         * \brief This method is called at each game round. Here, the entity can choose to do anything (or nothing).
          * The returned EntityAction contains all that the entity wants to do.
          * It must be dynamically alloc'd, and will be deleted by the caller. Must not be null.
          * The parameter is the current game round. It allows the entity to know the current 'time' of the game.
@@ -38,24 +39,26 @@ namespace server
          */
         virtual EntityAction *act(round_t current_round, const std::vector<Entity *> &) = 0;
         /**
-         * This method is called when the object is first created.
+         * \brief This method is called when the object is first created.
          * The X and Y coordinates given in the EntityInitilization will be ignored if the entity was created by the level.
          * They will only be applied if the entity is created by another entity.
          */
         virtual EntityInitialization *initialize(round_t, const std::vector<Entity *> &) = 0;
         /**
-         * This method returns the damage that this entity causes when colliding with another entity.
+         * \brief This method returns the damage that this entity causes when colliding with another entity.
          * May be null.
          * Is typically used for projectiles.
          * May be negative (for a boon for instance).
          */
         virtual hp_t getDamage() = 0;
         /**
-         * In this function, the object must return whether or not it should collide with the given entity.
+         * \brief In this function, the object must return whether or not it should collide with the given entity.
          * Visuals effects and object that do not interact with any other entity can return NA.
          */
         virtual Tribool collidesWith(const Entity &) = 0;
-
+        /**
+         *  \brief Contain all data on entity (position, sprite, speed ...)
+         */
         const EntityData * data;
     };
 }
