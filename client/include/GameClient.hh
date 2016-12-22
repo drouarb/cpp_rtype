@@ -37,6 +37,8 @@ namespace client {
     ide_t			playerId;
     uint8_t			nbrAttack;
 	  helpers::IStopwatch * sw;
+      std::map<client::Key , vec_t>keygame_move;
+	  std::map<client::Key , int>keygame_attack;
 
 
   public:
@@ -81,7 +83,7 @@ namespace client {
     void manageQuit();
     
     World *getWorld() const;
-
+      void createKeyMap(const std::string & path);
   private:
     void readaptTickRate(int servTickRate,
 			 std::pair<tick, uint64_t> estiClientHoro,

@@ -79,7 +79,7 @@ void GameUIInterface::addListEntity(std::vector<Entity *> listentity) {
 
 void GameUIInterface::addEntity(Entity *listEntity) {
     ui_mut->lock();
-   auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
+    auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
     std::cerr << typeEntity[listEntity->getId()] << "ici" << std::endl;
 
@@ -128,7 +128,7 @@ void GameUIInterface::addMenu(const std::string &path) {
     read_json(path, root);
     Menu *temp = new Menu;
     unsigned long id = window->addLayer(UI::MENU);
-     temp->setLayer_id(id);
+    temp->setLayer_id(id);
     temp->setName(root.get_child("Name").get_value<std::string>());
     temp->setType(static_cast<MenuType >(root.get_child("type").get_value<int>()));
     if (root.get_child("Default_Visibility").get_value<int>() == 0)
@@ -154,7 +154,7 @@ void GameUIInterface::addMenu(const std::string &path) {
                                 x + padding_left, y + padding_up));
 
                         temp->changeTextBox(item, child.second.get<std::string>("default_value"));
-                        static_cast<UI::Text*>(item)->setString(child.second.get<std::string>("default_value"));
+                        static_cast<UI::Text *>(item)->setString(child.second.get<std::string>("default_value"));
                         temp->addInfo(item, child.second.get<int>("send"));
 
                     } else {
@@ -187,7 +187,7 @@ void GameUIInterface::addNavMap(const std::string &path) {
     nav_map["Prev"] = static_cast<client::Key>(root.get_child("Prev").get_value<int>());
 }
 
-s_info * GameUIInterface::manageInput(short key1) {
+s_info *GameUIInterface::manageInput(short key1) {
 
     std::string res;
     sf::Keyboard::Key key = static_cast<sf::Keyboard::Key >(key1);
@@ -197,12 +197,17 @@ s_info * GameUIInterface::manageInput(short key1) {
             if ((res = isNavKey(tmp)) != "")
                 manageNavkey(res);
             else if (tmp == client::KEY_ENTER)
-                return(manageEnter());
+                return (manageEnter());
             else
                 manageTouch(tmp);
-        }
+        } else
+            return (client::parse(I_PLAYER, tmp));
     }
     return (nullptr);
+}
+
+bool GameUIInterface::windowIsOpen() {
+    return (window->isOpen());
 }
 
 std::string GameUIInterface::isNavKey(client::Key key) {
@@ -221,19 +226,19 @@ void GameUIInterface::manageNavkey(const std::string &res) {
 
 }
 
-s_info * GameUIInterface::manageEnter() {
+s_info *GameUIInterface::manageEnter() {
 
     if (currentMenu->getType(currentMenu->getCurrent_selected()) == GOTO) {
         changeMenu(currentMenu->getMenuName(currentMenu->getCurrent_selected()));
     } else if (currentMenu->getType(currentMenu->getCurrent_selected()) == TEXTBOX) {
         return (client::parse(static_cast<information>(currentMenu->getInfo(currentMenu->getCurrent_selected())),
-                      currentMenu->getTextFromtextBox(currentMenu->getCurrent_selected())));
+                              currentMenu->getTextFromtextBox(currentMenu->getCurrent_selected())));
     }
     return nullptr;
 }
 
 void GameUIInterface::changeMenu(const std::string &ne) {
-    for (int i = 0; i  != listMenu.size(); i++) {
+    for (int i = 0; i != listMenu.size(); i++) {
         if (listMenu[i]->getName() == ne) {
             currentMenu->popMenu();
             currentMenu->reloadCurrent();
@@ -280,24 +285,19 @@ void GameUIInterface::createStaticMenu() {
 void GameUIInterface::reloadMenuRoomList() {
     int x = 100;
     int y = 100;
-    for(int i = 0; i != listMenu.size(); i++)
-    {
-        if (listMenu[i]->getName() == "roomList")
-        {
+    for (int i = 0; i != listMenu.size(); i++) {
+        if (listMenu[i]->getName() == "roomList") {
             ui_mut->lock();
             listMenu[i]->erraseTextBox();
-            for (auto it = gameList.begin();  it != gameList.end() ;it++)
-            {
-
+            for (auto it = gameList.begin(); it != gameList.end(); it++) {
                 auto item = static_cast<UI::MenuLayer *>(window->getLayer(listMenu[i]->getLayer_id()))->addTextBox(
-                        x , y);
+                        x, y);
                 std::stringstream sstm;
-                sstm << static_cast<unsigned  int>(it->first) << "  | 4 Players  Room Number : "  << static_cast<unsigned int>(it->second);
+                sstm << static_cast<unsigned int>(it->first) << "  | 4 Players  Room Number : "
+                     << static_cast<unsigned int>(it->second);
                 item->setString(sstm.str());
                 listMenu[i]->addInfo(item, 1);
-
-                auto item1 = static_cast<UI::AItem*>(item);
-
+                auto item1 = static_cast<UI::AItem *>(item);
                 if (it != gameList.begin())
                     item1->changeStatus(UI::IDLE);
                 else {
@@ -307,7 +307,7 @@ void GameUIInterface::reloadMenuRoomList() {
                 }
                 listMenu[i]->setButtonsStats(item1, static_cast<ButtonsStats >(1));
                 listMenu[i]->addButtons(item1, TEXTBOX);
-                y+=100;
+                y += 100;
             }
             ui_mut->unlock();
         }

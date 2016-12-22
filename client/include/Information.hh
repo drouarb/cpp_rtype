@@ -8,7 +8,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-
+#include "TouchDefinition.hh"
 namespace client {
     enum information : int {
         I_DEFAULT = 0,
@@ -18,7 +18,7 @@ namespace client {
         I_QUIT = 4,
         I_ASKLEADERBOARD = 5,
         I_ASKLIST = 6,
-        I_PLAYER_MOVE = 7,
+        I_PLAYER = 7,
         I_CONNECTION = 8
     };
     struct  s_info
@@ -39,6 +39,11 @@ namespace client {
     struct s_join : s_info
     {
        uint8_t roomid;
+    };
+
+    struct s_player : s_info
+    {
+        client::Key key;
     };
     static s_info* parse(information type , const std::string & value)
     {
@@ -64,10 +69,16 @@ namespace client {
                 res->info = type;
                 std::istringstream strm(value.substr(value.find(":") + 1, value.size()));
                 strm >> res->roomid;
-            std::cout << res->roomid << std::endl;
                 return res;
         }
         return nullptr;
+    }
+    static  s_info *parse(information type, client::Key key)
+    {
+        s_player *res = new s_player;
+        res->key = key;
+        res->info = type;
+        return res;
     }
 }
 

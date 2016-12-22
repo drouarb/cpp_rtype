@@ -84,8 +84,10 @@ namespace client {
 
         void reloadMenuRoomList();
 
+        bool windowIsOpen();
     private:
         typeide_t getNextId();
+
     };
 }
 

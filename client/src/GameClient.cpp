@@ -2,6 +2,10 @@
 // Created by celeriy on 28/11/16.
 //
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+
 #include <stdexcept>
 #include <iostream>
 #include <future>
@@ -9,6 +13,7 @@
 #include "EventManager.hh"
 #include "GameClient.hh"
 
+using namespace boost::property_tree;
 using namespace client;
 
 client::GameClient::GameClient() {
@@ -20,6 +25,7 @@ client::GameClient::GameClient() {
     sw = helpers::IStopwatch::getInstance();
     gameui = new GameUIInterface(handler, client_mut);
     gameui->initUI();
+    createKeyMap("config/gameCommand.json");
 }
 
 void client::GameClient::createNetworkManager(const std::string &ip, unsigned short port) {
@@ -38,7 +44,6 @@ void client::GameClient::deleteNetworkManager() {
     delete (manager);
     manager = nullptr;
 }
-
 
 
 void GameClient::readaptTickRate(int servTickRate,
@@ -166,11 +171,8 @@ void GameClient::manageQuit() {
 void GameClient::gameLoop() {
     short event;
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
-    std::string name = "jean patric";
-//    manager->sendRegister(name);
-  //  manager->sendJoin(0);
     s_info *receive = nullptr;
-    while (1) {
+    while (gameui->windowIsOpen()) {
         sw->set();
         gameui->updateListEntity();
         event = handler->getEvent();
@@ -179,83 +181,72 @@ void GameClient::gameLoop() {
             world->applyTurn();
         if (event != -42) {
             receive = gameui->manageInput(event);
-            if (receive != nullptr)
-            {
-                    sendAll(receive);
-                delete(receive);
+            if (receive != nullptr) {
+                sendAll(receive);
+                delete (receive);
                 receive = nullptr;
             }
-/*            if (world != nullptr) {
-                if (event == sf::Keyboard::Key::Right) {
-                    world->getEntityById(playerId)->setVec(vec_t(3, 0));
-                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-                                            world->getEntityById(playerId)->getVec().second,
-                                            world->getEntityById(playerId)->getPos().first,
-                                            world->getEntityById(playerId)->getPos().second);
-                } else if (event == sf::Keyboard::Key::Left) {
-                    world->getEntityById(playerId)->setVec(vec_t(-3, 0));
-                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-                                            world->getEntityById(playerId)->getVec().second,
-                                            world->getEntityById(playerId)->getPos().first,
-                                            world->getEntityById(playerId)->getPos().second);
-
-                } else if (event == sf::Keyboard::Key::Up) {
-                    world->getEntityById(playerId)->setVec(vec_t(0, -3));
-                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-                                            world->getEntityById(playerId)->getVec().second,
-                                            world->getEntityById(playerId)->getPos().first,
-                                            world->getEntityById(playerId)->getPos().second);
-
-                } else if (event == sf::Keyboard::Key::Down) {
-                    world->getEntityById(playerId)->setVec(vec_t(0, 3));
-                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-                                            world->getEntityById(playerId)->getVec().second,
-                                            world->getEntityById(playerId)->getPos().first,
-                                            world->getEntityById(playerId)->getPos().second);
-                } else if (event == sf::Keyboard::Key::Space) {
-                    manager->sendPlayerAttack(world->getTick(), 0);
-                } else if (event == sf::Keyboard::RControl) {
-                    std::cout << "Stop player in course" << std::endl;
-                    world->getEntityById(playerId)->setVec(vec_t(0, 0));
-                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-                                            world->getEntityById(playerId)->getVec().second,
-                                            world->getEntityById(playerId)->getPos().first,
-                                            world->getEntityById(playerId)->getPos().second);
-                }
-
-            }
-            if (sw->elapsedMs() < 1000 / tickRateClient) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000 / tickRateClient - sw->elapsedMs()));
-            } */
         }
     }
 }
 
 void GameClient::sendAll(struct s_info *info) {
- switch (info->info)
- {
-     case I_CONNECTION: {
-         createNetworkManager(static_cast<s_connection *>(info)->ip, static_cast<s_connection *>(info)->port);
-        if (manager != nullptr)
-            gameui->changeMenu("MenuRegister");
-     }
-         break;
-     case I_REGISTER: {
-        if (manager != nullptr) {
-            manager->sendRegister(static_cast<s_register *>(info)->name);
-            manager->sendAskList();
-            gameui->changeMenu("roomList");
+    switch (info->info) {
+        case I_CONNECTION: {
+            createNetworkManager(static_cast<s_connection *>(info)->ip, static_cast<s_connection *>(info)->port);
+            if (manager != nullptr)
+                gameui->changeMenu("MenuRegister");
         }
-     }
-         break;
-     case I_JOIN: {
-         if (manager != nullptr) {
-             manager->sendJoin(static_cast<s_join *>(info)->roomid);
-            gameui->changeMenu("game");
-         }
-     }
-         break;
-     default:
-         break;
- }
+            break;
+        case I_REGISTER: {
+            if (manager != nullptr) {
+                manager->sendRegister(static_cast<s_register *>(info)->name);
+                manager->sendAskList();
+                gameui->changeMenu("roomList");
+            }
+        }
+            break;
+        case I_JOIN: {
+            if (manager != nullptr) {
+                manager->sendJoin(static_cast<s_join *>(info)->roomid);
+                gameui->changeMenu("game");
+            }
+        }
+            break;
+        case I_PLAYER : {
+            if (manager != nullptr && world != nullptr) {
+                if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end()) {
+                    world->getEntityById(playerId)->setVec(keygame_move[static_cast<s_player *>(info)->key]);
+                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+                                            world->getEntityById(playerId)->getVec().second,
+                                            world->getEntityById(playerId)->getPos().first,
+                                            world->getEntityById(playerId)->getPos().second);
+                }
+                if (keygame_attack.find(static_cast<s_player *>(info)->key) != keygame_attack.end()) {
+                    std::cout << "je passe " << std::endl;
+                    manager->sendPlayerAttack(world->getTick(), keygame_attack[static_cast<s_player *>(info)->key]);
+                }
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+void GameClient::createKeyMap(const std::string &path) {
+
+    ptree root;
+    read_json(path, root);
+    BOOST_FOREACH(ptree::value_type
+                          child, root.get_child("Move")) {
+                    keygame_move[static_cast<client::Key >(child.second.get<int>("value"))] = std::pair<int16_t, int16_t>(
+                            child.second.get<int>("x"),
+                            child.second.get<int>("y"));
+                }
+
+    BOOST_FOREACH(ptree::value_type
+                          child, root.get_child("Attack")) {
+                    keygame_attack[static_cast<client::Key >(child.second.get<int>("value"))] = child.second.get<int>("id");
+                }
 }
