@@ -28,7 +28,7 @@ void Player::collide(const Entity &entity, server::round_t current_round) {
         return;
     }
     std::cout << "Player " << this->data->getId() << " collides with player id " << entity.data.getId() << std::endl;
-    this->newHp = entity.obj->getDamage();
+    this->newHp += entity.obj->getDamage();
 }
 
 EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) {
