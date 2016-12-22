@@ -54,12 +54,11 @@ void WindowsFileExplorer::loadFolder(const std::string &path) {
     {
         if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
-            _tprintf(TEXT("  %s   <DIR>\n"), ffd.cFileName);
         }
         else
         {
             File file;
-            file.name = ffd.cFileName;
+            file.name = "/" + std::string(ffd.cFileName);
             this->fileList.push_back(file);
         }
     }
