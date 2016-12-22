@@ -28,6 +28,7 @@ void GameUIInterface::initUI() {
     addMenu("config/menuStart.json");
     addMenu("config/menuConnection.json");
     addMenu("config/MenuRegister.json");
+    createStaticMenu();
     currentMenu = listMenu[0];
 }
 
@@ -55,7 +56,9 @@ void GameUIInterface::feedLeaderBoard(std::vector<std::pair<uint32_t, std::strin
 }
 
 void GameUIInterface::feedGameList(std::vector<std::pair<uint8_t, uint16_t> > ngameList) {
+    ui_mut->lock();
     gameList = ngameList;
+    ui_mut->unlock();
 }
 
 
@@ -76,30 +79,7 @@ void GameUIInterface::addListEntity(std::vector<Entity *> listentity) {
 
 void GameUIInterface::addEntity(Entity *listEntity) {
     ui_mut->lock();
-
-/*    int n = 0;
-    int n1 = 0;
-
-    std::string  final = typeEntity[listEntity->getId()];
-
-    if (final.find(".gif") != std::string::npos) {
-        final = final.replace(final.find(".gif"), 4, ".txt");
-    }
-    if (final.find(".png") != std::string::npos) {
-        final = final.replace(final.find(".png"), 4, ".txt");
-    }
-
-    std::ifstream ifs = std::ifstream(final, std::ifstream::in);
-
-    if (ifs.is_open()) {
-        ifs >> n;
-        ifs >> n1;
-    }*/
-
-
-    std::cout << "add entity  " << typeEntity[listEntity->getId()] << "pos_x  :" << listEntity->getPos().first
-              << "pos_y " << listEntity->getPos().second << std::endl;
-    auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
+   auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
     std::cerr << typeEntity[listEntity->getId()] << "ici" << std::endl;
 
@@ -140,6 +120,7 @@ void GameUIInterface::deleteEntity(Entity *entity) {
     window->deleteItem(gameItem[entity]);
     gameItem.erase(entity);
     ui_mut->unlock();
+
 }
 
 void GameUIInterface::addMenu(const std::string &path) {
@@ -147,7 +128,7 @@ void GameUIInterface::addMenu(const std::string &path) {
     read_json(path, root);
     Menu *temp = new Menu;
     unsigned long id = window->addLayer(UI::MENU);
-    temp->setLayer_id(id);
+     temp->setLayer_id(id);
     temp->setName(root.get_child("Name").get_value<std::string>());
     temp->setType(static_cast<MenuType >(root.get_child("type").get_value<int>()));
     if (root.get_child("Default_Visibility").get_value<int>() == 0)
@@ -172,7 +153,10 @@ void GameUIInterface::addMenu(const std::string &path) {
                         item = static_cast<UI::AItem *>(static_cast<UI::MenuLayer *>(window->getLayer(id))->addTextBox(
                                 x + padding_left, y + padding_up));
 
+                        temp->changeTextBox(item, child.second.get<std::string>("default_value"));
+                        static_cast<UI::Text*>(item)->setString(child.second.get<std::string>("default_value"));
                         temp->addInfo(item, child.second.get<int>("send"));
+
                     } else {
                         item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" +
                                                                        child.second.get<std::string>("noselected"),
@@ -249,7 +233,7 @@ s_info * GameUIInterface::manageEnter() {
 }
 
 void GameUIInterface::changeMenu(const std::string &ne) {
-    for (int i = 0; listMenu[i]; i++) {
+    for (int i = 0; i  != listMenu.size(); i++) {
         if (listMenu[i]->getName() == ne) {
             currentMenu->popMenu();
             currentMenu->reloadCurrent();
@@ -269,5 +253,63 @@ void GameUIInterface::manageTouch(client::Key key) {
         }
         if (key == client::Key::KEY_BACKSPACE)
             currentMenu->errasefromTextBox(currentMenu->getCurrent_selected());
+    }
+}
+
+void GameUIInterface::createStaticMenu() {
+
+    Menu *temp = new Menu;
+    unsigned long id = window->addLayer(UI::MENU);
+    temp->setLayer_id(id);
+    temp->setType(DEFAULT);
+    window->getLayer(id)->close();
+    temp->setName("roomList");
+    temp->setLayer(window->getLayer(id));
+    listMenu.push_back(temp);
+    Menu *tep = new Menu;
+    id = window->addLayer(UI::GAME);
+    tep->setLayer_id(id);
+    tep->setType(GAME);
+    window->getLayer(id)->close();
+    tep->setName("game");
+    tep->setLayer(window->getLayer(id));
+    listMenu.push_back(tep);
+
+}
+
+void GameUIInterface::reloadMenuRoomList() {
+    int x = 100;
+    int y = 100;
+    for(int i = 0; i != listMenu.size(); i++)
+    {
+        if (listMenu[i]->getName() == "roomList")
+        {
+            ui_mut->lock();
+            listMenu[i]->erraseTextBox();
+            for (auto it = gameList.begin();  it != gameList.end() ;it++)
+            {
+
+                auto item = static_cast<UI::MenuLayer *>(window->getLayer(listMenu[i]->getLayer_id()))->addTextBox(
+                        x , y);
+                std::stringstream sstm;
+                sstm << static_cast<unsigned  int>(it->first) << "  | 4 Players  Room Number : "  << static_cast<unsigned int>(it->second);
+                item->setString(sstm.str());
+                listMenu[i]->addInfo(item, 1);
+
+                auto item1 = static_cast<UI::AItem*>(item);
+
+                if (it != gameList.begin())
+                    item1->changeStatus(UI::IDLE);
+                else {
+                    listMenu[i]->setDefault_selected(item1);
+                    listMenu[i]->setCurrent_selected(item1);
+                    item1->changeStatus(UI::ACTIVE);
+                }
+                listMenu[i]->setButtonsStats(item1, static_cast<ButtonsStats >(1));
+                listMenu[i]->addButtons(item1, TEXTBOX);
+                y+=100;
+            }
+            ui_mut->unlock();
+        }
     }
 }

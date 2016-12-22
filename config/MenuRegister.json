@@ -21,8 +21,9 @@
     },
     {
       "buttons_name": "port",
-      "default_selected" : 0,
+      "default_selected" : 1,
       "lock" : 1,
+      "default_value" : "Regis",
       "position": [
         {
           "x": 0,
@@ -36,7 +37,7 @@
       "buttons_name": "back",
       "selected": "back2.png",
       "noselected": "back.png",
-      "default_selected" : 1,
+      "default_selected" : 0,
       "lock" : 1,
       "position": [
         {

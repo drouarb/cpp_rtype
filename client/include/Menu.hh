@@ -95,6 +95,8 @@ namespace client {
         int getInfo(UI::AItem *item);
 
         const  std::string &getTextFromtextBox(UI::AItem *item);
+
+        void erraseTextBox();
     private:
         std::vector<UI::AItem *> listItem;
     public:

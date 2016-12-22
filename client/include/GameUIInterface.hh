@@ -80,6 +80,10 @@ namespace client {
 
         void manageTouch(client::Key);
 
+        void createStaticMenu();
+
+        void reloadMenuRoomList();
+
     private:
         typeide_t getNextId();
     };

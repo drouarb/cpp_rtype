@@ -177,3 +177,14 @@ const std::string &Menu::getTextFromtextBox(UI::AItem *item) {
     return textBox[item];
 }
 
+void Menu::erraseTextBox() {
+
+    textBox.clear();
+    listItem.clear();
+    current_selected = nullptr;
+    default_selected = nullptr;
+    buttonsStats.clear();
+    SendInfo.clear();
+    TypeMap.clear();
+}
+

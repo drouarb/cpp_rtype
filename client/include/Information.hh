@@ -7,6 +7,7 @@
 
 #include <string>
 #include <sstream>
+#include <iostream>
 
 namespace client {
     enum information : int {
@@ -34,6 +35,11 @@ namespace client {
     {
         std::string name;
     };
+
+    struct s_join : s_info
+    {
+       uint8_t roomid;
+    };
     static s_info* parse(information type , const std::string & value)
     {
         if (type == I_CONNECTION)
@@ -51,6 +57,15 @@ namespace client {
             reg->name = value;
             reg->info = type;
             return reg;
+        }
+        else if (type == I_JOIN)
+        {
+                struct  s_join* res = new s_join;
+                res->info = type;
+                std::istringstream strm(value.substr(value.find(":") + 1, value.size()));
+                strm >> res->roomid;
+            std::cout << res->roomid << std::endl;
+                return res;
         }
         return nullptr;
     }

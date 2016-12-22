@@ -23,7 +23,8 @@
       "buttons_name": "port",
       "selected": "ready2.png",
       "noselected": "ready.png",
-      "default_selected" : 0,
+      "default_selected" : 1,
+       "default_value" : "127.0.0.1:9000",
       "lock" : 1,
       "position": [
         {
@@ -38,7 +39,7 @@
       "buttons_name": "back",
       "selected": "back2.png",
       "noselected": "back.png",
-      "default_selected" : 1,
+      "default_selected" : 0,
       "lock" : 1,
       "position": [
         {
