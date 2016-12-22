@@ -21,7 +21,10 @@ void network::utils::NetworkString::serialize(t_rawdata *data) const {
     data->resize(data->size() + this->getSize(), 0);
     len = reinterpret_cast<unsigned short *>(&data->back() - this->getSize() + 1);
     *len = static_cast<unsigned short>(this->size());
-    memcpy(&data->back() - this->size() + 1, &this->front(), this->size());
+	for (unsigned short i = 0; i < *len; ++i) {
+		(*data)[i] = (*this)[i];
+	}
+//    memcpy(&data->back() - this->size() + 1, &this->front(), this->size());
 }
 
 t_rawdata::iterator network::utils::NetworkString::deserialize(t_rawdata *data, t_rawdata::iterator it) {
@@ -33,7 +36,10 @@ t_rawdata::iterator network::utils::NetworkString::deserialize(t_rawdata *data, 
     if ((&data->back() - &(*it)) < *len + 1)
         throw std::out_of_range("Can't read string of NetworkString");
     this->resize(*len);
-    memcpy(&this->front(), &(*it) + 2, *len);
+	for (unsigned short i = 0; i < *len; ++i) {
+		(*this)[i] = (*data)[i];
+	}
+//	std::memcpy(&this->front(), &(*it) + 2, *len);
     return it + this->getSize();
 }
 
