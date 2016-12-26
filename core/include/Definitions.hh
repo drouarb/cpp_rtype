@@ -8,6 +8,7 @@
 #include "cstdint"
 
 #define ROUND_DURATION_MS 30
+#define MAX_PLAYERS 4
 
 namespace server {
 

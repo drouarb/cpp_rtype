@@ -30,7 +30,7 @@ namespace server {
         Tribool collidesWith(const Entity &entity) override;
         void collide(const Entity &entity, server::round_t current_round) override;
         EntityAction *act(round_t round, const std::vector<Entity *> &) override;
-        EntityInitialization *initialize() override;
+        EntityInitialization *initialize(round_t, const std::vector<Entity *> &) override;
         hp_t getDamage() override;
 
         class MagicMissile : public ADynamicObject {
@@ -39,7 +39,7 @@ namespace server {
 
             void collide(const Entity &entity, server::round_t current_round) override;
             EntityAction *act(round_t current_round, const std::vector<Entity *> &) override;
-            EntityInitialization *initialize() override;
+            EntityInitialization *initialize(round_t, const std::vector<Entity *> &) override;
             hp_t getDamage() override;
             Tribool collidesWith(const Entity &entity) override;
 

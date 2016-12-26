@@ -14,15 +14,16 @@ namespace server
     {
     public:
         Entity();
-        Entity(ADynamicObject * obj, entityId_t id);
+        Entity(ADynamicObject *obj, entityId_t id, round_t round, const std::vector<Entity *> &entities);
         ~Entity();
 
-        void initialize(ADynamicObject * obj, entityId_t id);
+        void initialize(ADynamicObject *obj, entityId_t id, round_t round, const std::vector<Entity *> &entities);
 
         ADynamicObject * obj;
         EntityData data;
 
-        static Entity * make(const std::string & path, entityId_t id);
+        static Entity *
+        make(const std::string &path, entityId_t id, round_t round, const std::vector<Entity *> &entities);
     };
 }
 

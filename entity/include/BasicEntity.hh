@@ -18,7 +18,7 @@ public:
 
     void collide(const server::Entity &entity, server::round_t current_round) override;
     server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
-    server::EntityInitialization *initialize() override;
+    server::EntityInitialization *initialize(server::round_t, const std::vector<server::Entity *> &) override;
 
     server::hp_t getDamage() override;
 

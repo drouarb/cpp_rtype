@@ -52,7 +52,8 @@ EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) 
     return act;
 }
 
-EntityInitialization *Player::initialize() {
+EntityInitialization *Player::initialize(round_t, const std::vector<Entity *> &)
+{
     EntityInitialization *ei = new EntityInitialization();
     ei->team = PLAYER;
     ei->action.hp = 5;
@@ -114,7 +115,8 @@ EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector
     return entityAction;
 }
 
-EntityInitialization *Player::MagicMissile::initialize() {
+EntityInitialization *Player::MagicMissile::initialize(round_t, const std::vector<Entity *> &)
+{
     EntityInitialization *initialization = new EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;
     initialization->posX = this->posX;

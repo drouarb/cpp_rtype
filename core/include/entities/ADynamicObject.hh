@@ -42,7 +42,7 @@ namespace server
          * The X and Y coordinates given in the EntityInitilization will be ignored if the entity was created by the level.
          * They will only be applied if the entity is created by another entity.
          */
-        virtual EntityInitialization * initialize() = 0;
+        virtual EntityInitialization *initialize(round_t, const std::vector<Entity *> &) = 0;
         /**
          * This method returns the damage that this entity causes when colliding with another entity.
          * May be null.

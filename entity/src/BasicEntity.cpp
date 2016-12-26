@@ -38,7 +38,7 @@ EntityAction *BasicEntity::act(round_t current_round, const std::vector<Entity *
     return (a);
 }
 
-EntityInitialization * BasicEntity::initialize()
+EntityInitialization * BasicEntity::initialize(round_t, const std::vector<Entity *> &)
 {
     EntityInitialization *initialization = new EntityInitialization();
     initialization->action.hp = 100;

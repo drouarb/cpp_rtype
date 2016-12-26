@@ -12,6 +12,7 @@
 #include <network/packet/PacketPlayerData.hh>
 #include <network/packet/PacketPlaySound.hh>
 #include <network/packet/PacketLeaderBoard.hh>
+#include <network/packet/PacketErrorGame.hh>
 #include "Game.hh"
 
 using namespace server;
@@ -76,7 +77,7 @@ void Game::progressLevel()
         }
         for (auto spawn : *pVector)
         {
-            Entity * entity = spawn.trigger(entityIdCount);
+            Entity * entity = spawn.trigger(entityIdCount, round, entities);
             if (entity == nullptr)
             {
                 ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
@@ -316,7 +317,7 @@ void Game::letEntitesAct()
         }
         if (action->newEntity)
         {
-            entities.push_back(new Entity(action->newEntity, entityIdCount));
+            entities.push_back(new Entity(action->newEntity, entityIdCount, round, entities));
             entityIdCount++;
             this->sim_spawn(entities.back());
         }
@@ -378,17 +379,22 @@ void Game::unspawn()
 
 void Game::newPlayer(Client *client) {
     INFO("Adding player from " << client->getClientId())
+
     if (clientList.size() == 4)
     {
-        WARN("maximum number of players reached");
+        INFO("Full")
+        network::packet::PacketErrorGame packet;
+        packet.setMessage("Game room number " + std::to_string(gameId) + " is full.");
+        packetf.send(packet, client->getClientId());
         return;
     }
+
     Controller *controller = new Controller();
     this->clientList.push_back(client);
     Player *player = new Player();
     Entity *entity = new Entity();
     controller->setEntity(entity);
-    entity->initialize(player, entityIdCount);
+    entity->initialize(player, entityIdCount, round, entities);
     entityIdCount++;
     controller->setEntity(player);
     client->setController(controller);
