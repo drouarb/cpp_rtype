@@ -19,7 +19,6 @@ server::Core::Core(const std::string &path, const unsigned short port)
 {
     FolderExplorer fileExplorer(path);
 
-    lastGameId = 0;
     this->isRunning = true;
     fileExplorer.loadFolder();
     this->networkManager = new NetworkManager(this);
@@ -87,8 +86,7 @@ void server::Core::psetClient(server::Client &client, server::gameId_t gameId) {
     }
 
     games.push_back(new Game(*packetFactory, gameId));
-    games.back()->setLevel(levels[lastGameId % levels.size()]);
-    ++lastGameId;
+    games.back()->setLevel(levels[gameId % levels.size()]);
     games.back()->newPlayer(&client);
 }
 
@@ -126,7 +124,6 @@ server::Core::Core(const std::string &path, server::NetworkManager *networkManag
     this->networkManager = networkManager;
     FolderExplorer fileExplorer(path);
 
-    lastGameId = 0;
     this->isRunning = true;
     fileExplorer.loadFolder();
     this->networkManager = new NetworkManager(this);

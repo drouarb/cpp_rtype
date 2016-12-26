@@ -16,10 +16,10 @@
 
 using namespace server;
 
-Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true)
 { }
 
-Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true)
 { }
 
 Game::~Game()
@@ -367,7 +367,7 @@ void Game::unspawn()
             destroyedEntities.push_back(*it);
             it = vect_erase(it, entities);
 
-            if (entities.empty() && lvl->isOver(round))
+            if (going && isFinished())
                 endGame();
         }
         else
@@ -610,6 +610,23 @@ void Game::sendSound(const std::string &soundfile)
     delete (packet);
 }
 
+bool Game::isFinished()
+{
+    if (lvl->isOver(round))
+    {
+        for (auto entity : entities)
+        {
+            if (entity->data.getTeam() == FOE)
+                return (false);
+        }
+        return (true);
+    }
+    else
+    {
+        return (false);
+    }
+}
+
 void Game::endGame()
 {
     std::vector<std::pair<uint32_t, std::string>> vect;
@@ -620,4 +637,5 @@ void Game::endGame()
     {
         packetf.send(packet, client->getClientId());
     }
+    going = false;
 }
