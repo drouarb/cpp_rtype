@@ -117,7 +117,7 @@ void Game::checkCollisions()
                 ((fy(i) >= fy(j) && fy(i) <= fyp(j)) || (fyp(i) >= fy(j) && fyp(i) <= fyp(j))))
             {
                 dist = fx(i) - fxp(j);
-                std::cout << "left dist=" << std::to_string(dist) << std::endl;
+                //std::cout << "left dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
                     entities[i]->obj->collide(*entities[j], this->round);
@@ -161,7 +161,7 @@ void Game::checkCollisions()
                 ((fy(i) >= fy(j) && fy(i) <= fyp(j)) || (fyp(i) >= fy(j) && fyp(i) <= fyp(j))))
             {
                 dist = fx(j) - fxp(i);
-                std::cout << "right dist=" << std::to_string(dist) << std::endl;
+                //std::cout << "right dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
                     entities[i]->obj->collide(*entities[j], this->round);
@@ -207,7 +207,7 @@ void Game::checkCollisions()
                 ((fx(i) >= fx(j) && fx(i) <= fxp(j)) || (fxp(i) >= fx(j) && fxp(i) <= fxp(j))))
             {
                 dist = fy(i) - fyp(j);
-                std::cout << "up dist=" << std::to_string(dist) << std::endl;
+                //std::cout << "up dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
                     entities[i]->obj->collide(*entities[j], this->round);
@@ -251,7 +251,7 @@ void Game::checkCollisions()
                 ((fx(i) >= fx(j) && fx(i) <= fxp(j)) || (fxp(i) >= fx(j) && fxp(i) <= fxp(j))))
             {
                 dist = fy(j) - fyp(i);
-                std::cout << "down dist=" << std::to_string(dist) << std::endl;
+                //std::cout << "down dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
                     entities[i]->obj->collide(*entities[j], this->round);
@@ -338,7 +338,7 @@ void Game::moveEntities()
     {
         entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
         entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
-        std::cout << "player " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
+        //std::cout << "player " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
         //TODO: do this in checkCollisions, by creating entity of the player team, located on the borders?
         /*if (entity->data.getPosY() > FIELD_HEIGHT)
             entity->data.setPosY(FIELD_HEIGHT);
@@ -406,7 +406,7 @@ void Game::removePlayer(Client *client) {
     client->getController()->destroy();
     delete client->getController();
     client->setController(nullptr);
-    std::cout << "erase" << *position << std::endl;
+    //std::cout << "erase" << *position << std::endl;
     this->clientList.remove(*position);
     //TODO: send to simulation: destroy
 }
