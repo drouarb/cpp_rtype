@@ -46,6 +46,7 @@ const std::map<sf::Keyboard::Key, client::Key> client::GameUIInterface::keymap =
         {sf::Keyboard::Key::Num2,         client::KEY_2},
         {sf::Keyboard::Key::Num3,         client::KEY_3},
         {sf::Keyboard::Key::Num4,         client::KEY_4},
+        {sf::Keyboard::Key::Quote,         client::KEY_4},
         {sf::Keyboard::Key::Num5,         client::KEY_5},
         {sf::Keyboard::Key::Num6,         client::KEY_6},
         {sf::Keyboard::Key::Num7,         client::KEY_7},

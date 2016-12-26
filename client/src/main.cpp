@@ -19,17 +19,7 @@ int main(int argc, char **argv)
 
  //   AMenu lolo("config/menuStart.json");
  =======*/
-  std::string	IP;
-  unsigned short		port;
-
-    if (argc < 3) {
-        std::cerr << "usage : ./rtype_client IP port" << std::endl;
-        return (1);
-    }
     //<<<<<<< 6faf4ea3aa5e41712e896bfd09a28deda37425f9
-    IP = argv[1];
-    std::istringstream strm(argv[2]);
-    strm >> port;
     client::GameClient game;
    // game.createNetworkManager(IP, port);
    // std::this_thread::sleep_for(std::chrono::seconds(1));

@@ -19,7 +19,8 @@ namespace client {
     {
         NONE = 0,
         GOTO  = 1,
-        TEXTBOX = 2
+        TEXTBOX = 2,
+        SEND = 3
     };
     enum ButtonsStats : int
     {

@@ -179,12 +179,17 @@ const std::string &Menu::getTextFromtextBox(UI::AItem *item) {
 
 void Menu::erraseTextBox() {
 
-    textBox.clear();
-    listItem.clear();
-    current_selected = nullptr;
-    default_selected = nullptr;
-    buttonsStats.clear();
-    SendInfo.clear();
-    TypeMap.clear();
+
+    for (auto it =  listItem.begin(); it != listItem.end() ; it++)
+    {
+        if (textBox.find(*it) != textBox.end() && buttonsStats[*it] == LOCK)
+        {
+            textBox.erase(*it);
+            SendInfo.erase(*it);
+            buttonsStats.erase(*it);
+            it++;
+            listItem.erase(it--);
+        }
+    }
 }
 

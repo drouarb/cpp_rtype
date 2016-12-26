@@ -67,7 +67,7 @@ namespace client {
         {
                 struct  s_join* res = new s_join;
                 res->info = type;
-                std::istringstream strm(value.substr(value.find(":") + 1, value.size()));
+                std::istringstream strm(value);
                 strm >> res->roomid;
                 return res;
         }

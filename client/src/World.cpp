@@ -26,13 +26,13 @@ World::~World() {
 
 void World::spawnEntity(ide_t nid, pos_t pos, typeide_t idtype, UIevent_t nevent, tick nturn) {
     world_mut->lock();
-    std::cout << "t=<" << nturn << "> Spawn entity (" << nid << ") type : " << idtype << " : [" << pos.first << ":"
-              << pos.second << "]" << std::endl;
+    //std::cout << "t=<" << nturn << "> Spawn entity (" << nid << ") type : " << idtype << " : [" << pos.first << ":"
+          //    << pos.second << "]" << std::endl;
     worldEvents.push_back(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, pos, idtype, nturn, nevent)));
     std::list<std::pair<tick, WorldEvent> >::iterator it;
     it = worldEvents.begin();
     while (it != worldEvents.end()) {
-        std::cout << "t=" << it->first << " id=" << it->second.id << " eventid=" << it->second.eventtype << std::endl;
+      //  std::cout << "t=" << it->first << " id=" << it->second.id << " eventid=" << it->second.eventtype << std::endl;
         ++it;
     }
     world_mut->unlock();
@@ -40,8 +40,8 @@ void World::spawnEntity(ide_t nid, pos_t pos, typeide_t idtype, UIevent_t nevent
 
 void World::moveEntity(vec_t vec, pos_t pos, tick nturn, ide_t nid, UIevent_t nevent) {
     world_mut->lock();
-    std::cout << "t=<" << nturn << "> move entity (" << nid << ") : [" << pos.first << ":" << pos.second << "] vec: ["
-              << vec.first << ":" << vec.second << "]" << std::endl;
+//    std::cout << "t=<" << nturn << "> move entity (" << nid << ") : [" << pos.first << ":" << pos.second << "] vec: ["
+  //            << vec.first klkklknl<< ":" << vec.second << "]" << std::endl;
     worldEvents.push_back(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, vec, pos, nturn, nevent)));
     std::list<std::pair<tick, WorldEvent> >::iterator it;
     it = worldEvents.begin();
@@ -50,14 +50,14 @@ void World::moveEntity(vec_t vec, pos_t pos, tick nturn, ide_t nid, UIevent_t ne
 
 void World::updateEntity(int hp, tick nturn, ide_t nid, UIevent_t nevent) {
     world_mut->lock();
-    std::cout << "t=<" << nturn << "> update entity (" << nid << ") : " << hp << std::endl;
+    //std::cout << "t=<" << nturn << "> update entity (" << nid << ") : " << hp << std::endl;
     worldEvents.push_back(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, hp, nturn, nevent)));
     world_mut->unlock();
 }
 
 void World::deleteEntity(ide_t nid, tick nturn, UIevent_t nevent) {
     world_mut->lock();
-    std::cout << "t=<" << nturn << "> delete entity (" << nid << ")" << std::endl;
+    //std::cout << "t=<" << nturn << "> delete entity (" << nid << ")" << std::endl;
     worldEvents.push_back(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, nturn, nevent)));
     world_mut->unlock();
 }

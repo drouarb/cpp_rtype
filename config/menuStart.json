@@ -55,7 +55,8 @@
       "noselected": "quit.png",
       "default_selected" : 0,
       "lock" : 1,
-      "type" : 0,
+      "type" : 3,
+      "send" : 4,
       "position": [
         {
           "x": 0,

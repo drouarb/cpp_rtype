@@ -113,7 +113,6 @@ void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t en
 }
 
 void GameClient::managePlayerData(uint16_t nplayerId, uint8_t nbAttackPlayer) {
-    std::cout << "receive playerData" << std::endl;
     if (world == nullptr) {
         playerId = nplayerId;
         nbrAttack = nbAttackPlayer;
@@ -141,10 +140,6 @@ void GameClient::manageCancelEvent(uint32_t eventId) {
 }
 
 void GameClient::manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList) {
-    std::cout << "jai recu la game list" << gameList.size() << std::endl;
-    gameList.push_back(std::pair<uint8_t, uint16_t>(0, 0));
-    gameList.push_back(std::pair<uint8_t, uint16_t>(0, 0));
-    gameList.push_back(std::pair<uint8_t, uint16_t>(0, 0));
     gameui->feedGameList(gameList);
     gameui->reloadMenuRoomList();
 }
@@ -164,8 +159,6 @@ void GameClient::manageQuit() {
         tickRateClient = 0;
         world = nullptr;
     }
-    exit(0); //supr
-    //informer la gameUI
 }
 
 void GameClient::gameLoop() {
@@ -182,12 +175,15 @@ void GameClient::gameLoop() {
         if (event != -42) {
             receive = gameui->manageInput(event);
             if (receive != nullptr) {
+                if (receive->info == I_QUIT)
+                    break;
                 sendAll(receive);
                 delete (receive);
-                receive = nullptr;
             }
         }
     }
+    deleteNetworkManager();
+
 }
 
 void GameClient::sendAll(struct s_info *info) {
@@ -206,9 +202,18 @@ void GameClient::sendAll(struct s_info *info) {
             }
         }
             break;
+        case I_ASKLIST: {
+            if (manager != nullptr) {
+                 manager->sendAskList();
+                gameui->changeMenu("roomList");
+                manager->sendQuit();
+            }
+        }
+            break;
         case I_JOIN: {
             if (manager != nullptr) {
                 manager->sendJoin(static_cast<s_join *>(info)->roomid);
+                std::cout << "room id " << static_cast<s_join *>(info)->roomid << std::endl;
                 gameui->changeMenu("game");
             }
         }
@@ -223,7 +228,6 @@ void GameClient::sendAll(struct s_info *info) {
                                             world->getEntityById(playerId)->getPos().second);
                 }
                 if (keygame_attack.find(static_cast<s_player *>(info)->key) != keygame_attack.end()) {
-                    std::cout << "je passe " << std::endl;
                     manager->sendPlayerAttack(world->getTick(), keygame_attack[static_cast<s_player *>(info)->key]);
                 }
             }
