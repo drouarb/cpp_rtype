@@ -15,15 +15,15 @@
 #include <ProjTester.hpp>
 
 server::Core::Core(const std::string &path, const unsigned short port)
-        : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(
-        nullptr) {
-    FolderExplorer fileExplorer(path);
+        : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(nullptr)
+{
+    IExplorer *fileExplorer = IExplorer::getInstance();
 
     lastGameId = 0;
     this->isRunning = true;
-    fileExplorer.loadFolder();
+    fileExplorer->loadFolder(path);
     this->networkManager = new NetworkManager(this);
-    const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
+    const std::vector<IExplorer::File> &vector = fileExplorer->getFiles();
     for (auto f : vector) {
         if (f.name.find(".json") == std::string::npos) {
             continue;
@@ -40,7 +40,9 @@ server::Core::Core(const std::string &path, const unsigned short port)
         std::cerr << "No levels. Aborting." << std::endl;
         return;
     }
-    this->packetFactory = new PacketFactoryTest(port);
+
+    //this->packetFactory = new PacketFactoryTest(port);
+    this->packetFactory = new network::PacketFactory(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
     this->packetFactory->registerListener(new ServerListenerAskLeaderboard());
@@ -123,13 +125,13 @@ server::Core::Core(const std::string &path, server::NetworkManager *networkManag
                                                                                       networkManager(
                                                                                               nullptr) {
     this->networkManager = networkManager;
-    FolderExplorer fileExplorer(path);
+    IExplorer *fileExplorer = IExplorer::getInstance();
 
     lastGameId = 0;
     this->isRunning = true;
-    fileExplorer.loadFolder();
+    fileExplorer->loadFolder(path);
     this->networkManager = new NetworkManager(this);
-    const std::vector<IExplorer::File> &vector = fileExplorer.getFiles();
+    const std::vector<IExplorer::File> &vector = fileExplorer->getFiles();
     for (auto f : vector) {
         if (f.name.find(".json") == std::string::npos) {
             continue;

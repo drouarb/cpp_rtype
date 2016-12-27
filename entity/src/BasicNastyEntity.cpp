@@ -7,6 +7,7 @@
 #include "Definitions.hh"
 #include <BasicNastyEntity.hh>
 #include <iostream>
+#include <vector>
 
 BasicNastyEntity::BasicNastyEntity() : notifyCollision(nullptr), stopwatch(helpers::IStopwatch::getInstance()) {
     this->stopwatch->set();
@@ -24,7 +25,7 @@ void BasicNastyEntity::collide(const server::Entity &entity, server::round_t cur
     }
 }
 
-server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
+server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const std::vector<server::Entity *> &)
 {
     INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ", round:" << current_round << ")")
     server::EntityAction * a;
@@ -41,7 +42,7 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round)
     if (current_round % (6 * FIRE_FREQUENCY) == 0) {
         INFO("I'm the vilain nasty player : BOUM BIM BAM")
         this->stopwatch->set();
-        VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3, this->data->getPosY());
+        VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3, this->data->getPosY() + this->data->getSprite().sizeY / 2);
         a->newEntity = projectile;
     }
     INFO("Next action OK")
@@ -54,8 +55,8 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
     initialization->team = server::Team::FOE;
     initialization->action.speedX = 0;
     initialization->action.speedY = 0;
-    initialization->sprite.sizeX = 400;
-    initialization->sprite.sizeY = 400;
+    initialization->sprite.sizeX = 120;
+    initialization->sprite.sizeY = 120;
     initialization->sprite.path = "media/references/ALL_GONE.jpg";
 
     INFO("I'm the vilain nasty player: ");
@@ -63,11 +64,11 @@ server::EntityInitialization *BasicNastyEntity::initialize() {
 }
 
 server::hp_t BasicNastyEntity::getDamage() {
-    return NASTY_COLLISION_DAMAGE;
+    return 0;
 }
 
-bool BasicNastyEntity::collideWith(const server::Entity &entity) {
-    return this->data->getTeam() != entity.data.getTeam();
+server::Tribool BasicNastyEntity::collidesWith(const server::Entity &entity) {
+    return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
 }
 
 void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity, server::round_t current_round) {
@@ -75,11 +76,11 @@ void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity
     if (entity.data.getTeam() == server::Team::FOE) {
         return;
     }
-    INFO("MISSILE COLLIDE EXPLOSION (round : " << current_round << ")");
+    INFO("MISSILE COLLIDE EXPLOSION (entity=" << entity.data.getId() << " me=" << data->getId() << " round : " << current_round << ")");
     this->isCollide = current_round;
 }
 
-server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round)
+server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round, const std::vector<server::Entity *> &)
 {
     server::EntityAction * a = new server::EntityAction();
     if (this->isCollide) {
@@ -87,19 +88,19 @@ server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
     }
-    a->speedX = -1;
+    a->speedX = -3;
     return (a);
 }
 
 server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize() {
     server::EntityInitialization *initialization = new server::EntityInitialization(""); //TODO Add sprite
-    initialization->posX = this->posX;
-    initialization->posY = this->posY;
     initialization->action.speedX = -3;
     initialization->action.speedY = 0;
     initialization->team = server::Team::FOE;
-    initialization->sprite.sizeX = 50;
-    initialization->sprite.sizeY = 50;
+    initialization->sprite.sizeX = 20;
+    initialization->sprite.sizeY = 20;
+    initialization->posX = this->posX;
+    initialization->posY = this->posY - initialization->sprite.sizeY / 2;
     initialization->sprite.path = "media/sprites/magicBullet.png";
     return initialization;
 }
@@ -114,8 +115,8 @@ BasicNastyEntity::VeryNastyProjectile::VeryNastyProjectile(server::speed_t posX,
     this->posY = posY;
 }
 
-bool BasicNastyEntity::VeryNastyProjectile::collideWith(const server::Entity &entity) {
-    return this->data->getTeam() != entity.data.getTeam();
+server::Tribool BasicNastyEntity::VeryNastyProjectile::collidesWith(const server::Entity &entity) {
+    return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
 }
 
 extern "C"

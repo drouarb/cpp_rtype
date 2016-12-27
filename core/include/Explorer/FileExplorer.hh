@@ -14,7 +14,7 @@ private:
 public:
     FolderExplorer(const std::string &path);
 
-    void loadFolder() override;
+    void loadFolder(const std::string &path) override;
 
     std::vector<File> getFiles() override;
 };

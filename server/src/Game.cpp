@@ -10,14 +10,15 @@
 #include <network/packet/PacketSynchronization.hh>
 #include <ctime>
 #include <network/packet/PacketPlayerData.hh>
+#include <network/packet/PacketPlaySound.hh>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0)
 { }
 
-Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0)
 { }
 
 Game::~Game()
@@ -77,7 +78,7 @@ void Game::progressLevel()
             Entity * entity = spawn.trigger(entityIdCount);
             if (entity == nullptr)
             {
-                ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
+                LOG_ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
             }
             else
             {
@@ -99,13 +100,10 @@ void Game::checkCollisions()
     {
         for (size_t j = i + 1; j < max; ++j)
         {
-
-            if (!(entities[i]->obj->collideWith(*entities[j]) || entities[j]->obj->collideWith(*entities[i])))
-            {
+            if (entities[i]->obj->collidesWith(*entities[j]) == T_FALSE && entities[j]->obj->collidesWith(*entities[i]) == T_FALSE)
                 continue;
-            }
-
-            INFO("Un debug i=" << i << ", j=" << j << ", " << entities[i]->data.getId()  << " + " << entities[j]->data.getId());
+            if (entities[i]->obj->collidesWith(*entities[j]) == NA || entities[j]->obj->collidesWith(*entities[i]) == NA)
+                continue;
 
             int dist;
 
@@ -291,7 +289,7 @@ void Game::letEntitesAct()
     for (size_t i = 0; i != entities.size(); ++i)
     {
         auto it = entities.at(i);
-        EntityAction * action = it->obj->act(this->round);
+        EntityAction * action = it->obj->act(this->round, entities);
         if (action->speedX != it->data.getVectX())
         {
             it->data.setVectX(action->speedX);
@@ -316,6 +314,10 @@ void Game::letEntitesAct()
         if (action->destroy)
         {
             it->data.setDestroyed(true);
+        }
+        if (action->soundToPlay != "")
+        {
+            sendSound(action->soundToPlay);
         }
         delete action;
     }
@@ -456,6 +458,11 @@ void Game::sendData() {
         delete packet;
     }
     this->gameEvents.clear();
+
+    sendAllMoves();
+
+    if (round - lastSyn > ROUNDS_BETWEEN_SYN)
+        sendPacketSync(nullptr);
 }
 
 void Game::sim_spawn(Entity *entity) {
@@ -465,9 +472,11 @@ void Game::sim_spawn(Entity *entity) {
 }
 
 void Game::sim_move(Entity *entity) {
+/*
     this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX(),
                                                        entity->data.getVectY(), entity->data.getPosX(),
                                                        entity->data.getPosY()));
+*/
 }
 
 void Game::sim_update(Entity *entity) {
@@ -494,6 +503,7 @@ void Game::sendPacketSync(const Client * client)
     packet_syn->setTime(static_cast<int64_t>(std::time(nullptr)));
     if (client == nullptr)
     {
+        lastSyn = round;
         for (auto client_it : clientList)
         {
             packetf.send(*packet_syn, client_it->getClientId());
@@ -540,7 +550,7 @@ void Game::sendSimToNewNotFirst(const Client &client)
         delete pspawn;
         ++id;
 
-        auto pmove = new network::packet::PacketMoveEntity();
+        /*auto pmove = new network::packet::PacketMoveEntity();
         pmove->setTick(round);
         pmove->setEventId(id);
         pmove->setEntityId(entity->data.getId());
@@ -550,6 +560,40 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pmove->setVecY(entity->data.getVectY());
         packetf.send(*pmove, client.getClientId());
         delete pmove;
-        ++id;
+        ++id;*/
     }
+}
+
+void Game::sendAllMoves()
+{
+    //TODO
+    for (auto client : clientList)
+    {
+        for (auto entity : entities)
+        {
+            auto pmove = new network::packet::PacketMoveEntity();
+            pmove->setTick(round);
+            pmove->setEventId(0);
+            pmove->setEntityId(entity->data.getId());
+            pmove->setPosX(entity->data.getPosX());
+            pmove->setPosY(entity->data.getPosY());
+            pmove->setVecX(entity->data.getVectX());
+            pmove->setVecY(entity->data.getVectY());
+            packetf.send(*pmove, client->getClientId());
+            delete pmove;
+        }
+    }
+}
+
+void Game::sendSound(const std::string &soundfile)
+{
+    auto packet = new network::packet::PacketPlaySound();
+    packet->setTick(round);
+    packet->setEventId(0);
+    /*packet->setSoundName(soundfile);*/ //TODO
+    for (auto client : clientList)
+    {
+        packetf.send(*packet, client->getClientId());
+    }
+    delete (packet);
 }

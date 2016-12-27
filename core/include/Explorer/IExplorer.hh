@@ -15,9 +15,11 @@ public:
     };
 
 public:
-    virtual void loadFolder()= 0;
+    virtual void loadFolder(const std::string &path)= 0;
 
     virtual std::vector<File> getFiles()= 0;
+
+    static IExplorer *getInstance();
 };
 
 #endif //CPP_RTYPE_IEXPLORER_HH

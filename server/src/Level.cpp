@@ -1,7 +1,5 @@
 
-#include <boost/foreach.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include "boost/property_tree/json_parser.hpp"
+#include <fstream>
 #include "Level.hh"
 #include <JSON/JsonParser.hpp>
 #include <JSON/JsonArr.hpp>
@@ -10,7 +8,7 @@ server::Level::Level(const std::string &filepath) {
 
     JSON::JsonObj root;
 
-    std::ifstream ifs(filepath);
+    std::ifstream ifs(filepath.c_str());
 
     if (!ifs.is_open()) {
         throw std::runtime_error("Cannot find " + filepath);
