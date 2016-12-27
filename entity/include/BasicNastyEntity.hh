@@ -9,6 +9,7 @@
 #include <entities/ADynamicObject.hh>
 #include <entities/Entity.hh>
 #include <helpers/IStopwatch.hh>
+#include <vector>
 
 class BasicNastyEntity : public server::ADynamicObject {
 private:
@@ -21,10 +22,10 @@ private:
         VeryNastyProjectile(server::speed_t posX, server::speed_t posY);
 
         void collide(const server::Entity &, server::round_t current_round) override;
-        server::EntityAction *act(server::round_t current_round) override;
-        server::EntityInitialization *initialize() override;
+        server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
+        server::EntityInitialization *initialize(server::round_t, const std::vector<server::Entity *> &) override;
 
-        bool collideWith(const server::Entity &entity) override;
+        server::Tribool collidesWith(const server::Entity &entity) override;
 
     private:
         server::hp_t getDamage() override;
@@ -36,28 +37,29 @@ private:
     };
 
 private:
-    server::EntityAction *notifyCollision;
-    helpers::IStopwatch *stopwatch;
-    server::round_t damage_time;
-
+    server::hp_t lostHp;
+    bool mustDestroy;
+    server::round_t startingRound;
 
     static const int NASTY_DAMAGE = 10;
     static const int NASTY_COLLISION_DAMAGE = 5;
     static const int FIRE_FREQUENCY = 5;
     static const int DEFAULT_HP = 100;
+    static const int SPEED = 5;
+    static const int ROUNDS_MOVING = 60;
 
 
 
 public:
-    bool collideWith(const server::Entity &entity) override;
+    server::Tribool collidesWith(const server::Entity &entity) override;
 
     BasicNastyEntity();
 
 //    friend std::ostream &operator<<(std::ostream &os, const BasicNastyEntity &player);
 
     void collide(const server::Entity &entity, server::round_t current_round) override;
-    server::EntityAction *act(server::round_t current_round) override;
-    server::EntityInitialization *initialize() override;
+    server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
+    server::EntityInitialization *initialize(server::round_t, const std::vector<server::Entity *> &) override;
 
     server::hp_t getDamage() override;
 };

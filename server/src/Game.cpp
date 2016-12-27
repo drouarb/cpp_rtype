@@ -10,14 +10,17 @@
 #include <network/packet/PacketSynchronization.hh>
 #include <ctime>
 #include <network/packet/PacketPlayerData.hh>
+#include <network/packet/PacketPlaySound.hh>
+#include <network/packet/PacketLeaderBoard.hh>
+#include <network/packet/PacketErrorGame.hh>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true)
 { }
 
-Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0)
+Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true)
 { }
 
 Game::~Game()
@@ -74,7 +77,7 @@ void Game::progressLevel()
         }
         for (auto spawn : *pVector)
         {
-            Entity * entity = spawn.trigger(entityIdCount);
+            Entity * entity = spawn.trigger(entityIdCount, round, entities);
             if (entity == nullptr)
             {
                 ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
@@ -99,13 +102,10 @@ void Game::checkCollisions()
     {
         for (size_t j = i + 1; j < max; ++j)
         {
-
-            if (!(entities[i]->obj->collideWith(*entities[j]) || entities[j]->obj->collideWith(*entities[i])))
-            {
+            if (entities[i]->obj->collidesWith(*entities[j]) == FALSE && entities[j]->obj->collidesWith(*entities[i]) == FALSE)
                 continue;
-            }
-
-            INFO("Un debug i=" << i << ", j=" << j << ", " << entities[i]->data.getId()  << " + " << entities[j]->data.getId());
+            if (entities[i]->obj->collidesWith(*entities[j]) == NA || entities[j]->obj->collidesWith(*entities[i]) == NA)
+                continue;
 
             int dist;
 
@@ -118,7 +118,7 @@ void Game::checkCollisions()
                 ((fy(i) >= fy(j) && fy(i) <= fyp(j)) || (fyp(i) >= fy(j) && fyp(i) <= fyp(j))))
             {
                 dist = fx(i) - fxp(j);
-                std::cout << "left dist=" << std::to_string(dist) << std::endl;
+                //std::cout << "left dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
                     entities[i]->obj->collide(*entities[j], this->round);
@@ -152,6 +152,8 @@ void Game::checkCollisions()
                             this->sim_move(entities[i]);
                         }
                     }
+
+                    continue;
                 }
             }
 
@@ -160,7 +162,7 @@ void Game::checkCollisions()
                 ((fy(i) >= fy(j) && fy(i) <= fyp(j)) || (fyp(i) >= fy(j) && fyp(i) <= fyp(j))))
             {
                 dist = fx(j) - fxp(i);
-                std::cout << "right dist=" << std::to_string(dist) << std::endl;
+                //std::cout << "right dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
                     entities[i]->obj->collide(*entities[j], this->round);
@@ -194,6 +196,8 @@ void Game::checkCollisions()
                             this->sim_move(entities[i]);
                         }
                     }
+
+                    continue;
                 }
             }
 
@@ -204,7 +208,7 @@ void Game::checkCollisions()
                 ((fx(i) >= fx(j) && fx(i) <= fxp(j)) || (fxp(i) >= fx(j) && fxp(i) <= fxp(j))))
             {
                 dist = fy(i) - fyp(j);
-                std::cout << "up dist=" << std::to_string(dist) << std::endl;
+                //std::cout << "up dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
                     entities[i]->obj->collide(*entities[j], this->round);
@@ -238,6 +242,8 @@ void Game::checkCollisions()
                             this->sim_move(entities[i]);
                         }
                     }
+
+                    continue;
                 }
             }
 
@@ -246,7 +252,7 @@ void Game::checkCollisions()
                 ((fx(i) >= fx(j) && fx(i) <= fxp(j)) || (fxp(i) >= fx(j) && fxp(i) <= fxp(j))))
             {
                 dist = fy(j) - fyp(i);
-                std::cout << "down dist=" << std::to_string(dist) << std::endl;
+                //std::cout << "down dist=" << std::to_string(dist) << std::endl;
                 if (dist <= 0)
                 {
                     entities[i]->obj->collide(*entities[j], this->round);
@@ -280,6 +286,8 @@ void Game::checkCollisions()
                             this->sim_move(entities[i]);
                         }
                     }
+
+                    continue;
                 }
             }
         }
@@ -291,7 +299,7 @@ void Game::letEntitesAct()
     for (size_t i = 0; i != entities.size(); ++i)
     {
         auto it = entities.at(i);
-        EntityAction * action = it->obj->act(this->round);
+        EntityAction * action = it->obj->act(this->round, entities);
         if (action->speedX != it->data.getVectX())
         {
             it->data.setVectX(action->speedX);
@@ -309,13 +317,17 @@ void Game::letEntitesAct()
         }
         if (action->newEntity)
         {
-            entities.push_back(new Entity(action->newEntity, entityIdCount));
+            entities.push_back(new Entity(action->newEntity, entityIdCount, round, entities));
             entityIdCount++;
             this->sim_spawn(entities.back());
         }
         if (action->destroy)
         {
             it->data.setDestroyed(true);
+        }
+        if (action->soundToPlay != "")
+        {
+            sendSound(action->soundToPlay);
         }
         delete action;
     }
@@ -327,7 +339,7 @@ void Game::moveEntities()
     {
         entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
         entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
-        std::cout << "player " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
+        //std::cout << "player " << std::to_string(entity->data.getId()) << " x=" << std::to_string(entity->data.getPosX()) << " y=" << std::to_string(entity->data.getPosY()) << std::endl;
         //TODO: do this in checkCollisions, by creating entity of the player team, located on the borders?
         /*if (entity->data.getPosY() > FIELD_HEIGHT)
             entity->data.setPosY(FIELD_HEIGHT);
@@ -355,6 +367,9 @@ void Game::unspawn()
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
             it = vect_erase(it, entities);
+
+            if (going && isFinished())
+                endGame();
         }
         else
             ++it;
@@ -364,17 +379,22 @@ void Game::unspawn()
 
 void Game::newPlayer(Client *client) {
     INFO("Adding player from " << client->getClientId())
+
     if (clientList.size() == 4)
     {
-        WARN("maximum number of players reached");
+        INFO("Full")
+        network::packet::PacketErrorGame packet;
+        packet.setMessage("Game room number " + std::to_string(gameId) + " is full.");
+        packetf.send(packet, client->getClientId());
         return;
     }
+
     Controller *controller = new Controller();
     this->clientList.push_back(client);
     Player *player = new Player();
     Entity *entity = new Entity();
     controller->setEntity(entity);
-    entity->initialize(player, entityIdCount);
+    entity->initialize(player, entityIdCount, round, entities);
     entityIdCount++;
     controller->setEntity(player);
     client->setController(controller);
@@ -392,7 +412,7 @@ void Game::removePlayer(Client *client) {
     client->getController()->destroy();
     delete client->getController();
     client->setController(nullptr);
-    std::cout << "erase" << *position << std::endl;
+    //std::cout << "erase" << *position << std::endl;
     this->clientList.remove(*position);
     //TODO: send to simulation: destroy
 }
@@ -456,6 +476,11 @@ void Game::sendData() {
         delete packet;
     }
     this->gameEvents.clear();
+
+    sendAllMoves();
+
+    if (round - lastSyn > ROUNDS_BETWEEN_SYN)
+        sendPacketSync(nullptr);
 }
 
 void Game::sim_spawn(Entity *entity) {
@@ -465,9 +490,11 @@ void Game::sim_spawn(Entity *entity) {
 }
 
 void Game::sim_move(Entity *entity) {
+/*
     this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX(),
                                                        entity->data.getVectY(), entity->data.getPosX(),
                                                        entity->data.getPosY()));
+*/
 }
 
 void Game::sim_update(Entity *entity) {
@@ -494,6 +521,7 @@ void Game::sendPacketSync(const Client * client)
     packet_syn->setTime(static_cast<int64_t>(std::time(nullptr)));
     if (client == nullptr)
     {
+        lastSyn = round;
         for (auto client_it : clientList)
         {
             packetf.send(*packet_syn, client_it->getClientId());
@@ -540,7 +568,7 @@ void Game::sendSimToNewNotFirst(const Client &client)
         delete pspawn;
         ++id;
 
-        auto pmove = new network::packet::PacketMoveEntity();
+        /*auto pmove = new network::packet::PacketMoveEntity();
         pmove->setTick(round);
         pmove->setEventId(id);
         pmove->setEntityId(entity->data.getId());
@@ -550,6 +578,70 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pmove->setVecY(entity->data.getVectY());
         packetf.send(*pmove, client.getClientId());
         delete pmove;
-        ++id;
+        ++id;*/
     }
+}
+
+void Game::sendAllMoves()
+{
+    //TODO
+    for (auto client : clientList)
+    {
+        for (auto entity : entities)
+        {
+            auto pmove = new network::packet::PacketMoveEntity();
+            pmove->setTick(round);
+            pmove->setEventId(0);
+            pmove->setEntityId(entity->data.getId());
+            pmove->setPosX(entity->data.getPosX());
+            pmove->setPosY(entity->data.getPosY());
+            pmove->setVecX(entity->data.getVectX());
+            pmove->setVecY(entity->data.getVectY());
+            packetf.send(*pmove, client->getClientId());
+            delete pmove;
+        }
+    }
+}
+
+void Game::sendSound(const std::string &soundfile)
+{
+    auto packet = new network::packet::PacketPlaySound();
+    packet->setTick(round);
+    packet->setEventId(0);
+    /*packet->setSoundName(soundfile);*/ //TODO
+    for (auto client : clientList)
+    {
+        packetf.send(*packet, client->getClientId());
+    }
+    delete (packet);
+}
+
+bool Game::isFinished()
+{
+    if (lvl->isOver(round))
+    {
+        for (auto entity : entities)
+        {
+            if (entity->data.getTeam() == FOE)
+                return (false);
+        }
+        return (true);
+    }
+    else
+    {
+        return (false);
+    }
+}
+
+void Game::endGame()
+{
+    std::vector<std::pair<uint32_t, std::string>> vect;
+    //TODO: scores
+
+    network::packet::PacketLeaderBoard packet(vect);
+    for (auto client : clientList)
+    {
+        packetf.send(packet, client->getClientId());
+    }
+    going = false;
 }

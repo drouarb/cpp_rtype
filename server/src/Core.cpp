@@ -15,11 +15,10 @@
 #include <ProjTester.hpp>
 
 server::Core::Core(const std::string &path, const unsigned short port)
-        : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(
-        nullptr) {
+        : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(nullptr)
+{
     FolderExplorer fileExplorer(path);
 
-    lastGameId = 0;
     this->isRunning = true;
     fileExplorer.loadFolder();
     this->networkManager = new NetworkManager(this);
@@ -40,7 +39,9 @@ server::Core::Core(const std::string &path, const unsigned short port)
         std::cerr << "No levels. Aborting." << std::endl;
         return;
     }
-    this->packetFactory = new PacketFactoryTest(port);
+
+    //this->packetFactory = new PacketFactoryTest(port);
+    this->packetFactory = new network::PacketFactory(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
     this->packetFactory->registerListener(new ServerListenerAskLeaderboard());
@@ -58,7 +59,6 @@ void server::Core::run() {
         sw->set();
         mutex.lock();
 
-//        std::cout << "- round - - - - - - - - - - - - - - - - - -" << std::endl;
         for (auto &game : games) {
             std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
             game->tick();
@@ -86,8 +86,7 @@ void server::Core::psetClient(server::Client &client, server::gameId_t gameId) {
     }
 
     games.push_back(new Game(*packetFactory, gameId));
-    games.back()->setLevel(levels[lastGameId % levels.size()]);
-    ++lastGameId;
+    games.back()->setLevel(levels[gameId % levels.size()]);
     games.back()->newPlayer(&client);
 }
 
@@ -125,7 +124,6 @@ server::Core::Core(const std::string &path, server::NetworkManager *networkManag
     this->networkManager = networkManager;
     FolderExplorer fileExplorer(path);
 
-    lastGameId = 0;
     this->isRunning = true;
     fileExplorer.loadFolder();
     this->networkManager = new NetworkManager(this);

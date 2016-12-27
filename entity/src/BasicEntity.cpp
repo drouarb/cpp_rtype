@@ -26,7 +26,7 @@ void BasicEntity::collide(const server::Entity &entity, server::round_t current_
     this->destroyed = true;
 }
 
-EntityAction *BasicEntity::act(round_t current_round)
+EntityAction *BasicEntity::act(round_t current_round, const std::vector<Entity *> &)
 {
     EntityAction * a = new EntityAction();
     if (this->destroyed) {
@@ -38,7 +38,7 @@ EntityAction *BasicEntity::act(round_t current_round)
     return (a);
 }
 
-EntityInitialization * BasicEntity::initialize()
+EntityInitialization * BasicEntity::initialize(round_t, const std::vector<Entity *> &)
 {
     EntityInitialization *initialization = new EntityInitialization();
     initialization->action.hp = 100;
@@ -49,6 +49,6 @@ hp_t BasicEntity::getDamage() {
     return 0;
 }
 
-bool BasicEntity::collideWith(const Entity &entity) {
-    return this->data->getTeam() != entity.data.getTeam();
+Tribool BasicEntity::collidesWith(const Entity &entity) {
+    return (this->data->getTeam() != entity.data.getTeam() ? TRUE : FALSE);
 }

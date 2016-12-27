@@ -22,7 +22,6 @@ namespace server
         Mutex mutex;
         std::vector<Level> levels;
         std::vector<Game *> games;
-        gameId_t lastGameId;
         helpers::IStopwatch * sw;
 
     protected:
