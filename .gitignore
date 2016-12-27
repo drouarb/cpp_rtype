@@ -83,3 +83,6 @@ client/*.sh
 *~
 client/rtype_client
 test.sh
+debug.sh
+make.sh
+launch.sh
