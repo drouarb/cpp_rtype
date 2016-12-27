@@ -19,12 +19,6 @@ void WindowsFileExplorer::loadFolder(const std::string &path) {
     HANDLE hFind = INVALID_HANDLE_VALUE;
     DWORD dwError=0;
 
-    // If the directory is not specified as a command-line argument,
-    // print usage.
-
-    // Check that the input path plus 3 is not longer than MAX_PATH.
-    // Three characters are for the "\*" plus NULL appended below.
-
     StringCchLength(path.c_str(), MAX_PATH, &length_of_arg);
 
     if (length_of_arg > (MAX_PATH - 3))
@@ -32,13 +26,9 @@ void WindowsFileExplorer::loadFolder(const std::string &path) {
         _tprintf(TEXT("\nDirectory path is too long.\n"));
     }
 
-    // Prepare string for use with FindFile functions.  First, copy the
-    // string to a buffer, then append '\*' to the directory name.
 
     StringCchCopy(szDir, MAX_PATH, path.c_str());
     StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
-
-    // Find the first file in the directory.
 
     hFind = FindFirstFile(szDir, &ffd);
 
@@ -46,9 +36,6 @@ void WindowsFileExplorer::loadFolder(const std::string &path) {
     {
         throw std::runtime_error("Excepted value when opening directory " + path);
     }
-
-    // List all the files in the directory with some info about them.
-
 
     do
     {
