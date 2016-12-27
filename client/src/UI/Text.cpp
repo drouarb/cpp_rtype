@@ -9,9 +9,9 @@ UI::Text::Text() : AItem(UI::TEXT) {
     initStatus = font.loadFromFile("media/font/Pixeled.ttf");
     text.setFont(font);
     text.setCharacterSize(24);
-    /*text.setOutlineColor(sf::Color::Red);
+    text.setOutlineColor(sf::Color::Red);
     text.setOutlineThickness(20);
-    text.setFillColor(sf::Color::Green);*/
+    text.setFillColor(sf::Color::Green);
 }
 
 UI::Text::~Text() {
