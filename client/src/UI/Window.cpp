@@ -7,8 +7,8 @@
 
 UI::Window::Window() {
     layerFactory = new LayerFactory();
-    length = 800;
-    width = 600;
+    length = LENGTH;
+    width = WIDTH;
     name = "rtype";
     window = new sf::RenderWindow(sf::VideoMode(length, width, 32), name);
     alertText.setPosition(0, 0);

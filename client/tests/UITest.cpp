@@ -39,7 +39,7 @@ int main()
 
     bool flag = true;
     int lermi = 100;
-    ui->init(800, 600);
+    ui->init(LENGTH, WIDTH);
     /*sf::Font font;
     font.loadFromFile("/home/jonas_e/Work/Epitech/rtype/media/font/Pixeled.ttf");
     sf::Text text;
@@ -88,7 +88,7 @@ int main()
 
     static_cast<UI::MenuLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::MENU))->addTextBox(400, 16)->setString("abc");
 
-    static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "/home/jonas_e/Work/Epitech/rtype/media/references/background.png");
+    static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "/home/jonas_e/Work/Epitech/rtype/media/backgrounds/nightfall.png");
     ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addTexture(item3, UI::ACTIVE, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready2.png");
     UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);
     UI::IEventObserver* eventObserver = ui->getEventObserver();
