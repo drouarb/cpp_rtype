@@ -78,11 +78,11 @@ int main()
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/bf109.png", 200 , 100);
-    item4->addAnimation(UI::IDLE, 16, 350);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/ju87.png", 200 , 100);
+    item4->addAnimation(UI::IDLE, 6, 350);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/bf109.png", 400 , 300);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/he111.png", 800 , 300);
     item4->addAnimation(UI::IDLE, 16, 350);
     item4->changeStatus(UI::IDLE);
 
