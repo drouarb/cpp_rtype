@@ -77,8 +77,8 @@ void Player::move(speed_t vectX, speed_t vectY) {
     this->vectY = vectY;
 }
 
-Tribool Player::collidesWith(const Entity &) {
-    return TRUE;
+Tribool Player::collidesWith(const Entity & entity) {
+    return (entity.data.getTeam() != server::Team::PLAYER ? TRUE : FALSE);
 }
 
 Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY), startRound(startRound)
