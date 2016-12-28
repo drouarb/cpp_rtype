@@ -140,6 +140,7 @@ void GameClient::manageCancelEvent(uint32_t eventId) {
 }
 
 void GameClient::manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList) {
+    std::cout << "receivce" << std::endl;
     gameui->feedGameList(gameList);
     gameui->reloadMenuRoomList();
 }
@@ -204,17 +205,16 @@ void GameClient::sendAll(struct s_info *info) {
             break;
         case I_ASKLIST: {
             if (manager != nullptr) {
+                manager->sendQuit();
                  manager->sendAskList();
                 gameui->changeMenu("roomList");
-                manager->sendQuit();
             }
         }
             break;
         case I_JOIN: {
             if (manager != nullptr) {
                 manager->sendJoin(static_cast<s_join *>(info)->roomid);
-                std::cout << "room id " << static_cast<s_join *>(info)->roomid << std::endl;
-                gameui->changeMenu("game");
+                 gameui->changeMenu("game");
             }
         }
             break;

@@ -34,6 +34,7 @@ namespace client {
         UI::IWindow *window;
         Menu *currentMenu;
         std::map<std::string ,client::Key>nav_map;
+        std::map<std::string , std::vector<int>>anim_map;
         static const std::map<sf::Keyboard::Key, client::Key> keymap;
     private:
         GameUIInterface() {};
@@ -65,6 +66,8 @@ namespace client {
         void deleteEntity(Entity *entity);
 
         void addMenu(const std::string &path);
+
+        void addAnimaton(const std::string &path, UI::AItem *item);
 
         void addNavMap(const std::string & path);
 

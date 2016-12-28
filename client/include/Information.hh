@@ -67,8 +67,7 @@ namespace client {
         {
                 struct  s_join* res = new s_join;
                 res->info = type;
-                std::istringstream strm(value);
-                strm >> res->roomid;
+                res->roomid  = static_cast<uint8_t >(std::stoi(value));
                 return res;
         }
         return nullptr;

@@ -179,7 +179,6 @@ void NetworkManager::sendQuit() {
 
 void NetworkManager::sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y) {
     network::packet::PacketPlayerMove playerMove(tick, vect_x, vect_y, pos_x, pos_y);
-    std::cout << "vec_x : " << vect_x << "  vec_y  " << vect_y << std::endl;
     packetFactory->broadcast(playerMove);
 }
 

@@ -44,8 +44,9 @@ typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
 
     it = typeEntity.begin();
     while (it != typeEntity.end()) {
-        if (it->second == str)
+        if (it->second == str) {
             return (it->first);
+        }
         ++it;
     }
     typeide_t newid = getNextId();
@@ -83,13 +84,8 @@ void GameUIInterface::addEntity(Entity *listEntity) {
     ui_mut->lock();
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
                                                     listEntity->getPos().first, listEntity->getPos().second);
-    std::cerr << typeEntity[listEntity->getId()] << "ici" << std::endl;
 
-    if (typeEntity[listEntity->getId()].find("magical") != std::string::npos) {
-
-        static_cast<UI::Item *>(item)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
-        item->changeStatus(UI::IDLE);
-    }
+    addAnimaton(typeEntity[listEntity->getTypeid()], item);
     gameItem[listEntity] = item;
     ui_mut->unlock();
 }
@@ -169,8 +165,7 @@ void GameUIInterface::addMenu(const std::string &path) {
                     try {
                         temp->addInfo(item, child.second.get<int>("send"));
                     }
-                    catch (std::exception & e)
-                    {
+                    catch (std::exception &e) {
 
                     }
                     if (child.second.get<int>("default_selected") == 0)
@@ -199,7 +194,6 @@ s_info *GameUIInterface::manageInput(short key1) {
 
     std::string res;
     sf::Keyboard::Key key = static_cast<sf::Keyboard::Key >(key1);
-    std::cout << key << std::endl;
     if (keymap.find(key) != keymap.end()) {
         client::Key tmp = keymap.at(key);
         if (currentMenu->getType() == DEFAULT) {
@@ -209,9 +203,9 @@ s_info *GameUIInterface::manageInput(short key1) {
                 return (manageEnter());
             else
                 manageTouch(tmp);
-        } else if(tmp == client::Key::KEY_ESCAPE)
+        } else if (tmp == client::Key::KEY_ESCAPE)
             return (client::parse(I_ASKLIST, tmp));
-            else
+        else
             return (client::parse(I_PLAYER, tmp));
     }
     return (nullptr);
@@ -244,8 +238,9 @@ s_info *GameUIInterface::manageEnter() {
     } else if (currentMenu->getType(currentMenu->getCurrent_selected()) == TEXTBOX) {
         return (client::parse(static_cast<information>(currentMenu->getInfo(currentMenu->getCurrent_selected())),
                               currentMenu->getTextFromtextBox(currentMenu->getCurrent_selected())));
-    }else if(currentMenu->getType(currentMenu->getCurrent_selected()) == SEND)
-        return (client::parse(static_cast<information>(currentMenu->getInfo(currentMenu->getCurrent_selected())) , client::KEY_0));
+    } else if (currentMenu->getType(currentMenu->getCurrent_selected()) == SEND)
+        return (client::parse(static_cast<information>(currentMenu->getInfo(currentMenu->getCurrent_selected())),
+                              client::KEY_0));
     return nullptr;
 }
 
@@ -275,7 +270,7 @@ void GameUIInterface::manageTouch(client::Key key) {
 
 void GameUIInterface::createStaticMenu() {
 
-    unsigned long id =0;
+    unsigned long id = 0;
     Menu *tep = new Menu;
     id = window->addLayer(UI::GAME);
     tep->setLayer_id(id);
@@ -293,11 +288,12 @@ void GameUIInterface::reloadMenuRoomList() {
     for (int i = 0; i != listMenu.size(); i++) {
         if (listMenu[i]->getName() == "roomList") {
             ui_mut->lock();
-          listMenu[i]->erraseTextBox();
+            listMenu[i]->erraseTextBox();
             for (auto it = gameList.begin(); it != gameList.end(); it++) {
                 auto item = static_cast<UI::MenuLayer *>(window->getLayer(listMenu[i]->getLayer_id()))->addTextBox(
                         x, y);
-                std::string res = std::to_string(it->first) + "  | 4 Players  Room Number : " + std::to_string(it->second);
+                std::string res =
+                        std::to_string(it->first) + "  | 4 Players  Room Number : " + std::to_string((int) it->second);
                 item->setString(res);
                 listMenu[i]->addInfo(item, 1);
                 listMenu[i]->setButtonsStats(item, static_cast<ButtonsStats >(0));
@@ -306,5 +302,32 @@ void GameUIInterface::reloadMenuRoomList() {
             }
             ui_mut->unlock();
         }
+    }
+}
+
+void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
+    std::vector<int> tmp;
+    std::string new_path;
+    std::string buf;
+
+    if (anim_map.find(path) != anim_map.end())
+        tmp = anim_map[path];
+    else {
+        new_path = path.substr(0, path.find("."));
+        std::fstream file(new_path + ".rtype");
+        if (file.is_open()) {
+            for (buf; getline(file, buf);) {
+                tmp.push_back(std::stoi(buf));
+            }
+            anim_map[path] = tmp;
+        }
+    }
+    if (tmp.size() == 5) {
+        (item)->addAnimation(UI::IDLE, tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
+        item->changeStatus(UI::IDLE);
+    }
+    if (tmp.size() == 2) {
+        (item)->addAnimation(UI::IDLE, tmp[0], tmp[1]);
+        item->changeStatus(UI::IDLE);
     }
 }
