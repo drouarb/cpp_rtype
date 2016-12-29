@@ -230,6 +230,7 @@ void GameClient::manageQuit() {
     if (world != nullptr) {
         std::cout << "Receive Disconnect" << std::endl;
         delete world;
+	// informer la gameUI
         horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
@@ -249,22 +250,33 @@ void GameClient::gameLoop() {
 	  {
 	    sw->set();
 	    gameui->updateListEntity();
-	    if (tickcpt % PERIODTICKEVENT == 0)
-	      event = handler->getEvent();
-	    gameui->displaySimple();
 	    if (world != nullptr)
 	      world->applyTurn();
-	    if (event != -42)
+	    if (tickcpt % PERIODTICKEVENT == 0)
 	      {
-		receive = gameui->manageInput(event);
-		if (receive != nullptr)
+		event = handler->getEvent();
+		if (event != -42)
 		  {
-		    if (receive->info == I_QUIT)
-		      break;
-		    sendAll(receive);
-		    delete (receive);
+		    receive = gameui->manageInput(event);
+		    if (receive != nullptr)
+		      {
+			if (receive->info == I_QUIT)
+			  break;
+			sendAll(receive);
+			delete (receive);
+		      }
+		    event = -42;
+		  }
+		else if (world != nullptr)
+		  {
+		    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
+                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+                                            world->getEntityById(playerId)->getVec().second,
+                                            world->getEntityById(playerId)->getPos().first,
+                                            world->getEntityById(playerId)->getPos().second);
 		  }
 	      }
+	    gameui->displaySimple();
 	    ++tickcpt;
 	  }
       }
