@@ -51,7 +51,13 @@ void UI::Window::display() {
             }
         }
     }
-    window->draw(*alertText.getText());
+    if (alerted) {
+        if (alertClock.getElapsedTime().asSeconds() > 10) {
+            alerted = false;
+            alertText.setString("");
+        }
+        window->draw(*alertText.getText());
+    }
     window->display();
     //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;
 }
@@ -85,4 +91,6 @@ void UI::Window::deleteItem(AItem* item) {
 
 void UI::Window::alert(const std::string &string) {
     alertText.setString(string);
+    alerted = true;
+    alertClock.restart();
 }

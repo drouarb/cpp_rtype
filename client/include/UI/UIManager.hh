@@ -18,6 +18,7 @@ namespace UI {
         unsigned long addItemToLayer(UI::itemType type, std::string sprite, int posX, int posY, unsigned long LayerID);
         int addItemToGame(UI::itemType type, std::string sprite, int posX, int posY);
         int UpdateItem(unsigned long layerID, unsigned long itemID);
+        void alert(std::string text);
         IWindow* getWindow(enum windowType);
         IAudioManager* getAudioManager();
         IEventObserver* getEventObserver();

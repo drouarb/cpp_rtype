@@ -37,6 +37,8 @@ namespace UI {
         std::string name;
         LayerFactory *layerFactory;
         std::vector<ILayer*> layers;
+        bool alerted;
+        sf::Clock alertClock;
     };
 }
 
