@@ -94,7 +94,7 @@ int main()
     UI::IEventObserver* eventObserver = ui->getEventObserver();
     item2->setRatio(0.20);
     testshitfunction(0, ui);
-    ui->alert("shit  is brokeen aaaaahhh");
+    ui->alert("SHIT IS BROKEN AAAAH");
     while (window->isOpen()) {
         window->display();
         if (ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->isVisible()) {
