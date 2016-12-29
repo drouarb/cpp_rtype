@@ -42,6 +42,10 @@ void UI::Text::setCharacterSize(unsigned int size) {
     text.setCharacterSize(size);
 }
 
+float UI::Text::getWidth() {
+    return text.getGlobalBounds().width;
+}
+
 sf::Text *UI::Text::getText() {
     return &text;
 }
