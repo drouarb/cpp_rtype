@@ -28,7 +28,7 @@ void Player::collide(const Entity &entity, server::round_t current_round) {
         return;
     }
     std::cout << "Player " << this->data->getId() << " collides with player id " << entity.data.getId() << std::endl;
-    this->newHp = entity.obj->getDamage();
+    this->newHp += entity.obj->getDamage();
 }
 
 EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) {
@@ -52,7 +52,8 @@ EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) 
     return act;
 }
 
-EntityInitialization *Player::initialize() {
+EntityInitialization *Player::initialize(round_t, const std::vector<Entity *> &)
+{
     EntityInitialization *ei = new EntityInitialization();
     ei->team = PLAYER;
     ei->action.hp = 5;
@@ -76,8 +77,8 @@ void Player::move(speed_t vectX, speed_t vectY) {
     this->vectY = vectY;
 }
 
-Tribool Player::collidesWith(const Entity &) {
-    return TRUE;
+Tribool Player::collidesWith(const Entity & entity) {
+    return (entity.data.getTeam() != server::Team::PLAYER ? TRUE : FALSE);
 }
 
 Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY), startRound(startRound)
@@ -86,14 +87,14 @@ Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) :
 
 void Player::MagicMissile::collide(const Entity &entity, server::round_t current_round) {
     INFO("MagicMissile collide with : " << entity.data.getId() << "(id: " << this->data->getId() << ")")
-    this->mustDestroy = current_round;
+    this->mustDestroy = true;
 }
 
 EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector<Entity *> &)
 {
     server::EntityAction *entityAction = new server::EntityAction();
 
-    if (this->mustDestroy != 0 && this->mustDestroy + 1 == current_round) {
+    if (this->mustDestroy) {
         entityAction->destroy = true;
         INFO("MagicMassile ded" << this->data->getId() << ", x:" << this->data->getPosX() << ", y: "
                                 << this->data->getPosY())
@@ -114,7 +115,8 @@ EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector
     return entityAction;
 }
 
-EntityInitialization *Player::MagicMissile::initialize() {
+EntityInitialization *Player::MagicMissile::initialize(round_t, const std::vector<Entity *> &)
+{
     EntityInitialization *initialization = new EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;
     initialization->posX = this->posX;

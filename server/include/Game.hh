@@ -41,6 +41,7 @@ namespace server
         entityId_t entityIdCount;
         std::vector<server::event::AGameEvent *> gameEvents;
         round_t lastSyn;
+        bool going;
 
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
@@ -96,6 +97,9 @@ namespace server
         void sendSimToNewNotFirst(const Client & client);
         void sendAllMoves();
         void sendSound(const std::string & soundfile);
+
+        bool isFinished();
+        void endGame();
     };
 }
 

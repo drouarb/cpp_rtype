@@ -59,6 +59,7 @@ void server::NetworkManager::clientPlayerAttack(clientId_t src, attackId_t attac
 
 void server::NetworkManager::clientPlayerMove(clientId_t src, speed_t vectX, speed_t vectY) {
     Mutexer(this->mutex);
+    //TODO Use tick
     Client &client = this->clientContainer.get((src));
     if (client.getController())
         client.getController()->playMove(vectX, vectY);
@@ -85,10 +86,10 @@ void server::NetworkManager::askGame(clientId_t src) {
 
     std::vector<std::pair<uint8_t, uint16_t >> serializedVector;
     for (auto game : games) {
-        serializedVector.push_back(std::pair<uint8_t, uint16_t>(game->getLobbyId(), game->getClientSize()));
+        serializedVector.push_back(std::pair<uint8_t, uint16_t>(game->getClientSize(), game->getLobbyId()));
     }
-    network::packet::PacketGameList list = network::packet::PacketGameList();
-    pFactory->send(list, (src));
+    network::packet::PacketGameList list = network::packet::PacketGameList(serializedVector);
+    pFactory->send(list, src);
 }
 
 server::NetworkManager::ConnectionListener::ConnectionListener(server::ClientContainer &clientContainer)
