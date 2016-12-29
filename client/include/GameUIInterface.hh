@@ -79,6 +79,7 @@ namespace client {
 
         s_info * manageEnter();
 
+        void showError(const std::string &res);
         void changeMenu(const std::string & ne);
 
         void manageTouch(client::Key);

@@ -351,3 +351,7 @@ void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
         item->changeStatus(UI::IDLE);
     }
 }
+
+void GameUIInterface::showError(const std::string &res) {
+    managerUi.alert(res);
+}

@@ -10,7 +10,8 @@ UI::AudioManager::AudioManager() {
 }
 
 void UI::AudioManager::playSound(int soundID) {
-
+    sound.setBuffer(*(buffers[soundID]));
+    sound.play();
 }
 
 bool UI::AudioManager::isPlaying() {
@@ -38,8 +39,20 @@ void UI::AudioManager::setVolume(int newVolume) {
     volume = newVolume > 100 ? 100 : newVolume < 0 ? 0 : newVolume;
     if (music.getStatus() == sf::SoundSource::Status::Playing)
         music.setVolume(newVolume);
+    sound.setVolume(newVolume);
 }
 
 int UI::AudioManager::getVolume() {
     return volume;
+}
+
+int UI::AudioManager::addSound(std::string path) {
+    sf::SoundBuffer *soundBuffer = new sf::SoundBuffer();
+    soundBuffer->loadFromFile(path);
+    buffers.push_back(soundBuffer);
+    return static_cast<int>(buffers.size() - 1);
+}
+
+void UI::AudioManager::stopMusic() {
+    music.stop();
 }

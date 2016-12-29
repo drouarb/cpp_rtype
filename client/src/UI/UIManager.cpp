@@ -52,6 +52,10 @@ int UI::UIManager::addItemToGame(UI::itemType type, std::string sprite, int posX
     return 0;
 }
 
+void    UI::UIManager::alert(std::string text) {
+    windows[MAIN_WINDOW]->alert(text);
+}
+
 unsigned long UI::UIManager::addLayer(UI::layerType layerType, UI::windowType windowType) {
     return windows[windowType]->addLayer(layerType); // on verra, certainement pas utile.
 }

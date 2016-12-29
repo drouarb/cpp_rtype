@@ -36,6 +36,7 @@ void client::GameClient::createNetworkManager(const std::string &ip, unsigned sh
         manager->startPacketFactory();
     }
     catch (std::runtime_error &e) {
+        gameui->showError("Impossible de joindre ce serveur");
         manager = nullptr;
     }
 }
@@ -210,6 +211,7 @@ void GameClient::manageDisconnect() {
 }
 
 void GameClient::manageCancelEvent(uint32_t eventId) {
+
 }
 
 void GameClient::manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList) {

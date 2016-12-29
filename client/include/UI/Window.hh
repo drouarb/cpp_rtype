@@ -11,10 +11,9 @@
 #include "LayerFactory.hh"
 #include "Text.hh"
 
-#define WIDTH 800
-#define HEIGHT 600
-
 namespace UI {
+    #define WIDTH 1080
+    #define LENGTH 1920
     class Window : public IWindow {
     public:
         Window();
@@ -38,6 +37,8 @@ namespace UI {
         std::string name;
         LayerFactory *layerFactory;
         std::vector<ILayer*> layers;
+        bool alerted;
+        sf::Clock alertClock;
     };
 }
 

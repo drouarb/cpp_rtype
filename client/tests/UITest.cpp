@@ -39,9 +39,9 @@ int main()
 
     bool flag = true;
     int lermi = 100;
-    ui->init(800, 600);
+    ui->init(LENGTH, WIDTH);
     /*sf::Font font;
-    font.loadFromFile("media/font/Pixeled.ttf");
+    font.loadFromFile("/home/jonas_e/Work/Epitech/rtype/media/font/Pixeled.ttf");
     sf::Text text;
     text.setFont(font);
     text.setString("meeeerde");
@@ -50,50 +50,51 @@ int main()
 
     ui->getEventObserver()->listen(ui->getWindow(UI::MAIN_WINDOW));
 
-    ui->getAudioManager()->playMusic("media/musics/Lady_Crimson.ogg");
+    ui->getAudioManager()->playMusic("/home/jonas_e/Work/Epitech/rtype/media/musics/Lady_Crimson.ogg");
     ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
-    item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "media/references/ALL_GONE.jpg", 250, 250);
+    item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/ALL_GONE.jpg", 250, 250);
     /*static_cast<UI::Item*>(item)->setTexture(reinterpret_cast<sf::Texture*>(&text));*/
-    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/references/5af.png", 300, 360);
-    item3 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/menu/ready.png", 100, 400);
+    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/5af.png", 300, 360);
+    item3 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready.png", 100, 400);
 
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/references/TouhouFaeries.png", 50 , 200);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png", 50 , 200);
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 4 * 65, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/references/TouhouFaeries.png", 150 , 200);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png", 150 , 200);
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 4 * 65, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/references/TouhouFaeries.png", 50 , 100);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png", 50 , 100);
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 2 * 4 * 65, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/references/TouhouFaeries.png", 50 , 300);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png", 50 , 300);
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/sprites/magicalGirlD.png", 50 , 0);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/magicalGirlD.png", 50 , 0);
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/references/bf109.png", 200 , 100);
-    item4->addAnimation(UI::IDLE, 16, 350);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/ju87.png", 200 , 100);
+    item4->addAnimation(UI::IDLE, 6, 350);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/references/bf109.png", 400 , 300);
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/he111.png", 800 , 300);
     item4->addAnimation(UI::IDLE, 16, 350);
     item4->changeStatus(UI::IDLE);
 
     static_cast<UI::MenuLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::MENU))->addTextBox(400, 16)->setString("abc");
 
-    static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "media/references/background.png");
-    ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addTexture(item3, UI::ACTIVE, "media/menu/ready2.png");
+    static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "/home/jonas_e/Work/Epitech/rtype/media/backgrounds/nightfall.png");
+    ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addTexture(item3, UI::ACTIVE, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready2.png");
     UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);
     UI::IEventObserver* eventObserver = ui->getEventObserver();
     item2->setRatio(0.20);
     testshitfunction(0, ui);
+    ui->alert("shit  is brokeen aaaaahhh");
     while (window->isOpen()) {
         window->display();
         if (ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->isVisible()) {
