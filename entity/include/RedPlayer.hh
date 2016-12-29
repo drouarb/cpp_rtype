@@ -11,7 +11,7 @@ class RedPlayer : public server::Player {
 public:
     void shoot(server::round_t round) override;
 
-    server::EntityInitialization *initialize() override;
+    server::EntityInitialization *initialize(server::round_t, const std::vector<server::Entity *> &) override;
 
 private:
 

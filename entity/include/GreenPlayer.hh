@@ -13,7 +13,7 @@ class GreenPlayer : public server::Player {
 public:
     void shoot(server::round_t attackId) override;
 
-    server::EntityInitialization *initialize() override;
+    server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &entity) override;
 
 private:
 
@@ -48,7 +48,7 @@ private:
             server::EntityAction *
             act(server::round_t current_round, const std::vector<server::Entity *> &vector) override;
 
-            server::EntityInitialization *initialize() override;
+            server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &entity) override;
 
             server::hp_t getDamage() override;
 
@@ -64,7 +64,7 @@ private:
 
         server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &vector) override;
 
-        server::EntityInitialization *initialize() override;
+        server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &entity) override;
 
         server::hp_t getDamage() override;
 

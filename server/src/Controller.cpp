@@ -18,6 +18,8 @@ void server::Controller::setEntity(server::Player *entity) {
 }
 
 void server::Controller::destroy() {
+    EntityData *data = const_cast<EntityData *>(this->player->data);
+    data->setDestroyed(true);
 }
 
 server::Entity *server::Controller::getEntity() const {

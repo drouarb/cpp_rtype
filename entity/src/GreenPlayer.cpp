@@ -10,8 +10,8 @@ void GreenPlayer::shoot(server::round_t round) {
             new WallAttack(this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() / 2 + 12));
 }
 
-server::EntityInitialization *GreenPlayer::initialize() {
-    server::EntityInitialization *pInitialization = server::Player::initialize();
+server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const std::vector<server::Entity *> &entity) {
+    server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
     pInitialization->sprite.path = "media/sprites/magicalGirlB.png";
     return pInitialization;
 }
@@ -51,7 +51,7 @@ GreenPlayer::WallAttack::act(server::round_t current_round, const std::vector<se
     return entityAction;
 }
 
-server::EntityInitialization *GreenPlayer::WallAttack::initialize() {
+server::EntityInitialization *GreenPlayer::WallAttack::initialize(server::round_t round, const std::vector<server::Entity *> &entity) {
     server::EntityInitialization *initialization = new server::EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;
     initialization->posX = this->posX;
@@ -90,7 +90,7 @@ GreenPlayer::WallAttack::WallElement::act(server::round_t, const std::vector<ser
     return action;
 }
 
-server::EntityInitialization *GreenPlayer::WallAttack::WallElement::initialize() {
+server::EntityInitialization *GreenPlayer::WallAttack::WallElement::initialize(server::round_t round, const std::vector<server::Entity *> &entity) {
     server::EntityInitialization *initialization = new server::EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;
     initialization->posX = this->posX;

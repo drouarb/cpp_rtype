@@ -16,7 +16,7 @@ namespace server {
 
         void setEntity(Player *entity);
 
-        void destroy(); //TODO: the player's player must return destroy=true in the next entityAction
+        void destroy();
 
         Entity *getEntity() const;
 

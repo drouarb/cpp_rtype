@@ -12,7 +12,7 @@ class YellowPlayer : public server::Player {
 public:
     void shoot(server::round_t attackId) override;
 
-    server::EntityInitialization *initialize() override;
+    server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &entity) override;
 };
 
 
