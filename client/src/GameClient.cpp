@@ -240,25 +240,35 @@ void GameClient::gameLoop() {
     short event;
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
     s_info *receive = nullptr;
-    while (gameui->windowIsOpen()) {
-        sw->set();
-        gameui->updateListEntity();
-        event = handler->getEvent();
-        gameui->displaySimple();
-        if (world != nullptr)
-            world->applyTurn();
-        if (event != -42) {
-            receive = gameui->manageInput(event);
-            if (receive != nullptr) {
-                if (receive->info == I_QUIT)
-                    break;
-                sendAll(receive);
-                delete (receive);
-            }
-        }
-    }
+    tick		tickcpt;
+    
+    while (gameui->windowIsOpen())
+      {
+	tickcpt = 0;
+	while (tickcpt < TICKRATE)
+	  {
+	    sw->set();
+	    gameui->updateListEntity();
+	    if (tickcpt % PERIODTICKEVENT == 0)
+	      event = handler->getEvent();
+	    gameui->displaySimple();
+	    if (world != nullptr)
+	      world->applyTurn();
+	    if (event != -42)
+	      {
+		receive = gameui->manageInput(event);
+		if (receive != nullptr)
+		  {
+		    if (receive->info == I_QUIT)
+		      break;
+		    sendAll(receive);
+		    delete (receive);
+		  }
+	      }
+	    ++tickcpt;
+	  }
+      }
     deleteNetworkManager();
-
 }
 
 void GameClient::sendAll(struct s_info *info) {

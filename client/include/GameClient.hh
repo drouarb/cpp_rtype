@@ -20,6 +20,7 @@
 #define TICKRATEDIFFCONST 0.1
 #define TICKCURRENTDIFFCONST (1.0 / (((double)TICKRATE) * 5.0))
 #define HORODIFFCONST (1.0 / 5000.0)
+#define PERIODTICKEVENT 10
 
 namespace client {
   class NetworkManager;

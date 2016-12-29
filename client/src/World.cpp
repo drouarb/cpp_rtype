@@ -72,8 +72,6 @@ void World::applyTurn() {
     Entity *ent;
     pos_t pos;
 
-    if (turn == 100)
-      exit(0);
     itEv = worldEvents.begin();
     //world_mut->lock();
     while (itEv != worldEvents.end()) {
