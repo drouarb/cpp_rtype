@@ -29,7 +29,7 @@ void GameUIInterface::initUI() {
     addMenu("config/menuConnection.json");
     addMenu("config/MenuRegister.json");
     addMenu("config/menuGameList.json");
-
+    addMenu("config/LearderBoard.json");
     createStaticMenu();
     currentMenu = listMenu[0];
 }
@@ -55,7 +55,9 @@ typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
 }
 
 void GameUIInterface::feedLeaderBoard(std::vector<std::pair<uint32_t, std::string> > nleaderBoard) {
+    ui_mut->lock();
     leaderBoard = nleaderBoard;
+    ui_mut->unlock();
 }
 
 void GameUIInterface::feedGameList(std::vector<std::pair<uint8_t, uint16_t> > ngameList) {
@@ -203,7 +205,9 @@ s_info *GameUIInterface::manageInput(short key1) {
                 return (manageEnter());
             else
                 manageTouch(tmp);
-        } else if (tmp == client::Key::KEY_ESCAPE)
+        } else if (tmp == client::Key::KEY_P)
+            return (client::parse(I_ASKLEADERBOARD, tmp));
+        else if (tmp == client::Key::KEY_ESCAPE)
             return (client::parse(I_ASKLIST, tmp));
         else
             return (client::parse(I_PLAYER, tmp));
@@ -294,6 +298,22 @@ void GameUIInterface::reloadMenuRoomList() {
                         x, y);
                 std::string res =
                         std::to_string(it->first) + "  | 4 Players  Room Number : " + std::to_string((int) it->second);
+                item->setString(res);
+                listMenu[i]->addInfo(item, 1);
+                listMenu[i]->setButtonsStats(item, static_cast<ButtonsStats >(0));
+                listMenu[i]->addButtons(item, TEXTBOX);
+                y += 100;
+            }
+            ui_mut->unlock();
+        }
+        if (listMenu[i]->getName() == "LeaderBoard") {
+            ui_mut->lock();
+            listMenu[i]->erraseTextBox();
+            for (auto it2 = leaderBoard.begin(); it2 != leaderBoard.end(); it2++) {
+                auto item = static_cast<UI::MenuLayer *>(window->getLayer(listMenu[i]->getLayer_id()))->addTextBox(
+                        x, y);
+                std::string res =
+                        std::to_string(it2->first) + " Players : " + it2->second;
                 item->setString(res);
                 listMenu[i]->addInfo(item, 1);
                 listMenu[i]->setButtonsStats(item, static_cast<ButtonsStats >(0));

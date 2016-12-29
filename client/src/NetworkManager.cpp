@@ -25,6 +25,7 @@
 #include <network/packet/PacketPlayerAttack.hh>
 #include <listener/ClientListenerPlayerData.hh>
 #include <listener/ClientListenerSynchronization.hh>
+#include <network/packet/PacketAskLeaderBoard.hh>
 #include "NetworkManager.hh"
 
 using namespace client;
@@ -162,6 +163,11 @@ void NetworkManager::sendDisconnect() {
     packetFactory->broadcast(disconnect);
 }
 
+void NetworkManager::sendAskLearderBoard()
+{
+    network::packet::PacketAskLeaderBoard packetLeaderBoard;
+    packetFactory->broadcast(packetLeaderBoard);
+}
 void NetworkManager::sendAskList() {
     network::packet::PacketAskList askList;
     packetFactory->broadcast(askList);

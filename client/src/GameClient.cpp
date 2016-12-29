@@ -140,13 +140,14 @@ void GameClient::manageCancelEvent(uint32_t eventId) {
 }
 
 void GameClient::manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList) {
-    std::cout << "receivce" << std::endl;
     gameui->feedGameList(gameList);
     gameui->reloadMenuRoomList();
 }
 
 void GameClient::manageLeaderBoard(std::vector<std::pair<uint32_t, std::string> > LeaderBoard) {
+    std::cout << "receivce" << std::endl;
     gameui->feedLeaderBoard(LeaderBoard);
+    gameui->reloadMenuRoomList();
 }
 
 void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {
@@ -215,6 +216,13 @@ void GameClient::sendAll(struct s_info *info) {
             if (manager != nullptr) {
                 manager->sendJoin(static_cast<s_join *>(info)->roomid);
                  gameui->changeMenu("game");
+            }
+        }
+            break;
+        case I_ASKLEADERBOARD: {
+            if (manager != nullptr) {
+                manager->sendAskLearderBoard();
+                gameui->changeMenu("LeaderBoard");
             }
         }
             break;

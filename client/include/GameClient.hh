@@ -81,7 +81,7 @@ namespace client {
     void managePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName);
     
     void manageQuit();
-    
+
     World *getWorld() const;
       void createKeyMap(const std::string & path);
   private:

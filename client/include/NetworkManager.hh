@@ -69,6 +69,8 @@ namespace client {
 
         void sendJoin(uint8_t roomId);
 
+        void sendAskLearderBoard();
+
         void sendQuit();
         
         void sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y);
