@@ -24,7 +24,7 @@ namespace UI {
         void getString();
         void setPosition(float x, float y);
         bool initOK();
-
+        float getWidth();
 
     private:
         void setImage(std::string filename);
