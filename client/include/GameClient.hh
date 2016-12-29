@@ -36,10 +36,10 @@ namespace client {
     GameUIInterface		*gameui;
     ide_t			playerId;
     uint8_t			nbrAttack;
-	  helpers::IStopwatch * sw;
-      std::map<client::Key , vec_t>keygame_move;
-	  std::map<client::Key , int>keygame_attack;
-
+    helpers::IStopwatch * sw;
+    std::map<client::Key , vec_t>	keygame_move;
+    std::map<client::Key , int>		keygame_attack;
+    
 
   public:
     GameClient();
@@ -47,6 +47,7 @@ namespace client {
     ~GameClient() {};
 
     void createNetworkManager(){};
+    
     void createNetworkManager(const std::string &ip, unsigned short port);
 
     void deleteNetworkManager();
@@ -85,6 +86,8 @@ namespace client {
     World *getWorld() const;
       void createKeyMap(const std::string & path);
   private:
+    void prepaStateMenus();
+    
     void readaptTickRate(int servTickRate,
 			 std::pair<tick, uint64_t> estiClientHoro,
 			 std::pair<tick, uint64_t> servHoro);

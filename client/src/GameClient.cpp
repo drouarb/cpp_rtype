@@ -45,7 +45,80 @@ void client::GameClient::deleteNetworkManager() {
     manager = nullptr;
 }
 
+/*<<<<<<< b9d11780f83838cdbd5cc95c205ab081ff6b12ef
 
+<<<<<<< 3469b261d37278aa5631c73c3bb58c3437f13ca9
+=======
+=======
+void GameClient::gameLoop()
+{
+  short event;
+  std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
+  std::string name = "jean patric";
+  manager->sendRegister(name);
+  manager->sendJoin(0);
+
+  while (1) {
+    tickLoop = 0;
+    while (tickLoop < tickrateClient) {
+      sw->set();
+      gameui->updateListEntity();
+      event = handler->getEvent();
+      gameui->displaySimple();
+      if (world != nullptr)
+	world->applyTurn();
+      if (event != -42) {
+	if (world != nullptr) {
+	  if (event == sf::Keyboard::Key::Right) {
+	    world->getEntityById(playerId)->setVec(vec_t(3, 0));
+	    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+				    world->getEntityById(playerId)->getVec().second,
+				    world->getEntityById(playerId)->getPos().first,
+				    world->getEntityById(playerId)->getPos().second);
+	  } else if (event == sf::Keyboard::Key::Left) {
+	    world->getEntityById(playerId)->setVec(vec_t(-3, 0));
+	    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+				    world->getEntityById(playerId)->getVec().second,
+				    world->getEntityById(playerId)->getPos().first,
+				    world->getEntityById(playerId)->getPos().second);
+
+	  } else if (event == sf::Keyboard::Key::Up) {
+	    world->getEntityById(playerId)->setVec(vec_t(0, -3));
+	    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+				    world->getEntityById(playerId)->getVec().second,
+				    world->getEntityById(playerId)->getPos().first,
+				    world->getEntityById(playerId)->getPos().second);
+
+	  } else if (event == sf::Keyboard::Key::Down) {
+	    world->getEntityById(playerId)->setVec(vec_t(0, 3));
+	    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+				    world->getEntityById(playerId)->getVec().second,
+				    world->getEntityById(playerId)->getPos().first,
+				    world->getEntityById(playerId)->getPos().second);
+	  } else if (event == sf::Keyboard::Key::Space) {
+	    manager->sendPlayerAttack(world->getTick(), 0);
+	  } else if (event == sf::Keyboard::RControl) {
+	    std::cout << "Stop player in course" << std::endl;
+	    world->getEntityById(playerId)->setVec(vec_t(0, 0));
+	    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+				    world->getEntityById(playerId)->getVec().second,
+				    world->getEntityById(playerId)->getPos().first,
+				    world->getEntityById(playerId)->getPos().second);
+	  }
+
+	}
+	if (sw->elapsedMs() < 1000 / tickRateClient) {
+	  std::this_thread::sleep_for(std::chrono::milliseconds(1000 / tickRateClient - sw->elapsedMs()));
+	}
+      }
+      ++tickLoop;
+    }
+  }
+}
+>>>>>>> koko*/
+
+
+//>>>>>>> koko
 void GameClient::readaptTickRate(int servTickRate,
                                  std::pair<tick, uint64_t> estiClientHoro,
                                  std::pair<tick, uint64_t> servHoro) {

@@ -39,7 +39,7 @@ ide_t Entity::getId() const { return id; }
 typeide_t Entity::getTypeid() const { return idtype; }
 
 void Entity::applyVec(vec_t nvec, tick tick) {
-    pos.first += nvec.first;
+  pos.first += nvec.first;
     pos.second += nvec.second;
     vec = nvec;
     lastUpdate = tick;
@@ -51,7 +51,7 @@ void Entity::updateEntity(int nhp) {
 }
 
 void Entity::moveEntity(vec_t nvec, pos_t npos, tick nturn) {
-    /*std::map<tick, moveData>::iterator it;
+  /*std::map<tick, moveData>::iterator it;
 
     if ((it = move.find(nturn)) != move.end()) {
         std::cerr << "readaptation de move sur tick identique à faire" << std::endl;
@@ -83,25 +83,26 @@ void Entity::moveEntity(vec_t nvec, pos_t npos, tick nturn) {
         if (it->second.vec != nvec)
             move.insert(std::pair<tick, moveData>(nturn, moveData(npos, nvec)));
         recalcPos();
-    }*/
-    pos = npos;
-    vec = nvec;
+	}*/
+  pos = npos;
+  vec = nvec;
 }
 
-void Entity::correctMiddleVec(std::map<tick, moveData>::iterator itO, vec_t *nvec, pos_t npos, tick nturn) {
+void Entity::correctMiddleVec(std::map<tick, moveData>::iterator itO, vec_t *nvec, pos_t npos, tick nturn)
+{
     std::map<tick, moveData>::iterator itA;
 
-    itO->second.vec.first = (npos.first - itO->second.pos.first) / (nturn - itO->first);
-    itO->second.vec.second = (npos.second - itO->second.pos.second) / (nturn - itO->first);
+    itO->second.vec.first = (npos.first - itO->second.pos.first) / ((nturn - itO->first) + 1);
+    itO->second.vec.second = (npos.second - itO->second.pos.second) / ((nturn - itO->first) + 1);
     itA = itO;
     ++itA;
-    nvec->first = (itA->second.pos.first - npos.first) / (itA->first - nturn);
-    nvec->second = (itA->second.pos.second - npos.second) / (itA->first - nturn);
+    nvec->first = (itA->second.pos.first - npos.first) / ((itA->first - nturn) + 1);
+    nvec->second = (itA->second.pos.second - npos.second) / ((itA->first - nturn) + 1);
 }
 
 void Entity::correctBeforeVec(std::map<tick, moveData>::iterator itO, vec_t nvec, pos_t npos, tick nturn) {
-    itO->second.vec.first = (npos.first - itO->second.pos.first) / (nturn - itO->first);
-    itO->second.vec.second = (npos.second - itO->second.pos.second) / (nturn - itO->first);
+  itO->second.vec.first = (npos.first - itO->second.pos.first) / ((nturn - itO->first) + 1);
+  itO->second.vec.second = (npos.second - itO->second.pos.second) / ((nturn - itO->first) + 1);
 }
 
 void Entity::recalcPos() {
