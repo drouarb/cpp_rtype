@@ -18,7 +18,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
         : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(nullptr)
 {
     IExplorer *fileExplorer = IExplorer::getInstance();
-
+    
     this->isRunning = true;
     fileExplorer->loadFolder(path);
     this->networkManager = new NetworkManager(this);

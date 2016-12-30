@@ -35,9 +35,9 @@ namespace server
          * This 'round' can increment (as the game goes) or go back a few steps in case of a rewind of the simulation.
          * In this case, in the same environment, the entity should act exactly the same as before the rewind.
          * So do not use time or randomness to decide how to act. Use only the given arguments.
-         * The 'entities' parameter is every entity currently present in the game. Destroyed entities are not included.
+         * The 'environment' parameter contains every entity currently present in the game. Destroyed entities are not included.
          */
-        virtual EntityAction *act(round_t current_round, const std::vector<Entity *> &) = 0;
+        virtual EntityAction *act(round_t current_round, const std::vector<Entity *> &environment) = 0;
         /**
          * \brief This method is called when the object is first created.
          * The X and Y coordinates given in the EntityInitilization will be ignored if the entity was created by the level.

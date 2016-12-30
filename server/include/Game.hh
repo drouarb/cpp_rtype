@@ -5,6 +5,7 @@
 #include "Client.hh"
 #include "network/PacketFactory.hh"
 #include "events/Timeline.hh"
+#include "CollisionWall.hh"
 #include <list>
 
 
@@ -41,33 +42,17 @@ namespace server
         std::vector<server::event::AGameEvent *> gameEvents;
         round_t lastSyn;
         bool going;
+        std::vector<CollisionWall> collisions;
 
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
 
-        /**
-         * Checks level for new spawns, or whatever the level may tell the game to do.
-         */
         void progressLevel();
-        /**
-         * Must be called after letEntitiesAct and before moveEntities.
-         * Checks for future collisions according to the current vector.
-         * Changes the vectors so that the entities about to collide touch but do not overlap.
-         * Calls the entity's collide() method in case of collision.
-         */
         void checkCollisions();
-        /**
-         * Here, entities will do their things.
-         */
+        void checkCollision(int entity_1_index, int entity_2_index);
         void letEntitesAct();
-        /**
-         * Moves the entities according to their vector.
-         */
         void moveEntities();
-        /**
-         * Must be called after moveEntities, and before sending packets.
-         */
         void unspawn();
         
         pos_t fx(size_t);
