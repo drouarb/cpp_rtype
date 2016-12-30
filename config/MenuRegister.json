@@ -6,9 +6,9 @@
   "type" : 0,
   "Buttons": [
     {
-      "buttons_name": "server",
-      "selected": "ready.png",
-      "noselected": "ready.png",
+      "buttons_name": "register",
+      "selected": "registerplayer.png",
+      "noselected": "registerplayer.png",
       "default_selected" : 0,
       "lock" : 0,
       "position": [
@@ -27,7 +27,7 @@
       "position": [
         {
           "x": 0,
-          "y": 400
+          "y": 200
         }
       ],
       "type" : 2,
@@ -42,7 +42,7 @@
       "position": [
         {
           "x": 0,
-          "y": 600
+          "y": 300
         }
       ],
       "type" : 1,

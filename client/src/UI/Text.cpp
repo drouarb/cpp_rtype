@@ -6,12 +6,12 @@
 #include "../../include/UI/Text.hh"
 
 UI::Text::Text() : AItem(UI::TEXT) {
-  initStatus = font.loadFromFile("media/font/Pixeled.ttf");
+    initStatus = font.loadFromFile("media/font/Pixeled.ttf");
     text.setFont(font);
     text.setCharacterSize(24);
-    /*text.setOutlineColor(sf::Color::Black);
+    text.setOutlineColor(sf::Color::Black);
     text.setOutlineThickness(10);
-    text.setFillColor(sf::Color::White);*/
+    text.setFillColor(sf::Color::White);
 }
 
 UI::Text::~Text() {

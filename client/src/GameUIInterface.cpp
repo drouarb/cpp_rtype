@@ -314,6 +314,8 @@ void GameUIInterface::reloadMenuRoomList() {
             ui_mut->unlock();
         }
         if (listMenu[i]->getName() == "LeaderBoard") {
+            x = 600;
+            y = 200;
             ui_mut->lock();
             listMenu[i]->erraseTextBox();
             for (auto it2 = leaderBoard.begin(); it2 != leaderBoard.end(); it2++) {

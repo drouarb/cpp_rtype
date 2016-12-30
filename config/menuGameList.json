@@ -1,38 +1,52 @@
 {
   "Name": "roomList",
   "Default_Visibility": 1,
-  "padding_up" : 100,
-  "padding_left" : 800,
-  "type" : 0,
+  "padding_up": 100,
+  "padding_left": 800,
+  "type": 0,
   "Buttons": [
     {
-      "buttons_name": "roomId",
-      "default_selected" : 1,
-      "lock" : 1,
-      "default_value" : "0",
+      "buttons_name": "roomdId",
+      "selected": "joinroom.png",
+      "noselected": "joinroom.png",
+      "default_selected": 0,
+      "lock": 0,
       "position": [
         {
           "x": 0,
-          "y": 400
+          "y": 250
         }
       ],
-      "type" : 2,
-      "send" : 1
+      "type": 0
+    },
+    {
+      "buttons_name": "roomId",
+      "default_selected": 1,
+      "lock": 1,
+      "default_value": "0",
+      "position": [
+        {
+          "x": 0,
+          "y": 450
+        }
+      ],
+      "type": 2,
+      "send": 1
     },
     {
       "buttons_name": "back",
       "selected": "back2.png",
       "noselected": "back.png",
-      "default_selected" : 0,
-      "lock" : 1,
+      "default_selected": 0,
+      "lock": 1,
       "position": [
         {
           "x": 0,
-          "y": 600
+          "y": 500
         }
       ],
-      "type" : 1,
-      "goto" : "MenuConnection"
+      "type": 1,
+      "goto": "MenuConnection"
     }
   ]
 }

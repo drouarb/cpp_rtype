@@ -32,21 +32,21 @@
       "position": [
         {
           "x": 0,
-          "y": 200
+          "y": 150
         }
       ]
     },
     {
       "buttons_name": "Crédit",
-      "selected": "credit2.png",
-      "noselected": "credit.png",
+      "selected": "credits2.png",
+      "noselected": "credits.png",
       "default_selected" : 0,
       "lock" : 1,
       "type" : 0,
       "position": [
         {
           "x": 0,
-          "y": 400
+          "y": 300
         }
       ]
     },
@@ -61,7 +61,7 @@
       "position": [
         {
           "x": 0,
-          "y": 600
+          "y": 450
         }
       ]
     }
