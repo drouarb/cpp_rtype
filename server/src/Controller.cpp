@@ -2,7 +2,7 @@
 #include "entities/Player.hh"
 
 void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY) {
-    this->player->move(speedX, speedY);
+    this->player->move(speedX * 2, speedY * 2);
 }
 
 void server::Controller::playShoot(attackId_t attackId, round_t tick) {

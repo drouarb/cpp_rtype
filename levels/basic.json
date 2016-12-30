@@ -9,7 +9,7 @@
       posY: "200"
     },
     {
-      dlName: "build/entity/libBasicNastyEntity",
+      dlName: "build/entity/libCrazyEntity",
       time: "180",
       posX: "2000",
       posY: "400"

@@ -5,9 +5,6 @@
 #ifndef CPP_RTYPE_WUNDERWAFFE_HH
 #define CPP_RTYPE_WUNDERWAFFE_HH
 
-
-static const int DEFAULT_LIFE = 1000;
-
 #include <entities/Player.hh>
 #include "../../server/include/Grid.hh"
 
@@ -15,6 +12,7 @@ class Wunderwaffe : public server::ADynamicObject {
 private:
     static const int DEFAULT_DAMAGE = 40;
     static const int MAX_MOVEMENT = 100;
+    static const int DEFAULT_LIFE = 25000;
 
     enum movement_t {
         FRONT,
