@@ -157,7 +157,7 @@ void GameClient::manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameL
 }
 
 void GameClient::manageLeaderBoard(std::vector<std::pair<uint32_t, std::string> > LeaderBoard) {
-    std::cout << "receivce" << std::endl;
+    std::cout << "receice" << std::endl;
     gameui->feedLeaderBoard(LeaderBoard);
     gameui->reloadMenuRoomList();
 }
@@ -195,46 +195,48 @@ void GameClient::gameLoop() {
                     receive = gameui->manageInput(event);
                     if (receive != nullptr) {
                         if (receive->info == I_QUIT)
-                        {
+			  {
                             deleteNetworkManager();
                             manageQuit();
                             return;
-                        }
+			  }
                         sendAll(receive);
                         delete (receive);
                     }
                     event = -42;
                 } else if (world != nullptr) {
-                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
-                                                               pos_t(world->getEntityById(playerId)->getPos().first,
-                                                                     world->getEntityById(playerId)->getPos().second),
-                                                               world->getTick());
-                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-                                            world->getEntityById(playerId)->getVec().second,
-                                            world->getEntityById(playerId)->getPos().first,
-                                            world->getEntityById(playerId)->getPos().second);
-                }
-                if (sw->elapsedMs() < 1000 / tickRateClient)
-                    std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient)
-                                                                          - sw->elapsedMs()));
-            }
-            gameui->displaySimple();
-            ++tickcpt;
-        }
-        if (world != nullptr && horodatageTick.size() > 1) {
-            std::map<tick, uint64_t>::iterator it;
-            it = horodatageTick.end();
-            --it;
-            readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)),
-                            std::pair<tick, uint64_t>(it->first, it->second));
-        } else
-            tickRateClient = 30;
+		  world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
+							     pos_t(world->getEntityById(playerId)->getPos().first,
+								   world->getEntityById(playerId)->getPos().second),
+							     world->getTick());
+		  manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+					  world->getEntityById(playerId)->getVec().second,
+					  world->getEntityById(playerId)->getPos().first,
+					  world->getEntityById(playerId)->getPos().second);
+		}
+		if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
+		  std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient)
+									- sw->elapsedMs()));
+	    }
+	    gameui->displaySimple();
+	    ++tickcpt;
+	}
+	if (world != nullptr && horodatageTick.size() > 1)
+	  {
+	    std::map<tick, uint64_t>::iterator it;
+	    it = horodatageTick.end();
+	    --it;
+	    readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)), std::pair<tick, uint64_t>(it->first, it->second));
+	  }
+	else
+	  tickRateClient = TICKRATE;
     }
+    deleteNetworkManager();
 }
 
 void GameClient::sendAll(struct s_info *info) {
-    switch (info->info) {
-        case I_CONNECTION: {
+  switch (info->info) {
+  case I_CONNECTION: {
             createNetworkManager(static_cast<s_connection *>(info)->ip, static_cast<s_connection *>(info)->port);
             if (manager != nullptr)
                 gameui->changeMenu("MenuRegister");
@@ -252,6 +254,7 @@ void GameClient::sendAll(struct s_info *info) {
             if (manager != nullptr) {
                 manager->sendQuit();
                 manager->sendAskList();
+		manageQuit();
                 gameui->changeMenu("roomList");
                 manageQuit();
             }

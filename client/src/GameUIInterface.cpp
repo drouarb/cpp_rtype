@@ -56,6 +56,10 @@ typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
     return (newid);
 }
 
+void GameUIInterface::UILoop()
+{
+}
+
 void GameUIInterface::feedLeaderBoard(std::vector<std::pair<uint32_t, std::string> > nleaderBoard) {
     ui_mut->lock();
     leaderBoard = nleaderBoard;

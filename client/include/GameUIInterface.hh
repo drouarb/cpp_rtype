@@ -20,6 +20,8 @@
 #include "TouchDefinition.hh"
 #include "Information.hh"
 
+#define TICKRATEUI 60
+
 namespace client {
     class GameUIInterface {
     private:
@@ -50,6 +52,8 @@ namespace client {
 
         void displaySimple();
 
+      void UILoop();
+      
         typeide_t registerNewSprite(const std::string &);
 
         void feedLeaderBoard(std::vector<std::pair<uint32_t, std::string> > leaderBoard);

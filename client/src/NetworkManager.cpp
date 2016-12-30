@@ -32,7 +32,9 @@ using namespace client;
 
 NetworkManager::~NetworkManager()
 {
-    delete(packetFactory);
+  delete(packetFactory);
+  for (auto it = listeners.begin(); it != listeners.end(); it++)
+    delete *it;
 }
 
 NetworkManager::NetworkManager(const std::string &ip, unsigned short port, GameClient *gameclient) : gameClient(gameclient)
