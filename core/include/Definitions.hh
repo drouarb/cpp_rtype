@@ -66,4 +66,10 @@ namespace server {
 #define INFO(expr)
 #endif
 
+#ifdef WIN32
+#define SYSTEM_FOLDER "\\"
+#else
+#define SYSTEM_FOLDER "/"
+#endif
+
 #endif //CPP_RTYPE_DEFINITIONS_HH

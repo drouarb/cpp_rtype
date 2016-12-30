@@ -59,9 +59,9 @@ server::EntityInitialization *BasicNastyEntity::initialize(server::round_t round
     initialization->team = server::Team::FOE;
     initialization->action.speedX = 0;
     initialization->action.speedY = 0;
-    initialization->sprite.sizeX = 120;
-    initialization->sprite.sizeY = 120;
-    initialization->sprite.path = "media/references/ALL_GONE.jpg";
+    initialization->sprite.sizeX = 350;
+    initialization->sprite.sizeY = 100;
+    initialization->sprite.path = "media/references/bf109.png";
     this->startingRound = round;
 
     INFO("I'm the vilain nasty player: ");

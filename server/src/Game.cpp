@@ -13,6 +13,7 @@
 #include <network/packet/PacketPlaySound.hh>
 #include <network/packet/PacketLeaderBoard.hh>
 #include <network/packet/PacketErrorGame.hh>
+#include <network/packet/PacketQuit.hh>
 #include "Game.hh"
 
 using namespace server;
@@ -612,7 +613,7 @@ void Game::sim_destroy(Entity *entity) {
 }
 
 uint16_t Game::getClientSize() {
-    return this->clientList.size();
+    return static_cast<uint16_t >(this->clientList.size());
 }
 
 round_t Game::getTick()
@@ -746,9 +747,11 @@ void Game::endGame()
     //TODO: scores
 
     network::packet::PacketLeaderBoard packet(vect);
+    network::packet::PacketQuit packetQuit;
     for (auto client : clientList)
     {
         packetf.send(packet, client->getClientId());
+        packetf.send(packetQuit, client->getClientId());
     }
     going = false;
 }
