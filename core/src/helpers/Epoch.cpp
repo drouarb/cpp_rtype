@@ -7,6 +7,9 @@
 using namespace helpers;
 
 #ifdef WIN32
+
+#include <windows.h>
+
 uint64_t Epoch::getTimeMs() {
  // the system time
     SYSTEMTIME systemTime;
