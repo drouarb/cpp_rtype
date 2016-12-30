@@ -11,7 +11,6 @@ UI::Window::Window() {
     width = WIDTH;
     name = "rtype";
     window = new sf::RenderWindow(sf::VideoMode(length, width, 32), name);
-    alertText.setPosition(0, 0);
     alertText.setString("");
 }
 
@@ -91,6 +90,7 @@ void UI::Window::deleteItem(AItem* item) {
 
 void UI::Window::alert(const std::string &string) {
     alertText.setString(string);
+    alertText.setPosition((LENGTH / 2) - (alertText.getWidth() / 2) , (WIDTH / 2));
     alerted = true;
     alertClock.restart();
 }
