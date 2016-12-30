@@ -12,7 +12,7 @@
 #include <cstdint>
 #include "EventManager.hh"
 #include "GameClient.hh"
-
+#include <algorithm>
 using namespace boost::property_tree;
 using namespace client;
 
@@ -315,6 +315,10 @@ void GameClient::sendAll(struct s_info *info) {
             }
         }
             break;
+        case I_SAVE: {
+            saveConfig();
+        }
+            break;
         case I_ASKLEADERBOARD: {
             if (manager != nullptr) {
                 manager->sendAskLearderBoard();
@@ -346,27 +350,72 @@ void GameClient::createKeyMap(const std::string &path) {
 
     ptree root;
     read_json(path, root);
+    keygame_move.clear();
+    keygame_attack.clear();
+    name_key.clear();
     BOOST_FOREACH(ptree::value_type
                           child, root.get_child("Move")) {
                     keygame_move[static_cast<client::Key >(child.second.get<int>(
                             "value"))] = std::pair<int16_t, int16_t>(
                             child.second.get<int>("x"),
                             child.second.get<int>("y"));
+                    gameui->setStringToButtons("key" + child.second.get<std::string>("name"), keyStringMap.at(
+                            static_cast<client::Key>(child.second.get<int>(
+                                    "value"))), "MenuOption");
+                    name_key.push_back(child.second.get<std::string>("name"));
                 }
 
     BOOST_FOREACH(ptree::value_type
                           child, root.get_child("Attack")) {
                     keygame_attack[static_cast<client::Key >(child.second.get<int>("value"))] = child.second.get<int>(
                             "id");
+                    gameui->setStringToButtons("key" + child.second.get<std::string>("name"), keyStringMap.at(
+                            static_cast<client::Key>(child.second.get<int>(
+                                    "value"))), "MenuOption");
+                    name_key.push_back(child.second.get<std::string>("name"));
                 }
 
     BOOST_FOREACH(ptree::value_type
                           child, root.get_child("gameList")) {
                     gameui->setKeygameList(static_cast<client::Key>(child.second.get<int>("value")));
+                    gameui->setStringToButtons("key" + child.second.get<std::string>("name"), keyStringMap.at(
+                            static_cast<client::Key>(child.second.get<int>(
+                            "value"))), "MenuOption");
+                    name_key.push_back(child.second.get<std::string>("name"));
                 }
 
     BOOST_FOREACH(ptree::value_type
                           child, root.get_child("leaderBoard")) {
                     gameui->setKeyLeaderBoard(static_cast<client::Key>(child.second.get<int>("value")));
+                    gameui->setStringToButtons("key" + child.second.get<std::string>("name"), keyStringMap.at(
+                            static_cast<client::Key>(child.second.get<int>(
+                                    "value"))), "MenuOption");
+                    name_key.push_back(child.second.get<std::string>("name"));
                 }
+}
+
+void GameClient::saveConfig() {
+    ptree root;
+    read_json("config/gameCommand.json", root);
+    std::string key;
+    for (auto it = name_key.begin(); it != name_key.end(); it++) {
+        if (touchExit(gameui->getStringFromButtons("key" + *it, "MenuOption")) == true) {
+            key = (gameui->getStringFromButtons("key" + *it, "MenuOption"));
+            BOOST_FOREACH(ptree::value_type
+                                  child, root.get_child("Move")) {
+                            if (child.second.get<std::string>("name") == (*it))
+                                child.second.put<int>("value", 43);
+                         }
+
+        }
+    }
+}
+
+bool GameClient::touchExit(const std::string &data) {
+    for(auto it = keyStringMap.begin() ; it != keyStringMap.end(); it++)
+    {
+        if (it->second == data)
+            return true;
+    }
+    return false;
 }

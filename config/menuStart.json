@@ -27,7 +27,8 @@
       "noselected": "settings.png",
       "default_selected" : 0,
       "lock" : 1,
-      "type" : 0,
+      "type" : 1,
+      "goto" : "MenuOption",
       "position": [
         {
           "x": 0,

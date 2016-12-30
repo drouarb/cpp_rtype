@@ -19,7 +19,9 @@ namespace client {
         I_ASKLEADERBOARD = 5,
         I_ASKLIST = 6,
         I_PLAYER = 7,
-        I_CONNECTION = 8
+        I_CONNECTION = 8,
+        I_SAVE = 9
+
     };
     struct  s_info
     {

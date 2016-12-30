@@ -193,3 +193,13 @@ void Menu::erraseTextBox() {
     }
 }
 
+void Menu::addButtonsName(const std::string &name, UI::AItem *item) {
+ ButtonsName[name] = item;
+}
+
+UI::AItem *Menu::getButtonsByName(const std::string &name) {
+    if (ButtonsName.find(name) != ButtonsName.end())
+        return ButtonsName[name];
+    return nullptr;
+}
+

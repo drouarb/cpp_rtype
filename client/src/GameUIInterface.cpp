@@ -21,6 +21,7 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
 }
 
 GameUIInterface::~GameUIInterface() {
+    managerUi.~UIManager();
 }
 
 void GameUIInterface::initUI() {
@@ -30,6 +31,7 @@ void GameUIInterface::initUI() {
     addMenu("config/MenuRegister.json");
     addMenu("config/menuGameList.json");
     addMenu("config/LearderBoard.json");
+    addMenu("config/menuOption.json");
     createStaticMenu();
     currentMenu = listMenu[0];
 }
@@ -164,6 +166,7 @@ void GameUIInterface::addMenu(const std::string &path) {
                                                          "media/menu/" + child.second.get<std::string>("selected"));
 
                     }
+                    temp->addButtonsName(child.second.get<std::string>("buttons_name"), item);
                     try {
                         temp->addInfo(item, child.second.get<int>("send"));
                     }
@@ -363,4 +366,35 @@ void GameUIInterface::setKeygameList(Key KeygameList) {
 
 void GameUIInterface::setKeyLeaderBoard(Key KeyLeaderBoard) {
     GameUIInterface::KeyLeaderBoard = KeyLeaderBoard;
+}
+
+void
+GameUIInterface::setStringToButtons(const std::string &name, const std::string &data, const std::string &menuName) {
+    for (int i = 0; i != listMenu.size(); i++) {
+        {
+            if (listMenu[i]->getName() == menuName) {
+                UI::Text *item = static_cast<UI::Text *>(listMenu[i]->getButtonsByName(name));
+                if (item != nullptr) {
+                    item->setString(data);
+                    listMenu[i]->changeTextBox(item, data);
+                }
+            }
+        }
+
+    }
+}
+
+const std::string GameUIInterface::getStringFromButtons(const std::string &name, const std::string &menuName) {
+    for (int i = 0; i != listMenu.size(); i++) {
+        {
+            if (listMenu[i]->getName() == menuName) {
+                UI::Text *item = static_cast<UI::Text *>(listMenu[i]->getButtonsByName(name));
+                if (item != nullptr) {
+                    return (listMenu[i]->getTextFromtextBox(item));
+                }
+            }
+        }
+
+    }
+    return("");
 }

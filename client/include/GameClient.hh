@@ -41,7 +41,10 @@ namespace client {
         helpers::IStopwatch *sw;
         std::map<client::Key, vec_t> keygame_move;
         std::map<client::Key, int> keygame_attack;
+        std::list<std::string>name_key;
     public:
+
+        static const std::map<client::Key, const std::string> keyStringMap;
         GameClient();
 
         ~GameClient() {};
@@ -90,6 +93,10 @@ namespace client {
 
         void createKeyMap(const std::string &path);
 
+        void saveConfig();
+
+
+        bool touchExit(const std::string &data);
     private:
         void prepaStateMenus();
 

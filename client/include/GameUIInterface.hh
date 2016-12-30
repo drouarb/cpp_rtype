@@ -98,6 +98,9 @@ namespace client {
 
         void setKeyLeaderBoard(Key KeyLeaderBoard);
 
+        void setStringToButtons(const std::string &name, const std::string &data, const std::string &menuName);
+
+        const std::string getStringFromButtons(const std::string &name, const std::string &menuName);
     private:
         typeide_t getNextId();
 

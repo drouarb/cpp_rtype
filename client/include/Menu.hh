@@ -38,6 +38,7 @@ namespace client {
         std::map<UI::AItem*, ButtonsStats> buttonsStats;
         std::map<UI::AItem*, std::string> textBox;
         std::map<UI::AItem*, int>SendInfo;
+        std::map<std::string , UI::AItem*>ButtonsName;
 
     public:
         const std::string &getText() const;
@@ -98,6 +99,11 @@ namespace client {
         const  std::string &getTextFromtextBox(UI::AItem *item);
 
         void erraseTextBox();
+
+        void addButtonsName(const std::string &name, UI::AItem *item);
+
+        UI::AItem *getButtonsByName(const std::string & name);
+
     private:
         std::vector<UI::AItem *> listItem;
     public:
