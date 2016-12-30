@@ -43,20 +43,16 @@ server::Level::Level(const std::string &filepath) {
         if (entry.first > end)
             end = entry.first;
     }
+
+    JSON::JsonObj &jsonObj = static_cast<JSON::JsonObj &>(root.GetObj("boss"));
     
-    /*   // Create a root
-BOOST_FOREACH(boost::property_tree::ptree::value_type
-                 child, root.get_child("spawns")) {
-
-           Spawn spawn;
-           spawn.dlName = child.second.get_child("dlName").get_value<std::string>();
-           spawn.time = child.second.get_child("time").get_value<round_t>();
-           spawn.posX = child.second.get_child("posX").get_value<int>();
-           spawn.posY = child.second.get_child("posY").get_value<int>();
-
-           this->spawns[spawn.time].push_back(spawn);
-       }*/
-
+    Spawn spawn;
+    spawn.dlName = static_cast<JSON::JsonStr &>(jsonObj.GetObj("dlName")).Get();
+    spawn.time = static_cast<round_t >(std::stoi(static_cast<JSON::JsonStr &>(jsonObj.GetObj("time")).Get()));
+    spawn.posX = std::stoi(static_cast<JSON::JsonStr &>(jsonObj.GetObj("posX")).Get());
+    spawn.posY = std::stoi(static_cast<JSON::JsonStr &>(jsonObj.GetObj("posY")).Get());
+    this->boss.first = spawn.time;
+    this->boss.second = spawn;
 }
 
 server::Level::~Level() {}
