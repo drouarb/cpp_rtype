@@ -17,10 +17,14 @@
 server::Core::Core(const std::string &path, const unsigned short port)
         : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(nullptr)
 {
+    std::cout << "Instanciation" << std::endl;
+
     IExplorer *fileExplorer = IExplorer::getInstance();
     this->isRunning = true;
     fileExplorer->loadFolder(path);
     this->networkManager = new NetworkManager(this);
+
+    std::cout << "Loading levels from '" << path << "'" << std::endl;
     const std::vector<IExplorer::File> &vector = fileExplorer->getFiles();
     for (auto f : vector) {
         if (f.name.find(".json") == std::string::npos) {
@@ -39,6 +43,10 @@ server::Core::Core(const std::string &path, const unsigned short port)
         return;
     }
 
+    std::cout << std::to_string(levels.size()) << " levels loaded" << std::endl;
+
+    std::cout << "Preparing packet factory" << std::endl;
+
     //this->packetFactory = new PacketFactoryTest(port);
     this->packetFactory = new network::PacketFactory(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
@@ -51,6 +59,8 @@ server::Core::Core(const std::string &path, const unsigned short port)
     this->packetFactory->registerListener(new ServerListenerQuit(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerRegister(this->networkManager));
     this->packetFactory->run();
+
+    std::cout << "Server ready" << std::endl;
 }
 
 void server::Core::run() {

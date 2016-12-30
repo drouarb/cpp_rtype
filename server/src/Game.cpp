@@ -142,7 +142,6 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) || (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j))))
     {
         dist = fx(entity_i) - fxp(entity_j);
-        std::cout << "left dist=" << std::to_string(dist) << std::endl;
         if (dist <= 0)
         {
             entity_i->obj->collide(*entity_j, this->round);
@@ -193,7 +192,6 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) || (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j))))
     {
         dist = fx(entity_j) - fxp(entity_i);
-        std::cout << "right dist=" << std::to_string(dist) << std::endl;
         if (dist <= 0)
         {
             entity_i->obj->collide(*entity_j, this->round);
@@ -246,7 +244,6 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) || (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j))))
     {
         dist = fy(entity_i) - fyp(entity_j);
-        std::cout << "up dist=" << std::to_string(dist) << std::endl;
         if (dist <= 0)
         {
             entity_i->obj->collide(*entity_j, this->round);
@@ -297,7 +294,6 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) || (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j))))
     {
         dist = fy(entity_j) - fyp(entity_i);
-        std::cout << "down dist=" << std::to_string(dist) << std::endl;
         if (dist <= 0)
         {
             entity_i->obj->collide(*entity_j, this->round);
