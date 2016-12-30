@@ -18,7 +18,6 @@ server::Core::Core(const std::string &path, const unsigned short port)
         : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(nullptr)
 {
     IExplorer *fileExplorer = IExplorer::getInstance();
-    
     this->isRunning = true;
     fileExplorer->loadFolder(path);
     this->networkManager = new NetworkManager(this);
@@ -55,6 +54,8 @@ server::Core::Core(const std::string &path, const unsigned short port)
 }
 
 void server::Core::run() {
+    std::cout << "Server running" << std::endl;
+
     while (isRunning) {
         sw->set();
         mutex.lock();

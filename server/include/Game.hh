@@ -6,8 +6,11 @@
 #include "network/PacketFactory.hh"
 #include "events/Timeline.hh"
 #include "CollisionWall.hh"
-#include <list>
+#include <map>
 
+#define GRID_CELL_SIZE 100
+#define GRID_HEIGHT (FIELD_HEIGHT / GRID_CELL_SIZE + 1)
+#define GRID_WIDTH ((FIELD_WIDTH + LEFT_MARGIN + RIGHT_MARGIN) / GRID_CELL_SIZE + 1)
 
 namespace server
 {
@@ -42,7 +45,10 @@ namespace server
         std::vector<server::event::AGameEvent *> gameEvents;
         round_t lastSyn;
         bool going;
-        std::vector<CollisionWall> collisions;
+        std::map<Entity *, CollisionWall> collisions;
+#ifdef GRID_CELL_SIZE
+        std::vector<Entity*> grid[GRID_HEIGHT][GRID_WIDTH];
+#endif
 
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
@@ -50,15 +56,24 @@ namespace server
 
         void progressLevel();
         void checkCollisions();
-        void checkCollision(int entity_1_index, int entity_2_index);
+        void checkCollision(Entity * entity1, Entity * entity2);
         void letEntitesAct();
         void moveEntities();
         void unspawn();
+
+#ifdef GRID_CELL_SIZE
+        void checkCollisionsCell(int entity_index, int cell_x, int cell_y);
+        bool willChangeCell(const Entity * entity);
+        void removeFromGrid(const Entity * entity);
+        void addToGrid(Entity * entity);
+#endif
+
+        void spawnEntity(Entity * entity);
         
-        pos_t fx(size_t);
-        pos_t fxp(size_t);
-        pos_t fy(size_t);
-        pos_t fyp(size_t);
+        pos_t fx(const Entity *) const;
+        pos_t fxp(const Entity *) const;
+        pos_t fy(const Entity *) const;
+        pos_t fyp(const Entity *) const;
 
         /**
          * \defgroup Simulations functions

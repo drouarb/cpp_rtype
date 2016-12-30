@@ -85,8 +85,7 @@ void Game::progressLevel()
             {
                 INFO("Game " << gameId << ": Adding new player(" << spawn.dlName << " on: " << entity->data.getPosX() << ", " << entity->data.getPosY());
                 entityIdCount++;
-                entities.push_back(entity);
-                this->sim_spawn(entity);
+                spawnEntity(entity);
             }
         }
     }
@@ -94,25 +93,42 @@ void Game::progressLevel()
 
 void Game::checkCollisions()
 {
-    collisions = std::vector<CollisionWall>(entities.size());
+    collisions = std::map<Entity *, CollisionWall>();
 
+#ifndef GRID_CELL_SIZE
     size_t max = entities.size();
     for (size_t i = 0; i < max; ++i)
     {
         for (size_t j = i + 1; j < max; ++j)
         {
-            checkCollision(i, j);
+            checkCollision(entities[i], entities[j]);
         }
     }
+#else
+    for (size_t i = 0; i < entities.size(); ++i)
+    {
+        int y = static_cast<int>(entities[i]->data.getPosY() / GRID_CELL_SIZE);
+        int x = static_cast<int>(entities[i]->data.getPosX() / GRID_CELL_SIZE);
+        checkCollisionsCell(i, y + 1, x + 1);
+        checkCollisionsCell(i, y, x + 1);
+        checkCollisionsCell(i, y - 1, x + 1);
+        checkCollisionsCell(i, y + 1, x);
+        checkCollisionsCell(i, y, x);
+        checkCollisionsCell(i, y - 1, x);
+        checkCollisionsCell(i, y + 1, x - 1);
+        checkCollisionsCell(i, y, x - 1);
+        checkCollisionsCell(i, y - 1, x - 1);
+    }
+#endif
 }
 
-void Game::checkCollision(int i, int j)
+void Game::checkCollision(Entity * entity_i, Entity * entity_j)
 {
     //TODO: lighten code
 
-    if (entities[i]->obj->collidesWith(*entities[j]) == T_FALSE && entities[j]->obj->collidesWith(*entities[i]) == T_FALSE)
+    if (entity_i->obj->collidesWith(*entity_j) == T_FALSE && entity_j->obj->collidesWith(*entity_i) == T_FALSE)
         return;
-    if (entities[i]->obj->collidesWith(*entities[j]) == NA || entities[j]->obj->collidesWith(*entities[i]) == NA)
+    if (entity_i->obj->collidesWith(*entity_j) == NA || entity_j->obj->collidesWith(*entity_i) == NA)
         return;
 
     int dist;
@@ -122,184 +138,208 @@ void Game::checkCollision(int i, int j)
     // --- x axis
 
     // - left edge
-    if (entities[j]->data.getPosX() < entities[i]->data.getPosX() &&
-        ((fy(i) >= fy(j) && fy(i) <= fyp(j)) || (fyp(i) >= fy(j) && fyp(i) <= fyp(j))))
+    if (entity_j->data.getPosX() < entity_i->data.getPosX() &&
+        ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) || (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j))))
     {
-        dist = fx(i) - fxp(j);
+        dist = fx(entity_i) - fxp(entity_j);
         std::cout << "left dist=" << std::to_string(dist) << std::endl;
         if (dist <= 0)
         {
-            entities[i]->obj->collide(*entities[j], this->round);
-            entities[j]->obj->collide(*entities[i], this->round);
+            entity_i->obj->collide(*entity_j, this->round);
+            #ifndef GRID_CELL_SIZE
+            entity_j->obj->collide(*entity_i, this->round);
+            #endif
 
-            if (entities[i]->data.getVectX() <= 0)
+            collisions[entity_i].add(X, NEG);
+            #ifndef GRID_CELL_SIZE
+            collisions[entity_j].add(X, POS);
+            #endif
+        }
+        if (dist < 0)
+        {
+            if (entity_i->data.getVectX() <= 0)
             {
-                if (dist >= entities[i]->data.getVectX())
+                if (dist >= entity_i->data.getVectX())
                 {
-                    entities[i]->data.setVectX(entities[i]->data.getVectX() - dist);
-                    this->sim_move(entities[i]);
+                    entity_i->data.setVectX(entity_i->data.getVectX() - dist);
+                    this->sim_move(entity_i);
                     dist = 0;
                 }
                 else
                 {
-                    dist -= entities[i]->data.getVectX();
-                    entities[i]->data.setVectX(0);
-                    this->sim_move(entities[i]);
+                    dist -= entity_i->data.getVectX();
+                    entity_i->data.setVectX(0);
+                    this->sim_move(entity_i);
                 }
             }
-            if (entities[j]->data.getVectX() >= 0)
+            if (entity_j->data.getVectX() >= 0)
             {
-                if (-dist <= entities[j]->data.getVectX())
+                if (-dist <= entity_j->data.getVectX())
                 {
-                    entities[j]->data.setVectX(entities[j]->data.getVectX() - -dist);
-                    this->sim_move(entities[i]);
+                    entity_j->data.setVectX(entity_j->data.getVectX() - -dist);
+                    this->sim_move(entity_i);
                 }
                 else
                 {
-                    entities[j]->data.setVectX(0);
-                    this->sim_move(entities[i]);
+                    entity_j->data.setVectX(0);
+                    this->sim_move(entity_i);
                 }
             }
-
-            collisions[i].add(X, NEG);
-            collisions[j].add(X, POS);
         }
     }
 
     // - right edge
-    else if (entities[j]->data.getPosX() > entities[i]->data.getPosX() &&
-        ((fy(i) >= fy(j) && fy(i) <= fyp(j)) || (fyp(i) >= fy(j) && fyp(i) <= fyp(j))))
+    else if (entity_j->data.getPosX() > entity_i->data.getPosX() &&
+        ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) || (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j))))
     {
-        dist = fx(j) - fxp(i);
+        dist = fx(entity_j) - fxp(entity_i);
         std::cout << "right dist=" << std::to_string(dist) << std::endl;
         if (dist <= 0)
         {
-            entities[i]->obj->collide(*entities[j], this->round);
-            entities[j]->obj->collide(*entities[i], this->round);
+            entity_i->obj->collide(*entity_j, this->round);
+            #ifndef GRID_CELL_SIZE
+            entity_j->obj->collide(*entity_i, this->round);
+            #endif
 
-            if (entities[j]->data.getVectX() <= 0)
+            collisions[entity_i].add(X, POS);
+            #ifndef GRID_CELL_SIZE
+            collisions[entity_j].add(X, NEG);
+            #endif
+        }
+        if (dist < 0)
+        {
+            if (entity_j->data.getVectX() <= 0)
             {
-                if (dist >= entities[j]->data.getVectX())
+                if (dist >= entity_j->data.getVectX())
                 {
-                    entities[j]->data.setVectX(entities[j]->data.getVectX() - dist);
-                    this->sim_move(entities[i]);
+                    entity_j->data.setVectX(entity_j->data.getVectX() - dist);
+                    this->sim_move(entity_i);
                     dist = 0;
                 }
                 else
                 {
-                    dist -= entities[j]->data.getVectX();
-                    entities[j]->data.setVectX(0);
-                    this->sim_move(entities[i]);
+                    dist -= entity_j->data.getVectX();
+                    entity_j->data.setVectX(0);
+                    this->sim_move(entity_i);
                 }
             }
-            if (entities[i]->data.getVectX() >= 0)
+            if (entity_i->data.getVectX() >= 0)
             {
-                if (-dist <= entities[i]->data.getVectX())
+                if (-dist <= entity_i->data.getVectX())
                 {
-                    entities[i]->data.setVectX(entities[i]->data.getVectX() - -dist);
-                    this->sim_move(entities[i]);
+                    entity_i->data.setVectX(entity_i->data.getVectX() - -dist);
+                    this->sim_move(entity_i);
                 }
                 else
                 {
-                    entities[i]->data.setVectX(0);
-                    this->sim_move(entities[i]);
+                    entity_i->data.setVectX(0);
+                    this->sim_move(entity_i);
                 }
             }
-
-            collisions[i].add(X, POS);
-            collisions[j].add(X, NEG);
         }
     }
 
     // --- y axis
 
     // - upper edge
-    if (entities[j]->data.getPosY() < entities[i]->data.getPosY() &&
-        ((fx(i) >= fx(j) && fx(i) <= fxp(j)) || (fxp(i) >= fx(j) && fxp(i) <= fxp(j))))
+    if (entity_j->data.getPosY() < entity_i->data.getPosY() &&
+        ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) || (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j))))
     {
-        dist = fy(i) - fyp(j);
+        dist = fy(entity_i) - fyp(entity_j);
         std::cout << "up dist=" << std::to_string(dist) << std::endl;
         if (dist <= 0)
         {
-            entities[i]->obj->collide(*entities[j], this->round);
-            entities[j]->obj->collide(*entities[i], this->round);
+            entity_i->obj->collide(*entity_j, this->round);
+            #ifndef GRID_CELL_SIZE
+            entity_j->obj->collide(*entity_i, this->round);
+            #endif
 
-            if (entities[i]->data.getVectY() <= 0)
+            collisions[entity_i].add(Y, NEG);
+            #ifndef GRID_CELL_SIZE
+            collisions[entity_j].add(Y, POS);
+            #endif
+        }
+        if (dist < 0)
+        {
+            if (entity_i->data.getVectY() <= 0)
             {
-                if (dist >= entities[i]->data.getVectY())
+                if (dist >= entity_i->data.getVectY())
                 {
-                    entities[i]->data.setVectY(entities[i]->data.getVectY() - dist);
-                    this->sim_move(entities[i]);
+                    entity_i->data.setVectY(entity_i->data.getVectY() - dist);
+                    this->sim_move(entity_i);
                     dist = 0;
                 }
                 else
                 {
-                    dist -= entities[i]->data.getVectY();
-                    entities[i]->data.setVectY(0);
-                    this->sim_move(entities[i]);
+                    dist -= entity_i->data.getVectY();
+                    entity_i->data.setVectY(0);
+                    this->sim_move(entity_i);
                 }
             }
-            if (entities[j]->data.getVectY() >= 0)
+            if (entity_j->data.getVectY() >= 0)
             {
-                if (-dist <= entities[j]->data.getVectY())
+                if (-dist <= entity_j->data.getVectY())
                 {
-                    entities[j]->data.setVectY(entities[j]->data.getVectY() - -dist);
-                    this->sim_move(entities[i]);
+                    entity_j->data.setVectY(entity_j->data.getVectY() - -dist);
+                    this->sim_move(entity_i);
                 }
                 else
                 {
-                    entities[j]->data.setVectY(0);
-                    this->sim_move(entities[i]);
+                    entity_j->data.setVectY(0);
+                    this->sim_move(entity_i);
                 }
             }
-
-            collisions[i].add(Y, NEG);
-            collisions[j].add(Y, POS);
         }
     }
 
     // - lower edge
-    else if (entities[j]->data.getPosY() > entities[i]->data.getPosY() &&
-        ((fx(i) >= fx(j) && fx(i) <= fxp(j)) || (fxp(i) >= fx(j) && fxp(i) <= fxp(j))))
+    else if (entity_j->data.getPosY() > entity_i->data.getPosY() &&
+        ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) || (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j))))
     {
-        dist = fy(j) - fyp(i);
+        dist = fy(entity_j) - fyp(entity_i);
         std::cout << "down dist=" << std::to_string(dist) << std::endl;
         if (dist <= 0)
         {
-            entities[i]->obj->collide(*entities[j], this->round);
-            entities[j]->obj->collide(*entities[i], this->round);
+            entity_i->obj->collide(*entity_j, this->round);
+            #ifndef GRID_CELL_SIZE
+            entity_j->obj->collide(*entity_i, this->round);
+            #endif
 
-            if (entities[j]->data.getVectY() <= 0)
+            collisions[entity_i].add(Y, POS);
+            #ifndef GRID_CELL_SIZE
+            collisions[entity_j].add(Y, NEG);
+            #endif
+        }
+        if (dist < 0)
+        {
+            if (entity_j->data.getVectY() <= 0)
             {
-                if (dist >= entities[j]->data.getVectY())
+                if (dist >= entity_j->data.getVectY())
                 {
-                    entities[j]->data.setVectY(entities[j]->data.getVectY() - dist);
-                    this->sim_move(entities[i]);
+                    entity_j->data.setVectY(entity_j->data.getVectY() - dist);
+                    this->sim_move(entity_i);
                     dist = 0;
                 }
                 else
                 {
-                    dist -= entities[j]->data.getVectY();
-                    entities[j]->data.setVectY(0);
-                    this->sim_move(entities[i]);
+                    dist -= entity_j->data.getVectY();
+                    entity_j->data.setVectY(0);
+                    this->sim_move(entity_i);
                 }
             }
-            if (entities[i]->data.getVectY() >= 0)
+            if (entity_i->data.getVectY() >= 0)
             {
-                if (-dist <= entities[i]->data.getVectY())
+                if (-dist <= entity_i->data.getVectY())
                 {
-                    entities[i]->data.setVectY(entities[i]->data.getVectY() - -dist);
-                    this->sim_move(entities[i]);
+                    entity_i->data.setVectY(entity_i->data.getVectY() - -dist);
+                    this->sim_move(entity_i);
                 }
                 else
                 {
-                    entities[i]->data.setVectY(0);
-                    this->sim_move(entities[i]);
+                    entity_i->data.setVectY(0);
+                    this->sim_move(entity_i);
                 }
             }
-
-            collisions[i].add(Y, POS);
-            collisions[j].add(Y, NEG);
         }
     }
 }
@@ -310,7 +350,11 @@ void Game::letEntitesAct()
     {
         auto it = entities.at(i);
         EntityAction * action = it->obj->act(this->round, entities);
-        collisions[i].apply(action);
+
+        auto col = collisions.find(it);
+        if (col != collisions.end())
+            col->second.apply(action);
+
         if (action->speedX != it->data.getVectX())
         {
             it->data.setVectX(action->speedX);
@@ -328,9 +372,9 @@ void Game::letEntitesAct()
         }
         if (action->newEntity)
         {
-            entities.push_back(new Entity(action->newEntity, entityIdCount, round, entities));
+            auto newEntity = new Entity(action->newEntity, entityIdCount, round, entities);
             entityIdCount++;
-            this->sim_spawn(entities.back());
+            spawnEntity(newEntity);
         }
         if (action->destroy)
         {
@@ -348,8 +392,18 @@ void Game::moveEntities()
 {
     for (auto entity : entities)
     {
+        #ifdef GRID_CELL_SIZE
+        bool change = willChangeCell(entity);
+        if (change)
+            removeFromGrid(entity);
         entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
         entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
+        if (change)
+            addToGrid(entity);
+        #else
+        entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
+        entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
+        #endif
     }
 }
 
@@ -368,6 +422,9 @@ void Game::unspawn()
             INFO("delete player : " << (*it)->data.getId())
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
+            #ifdef GRID_CELL_SIZE
+            removeFromGrid(*it);
+            #endif
             it = vect_erase(it, entities);
 
             if (going && isFinished())
@@ -376,7 +433,59 @@ void Game::unspawn()
         else
             ++it;
     }
+}
 
+#ifdef GRID_CELL_SIZE
+void Game::checkCollisionsCell(int entity_index, int cell_y, int cell_x)
+{
+    if (cell_y < 0 || cell_y >= GRID_HEIGHT || cell_x < 0 || cell_x >= GRID_WIDTH)
+        return;
+    auto & cell = grid[cell_y][cell_x];
+    for (size_t j = 0; j < cell.size(); ++j)
+    {
+        if (cell[j]->data.getId() != entities[entity_index]->data.getId())
+        {
+            checkCollision(entities[entity_index], cell[j]);
+        }
+    }
+}
+
+bool Game::willChangeCell(const Entity * entity)
+{
+    auto old = entity->data.getPosX() / GRID_CELL_SIZE;
+    if ((entity->data.getPosX() + entity->data.getVectX()) / GRID_CELL_SIZE != old)
+        return (true);
+    old = entity->data.getPosY() / GRID_CELL_SIZE;
+    return ((entity->data.getPosY() + entity->data.getVectY()) / GRID_CELL_SIZE != old);
+}
+
+void Game::removeFromGrid(const Entity * entity)
+{
+    auto & cell = grid[static_cast<int>(entity->data.getPosY()) / GRID_CELL_SIZE][static_cast<int>(entity->data.getPosX()) / GRID_CELL_SIZE];
+    for (int i = 0; i < cell.size(); ++i)
+    {
+        if (cell[i] == entity)
+        {
+            cell[i] = cell.back();
+            cell.pop_back();
+        }
+    }
+}
+
+void Game::addToGrid(Entity *entity)
+{
+    auto & cell = grid[static_cast<int>(entity->data.getPosY()) / GRID_CELL_SIZE][static_cast<int>(entity->data.getPosX()) / GRID_CELL_SIZE];
+    cell.push_back(entity);
+}
+#endif
+
+void Game::spawnEntity(Entity * entity)
+{
+    entities.push_back(entity);
+    this->sim_spawn(entity);
+    #ifdef GRID_CELL_SIZE
+    addToGrid(entity);
+    #endif
 }
 
 void Game::newPlayer(Client *client) {
@@ -400,8 +509,7 @@ void Game::newPlayer(Client *client) {
     entityIdCount++;
     controller->setEntity(player);
     client->setController(controller);
-    this->entities.push_back(entity);
-    this->sim_spawn(entity);
+    spawnEntity(entity);
     greetNewPlayer(*client);
 }
 
@@ -446,24 +554,24 @@ std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator
     return (it);
 }
 
-pos_t Game::fx(size_t i)
+pos_t Game::fx(const Entity * entity_i) const
 {
-    return (entities[i]->data.getPosX() + entities[i]->data.getVectX());
+    return (entity_i->data.getPosX() + entity_i->data.getVectX());
 }
 
-pos_t Game::fy(size_t i)
+pos_t Game::fy(const Entity * entity_i) const
 {
-    return (entities[i]->data.getPosY() + entities[i]->data.getVectY());
+    return (entity_i->data.getPosY() + entity_i->data.getVectY());
 }
 
-pos_t Game::fxp(size_t i)
+pos_t Game::fxp(const Entity * entity_i) const
 {
-    return (entities[i]->data.getPosX() + entities[i]->data.getSprite().sizeX + entities[i]->data.getVectX());
+    return (entity_i->data.getPosX() + entity_i->data.getSprite().sizeX + entity_i->data.getVectX());
 }
 
-pos_t Game::fyp(size_t i)
+pos_t Game::fyp(const Entity * entity_i) const
 {
-    return (entities[i]->data.getPosY() + entities[i]->data.getSprite().sizeY + entities[i]->data.getVectY());
+    return (entity_i->data.getPosY() + entity_i->data.getSprite().sizeY + entity_i->data.getVectY());
 }
 
 void Game::sendData() {
@@ -599,10 +707,7 @@ void Game::sendAllMoves()
             pmove->setPosY(entity->data.getPosY());
             pmove->setVecX(entity->data.getVectX());
             pmove->setVecY(entity->data.getVectY());
-            if (entity->data.getId() == 0)
-            {
-                std::cout << "player: " << std::to_string(entity->data.getVectX()) << " " << std::to_string(entity->data.getVectY()) << std::endl;
-            }
+
             packetf.send(*pmove, client->getClientId());
             delete pmove;
         }
