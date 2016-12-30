@@ -25,10 +25,16 @@
     {
       "value": 1006,
       "id": 1
-    },
+    }
+  ],
+  "gameList" : [
     {
-      "value": 65,
-      "id": 1
+      "value" : 1000
+    }
+  ],
+  "leaderBoard" : [
+    {
+      "value" : 80
     }
   ]
 }

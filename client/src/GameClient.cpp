@@ -232,7 +232,7 @@ void GameClient::manageQuit() {
     if (world != nullptr) {
         std::cout << "Receive Disconnect" << std::endl;
         delete world;
-	// informer la gameUI
+        // informer la gameUI
         horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
@@ -243,46 +243,44 @@ void GameClient::gameLoop() {
     short event;
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
     s_info *receive = nullptr;
-    tick		tickcpt;
-    
-    while (gameui->windowIsOpen())
-      {
-	tickcpt = 0;
-	while (tickcpt < TICKRATE)
-	  {
-	    sw->set();
-	    gameui->updateListEntity();
-	    if (world != nullptr)
-	      world->applyTurn();
-	    if (tickcpt % PERIODTICKEVENT == 0)
-	      {
-		event = handler->getEvent();
-		if (event != -42)
-		  {
-		    receive = gameui->manageInput(event);
-		    if (receive != nullptr)
-		      {
-			if (receive->info == I_QUIT)
-			  break;
-			sendAll(receive);
-			delete (receive);
-		      }
-		    event = -42;
-		  }
-		else if (world != nullptr)
-		  {
-		    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
+    tick tickcpt;
+
+    while (gameui->windowIsOpen()) {
+        tickcpt = 0;
+        while (tickcpt < TICKRATE) {
+            sw->set();
+            gameui->updateListEntity();
+            if (world != nullptr)
+                world->applyTurn();
+            if (tickcpt % PERIODTICKEVENT == 0) {
+                event = handler->getEvent();
+                if (event != -42) {
+                    receive = gameui->manageInput(event);
+                    if (receive != nullptr) {
+                        if (receive->info == I_QUIT)
+                        {
+                            deleteNetworkManager();
+                            return;
+                        }
+                        sendAll(receive);
+                        delete (receive);
+                    }
+                    event = -42;
+                } else if (world != nullptr) {
+                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
+                                                               pos_t(world->getEntityById(playerId)->getPos().first,
+                                                                     world->getEntityById(playerId)->getPos().second),
+                                                               world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,
                                             world->getEntityById(playerId)->getPos().second);
-		  }
-	      }
-	    gameui->displaySimple();
-	    ++tickcpt;
-	  }
-      }
-    deleteNetworkManager();
+                }
+            }
+            gameui->displaySimple();
+            ++tickcpt;
+        }
+    }
 }
 
 void GameClient::sendAll(struct s_info *info) {
@@ -304,15 +302,16 @@ void GameClient::sendAll(struct s_info *info) {
         case I_ASKLIST: {
             if (manager != nullptr) {
                 manager->sendQuit();
-                 manager->sendAskList();
+                manager->sendAskList();
                 gameui->changeMenu("roomList");
+                manageQuit();
             }
         }
             break;
         case I_JOIN: {
             if (manager != nullptr) {
                 manager->sendJoin(static_cast<s_join *>(info)->roomid);
-                 gameui->changeMenu("game");
+                gameui->changeMenu("game");
             }
         }
             break;
@@ -349,13 +348,25 @@ void GameClient::createKeyMap(const std::string &path) {
     read_json(path, root);
     BOOST_FOREACH(ptree::value_type
                           child, root.get_child("Move")) {
-                    keygame_move[static_cast<client::Key >(child.second.get<int>("value"))] = std::pair<int16_t, int16_t>(
+                    keygame_move[static_cast<client::Key >(child.second.get<int>(
+                            "value"))] = std::pair<int16_t, int16_t>(
                             child.second.get<int>("x"),
                             child.second.get<int>("y"));
                 }
 
     BOOST_FOREACH(ptree::value_type
                           child, root.get_child("Attack")) {
-                    keygame_attack[static_cast<client::Key >(child.second.get<int>("value"))] = child.second.get<int>("id");
+                    keygame_attack[static_cast<client::Key >(child.second.get<int>("value"))] = child.second.get<int>(
+                            "id");
+                }
+
+    BOOST_FOREACH(ptree::value_type
+                          child, root.get_child("gameList")) {
+                    gameui->setKeygameList(static_cast<client::Key>(child.second.get<int>("value")));
+                }
+
+    BOOST_FOREACH(ptree::value_type
+                          child, root.get_child("leaderBoard")) {
+                    gameui->setKeyLeaderBoard(static_cast<client::Key>(child.second.get<int>("value")));
                 }
 }

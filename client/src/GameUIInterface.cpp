@@ -14,7 +14,7 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     managerUi.getEventObserver()->setEventManager(handler);
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
     static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
-            UI::BACKGROUND, "media/references/background.png");
+            UI::BACKGROUND, "media/backgrounds/normal.png");
     ui_mut = mut;
     currentMenu = nullptr;
     addNavMap("config/navigation.json");
@@ -205,9 +205,9 @@ s_info *GameUIInterface::manageInput(short key1) {
                 return (manageEnter());
             else
                 manageTouch(tmp);
-        } else if (tmp == client::Key::KEY_P)
+        } else if (tmp ==  KeyLeaderBoard)
             return (client::parse(I_ASKLEADERBOARD, tmp));
-        else if (tmp == client::Key::KEY_ESCAPE)
+        else if (tmp == KeygameList)
             return (client::parse(I_ASKLIST, tmp));
         else
             return (client::parse(I_PLAYER, tmp));
@@ -354,4 +354,12 @@ void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
 
 void GameUIInterface::showError(const std::string &res) {
     managerUi.alert(res);
+}
+
+void GameUIInterface::setKeygameList(Key KeygameList) {
+    GameUIInterface::KeygameList = KeygameList;
+}
+
+void GameUIInterface::setKeyLeaderBoard(Key KeyLeaderBoard) {
+    GameUIInterface::KeyLeaderBoard = KeyLeaderBoard;
 }

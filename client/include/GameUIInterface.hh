@@ -36,6 +36,10 @@ namespace client {
         std::map<std::string ,client::Key>nav_map;
         std::map<std::string , std::vector<int>>anim_map;
         static const std::map<sf::Keyboard::Key, client::Key> keymap;
+        client::Key KeygameList;
+
+    private:
+        client::Key KeyLeaderBoard;
     private:
         GameUIInterface() {};
     public:
@@ -89,6 +93,11 @@ namespace client {
         void reloadMenuRoomList();
 
         bool windowIsOpen();
+
+        void setKeygameList(Key KeygameList);
+
+        void setKeyLeaderBoard(Key KeyLeaderBoard);
+
     private:
         typeide_t getNextId();
 
