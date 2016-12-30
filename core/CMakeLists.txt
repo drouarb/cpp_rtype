@@ -14,6 +14,7 @@ file(
         src/network/PacketFactory.cpp
         src/Explorer/Explorer.cpp
         src/thread/*.cpp
+        src/helpers/Epoch.cpp
         include/*.hh
         include/*.hpp
 )

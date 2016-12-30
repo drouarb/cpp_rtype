@@ -14,6 +14,7 @@
 #include <network/packet/PacketLeaderBoard.hh>
 #include <network/packet/PacketErrorGame.hh>
 #include <network/packet/PacketQuit.hh>
+#include <helpers/Epoch.hh>
 #include "Game.hh"
 
 using namespace server;
@@ -625,7 +626,7 @@ void Game::sendPacketSync(const Client * client)
 {
     auto packet_syn = new network::packet::PacketSynchronization();
     packet_syn->setTick(round);
-    packet_syn->setTime(static_cast<int64_t>(std::time(nullptr)));
+    packet_syn->setTime(static_cast<int64_t>(helpers::Epoch::getTimeMs()));
     if (client == nullptr)
     {
         lastSyn = round;
