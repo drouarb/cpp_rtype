@@ -340,6 +340,7 @@ void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
                 tmp.push_back(std::stoi(buf));
             }
             anim_map[path] = tmp;
+
         }
     }
     if (tmp.size() == 5) {
