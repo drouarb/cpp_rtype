@@ -45,7 +45,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
 
     std::cout << std::to_string(levels.size()) << " levels loaded" << std::endl;
 
-    std::cout << "Preparing packet factory" << std::endl;
+    std::cout << "Preparing packet factory on port " << std::to_string(port) << std::endl;
 
     //this->packetFactory = new PacketFactoryTest(port);
     this->packetFactory = new network::PacketFactory(port);
