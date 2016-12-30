@@ -35,9 +35,15 @@ network::socket::WindowsUDPSocket::WindowsUDPSocket(const std::string &address, 
 }
 
 bool network::socket::WindowsUDPSocket::run() {
+    if (status != DISCONNECTED)
+        throw std::runtime_error("UnixUDPSocket Already running");
+    init();
     //TODO Don't use std::thread
-    thread = new std::thread(&WindowsUDPSocket::poll, this);
-    return false;
+    if (type == CLIENT)
+        thread = new std::thread(&UnixUDPSocket::clientPoll, this);
+    else
+        thread = new std::thread(&UnixUDPSocket::serverPoll, this);
+    return true;
 }
 
 bool network::socket::WindowsUDPSocket::stop() {
@@ -46,17 +52,30 @@ bool network::socket::WindowsUDPSocket::stop() {
     return false;
 }
 
-void network::socket::WindowsUDPSocket::poll() {
-    if (status != DISCONNECTED)
-        throw std::runtime_error("WindowsUDPSocket Already running");
-    status = CONNECTING;
+void network::socket::WindowsUDPSocket::init() {
     if (type == CLIENT)
-        clientPoll();
+        clientInit();
     else
-        serverPoll();
+        serverInit();
 }
 
-void network::socket::WindowsUDPSocket::serverPoll() {
+void network::socket::WindowsUDPSocket::clientInit() {
+    status = CONNECTING;
+
+    if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+        status = DISCONNECTED;
+        throw std::runtime_error("WindowsUDPSocket can't instantiate socket");
+    }
+    clientHandshake();
+
+    sw.set();
+    npings = 0;
+    status = CONNECTED;
+}
+
+void network::socket::WindowsUDPSocket::serverInit() {
+    status = CONNECTING;
+
     if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
         status = DISCONNECTED;
         throw std::runtime_error("WindowsUDPSocket can't instantiate socket");
@@ -67,12 +86,24 @@ void network::socket::WindowsUDPSocket::serverPoll() {
         throw std::runtime_error("WindowsUDPSocket can't bind port");
     }
 
+    status = CONNECTED;
+}
+
+void network::socket::WindowsUDPSocket::poll() {
+    if (status != DISCONNECTED)
+        throw std::runtime_error("WindowsUDPSocket Already running");
+    init();
+    if (type == CLIENT)
+        clientPoll();
+    else
+        serverPoll();
+}
+
+void network::socket::WindowsUDPSocket::serverPoll() {
     bool found;
     struct sockaddr_in recvSocket;
     int recvSocketLen = sizeof(recvSocket);
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
-
-    status = CONNECTED;
 
     while (status == CONNECTED) {
         pollfd.fd = mainSocketFd;
@@ -175,12 +206,6 @@ void network::socket::WindowsUDPSocket::serverTimeout() {
 }
 
 void network::socket::WindowsUDPSocket::clientPoll() {
-    if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-        status = DISCONNECTED;
-        throw std::runtime_error("WindowsUDPSocket can't instantiate socket");
-    }
-
-    clientHandshake();
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
 
     pollfd.fd = mainSocketFd;
@@ -223,9 +248,6 @@ void network::socket::WindowsUDPSocket::clientHandshake() {
     packetAck.setAck(packetSynAck.getAck());
     packetAck.serialize(&buff);
     sendto(mainSocketFd, (char *)buff.data(), buff.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
-    sw.set();
-    npings = 0;
-    status = CONNECTED;
 }
 
 void network::socket::WindowsUDPSocket::clientTimeout() {

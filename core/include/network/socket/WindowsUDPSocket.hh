@@ -67,6 +67,10 @@ namespace network {
             virtual e_socketStatus getStatus();
 
         private:
+            void init();
+            void clientInit();
+            void serverInit();
+
             void serverPoll();
             void clientPoll();
 

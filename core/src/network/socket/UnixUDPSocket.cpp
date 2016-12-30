@@ -36,9 +36,15 @@ network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsign
 }
 
 bool network::socket::UnixUDPSocket::run() {
+    if (status != DISCONNECTED)
+        throw std::runtime_error("UnixUDPSocket Already running");
+    init();
     //TODO Don't use std::thread
-    thread = new std::thread(&UnixUDPSocket::poll, this);
-    return false;
+    if (type == CLIENT)
+        thread = new std::thread(&UnixUDPSocket::clientPoll, this);
+    else
+        thread = new std::thread(&UnixUDPSocket::serverPoll, this);
+    return true;
 }
 
 bool network::socket::UnixUDPSocket::stop() {
@@ -47,17 +53,30 @@ bool network::socket::UnixUDPSocket::stop() {
     return false;
 }
 
-void network::socket::UnixUDPSocket::poll() {
-    if (status != DISCONNECTED)
-        throw std::runtime_error("UnixUDPSocket Already running");
-    status = CONNECTING;
+void network::socket::UnixUDPSocket::init() {
     if (type == CLIENT)
-        clientPoll();
+        clientInit();
     else
-        serverPoll();
+        serverInit();
 }
 
-void network::socket::UnixUDPSocket::serverPoll() {
+void network::socket::UnixUDPSocket::clientInit() {
+    status = CONNECTING;
+
+    if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+        status = DISCONNECTED;
+        throw std::runtime_error("UnixUDPSocket can't instantiate socket");
+    }
+
+    clientHandshake();
+    sw.set();
+    npings = 0;
+    status = CONNECTED;
+}
+
+void network::socket::UnixUDPSocket::serverInit() {
+    status = CONNECTING;
+
     if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
         status = DISCONNECTED;
         throw std::runtime_error("UnixUDPSocket can't instantiate socket");
@@ -67,13 +86,24 @@ void network::socket::UnixUDPSocket::serverPoll() {
         status = DISCONNECTED;
         throw std::runtime_error("UnixUDPSocket can't bind port");
     }
+    status = CONNECTED;
+}
 
+void network::socket::UnixUDPSocket::poll() {
+    if (status != DISCONNECTED)
+        throw std::runtime_error("UnixUDPSocket Already running");
+    init();
+    if (type == CLIENT)
+        clientPoll();
+    else
+        serverPoll();
+}
+
+void network::socket::UnixUDPSocket::serverPoll() {
     bool found;
     struct sockaddr_in recvSocket;
     socklen_t recvSocketLen = sizeof(recvSocket);
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
-
-    status = CONNECTED;
 
     while (status == CONNECTED) {
         pollfd.fd = mainSocketFd;
@@ -176,12 +206,6 @@ void network::socket::UnixUDPSocket::serverTimeout() {
 }
 
 void network::socket::UnixUDPSocket::clientPoll() {
-    if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-        status = DISCONNECTED;
-        throw std::runtime_error("UnixUDPSocket can't instantiate socket");
-    }
-
-    clientHandshake();
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
 
     pollfd.fd = mainSocketFd;
@@ -224,9 +248,6 @@ void network::socket::UnixUDPSocket::clientHandshake() {
     packetAck.setAck(packetSynAck.getAck());
     packetAck.serialize(&buff);
     sendto(mainSocketFd, buff.data(), buff.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
-    sw.set();
-    npings = 0;
-    status = CONNECTED;
 }
 
 void network::socket::UnixUDPSocket::clientTimeout() {
