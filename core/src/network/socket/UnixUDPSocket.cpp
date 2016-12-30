@@ -10,10 +10,11 @@
 #include <network/packet/PacketAck.hh>
 #include <network/packet/PacketPing.hh>
 #include <network/packet/PacketPong.hh>
+#include <network/packet/PacketDisconnect.hh>
 #include "network/socket/UnixUDPSocket.hh"
 
 network::socket::UnixUDPSocket::UnixUDPSocket(unsigned short port) : type(network::socket::ISocket::SERVER),
-                                                                     status(DISCONNECTED) {
+                                                                     status(DISCONNECTED), thread(NULL) {
     memset(&mainSocket, 0, sizeof(mainSocket));
     memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
@@ -22,9 +23,8 @@ network::socket::UnixUDPSocket::UnixUDPSocket(unsigned short port) : type(networ
     pollfd.events = POLLIN;
 }
 
-network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsigned short port) : type(
-        network::socket::ISocket::CLIENT),
-                                                                                                 status(DISCONNECTED) {
+network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsigned short port) :
+        type(network::socket::ISocket::CLIENT), status(DISCONNECTED), thread(NULL) {
     memset(&mainSocket, 0, sizeof(mainSocket));
     memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
@@ -33,6 +33,10 @@ network::socket::UnixUDPSocket::UnixUDPSocket(const std::string &address, unsign
     if (inet_aton(address.c_str(), &mainSocket.sin_addr) == 0)
         throw std::runtime_error("UnixUDPSocket Invalid ip");
 
+}
+
+network::socket::UnixUDPSocket::~UnixUDPSocket() {
+    this->stop();
 }
 
 bool network::socket::UnixUDPSocket::run() {
@@ -47,8 +51,18 @@ bool network::socket::UnixUDPSocket::run() {
 }
 
 bool network::socket::UnixUDPSocket::stop() {
-    status = STOPPING;
-    thread->join();
+    if (status == CONNECTING)
+        while (status == CONNECTING);
+    if (status == CONNECTED) {
+        status = STOPPING;
+        if (thread != NULL) {
+            thread->join();
+            delete(thread);
+            thread = NULL;
+        } else
+            while (status != DISCONNECTED);
+        return true;
+    }
     return false;
 }
 
@@ -132,6 +146,17 @@ void network::socket::UnixUDPSocket::serverPoll() {
         }
         serverTimeout();
     }
+
+    packet::PacketDisconnect packetDisconnect;
+    buffer.resize(0);
+
+    packetDisconnect.serialize(&buffer);
+    for (auto &client : clients) {
+        if (client.status == CONNECTED)
+            sendto(mainSocketFd, buffer.data(), buffer.size(), 0, (sockaddr *) &client.client, sizeof(client.client));
+    }
+    clients.resize(0);
+    close(mainSocketFd);
     status = DISCONNECTED;
 }
 
@@ -215,7 +240,18 @@ void network::socket::UnixUDPSocket::clientPoll() {
             sw.set();
             handleData(buffer, mainSocket);
         }
-        clientTimeout();
+        else
+            clientTimeout();
+    }
+    if (status == STOPPING) {
+        packet::PacketDisconnect packetDisconnect;
+        buffer.resize(0);
+
+        packetDisconnect.serialize(&buffer);
+        sendto(mainSocketFd, buffer.data(), buffer.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
+        close(mainSocketFd);
+
+        status = DISCONNECTED;
     }
 }
 
@@ -258,30 +294,54 @@ void network::socket::UnixUDPSocket::clientTimeout() {
             packetPing.serialize(&buff);
             broadcast(buff);
             npings++;
-        } else {
-            status = DISCONNECTED;
-            close(mainSocketFd);
-            for (auto &l : disconnectionListeners) {
-                l->notify(getClientId(mainSocket));
+        } else
+            clientDisconnect();
+    }
+}
+
+void network::socket::UnixUDPSocket::handleData(const std::vector<uint8_t> &data, const struct sockaddr_in &client) {
+    try {
+        packet::PacketDisconnect packetDisconnect;
+
+        packetDisconnect.deserialize(const_cast<std::vector<uint8_t> *>(&data));
+        if (type == CLIENT)
+            clientDisconnect();
+        else
+            serverDisconnect(client);
+    } catch (std::exception e) {
+        try {
+            std::vector<uint8_t> buff;
+
+            packet::PacketPing packetPing;
+            packet::PacketPong packetPong;
+
+            //TODO Const APacket Protoboeuf
+            packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
+            packetPong.serialize(&buff);
+            send(buff, getClientId(client));
+        } catch (std::exception e) {
+            for (auto &l : dataListeners) {
+                l->notify(getClientId(client), data);
             }
         }
     }
 }
 
-void network::socket::UnixUDPSocket::handleData(const std::vector<uint8_t> &data, const struct sockaddr_in &client) {
-    //TODO PacketDisconnect
-    try {
-        std::vector<uint8_t> buff;
-        packet::PacketPing packetPing;
-        packet::PacketPong packetPong;
+void network::socket::UnixUDPSocket::clientDisconnect() {
+    status = DISCONNECTED;
+    for (auto &l : disconnectionListeners) {
+        l->notify(getClientId(mainSocket));
+    }
+    close(mainSocketFd);
+}
 
-        //TODO Const APacket Protoboeuf
-        packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
-        packetPong.serialize(&buff);
-        send(buff, getClientId(client));
-    } catch (std::exception e) {
-        for (auto &l : dataListeners) {
-            l->notify(getClientId(client), data);
+void network::socket::UnixUDPSocket::serverDisconnect(const struct sockaddr_in &client) {
+    for (auto it = clients.begin(); it != clients.end(); it++) {
+        if (getClientId((*it).client) == getClientId(client)) {
+            for (auto &l : disconnectionListeners)
+                l->notify(getClientId((*it).client));
+            clients.erase(it);
+            return;
         }
     }
 }

@@ -52,6 +52,8 @@ namespace network {
              */
             WindowsUDPSocket(const std::string &address, unsigned short port);
 
+            virtual ~WindowsUDPSocket();
+
             virtual bool run();
             virtual void poll();
             virtual bool stop();
@@ -73,6 +75,9 @@ namespace network {
 
             void serverPoll();
             void clientPoll();
+
+            void clientDisconnect();
+            void serverDisconnect(const struct sockaddr_in &client);
 
             //Server stuffs
             void serverTimeout();
