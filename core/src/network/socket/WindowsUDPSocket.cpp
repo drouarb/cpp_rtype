@@ -12,8 +12,8 @@
 #include "network/socket/WindowsUDPSocket.hh"
 
 network::socket::WindowsUDPSocket::WindowsUDPSocket(unsigned short port) : type(network::socket::ISocket::SERVER), status(DISCONNECTED) {
-	WSADATA wsaData = { 0 };
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
+    WSADATA wsaData = { 0 };
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
     memset(&mainSocket, 0, sizeof(mainSocket));
     memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
@@ -23,8 +23,8 @@ network::socket::WindowsUDPSocket::WindowsUDPSocket(unsigned short port) : type(
 }
 
 network::socket::WindowsUDPSocket::WindowsUDPSocket(const std::string &address, unsigned short port) : type(network::socket::ISocket::CLIENT), status(DISCONNECTED) {
-	WSADATA wsaData = { 0 };
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
+    WSADATA wsaData = { 0 };
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
     memset(&mainSocket, 0, sizeof(mainSocket));
     memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
@@ -38,11 +38,10 @@ bool network::socket::WindowsUDPSocket::run() {
     if (status != DISCONNECTED)
         throw std::runtime_error("UnixUDPSocket Already running");
     init();
-    //TODO Don't use std::thread
     if (type == CLIENT)
-        thread = new std::thread(&UnixUDPSocket::clientPoll, this);
+        thread = new Thread<void (WindowsUDPSocket::*)(), WindowsUDPSocket*>(&WindowsUDPSocket::clientPoll, this);
     else
-        thread = new std::thread(&UnixUDPSocket::serverPoll, this);
+        thread = new Thread<void (WindowsUDPSocket::*)(), WindowsUDPSocket*>(&WindowsUDPSocket::serverPoll, this);
     return true;
 }
 

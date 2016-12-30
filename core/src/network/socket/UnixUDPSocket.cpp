@@ -39,11 +39,10 @@ bool network::socket::UnixUDPSocket::run() {
     if (status != DISCONNECTED)
         throw std::runtime_error("UnixUDPSocket Already running");
     init();
-    //TODO Don't use std::thread
     if (type == CLIENT)
-        thread = new std::thread(&UnixUDPSocket::clientPoll, this);
+        thread = new Thread<void (UnixUDPSocket::*)(), UnixUDPSocket*>(&UnixUDPSocket::clientPoll, this);
     else
-        thread = new std::thread(&UnixUDPSocket::serverPoll, this);
+        thread = new Thread<void (UnixUDPSocket::*)(), UnixUDPSocket*>(&UnixUDPSocket::serverPoll, this);
     return true;
 }
 

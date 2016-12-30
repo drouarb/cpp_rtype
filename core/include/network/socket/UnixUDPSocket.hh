@@ -10,7 +10,7 @@
 #include <forward_list>
 #include <arpa/inet.h>
 #include <poll.h>
-#include <thread>
+#include <thread/Thread.hpp>
 #include <helpers/UnixStopwatch.hh>
 #include "ISocket.hh"
 
@@ -104,7 +104,7 @@ namespace network {
             //Server Stuffs
             std::list<struct s_UDPClient> clients;
 
-            std::thread *thread;
+            IThread *thread;
 
             std::forward_list<listener::ISocketConnectionListener *> connectionListeners;
             std::forward_list<listener::ISocketDisconnectionListener *> disconnectionListeners;
