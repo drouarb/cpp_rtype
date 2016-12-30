@@ -5,13 +5,13 @@
     {
       dlName: "build/entity/libBasicNastyEntity",
       time: "10",
-      posX: "900",
+      posX: "2000",
       posY: "200"
     },
     {
       dlName: "build/entity/libBasicNastyEntity",
       time: "180",
-      posX: "850",
+      posX: "1960",
       posY: "400"
     }
   ],
