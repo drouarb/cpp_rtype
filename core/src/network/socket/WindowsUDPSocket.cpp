@@ -249,7 +249,7 @@ void network::socket::WindowsUDPSocket::clientPoll() {
         buffer.resize(0);
 
         packetDisconnect.serialize(&buffer);
-        sendto(mainSocketFd, buffer.data(), buffer.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
+        sendto(mainSocketFd, (char *)buffer.data(), buffer.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
         close(mainSocketFd);
 
         status = DISCONNECTED;
