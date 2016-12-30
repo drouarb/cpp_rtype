@@ -9,6 +9,11 @@ UI::AudioManager::AudioManager() {
     volume = 100;
 }
 
+UI::AudioManager::~AudioManager() {
+    music.~Music();
+    sound.~Sound();
+}
+
 void UI::AudioManager::playSound(int soundID) {
     sound.setBuffer(*(buffers[soundID]));
     sound.play();

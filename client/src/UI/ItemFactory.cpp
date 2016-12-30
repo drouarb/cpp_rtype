@@ -75,6 +75,5 @@ UI::AItem* UI::ItemFactory::instantiate(UI::itemType type, const std::string& _t
     UI::AItem* item = itemMap.at(type)();
     setTexture(dynamic_cast<UI::Item*>(item));
     item->setID(id++);
-    std::cerr << item->getID() << std::endl;
     return item;
 }
