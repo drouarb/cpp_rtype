@@ -8,12 +8,13 @@
 
 
 #include <entities/Player.hh>
+#include "../../server/include/Grid.hh"
 
 class GreenPlayer : public server::Player {
 public:
     void shoot(server::round_t attackId) override;
 
-    server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &entity) override;
+    server::EntityInitialization *initialize(server::round_t round, const server::Grid &entity) override;
 
 private:
 
@@ -46,9 +47,9 @@ private:
             void collide(const server::Entity &entity, server::round_t current_round) override;
 
             server::EntityAction *
-            act(server::round_t current_round, const std::vector<server::Entity *> &vector) override;
+            act(server::round_t current_round, const server::Grid &vector) override;
 
-            server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &entity) override;
+            server::EntityInitialization *initialize(server::round_t round, const server::Grid &entity) override;
 
             server::hp_t getDamage() override;
 
@@ -62,9 +63,9 @@ private:
 
         void collide(const server::Entity &entity, server::round_t current_round) override;
 
-        server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &vector) override;
+        server::EntityAction *act(server::round_t current_round, const server::Grid &vector) override;
 
-        server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &entity) override;
+        server::EntityInitialization *initialize(server::round_t round, const server::Grid &entity) override;
 
         server::hp_t getDamage() override;
 

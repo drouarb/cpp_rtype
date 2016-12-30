@@ -5,6 +5,7 @@
 #define LOG_INFO
 
 #include "Definitions.hh"
+#include "../../server/include/Grid.hh"
 #include <BasicNastyEntity.hh>
 #include <iostream>
 #include <vector>
@@ -23,7 +24,7 @@ void BasicNastyEntity::collide(const server::Entity &entity, server::round_t cur
     }
 }
 
-server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const std::vector<server::Entity *> &)
+server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const server::Grid &)
 {
     INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ", round:" << current_round << ")")
     server::EntityAction * a;
@@ -52,7 +53,7 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const
     return (a);
 }
 
-server::EntityInitialization *BasicNastyEntity::initialize(server::round_t round, const std::vector<server::Entity *> &)
+server::EntityInitialization *BasicNastyEntity::initialize(server::round_t round, const server::Grid &environment)
 {
     server::EntityInitialization *initialization = new server::EntityInitialization("");
     initialization->action.hp = DEFAULT_HP;
@@ -85,7 +86,7 @@ void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity
     this->isCollide = current_round;
 }
 
-server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round, const std::vector<server::Entity *> &)
+server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round, const server::Grid &)
 {
     server::EntityAction * a = new server::EntityAction();
     if (this->isCollide) {
@@ -97,7 +98,8 @@ server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t
     return (a);
 }
 
-server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(server::round_t, const std::vector<server::Entity *> &)
+server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(server::round_t,
+                                                                                const server::Grid &environment)
 {
     server::EntityInitialization *initialization = new server::EntityInitialization(""); //TODO Add sprite
     initialization->action.speedX = -3;

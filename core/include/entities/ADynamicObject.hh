@@ -10,6 +10,9 @@
 #include "EntityInitialization.hh"
 #include "EntityData.hh"
 
+//TODO
+#include "../../../server/include/Grid.hh"
+
 namespace server
 {
     class Entity;
@@ -37,13 +40,13 @@ namespace server
          * So do not use time or randomness to decide how to act. Use only the given arguments.
          * The 'environment' parameter contains every entity currently present in the game. Destroyed entities are not included.
          */
-        virtual EntityAction *act(round_t current_round, const std::vector<Entity *> &environment) = 0;
+        virtual EntityAction *act(round_t current_round, const server::Grid &environment) = 0;
         /**
          * \brief This method is called when the object is first created.
          * The X and Y coordinates given in the EntityInitilization will be ignored if the entity was created by the level.
          * They will only be applied if the entity is created by another entity.
          */
-        virtual EntityInitialization *initialize(round_t, const std::vector<Entity *> &) = 0;
+        virtual EntityInitialization *initialize(round_t, const server::Grid &environment) = 0;
         /**
          * \brief This method returns the damage that this entity causes when colliding with another entity.
          * May be null.

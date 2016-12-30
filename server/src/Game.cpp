@@ -78,7 +78,7 @@ void Game::progressLevel()
         }
         for (auto spawn : *pVector)
         {
-            Entity * entity = spawn.trigger(entityIdCount, round, entities);
+            Entity * entity = spawn.trigger(entityIdCount, round, grid);
             if (entity == nullptr)
             {
                 LOG_ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
@@ -97,16 +97,6 @@ void Game::checkCollisions()
 {
     collisions = std::map<Entity *, CollisionWall>();
 
-#ifndef GRID_CELL_SIZE
-    size_t max = entities.size();
-    for (size_t i = 0; i < max; ++i)
-    {
-        for (size_t j = i + 1; j < max; ++j)
-        {
-            checkCollision(entities[i], entities[j]);
-        }
-    }
-#else
     for (size_t i = 0; i < entities.size(); ++i)
     {
         int y = static_cast<int>(entities[i]->data.getPosY() / GRID_CELL_SIZE);
@@ -121,7 +111,6 @@ void Game::checkCollisions()
         checkCollisionsCell(i, y, x - 1);
         checkCollisionsCell(i, y - 1, x - 1);
     }
-#endif
 }
 
 void Game::checkCollision(Entity * entity_i, Entity * entity_j)
@@ -147,14 +136,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         if (dist <= 0)
         {
             entity_i->obj->collide(*entity_j, this->round);
-            #ifndef GRID_CELL_SIZE
-            entity_j->obj->collide(*entity_i, this->round);
-            #endif
-
             collisions[entity_i].add(X, NEG);
-            #ifndef GRID_CELL_SIZE
-            collisions[entity_j].add(X, POS);
-            #endif
         }
         if (dist < 0)
         {
@@ -197,14 +179,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         if (dist <= 0)
         {
             entity_i->obj->collide(*entity_j, this->round);
-            #ifndef GRID_CELL_SIZE
-            entity_j->obj->collide(*entity_i, this->round);
-            #endif
-
             collisions[entity_i].add(X, POS);
-            #ifndef GRID_CELL_SIZE
-            collisions[entity_j].add(X, NEG);
-            #endif
         }
         if (dist < 0)
         {
@@ -249,14 +224,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         if (dist <= 0)
         {
             entity_i->obj->collide(*entity_j, this->round);
-            #ifndef GRID_CELL_SIZE
-            entity_j->obj->collide(*entity_i, this->round);
-            #endif
-
             collisions[entity_i].add(Y, NEG);
-            #ifndef GRID_CELL_SIZE
-            collisions[entity_j].add(Y, POS);
-            #endif
         }
         if (dist < 0)
         {
@@ -299,14 +267,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         if (dist <= 0)
         {
             entity_i->obj->collide(*entity_j, this->round);
-            #ifndef GRID_CELL_SIZE
-            entity_j->obj->collide(*entity_i, this->round);
-            #endif
-
             collisions[entity_i].add(Y, POS);
-            #ifndef GRID_CELL_SIZE
-            collisions[entity_j].add(Y, NEG);
-            #endif
         }
         if (dist < 0)
         {
@@ -347,7 +308,7 @@ void Game::letEntitesAct()
     for (size_t i = 0; i != entities.size(); ++i)
     {
         auto it = entities.at(i);
-        EntityAction * action = it->obj->act(this->round, entities);
+        EntityAction * action = it->obj->act(this->round, grid);
 
         auto col = collisions.find(it);
         if (col != collisions.end())
@@ -370,7 +331,7 @@ void Game::letEntitesAct()
         }
         if (action->newEntity)
         {
-            auto newEntity = new Entity(action->newEntity, entityIdCount, round, entities);
+            auto newEntity = new Entity(action->newEntity, entityIdCount, round, grid);
             entityIdCount++;
             spawnEntity(newEntity);
         }
@@ -390,18 +351,15 @@ void Game::moveEntities()
 {
     for (auto entity : entities)
     {
-        #ifdef GRID_CELL_SIZE
         bool change = willChangeCell(entity);
         if (change)
-            removeFromGrid(entity);
+            grid.remove(entity);
+
         entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
         entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
+
         if (change)
-            addToGrid(entity);
-        #else
-        entity->data.setPosX(entity->data.getPosX() + entity->data.getVectX());
-        entity->data.setPosY(entity->data.getPosY() + entity->data.getVectY());
-        #endif
+            grid.add(entity);
     }
 }
 
@@ -420,9 +378,7 @@ void Game::unspawn()
             INFO("delete player : " << (*it)->data.getId())
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
-            #ifdef GRID_CELL_SIZE
-            removeFromGrid(*it);
-            #endif
+            grid.remove(*it);
             it = vect_erase(it, entities);
 
             if (going && isFinished())
@@ -433,7 +389,6 @@ void Game::unspawn()
     }
 }
 
-#ifdef GRID_CELL_SIZE
 void Game::checkCollisionsCell(int entity_index, int cell_y, int cell_x)
 {
     if (cell_y < 0 || cell_y >= GRID_HEIGHT || cell_x < 0 || cell_x >= GRID_WIDTH)
@@ -457,33 +412,13 @@ bool Game::willChangeCell(const Entity * entity)
     return ((entity->data.getPosY() + entity->data.getVectY()) / GRID_CELL_SIZE != old);
 }
 
-void Game::removeFromGrid(const Entity * entity)
-{
-    auto & cell = grid[static_cast<int>(entity->data.getPosY()) / GRID_CELL_SIZE][static_cast<int>(entity->data.getPosX()) / GRID_CELL_SIZE];
-    for (int i = 0; i < cell.size(); ++i)
-    {
-        if (cell[i] == entity)
-        {
-            cell[i] = cell.back();
-            cell.pop_back();
-        }
-    }
-}
 
-void Game::addToGrid(Entity *entity)
-{
-    auto & cell = grid[static_cast<int>(entity->data.getPosY()) / GRID_CELL_SIZE][static_cast<int>(entity->data.getPosX()) / GRID_CELL_SIZE];
-    cell.push_back(entity);
-}
-#endif
 
 void Game::spawnEntity(Entity * entity)
 {
     entities.push_back(entity);
     this->sim_spawn(entity);
-    #ifdef GRID_CELL_SIZE
-    addToGrid(entity);
-    #endif
+    grid.add(entity);
 }
 
 void Game::newPlayer(Client *client) {
@@ -503,7 +438,7 @@ void Game::newPlayer(Client *client) {
     Player *player = new Player();
     Entity *entity = new Entity();
     controller->setEntity(entity);
-    entity->initialize(player, entityIdCount, round, entities);
+    entity->initialize(player, entityIdCount, round, grid);
     entityIdCount++;
     controller->setEntity(player);
     client->setController(controller);

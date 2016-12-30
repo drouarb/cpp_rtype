@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include "entities/Entity.hh"
+#include "../../../server/include/Grid.hh"
 
 
 using namespace server;
@@ -29,7 +30,7 @@ void Player::collide(const Entity &entity, server::round_t current_round) {
     this->newHp += entity.obj->getDamage();
 }
 
-EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) {
+EntityAction *Player::act(round_t current_round, const Grid &) {
     INFO("Player hp: " << this->data->getHp())
     EntityAction *act = new EntityAction();
     if (!attackQueue.empty()) {
@@ -50,7 +51,7 @@ EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) 
     return act;
 }
 
-EntityInitialization *Player::initialize(round_t, const std::vector<Entity *> &)
+EntityInitialization *Player::initialize(round_t, const Grid &)
 {
     EntityInitialization *ei = new EntityInitialization();
     ei->team = PLAYER;
@@ -88,7 +89,7 @@ void Player::MagicMissile::collide(const Entity &entity, server::round_t current
     this->mustDestroy = true;
 }
 
-EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector<Entity *> &)
+EntityAction *Player::MagicMissile::act(round_t current_round, const server::Grid &)
 {
     server::EntityAction *entityAction = new server::EntityAction();
 
@@ -113,7 +114,7 @@ EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector
     return entityAction;
 }
 
-EntityInitialization *Player::MagicMissile::initialize(round_t round, const std::vector<Entity *> &)
+EntityInitialization *Player::MagicMissile::initialize(round_t round, const Grid &environment)
 {
     EntityInitialization *initialization = new EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;

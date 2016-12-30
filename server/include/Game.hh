@@ -6,11 +6,8 @@
 #include "network/PacketFactory.hh"
 #include "events/Timeline.hh"
 #include "CollisionWall.hh"
+#include "Grid.hh"
 #include <map>
-
-#define GRID_CELL_SIZE 100
-#define GRID_HEIGHT (FIELD_HEIGHT / GRID_CELL_SIZE + 1)
-#define GRID_WIDTH ((FIELD_WIDTH + LEFT_MARGIN + RIGHT_MARGIN) / GRID_CELL_SIZE + 1)
 
 namespace server
 {
@@ -46,13 +43,9 @@ namespace server
         round_t lastSyn;
         bool going;
         std::map<Entity *, CollisionWall> collisions;
-#ifdef GRID_CELL_SIZE
-        std::vector<Entity*> grid[GRID_HEIGHT][GRID_WIDTH];
-#endif
-
+        Grid grid;
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
-
 
         void progressLevel();
         void checkCollisions();
@@ -61,13 +54,8 @@ namespace server
         void moveEntities();
         void unspawn();
 
-#ifdef GRID_CELL_SIZE
         void checkCollisionsCell(int entity_index, int cell_x, int cell_y);
         bool willChangeCell(const Entity * entity);
-        void removeFromGrid(const Entity * entity);
-        void addToGrid(Entity * entity);
-#endif
-
         void spawnEntity(Entity * entity);
         
         pos_t fx(const Entity *) const;

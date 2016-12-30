@@ -12,7 +12,7 @@ class BluePlayer : public server::Player {
 public:
     void shoot(server::round_t attackId) override;
 
-    server::EntityInitialization *initialize(server::round_t, const std::vector<server::Entity *> &) override;
+    server::EntityInitialization *initialize(server::round_t, const server::Grid &) override;
 };
 
 

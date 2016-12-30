@@ -9,6 +9,7 @@
 static const int DEFAULT_LIFE = 1000;
 
 #include <entities/Player.hh>
+#include "../../server/include/Grid.hh"
 
 class Wunderwaffe : public server::ADynamicObject {
 private:
@@ -37,9 +38,9 @@ private:
 
         void collide(const server::Entity &entity, server::round_t current_round) override;
 
-        server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &vector) override;
+        server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
 
-        server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &vector) override;
+        server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
 
         server::hp_t getDamage() override;
 
@@ -52,9 +53,9 @@ private:
 public:
     void collide(const server::Entity &entity, server::round_t current_round) override;
 
-    server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &vector) override;
+    server::EntityAction *act(server::round_t current_round, const server::Grid &vector) override;
 
-    server::EntityInitialization *initialize(server::round_t round, const std::vector<server::Entity *> &vector) override;
+    server::EntityInitialization *initialize(server::round_t round, const server::Grid &vector) override;
 
     server::hp_t getDamage() override;
 

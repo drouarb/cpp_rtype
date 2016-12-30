@@ -19,7 +19,7 @@ namespace server
         pos_t posX;
         pos_t posY;
 
-        Entity *trigger(entityId_t id, round_t round, const std::vector<Entity *> &entities);
+        Entity *trigger(entityId_t id, round_t round, const Grid &environment);
     };
 }
 

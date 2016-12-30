@@ -4,12 +4,13 @@
 
 #include <entities/Entity.hh>
 #include "Wunderwaffe.hh"
+#include "../../server/include/Grid.hh"
 
 void Wunderwaffe::collide(const server::Entity &entity, server::round_t) {
     this->damage += entity.obj->getDamage();
 }
 
-server::EntityAction *Wunderwaffe::act(server::round_t current_round, const std::vector<server::Entity *> &vector) {
+server::EntityAction *Wunderwaffe::act(server::round_t current_round, const server::Grid & environment) {
     server::EntityAction *action = new server::EntityAction();
 
     if (this->data->getHp() < 0) {
@@ -26,13 +27,13 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const std:
 
     if (current_round % (2 + (this->data->getHp() > DEFAULT_LIFE / 2)) == 0) {
         //TODO add bullet
-        
+
     }
     return action;
 }
 
 server::EntityInitialization *
-Wunderwaffe::initialize(server::round_t round, const std::vector<server::Entity *> &vector) {
+Wunderwaffe::initialize(server::round_t round, const server::Grid & environment) {
     server::EntityInitialization *initialization = new server::EntityInitialization;
     this->damage = 0;
     this->startRound = round;
@@ -65,7 +66,7 @@ void Wunderwaffe::BigBullet::collide(const server::Entity &entity, server::round
     this->mustDestroy = true;
 }
 
-server::EntityAction *Wunderwaffe::BigBullet::act(server::round_t current_round, const std::vector<server::Entity *> &vector) {
+server::EntityAction *Wunderwaffe::BigBullet::act(server::round_t current_round, const server::Grid &environment) {
     server::EntityAction *action = new server::EntityAction();
 
     action->destroy = this->mustDestroy;
@@ -73,7 +74,7 @@ server::EntityAction *Wunderwaffe::BigBullet::act(server::round_t current_round,
 }
 
 server::EntityInitialization *
-Wunderwaffe::BigBullet::initialize(server::round_t round, const std::vector<server::Entity *> &vector) {
+Wunderwaffe::BigBullet::initialize(server::round_t round, const server::Grid &environment) {
     server::EntityInitialization *initialization = new server::EntityInitialization();
     this->mustDestroy = false;
     initialization->sprite.path = "media/sprites/classicBulletGoingUpLeft.png";

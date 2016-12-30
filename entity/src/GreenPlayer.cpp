@@ -3,6 +3,7 @@
 //
 
 #include "GreenPlayer.hh"
+#include "../../server/include/Grid.hh"
 
 void GreenPlayer::shoot(server::round_t round) {
 //    server::Player::shoot(round);
@@ -10,7 +11,7 @@ void GreenPlayer::shoot(server::round_t round) {
             new WallAttack(this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() / 2 + 12));
 }
 
-server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const std::vector<server::Entity *> &entity) {
+server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
     pInitialization->sprite.path = "media/sprites/magicalGirlB.png";
     return pInitialization;
@@ -26,7 +27,7 @@ GreenPlayer::WallAttack::WallAttack(server::pos_t posX, server::pos_t posY) : po
 void GreenPlayer::WallAttack::collide(const server::Entity &entity, server::round_t current_round) {}
 
 server::EntityAction *
-GreenPlayer::WallAttack::act(server::round_t current_round, const std::vector<server::Entity *> &vector) {
+GreenPlayer::WallAttack::act(server::round_t current_round, const server::Grid &vector) {
     server::EntityAction *entityAction = new server::EntityAction();
     if (!this->initialRound) {
         this->initialRound = current_round;
@@ -51,7 +52,7 @@ GreenPlayer::WallAttack::act(server::round_t current_round, const std::vector<se
     return entityAction;
 }
 
-server::EntityInitialization *GreenPlayer::WallAttack::initialize(server::round_t round, const std::vector<server::Entity *> &entity) {
+server::EntityInitialization *GreenPlayer::WallAttack::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *initialization = new server::EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;
     initialization->posX = this->posX;
@@ -81,7 +82,7 @@ void GreenPlayer::WallAttack::WallElement::collide(const server::Entity &, serve
 }
 
 server::EntityAction *
-GreenPlayer::WallAttack::WallElement::act(server::round_t, const std::vector<server::Entity *> &vector) {
+GreenPlayer::WallAttack::WallElement::act(server::round_t, const server::Grid &vector) {
     server::EntityAction *action = new server::EntityAction;
 
     action->destroy = this->mustDestroy;
@@ -90,7 +91,8 @@ GreenPlayer::WallAttack::WallElement::act(server::round_t, const std::vector<ser
     return action;
 }
 
-server::EntityInitialization *GreenPlayer::WallAttack::WallElement::initialize(server::round_t round, const std::vector<server::Entity *> &entity) {
+server::EntityInitialization *GreenPlayer::WallAttack::WallElement::initialize(server::round_t round,
+                                                                               const server::Grid &entity) {
     server::EntityInitialization *initialization = new server::EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;
     initialization->posX = this->posX;

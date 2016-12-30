@@ -11,9 +11,9 @@ using namespace server;
 Entity::Entity() : obj(nullptr), data()
 { }
 
-Entity::Entity(ADynamicObject *obj, entityId_t id, round_t round, const std::vector<Entity *> &entities) : Entity()
+Entity::Entity(ADynamicObject *obj, entityId_t id, round_t round, const Grid &environment) : Entity()
 {
-    initialize(obj, id, round, entities);
+    initialize(obj, id, round, environment);
 }
 
 Entity::~Entity()
@@ -22,19 +22,19 @@ Entity::~Entity()
         delete obj;
 }
 
-void Entity::initialize(ADynamicObject *obj, entityId_t id, round_t round, const std::vector<Entity *> &entities)
+void Entity::initialize(ADynamicObject *obj, entityId_t id, round_t round, const Grid &environment)
 {
     this->obj = obj;
     this->obj->data = &data;
-    data.initialize(this->obj->initialize(round, entities), id);
+    data.initialize(this->obj->initialize(round, environment), id);
 }
 
-Entity * Entity::make(const std::string &path, entityId_t id, round_t round, const std::vector<Entity *> &entities)
+Entity * Entity::make(const std::string &path, entityId_t id, round_t round, const Grid &environment)
 {
     try
     {
         auto * obj = getDlLoader<ADynamicObject>(path)->getInstance();
-        return (new Entity(obj, id, round, entities));
+        return (new Entity(obj, id, round, environment));
     }
     catch (std::runtime_error &e)
     {
