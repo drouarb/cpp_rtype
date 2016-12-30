@@ -7,7 +7,7 @@
 
 #include "APlayer.hh"
 #include "Definitions.hh"
-#include <queue>
+#include <map>
 
 namespace server {
     class Player : public APlayer {
@@ -17,15 +17,27 @@ namespace server {
         static const int MAX_ATTACK_QUEUE = 10;
         static const int CIRCLE_RADIUS = 15;
         static const int DEFAULT_PLAYER_SPEED = 1;
+        static const int TIMELINE_LENGTH = 60;
 
         round_t mustDestroy;
         speed_t vectX;
         speed_t vectY;
-        hp_t newHp;
+        hp_t lostHp;
+
+        /**
+         * Must be called before doing anything in act().
+         */
+        void cleanAttackTimeline(server::round_t round);
+
 
     protected:
-        std::queue<ADynamicObject *> attackQueue;
         static const int BULLET_SIZE = 25;
+        std::map<server::round_t, server::attackId_t> attackTimeline;
+        round_t lastRound;
+        attackId_t nextAttack;
+
+        void setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound);
+        virtual ADynamicObject * createAttack(attackId_t id, round_t round);
 
     public:
 

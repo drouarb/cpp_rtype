@@ -8,7 +8,7 @@
 #include "Definitions.hh"
 #include <vector>
 
-#define GRID_CELL_SIZE 100
+#define GRID_CELL_SIZE 150
 #define GRID_HEIGHT (FIELD_HEIGHT / GRID_CELL_SIZE + 1)
 #define GRID_WIDTH ((FIELD_WIDTH + LEFT_MARGIN + RIGHT_MARGIN) / GRID_CELL_SIZE + 1)
 
