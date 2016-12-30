@@ -43,7 +43,7 @@ namespace server {
 
         Player();
 
-        void shoot(round_t attackId) override;
+        void shoot(round_t attackId, attackId_t attack) override;
         void move(speed_t vectX, speed_t vectY) override;
         Tribool collidesWith(const Entity &entity) override;
         void collide(const Entity &entity, server::round_t current_round) override;

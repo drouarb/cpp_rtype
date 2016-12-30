@@ -5,11 +5,6 @@
 #include "GreenPlayer.hh"
 #include "../../server/include/Grid.hh"
 
-void GreenPlayer::shoot(server::round_t round) {
-//    server::Player::shoot(round);
-    this->nextAttack = 0;
-}
-
 server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
     pInitialization->sprite.path = "media/sprites/magicalGirlB.png";

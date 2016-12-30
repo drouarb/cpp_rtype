@@ -10,7 +10,7 @@ void server::Controller::playShoot(attackId_t attackId, round_t tick) {
     {
         return;
     }
-    player->shoot(tick); //TODO add attack id
+    player->shoot(tick, attackId);
 }
 
 void server::Controller::setEntity(server::Player *entity) {

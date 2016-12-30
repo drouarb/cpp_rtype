@@ -4,10 +4,6 @@
 
 #include "BluePlayer.hh"
 
-void BluePlayer::shoot(server::round_t round) {
-    server::Player::shoot(round);
-}
-
 server::EntityInitialization *BluePlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
     pInitialization->sprite.path = "media/sprites/magicalGirlA.png";

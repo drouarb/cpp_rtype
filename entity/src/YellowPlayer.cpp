@@ -4,10 +4,6 @@
 
 #include "YellowPlayer.hh"
 
-void YellowPlayer::shoot(server::round_t attackId) {
-    server::Player::shoot(attackId);
-}
-
 server::EntityInitialization *YellowPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
     pInitialization->sprite.path = "media/sprites/magicalGirlD.png";

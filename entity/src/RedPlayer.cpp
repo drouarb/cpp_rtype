@@ -4,10 +4,6 @@
 
 #include "RedPlayer.hh"
 
-void RedPlayer::shoot(server::round_t current_round) {
-    this->nextAttack = 0;
-}
-
 server::EntityInitialization *RedPlayer::initialize(server::round_t r, const server::Grid &e) {
     server::EntityInitialization *pInitialization = server::Player::initialize(r, e);
     pInitialization->sprite.path = "media/sprites/magicalGirlC.png";

@@ -12,9 +12,6 @@ protected:
 
     server::ADynamicObject * createAttack(server::attackId_t id, server::round_t round) override;
 
-public:
-    void shoot(server::round_t round) override;
-
     server::EntityInitialization *initialize(server::round_t, const server::Grid &) override;
 
 private:

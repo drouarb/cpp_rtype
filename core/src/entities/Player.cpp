@@ -16,9 +16,10 @@ Player::Player() : mustDestroy(0), vectX(0), vectY(0), lostHp(0), nextAttack(NOA
     INFO("Player created")
 }
 
-void Player::shoot(round_t current_round) {
+void Player::shoot(round_t current_round, attackId_t attack)
+{
     //TODO Create map of <attackId_t, ADynamicObject *>
-    nextAttack = 0;
+    nextAttack = attack;
 }
 
 void Player::collide(const Entity &entity, server::round_t current_round) {
