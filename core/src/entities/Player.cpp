@@ -6,10 +6,9 @@
 #include <entities/Player.hh>
 #include <iostream>
 #include <cmath>
-#include "Entity.hh"
+#include "entities/Entity.hh"
+#include "../../../server/include/Grid.hh"
 
-#define CIRCLE_RADIUS 15
-#define BULLET_SIZE 25
 
 using namespace server;
 
@@ -17,9 +16,9 @@ Player::Player() : mustDestroy(0), vectX(0), vectY(0), newHp(0) {
     INFO("Player created")
 }
 
-void Player::shoot(attackId_t attack) {
+void Player::shoot(round_t current_round) {
     //TODO Create map of <attackId_t, ADynamicObject *>
-    this->attackQueue.push(attack);
+    this->attackQueue.push(new MagicMissile(this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(), current_round));
 }
 
 void Player::collide(const Entity &entity, server::round_t current_round) {
@@ -31,11 +30,11 @@ void Player::collide(const Entity &entity, server::round_t current_round) {
     this->newHp += entity.obj->getDamage();
 }
 
-EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) {
+EntityAction *Player::act(round_t current_round, const Grid &) {
     INFO("Player hp: " << this->data->getHp())
     EntityAction *act = new EntityAction();
     if (!attackQueue.empty()) {
-        ADynamicObject *pObject = new MagicMissile(this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(), current_round);
+        ADynamicObject *pObject = attackQueue.back();
         act->newEntity = pObject;
         attackQueue.pop();
         INFO("PLayer " << this->data->getId() << " : BOUM /!\\")
@@ -52,7 +51,7 @@ EntityAction *Player::act(round_t current_round, const std::vector<Entity *> &) 
     return act;
 }
 
-EntityInitialization *Player::initialize(round_t, const std::vector<Entity *> &)
+EntityInitialization *Player::initialize(round_t, const Grid &)
 {
     EntityInitialization *ei = new EntityInitialization();
     ei->team = PLAYER;
@@ -77,11 +76,11 @@ void Player::move(speed_t vectX, speed_t vectY) {
     this->vectY = vectY;
 }
 
-Tribool Player::collidesWith(const Entity & entity) {
-    return (entity.data.getTeam() != server::Team::PLAYER ? TRUE : FALSE);
+Tribool Player::collidesWith(const Entity &entity) {
+    return (entity.data.getTeam() != server::Team::PLAYER ? T_TRUE : T_FALSE);
 }
 
-Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY), startRound(startRound)
+Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY)
 { }
 
 
@@ -90,7 +89,7 @@ void Player::MagicMissile::collide(const Entity &entity, server::round_t current
     this->mustDestroy = true;
 }
 
-EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector<Entity *> &)
+EntityAction *Player::MagicMissile::act(round_t current_round, const server::Grid &)
 {
     server::EntityAction *entityAction = new server::EntityAction();
 
@@ -115,7 +114,7 @@ EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector
     return entityAction;
 }
 
-EntityInitialization *Player::MagicMissile::initialize(round_t, const std::vector<Entity *> &)
+EntityInitialization *Player::MagicMissile::initialize(round_t round, const Grid &environment)
 {
     EntityInitialization *initialization = new EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;
@@ -125,6 +124,7 @@ EntityInitialization *Player::MagicMissile::initialize(round_t, const std::vecto
     initialization->sprite.sizeX = BULLET_SIZE;
     initialization->sprite.sizeY = BULLET_SIZE;
     initialization->sprite.path = "media/sprites/magicBullet.png";
+    this->startRound = round;
     return initialization;
 }
 
@@ -133,5 +133,5 @@ hp_t Player::MagicMissile::getDamage() {
 }
 
 Tribool Player::MagicMissile::collidesWith(const Entity &entity) {
-    return (entity.data.getTeam() != server::Team::PLAYER ? TRUE : FALSE);
+    return (entity.data.getTeam() != server::Team::PLAYER ? T_TRUE : T_FALSE);
 }

@@ -22,8 +22,8 @@ namespace server {
 
     enum Tribool : int8_t
     {
-        FALSE   = false,
-        TRUE    = true,
+        T_FALSE   = 0,
+        T_TRUE    = 1,
         NA      = -1
     };
 
@@ -38,29 +38,38 @@ namespace server {
     typedef uint32_t eventId_t;
 }
 
-#define FIELD_WIDTH 800
-#define FIELD_HEIGHT 600
+#define FIELD_WIDTH 1920
+#define FIELD_HEIGHT 1080
 #define FIELD_BORDER_LEFT 0
 #define FIELD_BORDER_RIGHT (FIELD_BORDER_LEFT + FIELD_WIDTH)
 #define LEFT_MARGIN 100
 #define RIGHT_MARGIN (LEFT_MARGIN)
 
+#define ROUNDS_BETWEEN_SYN 30
+
+
 #ifdef LOG_INFO
-#define ERROR(expr) std::cerr << expr << std::endl;
+#define LOG_ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr) std::cout << "---- WARN ----- " << expr << std::endl;
 #define INFO(expr) std::cout << "---- INFO ----- " << expr << std::endl;
 #elif LOG_ERROR
-#define ERROR(expr) std::cerr << expr << std::endl;
+#define LOG_ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr)
 #define INFO(expr)
 #elif LOG_WARN
-#define ERROR(expr) std::cerr << expr << std::endl;
+#define LOG_ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr) std::cerr << expr << std::endl;
 #define INFO(expr)
 #else
-#define ERROR(expr) std::cerr << expr << std::endl;
+#define LOG_ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr)
 #define INFO(expr)
+#endif
+
+#ifdef WIN32
+#define SYSTEM_FOLDER "\\"
+#else
+#define SYSTEM_FOLDER "/"
 #endif
 
 #endif //CPP_RTYPE_DEFINITIONS_HH

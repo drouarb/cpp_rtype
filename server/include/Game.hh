@@ -5,9 +5,9 @@
 #include "Client.hh"
 #include "network/PacketFactory.hh"
 #include "events/Timeline.hh"
-#include <list>
-
-#define ROUNDS_BETWEEN_SYN 30
+#include "CollisionWall.hh"
+#include "Grid.hh"
+#include <map>
 
 namespace server
 {
@@ -42,39 +42,26 @@ namespace server
         std::vector<server::event::AGameEvent *> gameEvents;
         round_t lastSyn;
         bool going;
-
+        std::map<Entity *, CollisionWall> collisions;
+        Grid grid;
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
-
-        /**
-         * Checks level for new spawns, or whatever the level may tell the game to do.
-         */
         void progressLevel();
-        /**
-         * Must be called after letEntitiesAct and before moveEntities.
-         * Checks for future collisions according to the current vector.
-         * Changes the vectors so that the entities about to collide touch but do not overlap.
-         * Calls the entity's collide() method in case of collision.
-         */
         void checkCollisions();
-        /**
-         * Here, entities will do their things.
-         */
+        void checkCollision(Entity * entity1, Entity * entity2);
         void letEntitesAct();
-        /**
-         * Moves the entities according to their vector.
-         */
         void moveEntities();
-        /**
-         * Must be called after moveEntities, and before sending packets.
-         */
         void unspawn();
+
+        void checkCollisionsCell(int entity_index, int cell_x, int cell_y);
+        bool willChangeCell(const Entity * entity);
+        void spawnEntity(Entity * entity);
         
-        pos_t fx(size_t);
-        pos_t fxp(size_t);
-        pos_t fy(size_t);
-        pos_t fyp(size_t);
+        pos_t fx(const Entity *) const;
+        pos_t fxp(const Entity *) const;
+        pos_t fy(const Entity *) const;
+        pos_t fyp(const Entity *) const;
 
         /**
          * \defgroup Simulations functions

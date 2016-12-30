@@ -12,7 +12,9 @@ file(
         src/network/packet/*.cpp
         src/network/listener/*.cpp
         src/network/PacketFactory.cpp
+        src/Explorer/Explorer.cpp
         src/thread/*.cpp
+        src/helpers/Epoch.cpp
         include/*.hh
         include/*.hpp
 )
@@ -24,6 +26,7 @@ if (WIN32)
             ${CORE_SRCS}
             src/network/socket/WindowsUDPSocket.cpp
             src/helpers/WindowsStopwatch.cpp
+            src/Explorer/WindowsFileExplorer.cpp
     )
 else (WIN32)
     file(
@@ -32,6 +35,7 @@ else (WIN32)
             ${CORE_SRCS}
             src/network/socket/UnixUDPSocket.cpp
             src/helpers/UnixStopwatch.cpp
+            src/Explorer/FileExplorer.cpp
     )
 endif (WIN32)
 

@@ -5,6 +5,7 @@
 #define LOG_INFO
 
 #include "Definitions.hh"
+#include "../../server/include/Grid.hh"
 #include <BasicNastyEntity.hh>
 #include <iostream>
 #include <vector>
@@ -23,7 +24,7 @@ void BasicNastyEntity::collide(const server::Entity &entity, server::round_t cur
     }
 }
 
-server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const std::vector<server::Entity *> &)
+server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const server::Grid &)
 {
     INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ", round:" << current_round << ")")
     server::EntityAction * a;
@@ -52,16 +53,16 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const
     return (a);
 }
 
-server::EntityInitialization *BasicNastyEntity::initialize(server::round_t round, const std::vector<server::Entity *> &)
+server::EntityInitialization *BasicNastyEntity::initialize(server::round_t round, const server::Grid &environment)
 {
     server::EntityInitialization *initialization = new server::EntityInitialization("");
     initialization->action.hp = DEFAULT_HP;
     initialization->team = server::Team::FOE;
     initialization->action.speedX = 0;
     initialization->action.speedY = 0;
-    initialization->sprite.sizeX = 120;
-    initialization->sprite.sizeY = 120;
-    initialization->sprite.path = "media/references/ALL_GONE.jpg";
+    initialization->sprite.sizeX = 350;
+    initialization->sprite.sizeY = 100;
+    initialization->sprite.path = "media/references/bf109.png";
     this->startingRound = round;
 
     INFO("I'm the vilain nasty player: ");
@@ -73,7 +74,7 @@ server::hp_t BasicNastyEntity::getDamage() {
 }
 
 server::Tribool BasicNastyEntity::collidesWith(const server::Entity &entity) {
-    return (this->data->getTeam() != entity.data.getTeam() ? server::TRUE : server::FALSE);
+    return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
 }
 
 void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity, server::round_t current_round) {
@@ -85,7 +86,7 @@ void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity
     this->isCollide = current_round;
 }
 
-server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round, const std::vector<server::Entity *> &)
+server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round, const server::Grid &)
 {
     server::EntityAction * a = new server::EntityAction();
     if (this->isCollide) {
@@ -97,7 +98,8 @@ server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t
     return (a);
 }
 
-server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(server::round_t, const std::vector<server::Entity *> &)
+server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(server::round_t,
+                                                                                const server::Grid &environment)
 {
     server::EntityInitialization *initialization = new server::EntityInitialization(""); //TODO Add sprite
     initialization->action.speedX = -3;
@@ -122,7 +124,7 @@ BasicNastyEntity::VeryNastyProjectile::VeryNastyProjectile(server::speed_t posX,
 }
 
 server::Tribool BasicNastyEntity::VeryNastyProjectile::collidesWith(const server::Entity &entity) {
-    return (this->data->getTeam() != entity.data.getTeam() ? server::TRUE : server::FALSE);
+    return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
 }
 
 extern "C"

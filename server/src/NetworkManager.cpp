@@ -50,11 +50,10 @@ void server::NetworkManager::clientJoin(clientId_t src, gameId_t game) {
 }
 
 void server::NetworkManager::clientPlayerAttack(clientId_t src, attackId_t attackId, round_t tick) {
-    //TODO Use tick
     Mutexer(this->mutex);
     Client &client = this->clientContainer.get((src));
     if (client.getController())
-        client.getController()->playShoot(attackId);
+        client.getController()->playShoot(attackId, tick);
 }
 
 void server::NetworkManager::clientPlayerMove(clientId_t src, speed_t vectX, speed_t vectY) {
@@ -96,7 +95,7 @@ server::NetworkManager::ConnectionListener::ConnectionListener(server::ClientCon
         : clientContainer(clientContainer) {}
 
 void server::NetworkManager::ConnectionListener::notify(unsigned long fd) {
-    INFO("new client: " << std::to_string(fd));
+    std::cout << "New client: " << std::to_string(fd) << std::endl;
     this->clientContainer.create(fd);
 }
 
@@ -107,7 +106,7 @@ server::NetworkManager::DisconnectionListener::DisconnectionListener(server::Cli
 }
 
 void server::NetworkManager::DisconnectionListener::notify(unsigned long fd) {
-    INFO("delete client");
+    std::cout << "Client disconnected: " << std::to_string(fd) << std::endl;
     Client &client = this->clientContainer.get(fd);
     core->removeClient(client);
     this->clientContainer.remove(fd);
