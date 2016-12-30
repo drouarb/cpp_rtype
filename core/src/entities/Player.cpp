@@ -79,7 +79,7 @@ Tribool Player::collidesWith(const Entity &entity) {
     return (entity.data.getTeam() != server::Team::PLAYER ? T_TRUE : T_FALSE);
 }
 
-Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY), startRound(startRound)
+Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY)
 { }
 
 
@@ -113,7 +113,7 @@ EntityAction *Player::MagicMissile::act(round_t current_round, const std::vector
     return entityAction;
 }
 
-EntityInitialization *Player::MagicMissile::initialize(round_t, const std::vector<Entity *> &)
+EntityInitialization *Player::MagicMissile::initialize(round_t round, const std::vector<Entity *> &)
 {
     EntityInitialization *initialization = new EntityInitialization();
     initialization->action.hp = DEFAULT_LIFE;
@@ -123,6 +123,7 @@ EntityInitialization *Player::MagicMissile::initialize(round_t, const std::vecto
     initialization->sprite.sizeX = BULLET_SIZE;
     initialization->sprite.sizeY = BULLET_SIZE;
     initialization->sprite.path = "media/sprites/magicBullet.png";
+    this->startRound = round;
     return initialization;
 }
 

@@ -357,7 +357,8 @@ void Game::unspawn()
 {
     for (auto it = entities.begin(); it != entities.end();)
     {
-        if ((*it)->data.getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN)
+        if ((*it)->data.getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN || (*it)->data.getPosX() > FIELD_BORDER_RIGHT + RIGHT_MARGIN
+                || (*it)->data.getPosY() + (*it)->data.getSprite().sizeY < 0 || (*it)->data.getPosY() > FIELD_HEIGHT)
         {
             (*it)->data.setDestroyed(true);
             INFO("OUT OF RANGE : " << (*it)->data.getId())
