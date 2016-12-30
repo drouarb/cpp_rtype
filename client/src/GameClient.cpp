@@ -13,7 +13,7 @@
 #include "EventManager.hh"
 #include "GameClient.hh"
 #include <algorithm>
-using namespace boost::property_tree;
+
 using namespace client;
 
 client::GameClient::GameClient() {
@@ -51,15 +51,19 @@ void GameClient::readaptTickRate(int servTickRate,
                                  std::pair<tick, uint64_t> servHoro) {
     double tickRateModif;
 
-    tickRateModif = (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
-      + (((double)((int64_t)estiClientHoro.first - (int64_t)servHoro.first)) * TICKCURRENTDIFFCONST);
-    std::cout << "tickrate result : " << (tickRateClient - servTickRate) * TICKRATEDIFFCONST << " client server : [" << tickRateClient << ":" << servTickRate << "] CONST : " << TICKRATEDIFFCONST << std::endl;
-    std::cout << "tickcurrent result : " << ((int64_t)estiClientHoro.first - (int64_t)servHoro.first) * TICKCURRENTDIFFCONST << " client server : [" << estiClientHoro.first << ":" << servHoro.first << "] CONST : " << TICKCURRENTDIFFCONST << std::endl;
-      std::cout << "modif : " << tickRateModif << std::endl;
+    tickRateModif = (((double) (tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
+                    + (((double) ((int64_t) estiClientHoro.first - (int64_t) servHoro.first)) * TICKCURRENTDIFFCONST);
+    std::cout << "tickrate result : " << (tickRateClient - servTickRate) * TICKRATEDIFFCONST << " client server : ["
+              << tickRateClient << ":" << servTickRate << "] CONST : " << TICKRATEDIFFCONST << std::endl;
+    std::cout << "tickcurrent result : "
+              << ((int64_t) estiClientHoro.first - (int64_t) servHoro.first) * TICKCURRENTDIFFCONST
+              << " client server : [" << estiClientHoro.first << ":" << servHoro.first << "] CONST : "
+              << TICKCURRENTDIFFCONST << std::endl;
+    std::cout << "modif : " << tickRateModif << std::endl;
     if (tickRateModif < 0.0)
-      ++tickRateClient;
+        ++tickRateClient;
     else if (tickRateModif > 0.0)
-      --tickRateClient;
+        --tickRateClient;
 }
 
 int GameClient::calcTickRate(int nbrLevel) {
@@ -70,17 +74,17 @@ int GameClient::calcTickRate(int nbrLevel) {
     uint64_t timeEnd;
 
     if (nbrLevel > horodatageTick.size())
-      return (30);
+        return (30);
     it = horodatageTick.end();
     --it;
     tickBegin = it->first;
     timeBegin = it->second;
     while (nbrLevel > 0 && it != horodatageTick.begin()) {
-      --it;
-      --nbrLevel;
+        --it;
+        --nbrLevel;
     }
     if (horodatageTick.begin() == it)
-      return (30);
+        return (30);
     tickEnd = it->first;
     timeEnd = it->second;
     return (((tickBegin - tickEnd) * 1000) / (((timeBegin - timeEnd) + 0.0000001)));
@@ -138,6 +142,7 @@ void GameClient::manageDisconnect() {
     std::cout << "Receive Disconnect" << std::endl;
     manageQuit();
     deleteNetworkManager();
+    gameui->changeMenu("MenuStart");
     // informer la gameUI
     exit(0); // supr
 }
@@ -168,6 +173,7 @@ void GameClient::manageQuit() {
         horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
+        sendAll(client::parse(I_ASKLIST, client::Key::KEY_ESCAPE));
     }
 }
 
@@ -175,12 +181,10 @@ void GameClient::gameLoop() {
     short event;
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
     s_info *receive = nullptr;
-    /*<<<<<<< b4a8974a6bf86769959a03c79b71745a5acf6f5c
     tick tickcpt;
-
     while (gameui->windowIsOpen()) {
         tickcpt = 0;
-        while (tickcpt < TICKRATE) {
+        while (tickcpt < tickRateClient) {
             sw->set();
             gameui->updateListEntity();
             if (world != nullptr)
@@ -193,6 +197,7 @@ void GameClient::gameLoop() {
                         if (receive->info == I_QUIT)
                         {
                             deleteNetworkManager();
+                            manageQuit();
                             return;
                         }
                         sendAll(receive);
@@ -204,59 +209,27 @@ void GameClient::gameLoop() {
                                                                pos_t(world->getEntityById(playerId)->getPos().first,
                                                                      world->getEntityById(playerId)->getPos().second),
                                                                world->getTick());
-							       =======*/
-    tick		tickcpt;
-
-    while (gameui->windowIsOpen())
-      {
-	tickcpt = 0;
-	while (tickcpt < tickRateClient)
-	{
-	    sw->set();
-	    gameui->updateListEntity();
-	    if (world != nullptr)
-	      world->applyTurn();
-	    if (tickcpt % PERIODTICKEVENT == 0)
-	      {
-		event = handler->getEvent();
-		if (event != -42)
-		  {
-		    receive = gameui->manageInput(event);
-		    if (receive != nullptr)
-		      {
-			if (receive->info == I_QUIT)
-			  break;
-			sendAll(receive);
-			delete (receive);
-		      }
-		    event = -42;
-		  }
-		else if (world != nullptr)
-		  {
-		    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,
                                             world->getEntityById(playerId)->getPos().second);
-		  }
-		if (sw->elapsedMs() < 1000 / tickRateClient)
-		  std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient)
-									- sw->elapsedMs()));
-	      }
-	    gameui->displaySimple();
-	    ++tickcpt;
-	  }
-	if (world != nullptr && horodatageTick.size() > 1)
-	  {
-	    std::map<tick, uint64_t>::iterator it;
-	    it = horodatageTick.end();
-	    --it;
-	    readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)), std::pair<tick, uint64_t>(it->first, it->second));
-	  }
-	else
-	  tickRateClient = 30;
-      }
-    deleteNetworkManager();
+                }
+                if (sw->elapsedMs() < 1000 / tickRateClient)
+                    std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient)
+                                                                          - sw->elapsedMs()));
+            }
+            gameui->displaySimple();
+            ++tickcpt;
+        }
+        if (world != nullptr && horodatageTick.size() > 1) {
+            std::map<tick, uint64_t>::iterator it;
+            it = horodatageTick.end();
+            --it;
+            readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)),
+                            std::pair<tick, uint64_t>(it->first, it->second));
+        } else
+            tickRateClient = 30;
+    }
 }
 
 void GameClient::sendAll(struct s_info *info) {
@@ -324,12 +297,12 @@ void GameClient::sendAll(struct s_info *info) {
 
 void GameClient::createKeyMap(const std::string &path) {
 
-    ptree root;
+    boost::property_tree::ptree root;
     read_json(path, root);
     keygame_move.clear();
     keygame_attack.clear();
     name_key.clear();
-    BOOST_FOREACH(ptree::value_type
+    BOOST_FOREACH(boost::property_tree::ptree::value_type
                           child, root.get_child("Move")) {
                     keygame_move[static_cast<client::Key >(child.second.get<int>(
                             "value"))] = std::pair<int16_t, int16_t>(
@@ -341,7 +314,7 @@ void GameClient::createKeyMap(const std::string &path) {
                     name_key.push_back(child.second.get<std::string>("name"));
                 }
 
-    BOOST_FOREACH(ptree::value_type
+    BOOST_FOREACH(boost::property_tree::ptree::value_type
                           child, root.get_child("Attack")) {
                     keygame_attack[static_cast<client::Key >(child.second.get<int>("value"))] = child.second.get<int>(
                             "id");
@@ -351,16 +324,16 @@ void GameClient::createKeyMap(const std::string &path) {
                     name_key.push_back(child.second.get<std::string>("name"));
                 }
 
-    BOOST_FOREACH(ptree::value_type
+    BOOST_FOREACH(boost::property_tree::ptree::value_type
                           child, root.get_child("gameList")) {
                     gameui->setKeygameList(static_cast<client::Key>(child.second.get<int>("value")));
                     gameui->setStringToButtons("key" + child.second.get<std::string>("name"), keyStringMap.at(
                             static_cast<client::Key>(child.second.get<int>(
-                            "value"))), "MenuOption");
+                                    "value"))), "MenuOption");
                     name_key.push_back(child.second.get<std::string>("name"));
                 }
 
-    BOOST_FOREACH(ptree::value_type
+    BOOST_FOREACH(boost::property_tree::ptree::value_type
                           child, root.get_child("leaderBoard")) {
                     gameui->setKeyLeaderBoard(static_cast<client::Key>(child.second.get<int>("value")));
                     gameui->setStringToButtons("key" + child.second.get<std::string>("name"), keyStringMap.at(
@@ -371,32 +344,57 @@ void GameClient::createKeyMap(const std::string &path) {
 }
 
 void GameClient::saveConfig() {
-    ptree root;
+    boost::property_tree::ptree root;
     read_json("config/gameCommand.json", root);
     std::string key;
     for (auto it = name_key.begin(); it != name_key.end(); it++) {
         if (touchExit(gameui->getStringFromButtons("key" + *it, "MenuOption")) == true) {
             key = (gameui->getStringFromButtons("key" + *it, "MenuOption"));
-            BOOST_FOREACH(ptree::value_type
-                                  child, root.get_child("Move")) {
+            BOOST_FOREACH(boost::property_tree::ptree::value_type
+                                  & child, root.get_child("Move")) {
                             if (child.second.get<std::string>("name") == (*it))
-                                child.second.put<int>("value", 43);
-                         }
+                                child.second.put<int>("value", getTouch(key));
+                        }
+            BOOST_FOREACH(boost::property_tree::ptree::value_type
+                                  & child, root.get_child("Attack")) {
+                            if (child.second.get<std::string>("name") == (*it))
+                                child.second.put<int>("value", getTouch(key));
+                        }
+            BOOST_FOREACH(boost::property_tree::ptree::value_type
+                                  &child, root.get_child("leaderBoard")) {
+                            if (child.second.get<std::string>("name") == (*it))
+                                child.second.put<int>("value", getTouch(key));
+                        }
+            BOOST_FOREACH(boost::property_tree::ptree::value_type
+                                  & child, root.get_child("gameList")) {
+                            if (child.second.get<std::string>("name") == (*it)) {
+                                child.second.put<int>("value", getTouch(key));
+
+                            }
+                        }
 
         }
     }
+    write_json("config/gameCommand.json", root);
+    createKeyMap("config/gameCommand.json");
 }
 
 bool GameClient::touchExit(const std::string &data) {
-    for(auto it = keyStringMap.begin() ; it != keyStringMap.end(); it++)
-    {
+    for (auto it = keyStringMap.begin(); it != keyStringMap.end(); it++) {
         if (it->second == data)
             return true;
     }
     return false;
 }
 
-int GameClient::getTickRate() const
-{
-  return (tickRateClient);
+int GameClient::getTickRate() const {
+    return (tickRateClient);
+}
+
+int GameClient::getTouch(const std::string & data) {
+    for (auto it = keyStringMap.begin(); it != keyStringMap.end(); it++) {
+        if (it->second == data)
+            return static_cast<int>(it->first);
+    }
+    return 1000;
 }

@@ -203,3 +203,11 @@ UI::AItem *Menu::getButtonsByName(const std::string &name) {
     return nullptr;
 }
 
+void Menu::erraseTextFromTextBox(UI::AItem *item) {
+    static_cast<UI::Text *>(item)->setString("");
+}
+
+void Menu::addTextToButtons(UI::AItem *item, const std::string &data) {
+    textBox[item] = data;
+}
+

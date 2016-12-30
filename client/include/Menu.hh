@@ -104,6 +104,9 @@ namespace client {
 
         UI::AItem *getButtonsByName(const std::string & name);
 
+        void erraseTextFromTextBox(UI::AItem *item);
+
+        void addTextToButtons(UI::AItem *item, const std::string &data);
     private:
         std::vector<UI::AItem *> listItem;
     public:

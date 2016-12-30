@@ -126,7 +126,7 @@ void GameUIInterface::deleteEntity(Entity *entity) {
 }
 
 void GameUIInterface::addMenu(const std::string &path) {
-    ptree root;
+    boost::property_tree::ptree root;
     read_json(path, root);
     Menu *temp = new Menu;
     unsigned long id = window->addLayer(UI::MENU);
@@ -142,9 +142,9 @@ void GameUIInterface::addMenu(const std::string &path) {
     int y = 0;
     int padding_up = root.get_child("padding_up").get_value<int>();
     int padding_left = root.get_child("padding_left").get_value<int>();
-    BOOST_FOREACH(ptree::value_type
+    BOOST_FOREACH(boost::property_tree::ptree::value_type
                           child, root.get_child("Buttons")) {
-                    BOOST_FOREACH(const ptree::value_type &child2,
+                    BOOST_FOREACH(const boost::property_tree::ptree::value_type &child2,
                                   child.second.get_child("position")) {
                                     x = child2.second.get<int>("x");
                                     y = child2.second.get<int>("y");
@@ -189,7 +189,7 @@ void GameUIInterface::addMenu(const std::string &path) {
 }
 
 void GameUIInterface::addNavMap(const std::string &path) {
-    ptree root;
+    boost::property_tree::ptree root;
     read_json(path, root);
     nav_map["Next"] = static_cast<client::Key>(root.get_child("Next").get_value<int>());
     nav_map["Prev"] = static_cast<client::Key>(root.get_child("Prev").get_value<int>());
@@ -375,8 +375,9 @@ GameUIInterface::setStringToButtons(const std::string &name, const std::string &
             if (listMenu[i]->getName() == menuName) {
                 UI::Text *item = static_cast<UI::Text *>(listMenu[i]->getButtonsByName(name));
                 if (item != nullptr) {
+                    listMenu[i]->erraseTextFromTextBox(item);
                     item->setString(data);
-                    listMenu[i]->changeTextBox(item, data);
+                    listMenu[i]->addTextToButtons(item, data);
                 }
             }
         }

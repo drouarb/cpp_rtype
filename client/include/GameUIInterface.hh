@@ -19,7 +19,6 @@
 #include "Menu.hh"
 #include "TouchDefinition.hh"
 #include "Information.hh"
-using namespace boost::property_tree;
 
 namespace client {
     class GameUIInterface {

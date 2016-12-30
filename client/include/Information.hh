@@ -67,9 +67,14 @@ namespace client {
         }
         else if (type == I_JOIN)
         {
+            std::string resvalu;
                 struct  s_join* res = new s_join;
                 res->info = type;
-                res->roomid  = static_cast<uint8_t >(std::stoi(value));
+            if (value == "")
+                resvalu = "0";
+                else
+                resvalu = value;
+                res->roomid  = static_cast<uint8_t >(std::stoi(resvalu));
                 return res;
         }
         return nullptr;
