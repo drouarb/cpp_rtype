@@ -19,8 +19,9 @@ World::~World() {
 
     it = entitys.begin();
     while (it != entitys.end()) {
-        delete it->second;
-        ++it;
+      gameui->deleteEntity(entitys.at(it->first));
+      delete it->second;
+      ++it;
     }
 }
 

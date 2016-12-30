@@ -41,7 +41,8 @@ typeide_t Entity::getTypeid() const { return idtype; }
 void Entity::applyVec(vec_t nvec, tick tick) {
   pos.first += nvec.first;
   pos.second += nvec.second;
-  vec = nvec;
+  vec.first = nvec.first;
+  vec.second = nvec.second;
   lastUpdate = tick;
   //std::cout << "id : " << id << " vec = [" << nvec.first << ":" << nvec.second << "] pos : [" << pos.first << ":" << pos.second << "]" << std::endl;
 }
@@ -84,8 +85,10 @@ void Entity::moveEntity(vec_t nvec, pos_t npos, tick nturn) {
             move.insert(std::pair<tick, moveData>(nturn, moveData(npos, nvec)));
         recalcPos();
 	}*/
-  pos = npos;
-  vec = nvec;
+  pos.first = npos.first;
+  vec.first = nvec.first;
+  pos.second = npos.second;
+  vec.second = nvec.second;
 }
 
 void Entity::correctMiddleVec(std::map<tick, moveData>::iterator itO, vec_t *nvec, pos_t npos, tick nturn)

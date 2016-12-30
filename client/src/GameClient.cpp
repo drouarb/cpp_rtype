@@ -231,7 +231,7 @@ void GameClient::gameLoop() {
 		      }
 		    event = -42;
 		  }
-		else if (world != nullptr)
+		else if (world != nullptr && playerId != -1)
 		  {
 		    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
@@ -280,7 +280,6 @@ void GameClient::sendAll(struct s_info *info) {
                 manager->sendQuit();
                 manager->sendAskList();
                 gameui->changeMenu("roomList");
-                manageQuit();
             }
         }
             break;

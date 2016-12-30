@@ -19,7 +19,7 @@
 #define TICKRATE 30
 #define TICKRATEDIFFCONST 0.3
 #define TICKCURRENTDIFFCONST (1.0 / (((double)TICKRATE) * 5.0))
-#define PERIODTICKEVENT 15
+#define PERIODTICKEVENT 5
 
 namespace client {
   /*  <<<<<<< b4a8974a6bf86769959a03c79b71745a5acf6f5c
