@@ -4,6 +4,7 @@
 
 #include "IEventObserver.hh"
 #include "Window.hh"
+
 namespace UI {
     class EventObserver : public IEventObserver {
     public:
