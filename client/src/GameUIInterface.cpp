@@ -36,7 +36,7 @@ void GameUIInterface::initUI() {
 
 void GameUIInterface::displaySimple() {
     window->display();
-    managerUi.getEventObserver()->getEvent(); //TODO à modifier
+    managerUi.getEventObserver()->getEvent();
 }
 
 typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
@@ -141,47 +141,47 @@ void GameUIInterface::addMenu(const std::string &path) {
     int padding_up = root.get_child("padding_up").get_value<int>();
     int padding_left = root.get_child("padding_left").get_value<int>();
     BOOST_FOREACH(ptree::value_type
-                          child, root.get_child("Buttons")) {
-                    BOOST_FOREACH(const ptree::value_type &child2,
-                                  child.second.get_child("position")) {
-                                    x = child2.second.get<int>("x");
-                                    y = child2.second.get<int>("y");
-                                }
-                    ButtonsType typeB = static_cast<ButtonsType >(child.second.get<int>("type"));
-                    UI::AItem *item;
-                    if (typeB == TEXTBOX) {
-                        item = static_cast<UI::AItem *>(static_cast<UI::MenuLayer *>(window->getLayer(id))->addTextBox(
-                                x + padding_left, y + padding_up));
+		  child, root.get_child("Buttons")) {
+      BOOST_FOREACH(const ptree::value_type &child2,
+		    child.second.get_child("position")) {
+	x = child2.second.get<int>("x");
+	y = child2.second.get<int>("y");
+      }
+      ButtonsType typeB = static_cast<ButtonsType >(child.second.get<int>("type"));
+      UI::AItem *item;
+      if (typeB == TEXTBOX) {
+	item = static_cast<UI::AItem *>(static_cast<UI::MenuLayer *>(window->getLayer(id))->addTextBox(
+												       x + padding_left, y + padding_up));
 
-                        temp->changeTextBox(item, child.second.get<std::string>("default_value"));
-                        static_cast<UI::Text *>(item)->setString(child.second.get<std::string>("default_value"));
+	temp->changeTextBox(item, child.second.get<std::string>("default_value"));
+	static_cast<UI::Text *>(item)->setString(child.second.get<std::string>("default_value"));
 
-                    } else {
-                        item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" +
-                                                                       child.second.get<std::string>("noselected"),
-                                                             x + padding_left, y + padding_up);
-                        window->getLayer(id)->addTexture(item, UI::ACTIVE,
-                                                         "media/menu/" + child.second.get<std::string>("selected"));
+      } else {
+	item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" +
+					     child.second.get<std::string>("noselected"),
+					     x + padding_left, y + padding_up);
+	window->getLayer(id)->addTexture(item, UI::ACTIVE,
+					 "media/menu/" + child.second.get<std::string>("selected"));
 
-                    }
-                    try {
-                        temp->addInfo(item, child.second.get<int>("send"));
-                    }
-                    catch (std::exception &e) {
+      }
+      try {
+	temp->addInfo(item, child.second.get<int>("send"));
+      }
+      catch (std::exception &e) {
 
-                    }
-                    if (child.second.get<int>("default_selected") == 0)
-                        item->changeStatus(UI::IDLE);
-                    else {
-                        temp->setDefault_selected(item);
-                        temp->setCurrent_selected(item);
-                        item->changeStatus(UI::ACTIVE);
-                    }
-                    temp->setButtonsStats(item, static_cast<ButtonsStats >(child.second.get<int>("lock")));
-                    if (typeB == GOTO)
-                        temp->addButtonsType(child.second.get<std::string>("goto"), item);
-                    temp->addButtons(item, typeB);
-                }
+      }
+      if (child.second.get<int>("default_selected") == 0)
+	item->changeStatus(UI::IDLE);
+      else {
+	temp->setDefault_selected(item);
+	temp->setCurrent_selected(item);
+	item->changeStatus(UI::ACTIVE);
+      }
+      temp->setButtonsStats(item, static_cast<ButtonsStats >(child.second.get<int>("lock")));
+      if (typeB == GOTO)
+	temp->addButtonsType(child.second.get<std::string>("goto"), item);
+      temp->addButtons(item, typeB);
+    }
     listMenu.push_back(temp);
 }
 

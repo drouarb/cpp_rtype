@@ -23,20 +23,16 @@ namespace client
   {
   public:
     WorldEvent(ide_t nid, pos_t npos, typeide_t nidtype, tick nturn, UIevent_t nevent)
-    {//std::cout<<"WOWlespawn"<<std::endl;
-       id=nid;pos=npos;type=nidtype;UIevent=nevent;turn=nturn;eventtype=worldEventType::SPAWN;}
+    {id=nid;pos=npos;type=nidtype;UIevent=nevent;turn=nturn;eventtype=worldEventType::SPAWN;}
     
     WorldEvent(ide_t nid, int nhp, tick nturn, UIevent_t nevent)
-    {//std::cout<<"WOWleupdate"<<std::endl;
-      id=nid;hp=nhp;UIevent=nevent;turn=nturn;eventtype=worldEventType::UPDATE;}
+    {id=nid;hp=nhp;UIevent=nevent;turn=nturn;eventtype=worldEventType::UPDATE;}
     
     WorldEvent(ide_t nid, vec_t nvec, pos_t npos, tick nturn, UIevent_t nevent)
-    {//std::cout<<"WOWlemove"<<std::endl;
-      id=nid;vec=nvec;pos=npos;UIevent=nevent;turn=nturn;eventtype=worldEventType::MOVE;}
+    {id=nid;vec=nvec;pos=npos;UIevent=nevent;turn=nturn;eventtype=worldEventType::MOVE;}
     
     WorldEvent(ide_t nid, tick nturn, UIevent_t nevent)
-    {//std::cout<<"WOWledelete"<<std::endl;
-      id=nid;UIevent=nevent;turn=nturn;eventtype=worldEventType::DELETE;}
+    {id=nid;UIevent=nevent;turn=nturn;eventtype=worldEventType::DELETE;}
     
     worldEventType	eventtype;
     tick		turn;

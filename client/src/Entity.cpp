@@ -44,7 +44,6 @@ void Entity::applyVec(vec_t nvec, tick tick) {
   vec.first = nvec.first;
   vec.second = nvec.second;
   lastUpdate = tick;
-  //std::cout << "id : " << id << " vec = [" << nvec.first << ":" << nvec.second << "] pos : [" << pos.first << ":" << pos.second << "]" << std::endl;
 }
 
 void Entity::updateEntity(int nhp) {
@@ -52,39 +51,6 @@ void Entity::updateEntity(int nhp) {
 }
 
 void Entity::moveEntity(vec_t nvec, pos_t npos, tick nturn) {
-  /*std::map<tick, moveData>::iterator it;
-
-    if ((it = move.find(nturn)) != move.end()) {
-        std::cerr << "readaptation de move sur tick identique à faire" << std::endl;
-        return;
-    }
-    it = move.begin();
-    while (it != move.end())
-    {
-        std::cout << "DUMPid : " << id << " first : " << it->first << " second " << it->second.vec.first << ":" << it->second.vec.second << std::endl;
-        ++it;
-    }
-    it = move.begin();
-    while (it != move.end() && it->first > nturn)
-        ++it;
-    //++it;
-    std::cout << "id : " << id << " mytick : " << it->first << " worldturn : " << nturn << "  vec : [" << nvec.first << ":" << nvec.second << "]" <<std::endl;
-    if (it == move.end() || it->first < nturn) {
-        if (it == move.end()) {
-            std::cout << "id : " << id << " before" << std::endl;
-            --it;
-            correctBeforeVec(it, nvec, npos, nturn);
-            vec = nvec;
-            pos = npos;
-            lastUpdate = nturn;
-        } else {
-            std::cout << "id : " << id << " middle" << std::endl;
-            correctMiddleVec(it, &nvec, npos, nturn);
-        }
-        if (it->second.vec != nvec)
-            move.insert(std::pair<tick, moveData>(nturn, moveData(npos, nvec)));
-        recalcPos();
-	}*/
   pos.first = npos.first;
   vec.first = nvec.first;
   pos.second = npos.second;

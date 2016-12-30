@@ -54,8 +54,6 @@ void GameClient::readaptTickRate(int servTickRate,
     tickRateModif = (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
       + (((double)((int64_t)estiClientHoro.first - (int64_t)servHoro.first)) * TICKCURRENTDIFFCONST);
     std::cout << "tickrate result : " << (tickRateClient - servTickRate) * TICKRATEDIFFCONST << " client server : [" << tickRateClient << ":" << servTickRate << "] CONST : " << TICKRATEDIFFCONST << std::endl;
-    std::cout << "tickcurrent result : " << ((int64_t)estiClientHoro.first - (int64_t)servHoro.first) * TICKCURRENTDIFFCONST << " client server : [" << estiClientHoro.first << ":" << servHoro.first << "] CONST : " << TICKCURRENTDIFFCONST << std::endl;
-      std::cout << "modif : " << tickRateModif << std::endl;
     if (tickRateModif < 0.0)
       ++tickRateClient;
     else if (tickRateModif > 0.0)
@@ -138,8 +136,7 @@ void GameClient::manageDisconnect() {
     std::cout << "Receive Disconnect" << std::endl;
     manageQuit();
     deleteNetworkManager();
-    // informer la gameUI
-    exit(0); // supr
+    exit(0);
 }
 
 void GameClient::manageCancelEvent(uint32_t eventId) {
@@ -164,7 +161,6 @@ void GameClient::manageQuit() {
     if (world != nullptr) {
         std::cout << "Receive Disconnect" << std::endl;
         delete world;
-        // informer la gameUI
         horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
@@ -175,36 +171,6 @@ void GameClient::gameLoop() {
     short event;
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
     s_info *receive = nullptr;
-    /*<<<<<<< b4a8974a6bf86769959a03c79b71745a5acf6f5c
-    tick tickcpt;
-
-    while (gameui->windowIsOpen()) {
-        tickcpt = 0;
-        while (tickcpt < TICKRATE) {
-            sw->set();
-            gameui->updateListEntity();
-            if (world != nullptr)
-                world->applyTurn();
-            if (tickcpt % PERIODTICKEVENT == 0) {
-                event = handler->getEvent();
-                if (event != -42) {
-                    receive = gameui->manageInput(event);
-                    if (receive != nullptr) {
-                        if (receive->info == I_QUIT)
-                        {
-                            deleteNetworkManager();
-                            return;
-                        }
-                        sendAll(receive);
-                        delete (receive);
-                    }
-                    event = -42;
-                } else if (world != nullptr) {
-                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
-                                                               pos_t(world->getEntityById(playerId)->getPos().first,
-                                                                     world->getEntityById(playerId)->getPos().second),
-                                                               world->getTick());
-							       =======*/
     tick		tickcpt;
     
     while (gameui->windowIsOpen())
