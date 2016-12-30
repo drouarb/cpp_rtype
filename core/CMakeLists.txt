@@ -12,6 +12,7 @@ file(
         src/network/packet/*.cpp
         src/network/listener/*.cpp
         src/network/PacketFactory.cpp
+        src/Explorer/Explorer.cpp
         src/thread/*.cpp
         include/*.hh
         include/*.hpp
@@ -22,7 +23,9 @@ if (WIN32)
             GLOB_RECURSE
             CORE_SRCS
             ${CORE_SRCS}
+            src/network/socket/WindowsUDPSocket.cpp
             src/helpers/WindowsStopwatch.cpp
+            src/Explorer/WindowsFileExplorer.cpp
     )
 else (WIN32)
     file(
@@ -31,6 +34,7 @@ else (WIN32)
             ${CORE_SRCS}
             src/network/socket/UnixUDPSocket.cpp
             src/helpers/UnixStopwatch.cpp
+            src/Explorer/FileExplorer.cpp
     )
 endif (WIN32)
 
@@ -41,14 +45,16 @@ include_directories(${PROTOBOEUF_INCLUDE_DIRS})
 add_library(${PROJECT_NAME} STATIC ${CORE_SRCS})
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-if (NOT WIN32)
-    set(DL_LIBRARY dl)
-endif(NOT WIN32)
+if (WIN32)
+    set(ADDITIONAL_LIBS wsock32 ws2_32)
+else(WIN32)
+    set(ADDITIONAL_LIBS dl)
+endif(WIN32)
 
 set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include ${PROTOBOEUF_INCLUDE_DIRS}
         CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
-set(RTYPE_CORE_LIBS ${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} ${PROTOBOEUF_LIBS} ${DL_LIBRARY}
+set(RTYPE_CORE_LIBS ${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} ${PROTOBOEUF_LIBS} ${ADDITIONAL_LIBS}
         CACHE INTERNAL "${PROJECT_NAME}: Libraries" FORCE)
 
 if (CORE_TESTS)

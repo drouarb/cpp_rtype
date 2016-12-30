@@ -9,7 +9,7 @@
 
 FolderExplorer::FolderExplorer(const std::string &path) : path(path) {}
 
-void FolderExplorer::loadFolder() {
+void FolderExplorer::loadFolder(const std::string &path) {
     DIR *dir;
     struct dirent *ent;
     if ((dir = opendir(path.c_str())) != NULL) {

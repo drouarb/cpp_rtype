@@ -32,6 +32,7 @@ namespace server {
 
     private:
         std::map<round_t, std::vector<Spawn>> spawns;
+        std::pair<round_t, Spawn> boss;
         std::string name;
         round_t end;
     };

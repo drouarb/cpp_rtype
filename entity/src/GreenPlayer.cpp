@@ -107,7 +107,7 @@ server::hp_t GreenPlayer::WallAttack::WallElement::getDamage() {
 }
 
 server::Tribool GreenPlayer::WallAttack::WallElement::collidesWith(const server::Entity &entity) {
-    return server::TRUE;
+    return server::T_TRUE;
 }
 
 GreenPlayer::WallAttack::WallElement::WallElement(server::pos_t posX, server::pos_t posY) : mustDestroy(false),

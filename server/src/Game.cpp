@@ -80,7 +80,7 @@ void Game::progressLevel()
             Entity * entity = spawn.trigger(entityIdCount, round, entities);
             if (entity == nullptr)
             {
-                ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
+                LOG_ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
             }
             else
             {
@@ -102,7 +102,7 @@ void Game::checkCollisions()
     {
         for (size_t j = i + 1; j < max; ++j)
         {
-            if (entities[i]->obj->collidesWith(*entities[j]) == FALSE && entities[j]->obj->collidesWith(*entities[i]) == FALSE)
+            if (entities[i]->obj->collidesWith(*entities[j]) == T_FALSE && entities[j]->obj->collidesWith(*entities[i]) == T_FALSE)
                 continue;
             if (entities[i]->obj->collidesWith(*entities[j]) == NA || entities[j]->obj->collidesWith(*entities[i]) == NA)
                 continue;

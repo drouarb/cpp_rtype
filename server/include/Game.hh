@@ -7,7 +7,6 @@
 #include "events/Timeline.hh"
 #include <list>
 
-#define ROUNDS_BETWEEN_SYN 30
 
 namespace server
 {

@@ -14,5 +14,12 @@
       posX: "850",
       posY: "400"
     }
-  ]
+  ],
+  boss:
+  {
+    dlName: "build/entity/libWunderwaffe",
+    time: "1000",
+    posX: "900",
+    posY: "200"
+  }
 }
