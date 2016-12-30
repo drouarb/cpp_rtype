@@ -184,12 +184,14 @@ void NetworkManager::sendQuit() {
 }
 
 void NetworkManager::sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y) {
-    network::packet::PacketPlayerMove playerMove(tick, vect_x, vect_y, pos_x, pos_y);
+  std::cout << "send playerMove tick : "<< tick << " vect = [" << vect_x << ":" << vect_y << "]" << std::endl;
+  network::packet::PacketPlayerMove playerMove(tick - gameClient->getTickRate() * 100, vect_x, vect_y, pos_x, pos_y);
     packetFactory->broadcast(playerMove);
 }
 
 void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
-    network::packet::PacketPlayerAttack packetPlayerAttack(tick, attackId);
+  std::cout << "PPPPPPPPPPPPPPPLLLLLLLLLLLLLLLLLLLLAAAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYEEEEEEEEEEEEERRRRRRRRRRRRRRRR" << std::endl;
+  network::packet::PacketPlayerAttack packetPlayerAttack(tick - gameClient->getTickRate() * 100, attackId);
     packetFactory->broadcast(packetPlayerAttack);
 }
 

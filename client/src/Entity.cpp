@@ -40,10 +40,10 @@ typeide_t Entity::getTypeid() const { return idtype; }
 
 void Entity::applyVec(vec_t nvec, tick tick) {
   pos.first += nvec.first;
-    pos.second += nvec.second;
-    vec = nvec;
-    lastUpdate = tick;
-    //std::cout << "id : " << id << " vec = [" << nvec.first << ":" << nvec.second << "] pos : [" << pos.first << ":" << pos.second << "]" << std::endl;
+  pos.second += nvec.second;
+  vec = nvec;
+  lastUpdate = tick;
+  //std::cout << "id : " << id << " vec = [" << nvec.first << ":" << nvec.second << "] pos : [" << pos.first << ":" << pos.second << "]" << std::endl;
 }
 
 void Entity::updateEntity(int nhp) {
