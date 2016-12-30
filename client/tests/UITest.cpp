@@ -56,7 +56,7 @@ int main()
     /*static_cast<UI::Item*>(item)->setTexture(reinterpret_cast<sf::Texture*>(&text));*/
     item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/5af.png", 300, 360);
     item3 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready.png", 100, 400);
-
+    ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/tower.png", 800, 1080 - 463);
 
     item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/TouhouFaeries.png", 50 , 200);
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 4 * 65, 0, 64, 64);
@@ -79,6 +79,7 @@ int main()
     item4->changeStatus(UI::IDLE);
 
     item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/ju87.png", 200 , 100);
+    item4->setRatio(0.75);
     item4->addAnimation(UI::IDLE, 6, 350);
     item4->changeStatus(UI::IDLE);
 

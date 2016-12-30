@@ -51,7 +51,7 @@ void UI::Window::display() {
         }
     }
     if (alerted) {
-        if (alertClock.getElapsedTime().asSeconds() > 10) {
+        if (alertClock.getElapsedTime().asSeconds() > 5) {
             alerted = false;
             alertText.setString("");
         }

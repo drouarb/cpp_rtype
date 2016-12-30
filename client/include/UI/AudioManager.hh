@@ -12,6 +12,7 @@ namespace UI {
     class AudioManager : public IAudioManager {
     public:
         AudioManager();
+        ~AudioManager();
 
         int getVolume();
         void setVolume(int newVolume);
