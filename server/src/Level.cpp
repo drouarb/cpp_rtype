@@ -43,16 +43,6 @@ server::Level::Level(const std::string &filepath) {
         if (entry.first > end)
             end = entry.first;
     }
-
-    JSON::JsonObj &jsonObj = static_cast<JSON::JsonObj &>(root.GetObj("boss"));
-    
-    Spawn spawn;
-    spawn.dlName = static_cast<JSON::JsonStr &>(jsonObj.GetObj("dlName")).Get();
-    spawn.time = static_cast<round_t >(std::stoi(static_cast<JSON::JsonStr &>(jsonObj.GetObj("time")).Get()));
-    spawn.posX = std::stoi(static_cast<JSON::JsonStr &>(jsonObj.GetObj("posX")).Get());
-    spawn.posY = std::stoi(static_cast<JSON::JsonStr &>(jsonObj.GetObj("posY")).Get());
-    this->boss.first = spawn.time;
-    this->boss.second = spawn;
 }
 
 server::Level::~Level() {}

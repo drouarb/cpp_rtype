@@ -3,8 +3,8 @@
 //
 
 #include <entities/Entity.hh>
+#include <iostream>
 #include "Wunderwaffe.hh"
-#include "../../server/include/Grid.hh"
 
 void Wunderwaffe::collide(const server::Entity &entity, server::round_t) {
     this->damage += entity.obj->getDamage();
@@ -19,8 +19,8 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
     action->hp = this->data->getHp() - this->damage;
     this->damage = 0;
 
-    if ((current_round % (10 * 30)) == 0) {
-        BigBullet *bullet = new BigBullet(this->data->getPosX(), this->data->getPosY());
+    if ((current_round % (20)) == 0) {
+        BigBullet *bullet = new BigBullet(this->data->getPosX() + 280, this->data->getPosY());
         action->newEntity = bullet;
         return action;
     }
@@ -53,7 +53,7 @@ server::hp_t Wunderwaffe::getDamage() {
 }
 
 server::Tribool Wunderwaffe::collidesWith(const server::Entity &entity) {
-    return server::T_TRUE;
+    return entity.obj->data->getTeam() == server::Team::PLAYER ? server::T_TRUE : server::NA;
 }
 
 /*
@@ -70,6 +70,8 @@ server::EntityAction *Wunderwaffe::BigBullet::act(server::round_t current_round,
     server::EntityAction *action = new server::EntityAction();
 
     action->destroy = this->mustDestroy;
+    action->speedX = -5;
+    action->speedY = -5;
     return action;
 }
 
@@ -98,7 +100,7 @@ server::hp_t Wunderwaffe::BigBullet::getDamage() {
 }
 
 server::Tribool Wunderwaffe::BigBullet::collidesWith(const server::Entity &entity) {
-    return server::T_TRUE;
+    return entity.obj->data->getTeam() == server::Team::PLAYER ? server::T_TRUE : server::NA;
 }
 
 extern "C"

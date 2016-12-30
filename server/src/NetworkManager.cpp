@@ -3,6 +3,7 @@
 #include <thread/Mutexer.hh>
 #include <thread/Mutex.hh>
 #include <network/packet/PacketGameList.hh>
+#include <network/packet/PacketLeaderBoard.hh>
 
 server::NetworkManager::NetworkManager(server::Core *core) : core(core), mutex(new Mutex()), connectionListener(
         new ConnectionListener(this->clientContainer)), disconnectionListener(
@@ -89,6 +90,11 @@ void server::NetworkManager::askGame(clientId_t src) {
     }
     network::packet::PacketGameList list = network::packet::PacketGameList(serializedVector);
     pFactory->send(list, src);
+}
+
+void server::NetworkManager::askLeaderBoard(server::clientId_t src) {
+    network::packet::PacketLeaderBoard board = network::packet::PacketLeaderBoard(std::vector<std::pair<uint32_t, std::string>>());
+    this->core->getPacketFactory()->send(board, src);
 }
 
 server::NetworkManager::ConnectionListener::ConnectionListener(server::ClientContainer &clientContainer)

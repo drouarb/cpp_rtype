@@ -68,7 +68,7 @@ EntityInitialization *Player::initialize(round_t, const Grid &)
 }
 
 hp_t Player::getDamage() {
-    return (0);
+    return (32000);
 }
 
 void Player::move(speed_t vectX, speed_t vectY) {

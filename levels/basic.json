@@ -11,15 +11,14 @@
     {
       dlName: "build/entity/libBasicNastyEntity",
       time: "180",
-      posX: "1960",
+      posX: "2000",
       posY: "400"
+    },
+    {
+      dlName: "build/entity/libWunderwaffe",
+      time: "200",
+      posX: "900",
+      posY: "610"
     }
-  ],
-  boss:
-  {
-    dlName: "build/entity/libWunderwaffe",
-    time: "1000",
-    posX: "900",
-    posY: "200"
-  }
+  ]
 }
