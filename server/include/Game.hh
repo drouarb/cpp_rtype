@@ -9,6 +9,8 @@
 #include "Grid.hh"
 #include <map>
 
+#define Y_BORDER_WIDTH 10
+
 namespace server
 {
     class Game
