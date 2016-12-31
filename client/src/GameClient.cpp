@@ -166,7 +166,6 @@ void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, uint16_t Sound
 
 void GameClient::manageQuit() {
     if (world != nullptr) {
-        std::cout << "Receive quit" << std::endl;
         delete world;
         horodatageTick.clear();
         tickRateClient = 0;
@@ -251,12 +250,25 @@ void GameClient::sendAll(struct s_info *info) {
             }
         }
             break;
+      case I_ASK: {
+          if (manager != nullptr) {
+              manager->sendAskList();
+          }
+  }
+    break;
         case I_ASKLIST: {
             if (manager != nullptr) {
                 manager->sendQuit();
                 manager->sendAskList();
                 gameui->changeMenu("roomList");
-                manageQuit();
+                if (world != nullptr) {
+                    delete world;
+                    horodatageTick.clear();
+                    tickRateClient = 0;
+                    world = nullptr;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    horodatageTick.clear();
+                }
             }
         }
             break;

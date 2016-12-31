@@ -114,6 +114,8 @@ namespace client {
 
         void setNplayer(Entity *nplayer);
 
+		void updateHp();
+
     private:
         typeide_t getNextId();
 

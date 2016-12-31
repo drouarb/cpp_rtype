@@ -22,6 +22,7 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     addNavMap("config/navigation.json");
     nplayer = nullptr;
     this->playerSprite = nullptr;
+    this->playerHp = nullptr;
 }
 
 GameUIInterface::~GameUIInterface() {
@@ -123,14 +124,10 @@ void GameUIInterface::addEntity(Entity *listEntity) {
 void GameUIInterface::updateListEntity() {
     ui_mut->lock();
     for (auto it = gameItem.begin(); it != gameItem.end(); it++) {
-
         if (nplayer != nullptr)
-        if (it->first == this->nplayer) {
-            playerHp->setString(std::to_string(nplayer->getHp()));
-            std::cout << nplayer->getHp() << std::endl;
-        }
-
-         it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
+        if (it->first == this->nplayer)
+            updateHp();
+          it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
     }
     ui_mut->unlock();
 }
@@ -298,7 +295,8 @@ void GameUIInterface::changeMenu(const std::string &ne) {
         static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(
                 UI::BACKGROUNDS))->setBackground(
                 UI::BACKGROUND, "media/menu/black-background.jpg");
-
+        if (playerHp != nullptr)
+            playerHp->setString("");
         static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->close();
     } else {
         static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(
@@ -447,6 +445,13 @@ const std::string GameUIInterface::getStringFromButtons(const std::string &name,
     return("");
 }
 
+void GameUIInterface::updateHp()
+{
+    if (nplayer != nullptr && playerHp != nullptr)
+    {
+        playerHp->setString(std::to_string(nplayer->getHp()));
+    }
+}
 void GameUIInterface::setNplayer(Entity *nplayer) {
     GameUIInterface::nplayer = nplayer;
     if (nplayer != nullptr)
