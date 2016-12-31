@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <entities/Entity.hh>
 #include "GreenPlayer.hh"
 
 server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const server::Grid &entity) {
@@ -14,9 +15,11 @@ server::EntityInitialization *GreenPlayer::initialize(server::round_t round, con
 server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
 //    setAttackWait(id, 50, round);
-    setAttackWait(id, 50, round);
-    return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
-                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileD.png");
+    setAttackWait(id, 10, round);
+//    return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
+//                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileD.png");
+    return new WallAttack(this, this->data->getPosX() + this->data->getSprite().sizeX,
+                          this->data->getPosY() + this->data->getSprite().sizeY);
 }
 
 /*
@@ -25,7 +28,7 @@ server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server:
 
 GreenPlayer::WallAttack::WallAttack(server::APlayer *owner, server::pos_t posX, server::pos_t posY)
         : Power(owner), posX(posX), posY(posY), initialRound(0),
-          layerLeft(3), nextPlace(TOP) {}
+          layerLeft(6), nextPlace(TOP) {}
 
 void GreenPlayer::WallAttack::collide(const server::Entity &entity, server::round_t current_round) {}
 
@@ -44,15 +47,15 @@ GreenPlayer::WallAttack::act(server::round_t current_round, const server::Grid &
     }
     if (nextPlace == DOWN) {
         nextPlace = TOP;
-        entityAction->newEntity = new WallElement(this->posX - 34,
-                                                  this->posY - 34, getOwner());
-        std::cout << "Round " << current_round << ", element at " << this->posX - 34 << ", " << this->posY - 34 << std::endl;
+        entityAction->newEntity = new WallElement(this->posX - (21 * layerLeft) + 50,
+                                                  this->posY - (11 * layerLeft), getOwner());
+//        std::cout << "Round " << current_round << ", element at " << this->posX - 34 << ", " << this->posY - 34 << std::endl;
         this->layerLeft--;
     } else {
         nextPlace = DOWN;
-        entityAction->newEntity = new WallElement(this->posX - 34,
-                                                  this->posY + 34, getOwner());
-        std::cout << "Round " << current_round << ", element at " << this->posX - 34 << ", " << this->posY + 34 << std::endl;
+        entityAction->newEntity = new WallElement(this->posX - (21 * layerLeft) + 50,
+                                                  this->posY + (11 * layerLeft), getOwner());
+//        std::cout << "Round " << current_round << ", element at " << this->posX - 34 << ", " << this->posY + 34 << std::endl;
     }
     return entityAction;
 }
@@ -93,7 +96,7 @@ GreenPlayer::WallAttack::WallElement::act(server::round_t, const server::Grid &v
     server::EntityAction *action = new server::EntityAction;
 
     action->destroy = this->mustDestroy;
-    action->speedX = 2;
+    action->speedX = 10;
     action->speedY = 0;
     return action;
 }
@@ -105,9 +108,9 @@ server::EntityInitialization *GreenPlayer::WallAttack::WallElement::initialize(s
     initialization->posX = this->posX;
     initialization->posY = this->posY;
     initialization->team = server::Team::PLAYER;
-    initialization->sprite.sizeX = 34;
-    initialization->sprite.sizeY = 34;
-    initialization->sprite.path = "media/sprites/magicBullet.png";
+    initialization->sprite.sizeX = 21;
+    initialization->sprite.sizeY = 11;
+    initialization->sprite.path = "media/sprites/daggerA_b.png";
     return initialization;
 }
 
@@ -116,7 +119,7 @@ server::hp_t GreenPlayer::WallAttack::WallElement::getDamage() {
 }
 
 server::Tribool GreenPlayer::WallAttack::WallElement::collidesWith(const server::Entity &entity) {
-    return server::T_TRUE;
+    return entity.data.getTeam() != this->data->getTeam() ? server::T_TRUE : server::NA;
 }
 
 GreenPlayer::WallAttack::WallElement::WallElement(server::pos_t posX, server::pos_t posY, server::APlayer *owner)

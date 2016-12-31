@@ -2,6 +2,7 @@
 // Created by greg on 22/12/16.
 //
 
+#include <iostream>
 #include "BluePlayer.hh"
 
 server::EntityInitialization *BluePlayer::initialize(server::round_t round, const server::Grid &entity) {

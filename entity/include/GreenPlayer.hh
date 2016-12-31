@@ -21,8 +21,8 @@ private:
 
     class WallAttack : public server::ADynamicObject, protected server::APlayer::Power {
     private:
-        static const int DAMMAGE = 1;
-        static const int DEFAULT_LIFE = 1;
+        static const int DAMMAGE = 100;
+        static const int DEFAULT_LIFE = 100;
 
         server::pos_t posX;
         server::pos_t posY;

@@ -470,7 +470,7 @@ void Game::newPlayer(Client *client) {
     this->clientList.push_back(client);
     Entity *entity = new Entity();
     controller->setEntity(entity);
-    entity->initialize(getDlLoader<ADynamicObject>(playerPaths[clientList.size()])->getInstance(), entityIdCount, round, grid);
+    entity->initialize(getDlLoader<ADynamicObject>(playerPaths[clientList.size() - 1])->getInstance(), entityIdCount, round, grid);
     entityIdCount++;
     controller->setEntity(static_cast<Player *>(entity->obj));
     client->setController(controller);

@@ -51,7 +51,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
     this->packetFactory = new network::PacketFactory(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
-    this->packetFactory->registerListener(new ServerListenerAskLeaderboard(nullptr));
+    this->packetFactory->registerListener(new ServerListenerAskLeaderboard(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerAskList(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerJoin(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerPlayerAttack(this->networkManager));

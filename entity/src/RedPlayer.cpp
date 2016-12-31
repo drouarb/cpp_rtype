@@ -13,9 +13,10 @@ server::EntityInitialization *RedPlayer::initialize(server::round_t r, const ser
 server::ADynamicObject *RedPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
     setAttackWait(id, 5, round);
-    return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
+    if (id == 0)
+        return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
                             this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileA.png");
-//    return server::Player::createAttack(id, round);
+    return server::Player::createAttack(id, round);
 }
 
 extern "C"
