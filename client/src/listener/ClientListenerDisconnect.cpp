@@ -16,5 +16,6 @@ ClientListenerDisconnect::~ClientListenerDisconnect()
 
 void ClientListenerDisconnect::notify(const network::packet::PacketDisconnect *packet)
 {
+  std::cout << "receive real disco" << std::endl;
     networkManager->receiveDisconnect();
 }

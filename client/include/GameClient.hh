@@ -12,14 +12,13 @@
 #include "NetworkManager.hh"
 #include "GameUIInterface.hh"
 #include "Definitions.hh"
-#include "Machine.hpp"
 #include "Information.hh"
 #include "helpers/IStopwatch.hh"
 
 #define TICKRATE 30
 #define TICKRATEDIFFCONST 0.3
 #define TICKCURRENTDIFFCONST (1.0 / (((double)TICKRATE) * 5.0))
-#define PERIODTICKEVENT 2
+#define PERIODTICKEVENT 5
 
 namespace client {
 
@@ -33,7 +32,7 @@ namespace client {
         EventManager *handler;
         std::mutex *client_mut;
         NetworkManager *manager;
-        tick tickRateClient;
+      int tickRateClient;
         std::map<tick, uint64_t> horodatageTick;
         GameUIInterface *gameui;
         ide_t playerId;

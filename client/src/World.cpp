@@ -106,6 +106,7 @@ Entity *World::getEntityById(ide_t nid) {
     if (entitys.find(nid) != entitys.end()) {
         return (entitys.at(nid));
     }
+    return (nullptr);
 }
 
 std::map<ide_t, Entity *> World::getEntitys() {
