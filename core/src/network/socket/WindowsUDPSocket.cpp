@@ -9,11 +9,12 @@
 #include <network/packet/PacketAck.hh>
 #include <network/packet/PacketPing.hh>
 #include <network/packet/PacketPong.hh>
+#include <network/packet/PacketDisconnect.hh>
 #include "network/socket/WindowsUDPSocket.hh"
 
-network::socket::WindowsUDPSocket::WindowsUDPSocket(unsigned short port) : type(network::socket::ISocket::SERVER), status(DISCONNECTED) {
-	WSADATA wsaData = { 0 };
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
+network::socket::WindowsUDPSocket::WindowsUDPSocket(unsigned short port) : type(network::socket::ISocket::SERVER), status(DISCONNECTED), thread(NULL) {
+    WSADATA wsaData = { 0 };
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
     memset(&mainSocket, 0, sizeof(mainSocket));
     memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
@@ -22,9 +23,9 @@ network::socket::WindowsUDPSocket::WindowsUDPSocket(unsigned short port) : type(
     pollfd.events = POLLIN;
 }
 
-network::socket::WindowsUDPSocket::WindowsUDPSocket(const std::string &address, unsigned short port) : type(network::socket::ISocket::CLIENT), status(DISCONNECTED) {
-	WSADATA wsaData = { 0 };
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
+network::socket::WindowsUDPSocket::WindowsUDPSocket(const std::string &address, unsigned short port) : type(network::socket::ISocket::CLIENT), status(DISCONNECTED), thread(NULL) {
+    WSADATA wsaData = { 0 };
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
     memset(&mainSocket, 0, sizeof(mainSocket));
     memset(&pollfd, 0, sizeof(pollfd));
     mainSocket.sin_family = AF_INET;
@@ -34,29 +35,61 @@ network::socket::WindowsUDPSocket::WindowsUDPSocket(const std::string &address, 
         throw std::runtime_error("WindowsUDPSocket Invalid ip");
 }
 
+network::socket::WindowsUDPSocket::~WindowsUDPSocket() {
+    this->stop();
+}
+
 bool network::socket::WindowsUDPSocket::run() {
-    //TODO Don't use std::thread
-    thread = new std::thread(&WindowsUDPSocket::poll, this);
-    return false;
+    if (status != DISCONNECTED)
+        throw std::runtime_error("WindowsUDPSocket Already running");
+    init();
+    if (type == CLIENT)
+        thread = new Thread<void (WindowsUDPSocket::*)(), WindowsUDPSocket*>(&WindowsUDPSocket::clientPoll, this);
+    else
+        thread = new Thread<void (WindowsUDPSocket::*)(), WindowsUDPSocket*>(&WindowsUDPSocket::serverPoll, this);
+    return true;
 }
 
 bool network::socket::WindowsUDPSocket::stop() {
-    status = STOPPING;
-    thread->join();
+    if (status == CONNECTING)
+        while (status == CONNECTING);
+    if (status == CONNECTED) {
+        status = STOPPING;
+        if (thread != NULL) {
+            thread->join();
+            delete(thread);
+            thread = NULL;
+        } else
+            while (status != DISCONNECTED);
+        return true;
+    }
     return false;
 }
 
-void network::socket::WindowsUDPSocket::poll() {
-    if (status != DISCONNECTED)
-        throw std::runtime_error("WindowsUDPSocket Already running");
-    status = CONNECTING;
+void network::socket::WindowsUDPSocket::init() {
     if (type == CLIENT)
-        clientPoll();
+        clientInit();
     else
-        serverPoll();
+        serverInit();
 }
 
-void network::socket::WindowsUDPSocket::serverPoll() {
+void network::socket::WindowsUDPSocket::clientInit() {
+    status = CONNECTING;
+
+    if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+        status = DISCONNECTED;
+        throw std::runtime_error("WindowsUDPSocket can't instantiate socket");
+    }
+    
+    clientHandshake();
+    sw.set();
+    npings = 0;
+    status = CONNECTED;
+}
+
+void network::socket::WindowsUDPSocket::serverInit() {
+    status = CONNECTING;
+
     if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
         status = DISCONNECTED;
         throw std::runtime_error("WindowsUDPSocket can't instantiate socket");
@@ -67,12 +100,24 @@ void network::socket::WindowsUDPSocket::serverPoll() {
         throw std::runtime_error("WindowsUDPSocket can't bind port");
     }
 
+    status = CONNECTED;
+}
+
+void network::socket::WindowsUDPSocket::poll() {
+    if (status != DISCONNECTED)
+        throw std::runtime_error("WindowsUDPSocket Already running");
+    init();
+    if (type == CLIENT)
+        clientPoll();
+    else
+        serverPoll();
+}
+
+void network::socket::WindowsUDPSocket::serverPoll() {
     bool found;
     struct sockaddr_in recvSocket;
     int recvSocketLen = sizeof(recvSocket);
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
-
-    status = CONNECTED;
 
     while (status == CONNECTED) {
         pollfd.fd = mainSocketFd;
@@ -102,6 +147,17 @@ void network::socket::WindowsUDPSocket::serverPoll() {
         }
         serverTimeout();
     }
+
+    packet::PacketDisconnect packetDisconnect;
+    buffer.resize(0);
+
+    packetDisconnect.serialize(&buffer);
+    for (auto &client : clients) {
+        if (client.status == CONNECTED)
+            sendto(mainSocketFd, (char *)buffer.data(), buffer.size(), 0, (sockaddr *) &client.client, sizeof(client.client));
+    }
+    clients.resize(0);
+    close(mainSocketFd);
     status = DISCONNECTED;
 }
 
@@ -175,12 +231,6 @@ void network::socket::WindowsUDPSocket::serverTimeout() {
 }
 
 void network::socket::WindowsUDPSocket::clientPoll() {
-    if ((mainSocketFd = ::socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
-        status = DISCONNECTED;
-        throw std::runtime_error("WindowsUDPSocket can't instantiate socket");
-    }
-
-    clientHandshake();
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
 
     pollfd.fd = mainSocketFd;
@@ -191,7 +241,18 @@ void network::socket::WindowsUDPSocket::clientPoll() {
             sw.set();
             handleData(buffer, mainSocket);
         }
-        clientTimeout();
+        else
+            clientTimeout();
+    }
+    if (status == STOPPING) {
+        packet::PacketDisconnect packetDisconnect;
+        buffer.resize(0);
+
+        packetDisconnect.serialize(&buffer);
+        sendto(mainSocketFd, (char *)buffer.data(), buffer.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
+        close(mainSocketFd);
+
+        status = DISCONNECTED;
     }
 }
 
@@ -223,9 +284,6 @@ void network::socket::WindowsUDPSocket::clientHandshake() {
     packetAck.setAck(packetSynAck.getAck());
     packetAck.serialize(&buff);
     sendto(mainSocketFd, (char *)buff.data(), buff.size(), 0, (sockaddr *) &mainSocket, sizeof(mainSocket));
-    sw.set();
-    npings = 0;
-    status = CONNECTED;
 }
 
 void network::socket::WindowsUDPSocket::clientTimeout() {
@@ -237,30 +295,54 @@ void network::socket::WindowsUDPSocket::clientTimeout() {
             packetPing.serialize(&buff);
             broadcast(buff);
             npings++;
-        } else {
-            status = DISCONNECTED;
-            close(mainSocketFd);
-            for (auto &l : disconnectionListeners) {
-                l->notify(getClientId(mainSocket));
+        } else
+            clientDisconnect();
+    }
+}
+
+void network::socket::WindowsUDPSocket::handleData(const std::vector<uint8_t> &data, const struct sockaddr_in &client) {
+    try {
+        packet::PacketDisconnect packetDisconnect;
+
+        packetDisconnect.deserialize(const_cast<std::vector<uint8_t> *>(&data));
+        if (type == CLIENT)
+            clientDisconnect();
+        else
+            serverDisconnect(client);
+    } catch (std::exception e) {
+        try {
+            std::vector<uint8_t> buff;
+
+            packet::PacketPing packetPing;
+            packet::PacketPong packetPong;
+
+            //TODO Const APacket Protoboeuf
+            packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
+            packetPong.serialize(&buff);
+            send(buff, getClientId(client));
+        } catch (std::exception e) {
+            for (auto &l : dataListeners) {
+                l->notify(getClientId(client), data);
             }
         }
     }
 }
 
-void network::socket::WindowsUDPSocket::handleData(const std::vector<uint8_t> &data, const struct sockaddr_in &client) {
-    //TODO PacketDisconnect
-    try {
-        std::vector<uint8_t> buff;
-        packet::PacketPing packetPing;
-        packet::PacketPong packetPong;
+void network::socket::WindowsUDPSocket::clientDisconnect() {
+    status = DISCONNECTED;
+    for (auto &l : disconnectionListeners) {
+        l->notify(getClientId(mainSocket));
+    }
+    close(mainSocketFd);
+}
 
-        //TODO Const APacket Protoboeuf
-        packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
-        packetPong.serialize(&buff);
-        send(buff, getClientId(client));
-    } catch (std::exception e) {
-        for (auto &l : dataListeners) {
-            l->notify(getClientId(client), data);
+void network::socket::WindowsUDPSocket::serverDisconnect(const struct sockaddr_in &client) {
+    for (auto it = clients.begin(); it != clients.end(); it++) {
+        if (getClientId((*it).client) == getClientId(client)) {
+            for (auto &l : disconnectionListeners)
+                l->notify(getClientId((*it).client));
+            clients.erase(it);
+            return;
         }
     }
 }

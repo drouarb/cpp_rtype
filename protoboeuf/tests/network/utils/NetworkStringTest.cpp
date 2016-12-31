@@ -29,7 +29,7 @@ int main()
     assert(data.size() == n.getSize());
     strsize = reinterpret_cast<uint16_t *>(&data.front());
     assert(*strsize == 15);
-    assert(strcmp(n.c_str(), reinterpret_cast<char *>(&data.front() + 2)) == 0);
+    assert(strncmp(n.c_str(), reinterpret_cast<char *>(&data.front() + 2), n.size()) == 0);
 
     data.resize(0);
     data.resize(4);
@@ -39,7 +39,7 @@ int main()
     assert(data.size() == n.getSize() + 4);
     strsize = reinterpret_cast<uint16_t *>(&data.front() + 4);
     assert(*strsize == 15);
-    assert(strcmp(n.c_str(), reinterpret_cast<char *>(&data.front() + 6)) == 0);
+    assert(strncmp(n.c_str(), reinterpret_cast<char *>(&data.front() + 6), n.size()) == 0);
 
     std::cout << "Deserialisation tests" << std::endl;
     test = 0;

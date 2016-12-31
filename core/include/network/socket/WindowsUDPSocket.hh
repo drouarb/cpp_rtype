@@ -9,10 +9,9 @@
 #include <list>
 #include <forward_list>
 #include <io.h>
-#include <winsock.h>
-#include <thread>
 #include <WinSock2.h>
-#include "helpers/Stopwatch.hh"
+#include <thread/Thread.hpp>
+#include <helpers/WindowsStopwatch.hh>
 #include "ISocket.hh"
 
 namespace network {
@@ -26,7 +25,7 @@ namespace network {
             struct s_UDPClient {
                 int npings;
                 unsigned short ack;
-                helpers::Stopwatch sw;
+                helpers::WindowsStopwatch sw;
                 e_socketStatus status;
                 struct sockaddr_in client;
             };
@@ -53,6 +52,8 @@ namespace network {
              */
             WindowsUDPSocket(const std::string &address, unsigned short port);
 
+            virtual ~WindowsUDPSocket();
+
             virtual bool run();
             virtual void poll();
             virtual bool stop();
@@ -68,8 +69,15 @@ namespace network {
             virtual e_socketStatus getStatus();
 
         private:
+            void init();
+            void clientInit();
+            void serverInit();
+
             void serverPoll();
             void clientPoll();
+
+            void clientDisconnect();
+            void serverDisconnect(const struct sockaddr_in &client);
 
             //Server stuffs
             void serverTimeout();
@@ -94,12 +102,12 @@ namespace network {
             //Client stuffs
             int npings;
             unsigned short syn;
-            helpers::Stopwatch sw;
+            helpers::WindowsStopwatch sw;
 
             //Server Stuffs
             std::list<struct s_UDPClient> clients;
 
-            std::thread *thread;
+            IThread *thread;
 
             std::forward_list<listener::ISocketConnectionListener *> connectionListeners;
             std::forward_list<listener::ISocketDisconnectionListener *> disconnectionListeners;

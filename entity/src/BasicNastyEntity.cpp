@@ -73,7 +73,7 @@ server::hp_t BasicNastyEntity::getDamage() {
 }
 
 server::Tribool BasicNastyEntity::collidesWith(const server::Entity &entity) {
-    return (this->data->getTeam() != entity.data.getTeam() ? server::TRUE : server::FALSE);
+    return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
 }
 
 void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity, server::round_t current_round) {
@@ -122,7 +122,7 @@ BasicNastyEntity::VeryNastyProjectile::VeryNastyProjectile(server::speed_t posX,
 }
 
 server::Tribool BasicNastyEntity::VeryNastyProjectile::collidesWith(const server::Entity &entity) {
-    return (this->data->getTeam() != entity.data.getTeam() ? server::TRUE : server::FALSE);
+    return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
 }
 
 extern "C"

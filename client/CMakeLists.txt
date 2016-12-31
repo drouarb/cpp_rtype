@@ -13,12 +13,21 @@ file(
         include/*.hpp
 )
 
+if (WIN32)
+    file(
+            GLOB_RECURSE
+            CLIENT_SRCS
+            ${CLIENT_SRCS}
+            resources/resources.rc
+    )
+endif(WIN32)
+
 include_directories(include)
 include_directories(${SFML_INCLUDE_DIR})
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${CLIENT_SRCS})
-target_link_libraries(${PROJECT_NAME} rtype_core protoboeuf)
+target_link_libraries(${PROJECT_NAME} ${RTYPE_CORE_LIBS})
 target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES})
 if (UNIX)
     target_link_libraries(${PROJECT_NAME} pthread)

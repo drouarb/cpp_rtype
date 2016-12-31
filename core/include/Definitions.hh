@@ -22,8 +22,8 @@ namespace server {
 
     enum Tribool : int8_t
     {
-        FALSE   = false,
-        TRUE    = true,
+        T_FALSE   = 0,
+        T_TRUE    = 1,
         NA      = -1
     };
 
@@ -46,19 +46,19 @@ namespace server {
 #define RIGHT_MARGIN (LEFT_MARGIN)
 
 #ifdef LOG_INFO
-#define ERROR(expr) std::cerr << expr << std::endl;
+#define LOG_ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr) std::cout << "---- WARN ----- " << expr << std::endl;
 #define INFO(expr) std::cout << "---- INFO ----- " << expr << std::endl;
 #elif LOG_ERROR
-#define ERROR(expr) std::cerr << expr << std::endl;
+#define LOG_ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr)
 #define INFO(expr)
 #elif LOG_WARN
-#define ERROR(expr) std::cerr << expr << std::endl;
+#define LOG_ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr) std::cerr << expr << std::endl;
 #define INFO(expr)
 #else
-#define ERROR(expr) std::cerr << expr << std::endl;
+#define LOG_ERROR(expr) std::cerr << expr << std::endl;
 #define WARN(expr)
 #define INFO(expr)
 #endif

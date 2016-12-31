@@ -33,8 +33,9 @@ namespace network {
             ERROR_GAME              = 0x20,
             JOIN                    = 0x21,
             QUIT                    = 0x22,
-	    PLAYER_DATA             = 0x23,
+            PLAYER_DATA             = 0x23,
             SYNCHRONIZATION         = 0x24,
+            GAME_DATA               = 0x25,
 
             EVENT_ERROR             = 0x30,
             CANCEL_EVENT            = 0x31,
