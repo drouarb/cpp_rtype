@@ -181,7 +181,6 @@ void GameClient::gameLoop() {
 	while (tickcpt < tickRateClient)
 	{
 	    sw->set();
-	    gameui->updateListEntity();
 	    if (world != nullptr)
 	      world->applyTurn();
 	    if (tickcpt % PERIODTICKEVENT == 0)
@@ -208,14 +207,11 @@ void GameClient::gameLoop() {
                                             world->getEntityById(playerId)->getPos().second);
 		  }
 	    }
+	    gameui->updateListEntity();
 	    gameui->displaySimple();
 	    ++tickcpt;
 	    if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
-	      {
-		std::cout << "sleep" << std::endl;
-		std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient)
-								      - sw->elapsedMs()));
-	      }
+		std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
 	}
 	if (world != nullptr && horodatageTick.size() > 1)
 	  {
