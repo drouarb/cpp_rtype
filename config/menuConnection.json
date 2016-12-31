@@ -1,0 +1,54 @@
+{
+  "Name": "MenuConnection",
+  "Default_Visibility": 1,
+  "padding_up" : 100,
+  "padding_left" : 600,
+  "type" : 0,
+  "Buttons": [
+    {
+      "buttons_name": "server",
+      "selected": "servers.png",
+      "noselected": "servers.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "type" : 0
+    },
+     {
+      "buttons_name": "port",
+      "selected": "ready2.png",
+      "noselected": "ready.png",
+      "default_selected" : 1,
+       "default_value" : "127.0.0.1:9000",
+      "lock" : 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 400
+        }
+      ],
+      "type" : 2,
+      "send" : 8
+    },
+    {
+      "buttons_name": "back",
+      "selected": "back2.png",
+      "noselected": "back.png",
+      "default_selected" : 0,
+      "lock" : 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 600
+        }
+      ],
+      "type" : 1,
+      "goto" : "MenuStart"
+    }
+  ]
+}

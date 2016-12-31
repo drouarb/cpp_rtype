@@ -23,7 +23,7 @@ private:
 
         void collide(const server::Entity &, server::round_t current_round) override;
         server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
-        server::EntityInitialization *initialize() override;
+        server::EntityInitialization *initialize(server::round_t, const std::vector<server::Entity *> &) override;
 
         server::Tribool collidesWith(const server::Entity &entity) override;
 
@@ -37,15 +37,16 @@ private:
     };
 
 private:
-    server::EntityAction *notifyCollision;
-    helpers::IStopwatch *stopwatch;
-    server::round_t damage_time;
-
+    server::hp_t lostHp;
+    bool mustDestroy;
+    server::round_t startingRound;
 
     static const int NASTY_DAMAGE = 10;
     static const int NASTY_COLLISION_DAMAGE = 5;
     static const int FIRE_FREQUENCY = 5;
     static const int DEFAULT_HP = 100;
+    static const int SPEED = 5;
+    static const int ROUNDS_MOVING = 60;
 
 
 
@@ -58,7 +59,7 @@ public:
 
     void collide(const server::Entity &entity, server::round_t current_round) override;
     server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
-    server::EntityInitialization *initialize() override;
+    server::EntityInitialization *initialize(server::round_t, const std::vector<server::Entity *> &) override;
 
     server::hp_t getDamage() override;
 };

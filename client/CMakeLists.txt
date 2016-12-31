@@ -33,6 +33,10 @@ if (UNIX)
     target_link_libraries(${PROJECT_NAME} pthread)
 endif()
 
+if (${UNIX})
+    target_link_libraries(${PROJECT_NAME} -lpthread)
+endif(${UNIX})
+
 if (CLIENT_TESTS)
     enable_testing()
     add_subdirectory(tests)

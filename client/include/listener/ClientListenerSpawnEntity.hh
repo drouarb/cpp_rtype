@@ -7,20 +7,20 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketSpawnEntity.hh"
-#include "GameClient.hh"
+#include "NetworkManager.hh"
 namespace client {
     class ClientListenerSpawnEntity
             : public network::ListenerTemplate<network::packet::PacketSpawnEntity, network::packet::SPAWN_ENTITY> {
 
     public:
-        ClientListenerSpawnEntity(GameClient *gameClient);
+        ClientListenerSpawnEntity(NetworkManager *networkManager);
 
         ~ClientListenerSpawnEntity();
 
         void notify(const network::packet::PacketSpawnEntity *packet);
 
     private:
-        GameClient *gameclient;
+        NetworkManager *networkManager;
     };
 
 }

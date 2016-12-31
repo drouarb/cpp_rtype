@@ -1,0 +1,52 @@
+{
+    "Move": [
+        {
+            "name": "up",
+            "value": "1001",
+            "x": "0",
+            "y": "-4"
+        },
+        {
+            "name": "down",
+            "value": "1002",
+            "x": "0",
+            "y": "4"
+        },
+        {
+            "name": "right",
+            "value": "1003",
+            "x": "4",
+            "y": "0"
+        },
+        {
+            "name": "left",
+            "value": "1004",
+            "x": "-4",
+            "y": "0"
+        }
+    ],
+    "Attack": [
+        {
+            "name": "Attack1",
+            "value": "1006",
+            "id": "1"
+        },
+        {
+            "name": "Attack2",
+            "value": "1007",
+            "id": "1"
+        }
+    ],
+    "gameList": [
+        {
+            "name": "GameList",
+            "value": "1000"
+        }
+    ],
+    "leaderBoard": [
+        {
+            "name": "LeaderBoard",
+            "value": "80"
+        }
+    ]
+}
