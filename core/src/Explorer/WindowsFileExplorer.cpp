@@ -13,7 +13,6 @@
 
 void WindowsFileExplorer::loadFolder(const std::string &path) {
     WIN32_FIND_DATA ffd;
-    LARGE_INTEGER filesize;
     TCHAR szDir[MAX_PATH];
     size_t length_of_arg;
     HANDLE hFind = INVALID_HANDLE_VALUE;

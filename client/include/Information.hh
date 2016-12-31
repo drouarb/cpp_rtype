@@ -75,7 +75,7 @@ namespace client {
             try {
                 res->roomid  = static_cast<uint8_t >(std::stoi(resvalu));
             }
-            catch (std::exception &e)
+            catch (std::exception)
             {
                 res->roomid = 0;
             }
