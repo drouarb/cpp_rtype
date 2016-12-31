@@ -53,9 +53,9 @@ void GameClient::readaptTickRate(int servTickRate,
 
     tickRateModif = (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
       + (((double)((int64_t)estiClientHoro.first - (int64_t)servHoro.first)) * TICKCURRENTDIFFCONST);
-    std::cout << "tickrate result : " << (tickRateClient - servTickRate) * TICKRATEDIFFCONST << " client server : [" << tickRateClient << ":" << servTickRate << "] CONST : " << TICKRATEDIFFCONST << std::endl;
-    std::cout << "tickcurrent result : " << ((int64_t)estiClientHoro.first - (int64_t)servHoro.first) * TICKCURRENTDIFFCONST << " client server : [" << estiClientHoro.first << ":" << servHoro.first << "] CONST : " << TICKCURRENTDIFFCONST << std::endl;
-    std::cout << "modif : " << tickRateModif << std::endl;
+    std::cout << "Server. current tick : [" << servHoro.first << "] tickrate : " << servTickRate << std::endl;
+    std::cout << "Client. current tick : [" << estiClientHoro.first << "] tickrate : " << tickRateClient << std::endl;
+    std::cout << "Client tickrate " << ((tickRateModif < 0.0) ? "increase of + 1" : "decrease of - 1") << std::endl;
     if (tickRateModif < 0.0)
       ++tickRateClient;
     else if (tickRateModif > 0.0)
