@@ -70,9 +70,19 @@ void server::Core::run() {
         sw->set();
         mutex.lock();
 
-        for (auto &game : games) {
+        for (auto game = games.begin(); game != games.end();)
+        {
             INFO("- game " << std::to_string(game->getLobbyId()) << " - - -");
-            game->tick();
+            (*game)->tick();
+            if ((*game)->mustClose())
+            {
+                delete *game;
+                game = games.erase(game);
+            }
+            else
+            {
+                ++game;
+            }
         }
         mutex.unlock();
 

@@ -19,10 +19,10 @@ server::EntityAction *Obstacle::act(server::round_t, const server::Grid &environ
 server::EntityInitialization *Obstacle::initialize(server::round_t, const server::Grid &environment) {
     server::EntityInitialization *initialization = new server::EntityInitialization();
     initialization->sprite.sizeX = 100;
-    initialization->sprite.sizeY = 100;
-    initialization->team = server::Team::FOE;
+    initialization->sprite.sizeY = 1;
+    initialization->team = server::Team::NEUTRAL;
     initialization->action.destroy = false;
-    initialization->action.hp = 1000;
+    initialization->action.hp = 0;
     initialization->sprite.path = "";
     return initialization;
 }

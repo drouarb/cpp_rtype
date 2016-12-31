@@ -12,7 +12,7 @@ class Wunderwaffe : public server::ADynamicObject {
 private:
     static const int DEFAULT_DAMAGE = 40;
     static const int MAX_MOVEMENT = 100;
-    static const int DEFAULT_LIFE = 25000;
+    static const int DEFAULT_LIFE = 1000;
 
     enum movement_t {
         FRONT,

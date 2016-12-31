@@ -28,9 +28,10 @@ namespace server
         void tick();
         gameId_t getLobbyId();
         bool hasClient(const Client &);
-        bool empty();
-        uint16_t getClientSize();
-        round_t getTick();
+        bool empty() const;
+        uint16_t getClientSize() const;
+        round_t getTick() const;
+        bool mustClose() const;
 
     private:
         network::PacketFactory & packetf;

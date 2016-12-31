@@ -17,7 +17,6 @@
 #include <helpers/Epoch.hh>
 #include <network/packet/PacketGameData.hh>
 #include <helpers/libloader/getDlLoader.hpp>
-#include <algorithm>
 #include "Game.hh"
 
 using namespace server;
@@ -33,9 +32,9 @@ Game::Game(network::PacketFactory &packetf, int lobbyId, const Level &lvl) : pac
 
 Game::~Game()
 {
-    for (auto client : clientList)
+    while (clientList.size() > 0)
     {
-        removePlayer(client);
+        removePlayer(clientList.back());
     }
     for (auto entity : entities)
     {
@@ -395,13 +394,12 @@ void Game::unspawn()
             destroyedEntities.push_back(*it);
             grid.remove(*it);
             it = vect_erase(it, entities);
-
-            if (going && isFinished())
-                endGame();
         }
         else
             ++it;
     }
+    if (going && isFinished())
+        endGame();
 }
 
 void Game::manageNewGamedata()
@@ -505,7 +503,7 @@ bool Game::hasClient(const Client & client)
     return (false);
 }
 
-bool Game::empty()
+bool Game::empty() const
 {
     return (clientList.empty());
 }
@@ -583,13 +581,19 @@ void Game::sim_destroy(Entity *entity) {
     this->gameEvents.push_back(new server::event::Destroy(this->round, entity->data.getId()));
 }
 
-uint16_t Game::getClientSize() {
+uint16_t Game::getClientSize() const
+{
     return static_cast<uint16_t >(this->clientList.size());
 }
 
-round_t Game::getTick()
+round_t Game::getTick() const
 {
     return (round);
+}
+
+bool Game::mustClose() const
+{
+    return (!going || empty());
 }
 
 void Game::sendPacketSync(const Client * client)
@@ -709,7 +713,9 @@ bool Game::isFinished()
         for (auto entity : entities)
         {
             if (entity->data.getTeam() == FOE)
+            {
                 return (false);
+            }
         }
         return (true);
     }
@@ -743,10 +749,12 @@ void Game::endGame()
         std::cout << it.second << " -> " << std::to_string(it.first) << std::endl;
     }
 
-    network::packet::PacketLeaderBoard packet(vect);
+    network::packet::PacketLeaderBoard packetscore(vect);
+    network::packet::PacketQuit packetquit;
     for (auto client : clientList)
     {
-        packetf.send(packet, client->getClientId());
+        packetf.send(packetscore, client->getClientId());
+        packetf.send(packetquit, client->getClientId());
     }
     going = false;
 }
