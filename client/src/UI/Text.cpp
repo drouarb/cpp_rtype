@@ -6,7 +6,9 @@
 #include "../../include/UI/Text.hh"
 
 UI::Text::Text() : AItem(UI::TEXT) {
-    initStatus = font.loadFromFile("/home/jonas_e/Work/Epitech/rtype/media/font/Pixeled.ttf");
+    initStatus = font.loadFromFile("media/font/Pixeled.ttf");
+    font.loadFromFile("media/font/0_Trajan Bold.ttf");
+    font.loadFromFile("media/font/0_TrajanPro-Regular.ttf");
     text.setFont(font);
     text.setCharacterSize(24);
     text.setOutlineColor(sf::Color::Black);

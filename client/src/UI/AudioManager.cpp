@@ -3,10 +3,47 @@
 //
 
 #include <iostream>
+#include <stdlib.h>
 #include "../../include/UI/AudioManager.hh"
+
+std::vector<std::string> menuSoundsPath {
+        "media/musics/00.ogg",
+        "media/musics/01.ogg",
+        "media/musics/02.ogg",
+        "media/musics/03.ogg",
+        "media/musics/04.ogg",
+        "media/musics/05.ogg",
+        "media/musics/06.ogg",
+        "media/musics/07.ogg",
+        "media/musics/08.ogg",
+        "media/musics/09.ogg",
+        "media/musics/10.ogg",
+        "media/musics/11.ogg",
+        "media/musics/12.ogg",
+        "media/musics/13.ogg",
+        "media/musics/14.ogg",
+        "media/musics/15.ogg",
+        "media/musics/16.ogg",
+        "media/musics/17.ogg",
+        "media/musics/18.ogg",
+        "media/musics/19.ogg",
+        "media/musics/20.ogg",
+        "media/musics/21.ogg",
+        "media/musics/22.ogg",
+        "media/musics/23.ogg",
+        "media/musics/24.ogg",
+        "media/musics/25.ogg",
+        "media/musics/26.ogg",
+        "media/musics/27.ogg",
+        "media/musics/28.ogg",
+        "media/musics/29.ogg",
+        "media/musics/30.ogg",
+};
 
 UI::AudioManager::AudioManager() {
     volume = 100;
+    initMenuSound();
+    srand(time(NULL));
 }
 
 UI::AudioManager::~AudioManager() {
@@ -61,4 +98,14 @@ int UI::AudioManager::addSound(std::string path) {
 
 void UI::AudioManager::stopMusic() {
     music.stop();
+}
+
+void UI::AudioManager::initMenuSound() {
+    for (auto path : menuSoundsPath) {
+        addSound(path);
+    }
+}
+
+void UI::AudioManager::playMenuSound() {
+    playSound(rand() % 31);
 }

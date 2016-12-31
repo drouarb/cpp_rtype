@@ -14,6 +14,7 @@ namespace UI {
         AudioManager();
         ~AudioManager();
 
+        void playMenuSound();
         int getVolume();
         void setVolume(int newVolume);
         int addSound(std::string path);
@@ -23,11 +24,13 @@ namespace UI {
         bool isPlaying();
         int createPlaylist();
         void addMusic(int playlistID);
+
     private:
         sf::Music music;
         sf::Sound sound;
         std::vector<sf::SoundBuffer*> buffers;
         int volume;
+        void initMenuSound();
     };
 }
 
