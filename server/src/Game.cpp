@@ -23,15 +23,13 @@
 using namespace server;
 
 Game::Game(network::PacketFactory &packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId),
-                                                           entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr) {
-    initPlayers();
-}
+                                                           entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
+{}
 
 Game::Game(network::PacketFactory &packetf, int lobbyId, const Level &lvl) : packetf(packetf), lvl(&lvl), round(0),
                                                                              gameId(lobbyId), entityIdCount(0),
-                                                                             lastSyn(0), going(true), currentGamedata(nullptr) {
-    initPlayers();
-}
+                                                                             lastSyn(0), going(true), currentGamedata(nullptr)
+{}
 
 Game::~Game()
 {
@@ -473,11 +471,9 @@ void Game::newPlayer(Client *client) {
     this->clientList.push_back(client);
     Entity *entity = new Entity();
     controller->setEntity(entity);
-    ADynamicObject *obj = this->players.top();
-    this->players.pop();
-    entity->initialize(obj, entityIdCount, round, grid);
+    entity->initialize(getDlLoader<ADynamicObject>(playerPaths[clientList.size()])->getInstance(), entityIdCount, round, grid);
     entityIdCount++;
-    controller->setEntity(static_cast<Player *>(obj));
+    controller->setEntity(static_cast<Player *>(entity->obj));
     client->setController(controller);
     spawnEntity(entity);
     greetNewPlayer(*client);
@@ -755,18 +751,10 @@ void Game::endGame()
     going = false;
 }
 
-void Game::initPlayers() {
-    try {
-        auto blue = getDlLoader<ADynamicObject>("build/entity/libBluePlayer")->getInstance();
-        this->players.push(blue);
-        auto red = getDlLoader<ADynamicObject>("build/entity/libRedPlayer")->getInstance();
-        this->players.push(red);
-        auto yellow = getDlLoader<ADynamicObject>("build/entity/libYellowPlayer")->getInstance();
-        this->players.push(yellow);
-        auto green = getDlLoader<ADynamicObject>("build/entity/libGreenPlayer")->getInstance();
-        this->players.push(green);
-    }
-    catch (std::runtime_error &e) {
-        std::cerr << "Entity creation error: " << e.what() << std::endl;
-    }
-}
+const std::string Game::playerPaths[4] =
+    {
+            "build/entity/libRedPlayer",
+            "build/entity/libYellowPlayer",
+            "build/entity/libBluePlayer",
+            "build/entity/libGreenPlayer"
+    };

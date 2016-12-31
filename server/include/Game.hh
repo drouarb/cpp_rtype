@@ -45,12 +45,12 @@ namespace server
         round_t lastSyn;
         bool going;
         Grid grid;
-        std::stack<ADynamicObject *> players;
         const std::pair<std::string, std::string> * currentGamedata;
+
+        static const std::string playerPaths[4];
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
-        void initPlayers();
         void progressLevel();
         void checkCollisions();
         void checkCollision(Entity * entity1, Entity * entity2);
