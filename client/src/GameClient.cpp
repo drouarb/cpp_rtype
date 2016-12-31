@@ -181,8 +181,6 @@ void GameClient::gameLoop() {
 	while (tickcpt < tickRateClient)
 	{
 	    sw->set();
-	    if (world != nullptr)
-	      world->applyTurn();
 	    if (tickcpt % PERIODTICKEVENT == 0)
 	      {
 		event = handler->getEvent();
@@ -207,6 +205,8 @@ void GameClient::gameLoop() {
                                             world->getEntityById(playerId)->getPos().second);
 		  }
 	    }
+	    if (world != nullptr)
+	      world->applyTurn();
 	    gameui->updateListEntity();
 	    gameui->displaySimple();
 	    ++tickcpt;
@@ -273,7 +273,7 @@ void GameClient::sendAll(struct s_info *info) {
         case I_PLAYER : {
             if (manager != nullptr && world != nullptr) {
                 if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end()) {
-                    world->getEntityById(playerId)->setVec(keygame_move[static_cast<s_player *>(info)->key]);
+		  world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player*>(info)->key], pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,

@@ -96,8 +96,8 @@ void World::applyTurn() {
     }
     it = entitys.begin();
     while (it != entitys.end()) {
-        it->second->applyVec(it->second->getVec(), turn);
-        ++it;
+      it->second->applyVec(it->second->getVec(), turn);
+      ++it;
     }
     ++turn;
 }
