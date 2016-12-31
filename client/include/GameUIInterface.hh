@@ -42,6 +42,7 @@ namespace client {
         std::map<std::string , std::vector<int>>anim_map;
         static const std::map<sf::Keyboard::Key, client::Key> keymap;
         client::Key KeygameList;
+		bool running;
 
     private:
         client::Key KeyLeaderBoard;
@@ -57,6 +58,8 @@ namespace client {
         void displaySimple();
 
       void UILoop();
+
+	  void stopUI();
       
         typeide_t registerNewSprite(const std::string &);
 

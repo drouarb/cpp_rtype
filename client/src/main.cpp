@@ -13,6 +13,6 @@ using  namespace client;
 int main(int argc, char **argv)
 {
     client::GameClient game;
-    game.gameLoop();
+    game.run();
     return (0);
 }

@@ -42,7 +42,7 @@ namespace client {
         std::map<client::Key, vec_t> keygame_move;
         std::map<client::Key, int> keygame_attack;
         std::list<std::string> name_key;
-      IThread			*UIThread;
+      IThread			*GameThread;
     public:
 
         static const std::map<client::Key, const std::string> keyStringMap;
@@ -89,6 +89,8 @@ namespace client {
         void managePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName);
 
         void manageQuit();
+
+		void run();
 
         World *getWorld() const;
 

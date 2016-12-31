@@ -25,7 +25,6 @@ client::GameClient::GameClient() {
     sw = helpers::IStopwatch::getInstance();
     gameui = new GameUIInterface(handler, client_mut);
     gameui->initUI();
-    UIThread = new Thread<decltype(&GameUIInterface::UILoop), GameUIInterface *>(&GameUIInterface::UILoop, gameui);
     createKeyMap("config/gameCommand.json");
 }
 
@@ -178,6 +177,12 @@ void GameClient::manageQuit() {
     }
 }
 
+void GameClient::run()
+{
+	GameThread = new Thread<decltype(&GameClient::gameLoop), GameClient *>(&GameClient::gameLoop, this);
+	gameui->UILoop();
+}
+
 void GameClient::gameLoop() {
     short event;
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
@@ -195,6 +200,7 @@ void GameClient::gameLoop() {
                     if (receive != nullptr) {
                         if (receive->info == I_QUIT) {
                             deleteNetworkManager();
+							gameui->stopUI();
                             return;
                         }
                         sendAll(receive);
@@ -226,6 +232,7 @@ void GameClient::gameLoop() {
 	else
 	  tickRateClient = TICKRATE;
     }
+	gameui->stopUI();
 }
 
 void GameClient::sendAll(struct s_info *info) {

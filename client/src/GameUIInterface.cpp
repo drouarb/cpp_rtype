@@ -64,8 +64,9 @@ void GameUIInterface::UILoop()
 {
   helpers::IStopwatch *sw;
 
+  running = true;
   sw = helpers::IStopwatch::getInstance();
-  while (windowIsOpen())
+  while (running == true)
     {
       sw->set();
       updateListEntity();
@@ -73,6 +74,11 @@ void GameUIInterface::UILoop()
       if (sw->elapsedMs() < 1000 / (TICKRATEUI))
 	std::this_thread::sleep_for(std::chrono::milliseconds((1000 / TICKRATEUI) - sw->elapsedMs()));
     }
+}
+
+void GameUIInterface::stopUI()
+{
+	running = false;
 }
 
 void GameUIInterface::feedLeaderBoard(std::vector<std::pair<uint32_t, std::string> > nleaderBoard) {
