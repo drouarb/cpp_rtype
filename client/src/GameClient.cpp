@@ -188,15 +188,11 @@ void GameClient::gameLoop() {
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
     s_info *receive = nullptr;
     tick tickcpt;
-    helpers::IStopwatch *sw1 = helpers::IStopwatch::getInstance();
-        helpers::IStopwatch *sw2 = helpers::IStopwatch::getInstance();
-	    helpers::IStopwatch *sw3 = helpers::IStopwatch::getInstance();
 
     while (gameui->windowIsOpen()) {
         tickcpt = 0;
         while (tickcpt < tickRateClient) {
             sw->set();
-	    sw1->set();
             if (tickcpt % PERIODTICKEVENT == 0) {
                 event = handler->getEvent();
                 if (event != -42) {
@@ -204,9 +200,9 @@ void GameClient::gameLoop() {
                     receive = gameui->manageInput(event);
                     if (receive != nullptr) {
                         if (receive->info == I_QUIT) {
-                            deleteNetworkManager();
-							gameui->stopUI();
-                            return;
+			  deleteNetworkManager();
+			  gameui->stopUI();
+			  return;
                         }
                         sendAll(receive);
                         delete (receive);
@@ -223,20 +219,12 @@ void GameClient::gameLoop() {
 	    }
 	    if (world != nullptr)
 	      world->applyTurn(tickRateClient, playerId);
-	    std::cout << "sw1 : " << sw1->elapsedMs() << std::endl;
-	    sw2->set();
 	    gameui->updateListEntity();
-	    std::cout << "sw2 : " << sw2->elapsedMs() << std::endl;
-	    sw3->set();
 	    gameui->displaySimple();
-	    std::cout << "sw3 : " << sw3->elapsedMs() << std::endl;
-	    sw1->set();
 	    ++tickcpt;
 	    if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
 	      std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
-	    std::cout << "sw4 : " << sw1->elapsedMs() << std::endl;
 	}
-	sw1->set();
 	if (world != nullptr && horodatageTick.size() > 1)
 	  {
 	    std::map<tick, uint64_t>::iterator it;
@@ -246,7 +234,6 @@ void GameClient::gameLoop() {
 	  }
 	else
 	  tickRateClient = TICKRATE;
-	std::cout << "sw5 : " << sw1->elapsedMs() << std::endl;
     }
 	gameui->stopUI();
 }

@@ -43,13 +43,8 @@ void GameUIInterface::initUI() {
 }
 
 void GameUIInterface::displaySimple() {
-  sf::Clock clock;
-  clock.restart();
   window->display();
-  std::cout << "c'est quoi ce bordel" << clock.getElapsedTime().asMilliseconds() << std::endl;
-  clock.restart();
   managerUi.getEventObserver()->getEvent();
-    std::cout << "couille" << clock.getElapsedTime().asMilliseconds() << std::endl;
 }
 
 typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
@@ -459,19 +454,19 @@ void GameUIInterface::updateHp()
 {
     if (nplayer != nullptr && playerHp != nullptr)
     {
-        playerHp->setString(std::to_string(nplayer->getHp()));
+      playerHp->setString(std::to_string(nplayer->getHp()));
     }
 }
 void GameUIInterface::setNplayer(Entity *nplayer) {
     GameUIInterface::nplayer = nplayer;
     if (nplayer != nullptr)
     {
-     std::string res =    typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
-        this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + "vatar.png",
-                                                        0, 900);
-        playerSprite->setRatio(0.2);
-       playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->addTextBox(
-                100, 900);
-        playerHp->setString(std::to_string(nplayer->getHp()));
+      std::string res =    typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
+      this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + "vatar.png",
+							      0, 900);
+      playerSprite->setRatio(0.2);
+      playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->addTextBox(
+										     100, 900);
+      playerHp->setString(std::to_string(nplayer->getHp()));
     }
 }
