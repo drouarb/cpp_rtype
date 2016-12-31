@@ -13,6 +13,15 @@ file(
         include/*.hpp
 )
 
+if (WIN32)
+    file(
+            GLOB_RECURSE
+            CLIENT_SRCS
+            ${CLIENT_SRCS}
+            resources/resources.rc
+    )
+endif(WIN32)
+
 include_directories(include)
 include_directories(${SFML_INCLUDE_DIR})
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
