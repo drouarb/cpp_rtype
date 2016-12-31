@@ -22,7 +22,7 @@ void network::utils::NetworkInteger::serialize(t_rawdata *data) const {
 }
 
 t_rawdata::iterator network::utils::NetworkInteger::deserialize(t_rawdata *data, t_rawdata::iterator it) {
-    if ((&data->back() - &(*it)) < size - 1)
+    if (data->end() - it < size)
         throw std::out_of_range("Can't read number of NetworkInteger");
     this->i = (*reinterpret_cast<ssize_t *>(&(*it))) & this->intMask[this->size];
     return it + this->getSize();
