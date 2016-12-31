@@ -59,7 +59,7 @@ void GameClient::readaptTickRate(int servTickRate,
     std::cout << "Client tickrate " << ((tickRateModif < 0.0) ? "increase of + 1" : "decrease of - 1") << std::endl;
     if (tickRateModif < 0.0)
       ++tickRateClient;
-    else if (tickRateModif > 0.0)
+    else if (tickRateClient > 1 && tickRateModif > 0.0)
       --tickRateClient;
 }
 
@@ -197,9 +197,7 @@ void GameClient::gameLoop() {
                     }
                     event = -42;
                 } else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr) {
-                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
-                                                               pos_t(world->getEntityById(playerId)->getPos().first,
-                                                                     world->getEntityById(playerId)->getPos().second),
+                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second),
                                                                world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
