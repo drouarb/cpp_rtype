@@ -7,7 +7,7 @@
 
 #include "cstdint"
 
-#define ROUND_DURATION_MS 33
+#define ROUND_DURATION_MS 25
 #define MAX_PLAYERS 4
 
 #define NOATTACK ((attackId_t)-1)
