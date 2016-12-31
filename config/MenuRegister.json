@@ -20,7 +20,7 @@
       "type" : 0
     },
     {
-      "buttons_name": "port",
+      "buttons_name": "Name",
       "default_selected" : 1,
       "lock" : 1,
       "default_value" : "Regis",

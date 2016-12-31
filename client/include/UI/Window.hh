@@ -11,9 +11,10 @@
 #include "LayerFactory.hh"
 #include "Text.hh"
 
+#define WIDTH 1080
+#define LENGTH 1920
+
 namespace UI {
-    #define WIDTH 1080
-    #define LENGTH 1920
     class Window : public IWindow {
     public:
         Window();

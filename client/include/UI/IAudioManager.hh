@@ -10,7 +10,7 @@
 namespace UI {
     class IAudioManager {
     public:
-        ~IAudioManager(){};
+        virtual ~IAudioManager(){};
         virtual int getVolume() = 0;
         virtual void setVolume(int newVolume) = 0;
         virtual int addSound(std::string path) = 0;

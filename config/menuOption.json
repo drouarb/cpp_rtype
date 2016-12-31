@@ -214,9 +214,9 @@
       "type": 2
     },
     {
-      "buttons_name": "back",
-      "selected": "ready.png",
-      "noselected": "ready2.png",
+      "buttons_name": "save",
+      "selected": "save.png",
+      "noselected": "save2.png",
       "default_selected": 0,
       "lock": 1,
       "position": [

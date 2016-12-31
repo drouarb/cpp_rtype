@@ -2,11 +2,25 @@
   "Name": "MenuConnection",
   "Default_Visibility": 1,
   "padding_up" : 100,
-  "padding_left" : 600,
+  "padding_left" : 700,
   "type" : 0,
   "Buttons": [
     {
-      "buttons_name": "server",
+      "buttons_name": "register",
+      "selected": "rtype1.png",
+      "noselected": "rtype1.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -700,
+          "y": -100
+        }
+      ],
+      "type" : 0
+    },
+    {
+      "buttons_name": "serverip",
       "selected": "serverip.png",
       "noselected": "serverip.png",
       "default_selected" : 0,

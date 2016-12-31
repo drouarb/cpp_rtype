@@ -26,6 +26,7 @@ bool UI::AudioManager::isPlaying() {
 void UI::AudioManager::playMusic(std::string path) {
     if (music.openFromFile(path)) {
         music.setVolume(volume);
+        music.setLoop(true);
         music.play();
     } else {
         std::cerr << "Failed to load: " << path << std::endl;
