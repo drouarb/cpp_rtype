@@ -7,7 +7,7 @@
 
 #include "cstdint"
 
-#define ROUND_DURATION_MS 25
+#define ROUND_DURATION_MS 16
 #define MAX_PLAYERS 4
 
 #define BORDER_OBSTACLE_LIB "build/entity/libObstacle"
