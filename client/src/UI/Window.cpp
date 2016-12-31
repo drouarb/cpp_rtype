@@ -12,6 +12,7 @@ UI::Window::Window() {
     name = "rtype";
     window = new sf::RenderWindow(sf::VideoMode(length, width, 32), name);
     alertText.setString("");
+    alerted = false;
 }
 
 UI::Window::~Window() {

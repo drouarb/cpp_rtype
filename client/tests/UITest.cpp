@@ -93,6 +93,10 @@ int main()
     item4->addAnimation(UI::IDLE, 16, 350);
     item4->changeStatus(UI::IDLE);
 
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/EXPLOSION.png", 800 , 800);
+    item4->addAnimation(UI::IDLE, 29, 84);
+    item4->changeStatus(UI::IDLE);
+
     static_cast<UI::MenuLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::MENU))->addTextBox(400, 16)->setString("abc");
 
     static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "/home/jonas_e/Work/Epitech/rtype/media/backgrounds/nightfall.png");

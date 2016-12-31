@@ -29,7 +29,7 @@ UI::ILayer *UI::LayerFactory::instantiateMenu() {
 }
 
 UI::ILayer *UI::LayerFactory::instantiateHUD() {
-    return static_cast<ILayer*>(new HUDLayer());
+    return static_cast<ILayer*>(new MenuLayer());
 }
 
 UI::ILayer *UI::LayerFactory::instantiateGame() {
