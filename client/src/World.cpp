@@ -28,11 +28,6 @@ World::~World() {
 void World::spawnEntity(ide_t nid, pos_t pos, typeide_t idtype, UIevent_t nevent, tick nturn) {
     world_mut->lock();
     worldEvents.push_back(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, pos, idtype, nturn, nevent)));
-    std::list<std::pair<tick, WorldEvent> >::iterator it;
-    it = worldEvents.begin();
-    while (it != worldEvents.end()) {
-        ++it;
-    }
     world_mut->unlock();
 }
 
@@ -95,8 +90,10 @@ void World::applyTurn(int tickrate, ide_t playerId) {
             }
             worldEvents.erase(itEv);
             itEv = worldEvents.begin();
-        }
-        ++itEv;
+		}
+		else {
+			++itEv;
+		}
     }
     it = entitys.begin();
     while (it != entitys.end()) {

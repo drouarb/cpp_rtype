@@ -1,6 +1,7 @@
 #include "../../include/UI/ALayer.hh"
 
 UI::ALayer::ALayer() {
+	items = std::vector<AItem*>();
     itemFactory = new ItemFactory();
     visible = true;
 }
