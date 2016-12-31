@@ -2,13 +2,27 @@
   "Name": "MenuConnection",
   "Default_Visibility": 1,
   "padding_up" : 100,
-  "padding_left" : 600,
+  "padding_left" : 700,
   "type" : 0,
   "Buttons": [
     {
-      "buttons_name": "server",
-      "selected": "servers.png",
-      "noselected": "servers.png",
+      "buttons_name": "register",
+      "selected": "rtype1.png",
+      "noselected": "rtype1.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -700,
+          "y": -100
+        }
+      ],
+      "type" : 0
+    },
+    {
+      "buttons_name": "serverip",
+      "selected": "serverip.png",
+      "noselected": "serverip.png",
       "default_selected" : 0,
       "lock" : 0,
       "position": [
@@ -28,8 +42,8 @@
       "lock" : 1,
       "position": [
         {
-          "x": 0,
-          "y": 400
+          "x": 150,
+          "y": 200
         }
       ],
       "type" : 2,
@@ -44,7 +58,7 @@
       "position": [
         {
           "x": 0,
-          "y": 600
+          "y": 300
         }
       ],
       "type" : 1,

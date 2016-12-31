@@ -6,6 +6,20 @@
   "type": 0,
   "Buttons": [
     {
+      "buttons_name": "register",
+      "selected": "rtype5.png",
+      "noselected": "rtype5.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -600,
+          "y": -0
+        }
+      ],
+      "type" : 0
+    },
+    {
       "buttons_name": "up",
       "default_selected": 0,
       "lock": 0,
@@ -214,9 +228,9 @@
       "type": 2
     },
     {
-      "buttons_name": "back",
-      "selected": "ready.png",
-      "noselected": "ready2.png",
+      "buttons_name": "save",
+      "selected": "save2.png",
+      "noselected": "save.png",
       "default_selected": 0,
       "lock": 1,
       "position": [

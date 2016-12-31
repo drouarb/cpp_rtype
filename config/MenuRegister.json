@@ -1,14 +1,28 @@
 {
   "Name": "MenuRegister",
   "Default_Visibility": 1,
-  "padding_up" : 100,
-  "padding_left" : 600,
+  "padding_up" : 300,
+  "padding_left" : 200,
   "type" : 0,
   "Buttons": [
     {
-      "buttons_name": "server",
-      "selected": "ready.png",
-      "noselected": "ready.png",
+      "buttons_name": "register_flag",
+      "selected": "rtype2.png",
+      "noselected": "rtype2.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -200,
+          "y": -300
+        }
+      ],
+      "type" : 0
+    },
+    {
+      "buttons_name": "register",
+      "selected": "entername.png",
+      "noselected": "entername.png",
       "default_selected" : 0,
       "lock" : 0,
       "position": [
@@ -20,14 +34,14 @@
       "type" : 0
     },
     {
-      "buttons_name": "port",
+      "buttons_name": "Name",
       "default_selected" : 1,
       "lock" : 1,
       "default_value" : "Regis",
       "position": [
         {
-          "x": 0,
-          "y": 400
+          "x": 200,
+          "y": 200
         }
       ],
       "type" : 2,
@@ -42,7 +56,7 @@
       "position": [
         {
           "x": 0,
-          "y": 600
+          "y": 300
         }
       ],
       "type" : 1,

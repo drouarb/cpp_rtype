@@ -5,7 +5,6 @@
 #include <vector>
 #include <utility>
 #include <string>
-#define Animation std::vector<std::pair<unsigned int, std::string>> //std::string devrait etre remplacé par les parts d'image  (sf::Sprite) loadé
 
 namespace UI {
 

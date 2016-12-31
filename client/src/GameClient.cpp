@@ -36,7 +36,7 @@ void client::GameClient::createNetworkManager(const std::string &ip, unsigned sh
         manager->addListenerToPacketFactory();
         manager->startPacketFactory();
     }
-    catch (std::runtime_error &e) {
+    catch (std::runtime_error *e) {
         gameui->showError("Impossible de joindre ce serveur");
         manager = nullptr;
     }
@@ -137,6 +137,7 @@ void GameClient::manageGameData() {
 
 void GameClient::manageDisconnect() {
     std::cout << "Receive Disconnect" << std::endl;
+    gameui->showError("Deconnection du serveur");
     manageQuit();
     deleteNetworkManager();
     gameui->changeMenu("MenuStart");
@@ -163,6 +164,7 @@ void GameClient::manageQuit() {
     if (world != nullptr) {
         std::cout << "Receive quit" << std::endl;
         delete world;
+        horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
         sendAll(client::parse(I_ASKLIST, client::Key::KEY_ESCAPE));
@@ -175,32 +177,30 @@ void GameClient::gameLoop() {
     short event;
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
     s_info *receive = nullptr;
-    tick		tickcpt;
-    
-    while (gameui->windowIsOpen())
-      {
-	tickcpt = 0;
-	while (tickcpt < tickRateClient)
-	{
-	    sw->set();
-	    if (tickcpt % PERIODTICKEVENT == 0)
-	      {
-		event = handler->getEvent();
-		if (event != -42)
-		  {
-		    receive = gameui->manageInput(event);
-		    if (receive != nullptr)
-		      {
-			if (receive->info == I_QUIT)
-			  break;
-			sendAll(receive);
-			delete (receive);
-		      }
-		    event = -42;
-		  }
-		else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr)
-		  {
-		    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
+    tick tickcpt;
+
+    while (gameui->windowIsOpen()) {
+        tickcpt = 0;
+        while (tickcpt < tickRateClient) {
+            sw->set();
+            if (tickcpt % PERIODTICKEVENT == 0) {
+                event = handler->getEvent();
+                if (event != -42) {
+                    receive = gameui->manageInput(event);
+                    if (receive != nullptr) {
+                        if (receive->info == I_QUIT) {
+                            deleteNetworkManager();
+                            return;
+                        }
+                        sendAll(receive);
+                        delete (receive);
+                    }
+                    event = -42;
+                } else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr) {
+                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
+                                                               pos_t(world->getEntityById(playerId)->getPos().first,
+                                                                     world->getEntityById(playerId)->getPos().second),
+                                                               world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,
@@ -223,7 +223,6 @@ void GameClient::gameLoop() {
 	else
 	  tickRateClient = TICKRATE;
     }
-    deleteNetworkManager();
 }
 
 void GameClient::sendAll(struct s_info *info) {
@@ -345,12 +344,12 @@ void GameClient::saveConfig() {
         if (touchExit(gameui->getStringFromButtons("key" + *it, "MenuOption")) == true) {
             key = (gameui->getStringFromButtons("key" + *it, "MenuOption"));
             BOOST_FOREACH(boost::property_tree::ptree::value_type
-                                  & child, root.get_child("Move")) {
+                                  &child, root.get_child("Move")) {
                             if (child.second.get<std::string>("name") == (*it))
                                 child.second.put<int>("value", getTouch(key));
                         }
             BOOST_FOREACH(boost::property_tree::ptree::value_type
-                                  & child, root.get_child("Attack")) {
+                                  &child, root.get_child("Attack")) {
                             if (child.second.get<std::string>("name") == (*it))
                                 child.second.put<int>("value", getTouch(key));
                         }
@@ -360,7 +359,7 @@ void GameClient::saveConfig() {
                                 child.second.put<int>("value", getTouch(key));
                         }
             BOOST_FOREACH(boost::property_tree::ptree::value_type
-                                  & child, root.get_child("gameList")) {
+                                  &child, root.get_child("gameList")) {
                             if (child.second.get<std::string>("name") == (*it)) {
                                 child.second.put<int>("value", getTouch(key));
 
@@ -385,7 +384,7 @@ int GameClient::getTickRate() const {
     return (tickRateClient);
 }
 
-int GameClient::getTouch(const std::string & data) {
+int GameClient::getTouch(const std::string &data) {
     for (auto it = keyStringMap.begin(); it != keyStringMap.end(); it++) {
         if (it->second == data)
             return static_cast<int>(it->first);
