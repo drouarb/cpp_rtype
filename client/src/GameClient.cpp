@@ -25,6 +25,7 @@ client::GameClient::GameClient() {
     sw = helpers::IStopwatch::getInstance();
     gameui = new GameUIInterface(handler, client_mut);
     gameui->initUI();
+    UIThread = new Thread<decltype(&GameUIInterface::UILoop), GameUIInterface *>(&GameUIInterface::UILoop, gameui);
     createKeyMap("config/gameCommand.json");
 }
 
@@ -162,10 +163,11 @@ void GameClient::manageQuit() {
     if (world != nullptr) {
         std::cout << "Receive quit" << std::endl;
         delete world;
-        horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
         sendAll(client::parse(I_ASKLIST, client::Key::KEY_ESCAPE));
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        horodatageTick.clear();
     }
 }
 
@@ -207,11 +209,9 @@ void GameClient::gameLoop() {
 	    }
 	    if (world != nullptr)
 	      world->applyTurn();
-	    gameui->updateListEntity();
-	    gameui->displaySimple();
 	    ++tickcpt;
 	    if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
-		std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
+	      std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
 	}
 	if (world != nullptr && horodatageTick.size() > 1)
 	  {
@@ -246,7 +246,6 @@ void GameClient::sendAll(struct s_info *info) {
             if (manager != nullptr) {
                 manager->sendQuit();
                 manager->sendAskList();
-		manageQuit();
                 gameui->changeMenu("roomList");
                 manageQuit();
             }
@@ -271,9 +270,9 @@ void GameClient::sendAll(struct s_info *info) {
         }
             break;
         case I_PLAYER : {
-            if (manager != nullptr && world != nullptr) {
-                if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end()) {
-		  world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player*>(info)->key], pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
+	  if (manager != nullptr && world != nullptr && world->getEntityById(playerId) != nullptr) {
+	      if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end()) {
+		world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player*>(info)->key], pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,

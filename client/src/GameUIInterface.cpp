@@ -2,10 +2,12 @@
 ** trouve_b
 */
 
+#include <thread>
 #include <iostream>
 #include <UI/BackgroundLayer.hh>
 #include <UI/MenuLayer.hh>
 #include "GameUIInterface.hh"
+#include "helpers/IStopwatch.hh"
 
 using namespace client;
 
@@ -58,6 +60,17 @@ typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
 
 void GameUIInterface::UILoop()
 {
+  helpers::IStopwatch *sw;
+
+  sw = helpers::IStopwatch::getInstance();
+  while (windowIsOpen())
+    {
+      sw->set();
+      updateListEntity();
+      displaySimple();
+      if (sw->elapsedMs() < 1000 / (TICKRATEUI))
+	std::this_thread::sleep_for(std::chrono::milliseconds((1000 / TICKRATEUI) - sw->elapsedMs()));
+    }
 }
 
 void GameUIInterface::feedLeaderBoard(std::vector<std::pair<uint32_t, std::string> > nleaderBoard) {

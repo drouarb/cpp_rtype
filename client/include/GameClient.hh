@@ -13,10 +13,11 @@
 #include "GameUIInterface.hh"
 #include "Definitions.hh"
 #include "Information.hh"
+#include "thread/Thread.hpp"
 #include "helpers/IStopwatch.hh"
 
 #define TICKRATE 30
-#define TICKRATEDIFFCONST 0.3
+#define TICKRATEDIFFCONST 0.1
 #define TICKCURRENTDIFFCONST (1.0 / (((double)TICKRATE) * 5.0))
 #define PERIODTICKEVENT 2
 
@@ -41,6 +42,7 @@ namespace client {
         std::map<client::Key, vec_t> keygame_move;
         std::map<client::Key, int> keygame_attack;
         std::list<std::string> name_key;
+      IThread			*UIThread;
     public:
 
         static const std::map<client::Key, const std::string> keyStringMap;
