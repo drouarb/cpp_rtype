@@ -179,3 +179,44 @@ hp_t Player::MagicMissile::getDamage() {
 Tribool Player::MagicMissile::collidesWith(const Entity &entity) {
     return (entity.data.getTeam() != server::Team::PLAYER ? T_TRUE : T_FALSE);
 }
+
+/*
+ * ----------------------------------------------------------------------------------------------
+ */
+
+Player::BasicMissile::BasicMissile(pos_t posX, pos_t posY, const std::string &sprite) : posX(posX), posY(posY),
+                                                                                        sprite(sprite) {}
+
+EntityInitialization *Player::BasicMissile::initialize(round_t, const server::Grid &environment) {
+    this->mustDestroy = false;
+    EntityInitialization *initialization = new server::EntityInitialization;
+    initialization->posY = this->posY;
+    initialization->posX = this->posX;
+    initialization->sprite = this->sprite;
+    initialization->action.speedX = 25;
+    initialization->action.speedY = 0;
+    initialization->team = server::Team::PLAYER;
+    initialization->sprite.sizeX = 21;
+    initialization->sprite.sizeY = 11;
+    return initialization;
+}
+
+void Player::BasicMissile::collide(const server::Entity &entity, server::round_t) {
+    this->mustDestroy = true;
+}
+
+EntityAction *Player::BasicMissile::act(round_t current_round, const server::Grid &environment) {
+    EntityAction *action = new server::EntityAction();
+    action->speedX = 25;
+    action->speedY = 0;
+    action->destroy = this->mustDestroy;
+    return action;
+}
+
+hp_t Player::BasicMissile::getDamage() {
+    return 40;
+}
+
+Tribool Player::BasicMissile::collidesWith(const Entity &entity) {
+    return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
+}

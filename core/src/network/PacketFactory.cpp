@@ -31,6 +31,7 @@
 #include <network/packet/PacketLeaderBoard.hh>
 #include <network/packet/PacketSynchronization.hh>
 #include <network/packet/PacketPlayerData.hh>
+#include <network/packet/PacketGameData.hh>
 #include "network/PacketFactory.hh"
 
 network::PacketFactory::PacketFactory(unsigned short port): dataListener(*this) {
@@ -146,6 +147,7 @@ const std::map<network::packet::PacketId, network::PacketFactory::createPacketFu
         {packet::ERROR_LIST,      &PacketFactory::createPacket < packet::PacketErrorList > },
         {packet::ASK_LIST,        &PacketFactory::createPacket < packet::PacketAskList > },
         {packet::GAME_LIST,       &PacketFactory::createPacket < packet::PacketGameList > },
+        {packet::GAME_DATA,       &PacketFactory::createPacket < packet::PacketGameData > },
 
         {packet::ERROR_GAME,      &PacketFactory::createPacket < packet::PacketErrorGame > },
         {packet::JOIN,            &PacketFactory::createPacket < packet::PacketJoin > },

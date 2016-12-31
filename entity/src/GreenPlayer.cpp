@@ -13,8 +13,11 @@ server::EntityInitialization *GreenPlayer::initialize(server::round_t round, con
 
 server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
-    setAttackWait(id, 50, round);
-    return new WallAttack(this, this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() + this->data->getSprite().sizeY / 2);
+//    setAttackWait(id, 50, round);
+    setAttackWait(id, 5, round);
+    return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
+                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileB.png");
+//    return new WallAttack(this, this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() + this->data->getSprite().sizeY / 2);
 }
 
 /*

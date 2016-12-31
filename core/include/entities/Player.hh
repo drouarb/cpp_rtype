@@ -39,6 +39,26 @@ namespace server {
         void setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound);
         virtual ADynamicObject * createAttack(attackId_t id, round_t round);
 
+        class BasicMissile : public ADynamicObject {
+        private:
+            bool mustDestroy;
+            pos_t posX;
+            pos_t posY;
+            std::string sprite;
+        public:
+            BasicMissile(pos_t posX, pos_t posY, const std::string &sprite);
+
+            void collide(const server::Entity &entity, server::round_t current_round) override;
+
+            EntityAction *act(round_t current_round, const server::Grid &environment) override;
+
+            EntityInitialization *initialize(round_t round, const server::Grid &environment) override;
+
+            hp_t getDamage() override;
+
+            Tribool collidesWith(const Entity &entity) override;
+        };
+
     public:
 
         Player();

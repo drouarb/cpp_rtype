@@ -10,6 +10,13 @@ server::EntityInitialization *BluePlayer::initialize(server::round_t round, cons
     return pInitialization;
 }
 
+server::ADynamicObject *BluePlayer::createAttack(server::attackId_t id, server::round_t round) {
+//    return Player::createAttack(id, round);
+    setAttackWait(id, 5, round);
+    return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
+                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileA.png");
+}
+
 extern "C"
 {
 server::ADynamicObject * getInstance()

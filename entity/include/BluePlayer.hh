@@ -11,6 +11,7 @@
 class BluePlayer : public server::Player {
 public:
     server::EntityInitialization *initialize(server::round_t, const server::Grid &) override;
+    server::ADynamicObject *createAttack(server::attackId_t id, server::round_t round) override;
 };
 
 

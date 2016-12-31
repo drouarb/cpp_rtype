@@ -12,9 +12,9 @@ server::EntityInitialization *RedPlayer::initialize(server::round_t r, const ser
 
 server::ADynamicObject *RedPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
-    setAttackWait(id, 10, round);
-    return new MagicMissile(this, this->data->getPosX() + this->data->getSprite().sizeX,
-                            this->data->getPosY() + this->data->getSprite().sizeY, round);
+    setAttackWait(id, 5, round);
+    return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
+                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileC.png");
 }
 
 extern "C"
