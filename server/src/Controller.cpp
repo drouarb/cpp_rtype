@@ -30,3 +30,8 @@ void server::Controller::setEntity(server::Entity *entity) {
     Controller::entity = entity;
 }
 
+const server::APlayer *server::Controller::getPlayer() const
+{
+    return (player);
+}
+

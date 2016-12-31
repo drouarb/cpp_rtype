@@ -2,12 +2,14 @@
 // Created by lewis_e on 28/12/16.
 //
 
+#include <Entity.hh>
 #include "CollisionWall.hh"
+#include "EntityAction.hh"
 
-server::CollisionWall::CollisionWall() : x_pos(false), x_neg(false), y_pos(false), y_neg(false)
+server::CollisionWall::CollisionWall() : x_pos(false), x_neg(false), y_pos(false), y_neg(false), is_set(false), collisions(0)
 { }
 
-server::CollisionWall::CollisionWall(const server::CollisionWall &other) : x_pos(other.x_pos), x_neg(other.x_neg), y_pos(other.y_pos), y_neg(other.y_neg)
+server::CollisionWall::CollisionWall(const server::CollisionWall &other) : x_pos(other.x_pos), x_neg(other.x_neg), y_pos(other.y_pos), y_neg(other.y_neg), is_set(other.is_set), collisions(other.collisions)
 { }
 
 server::CollisionWall::~CollisionWall()
@@ -19,11 +21,14 @@ server::CollisionWall &server::CollisionWall::operator=(const server::CollisionW
     x_neg = other.x_neg;
     y_pos = other.y_pos;
     y_neg = other.y_neg;
+    is_set = other.is_set;
+    collisions = other.collisions;
     return (*this);
 }
 
-void server::CollisionWall::add(server::Axis axis, server::Direction dir)
+void server::CollisionWall::add(server::Axis axis, server::Direction dir, const Entity * entity)
 {
+    is_set = true;
     if (axis == X)
     {
         if (dir == POS)
@@ -46,6 +51,7 @@ void server::CollisionWall::add(server::Axis axis, server::Direction dir)
             y_neg = true;
         }
     }
+    collisions.push_back(entity);
 }
 
 void server::CollisionWall::apply(server::EntityAction *action)
@@ -59,4 +65,26 @@ void server::CollisionWall::apply(server::EntityAction *action)
     if (y_neg && action->speedY < 0)
         action->speedY = 0;
 }
+
+bool server::CollisionWall::isSet() const
+{
+    return (is_set);
+}
+
+void server::CollisionWall::reset()
+{
+    this->operator=(CollisionWall());
+}
+
+bool server::CollisionWall::includes(const Entity *entity) const
+{
+    for (auto it : collisions)
+    {
+        if (it == entity)
+            return (true);
+    }
+    return (false);
+}
+
+
 

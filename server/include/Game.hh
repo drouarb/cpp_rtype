@@ -5,7 +5,6 @@
 #include "Client.hh"
 #include "network/PacketFactory.hh"
 #include "events/Timeline.hh"
-#include "CollisionWall.hh"
 #include "Grid.hh"
 #include <map>
 #include <stack>
@@ -45,7 +44,6 @@ namespace server
         std::vector<server::event::AGameEvent *> gameEvents;
         round_t lastSyn;
         bool going;
-        std::map<Entity *, CollisionWall> collisions;
         Grid grid;
         std::stack<ADynamicObject *> players;
         const std::pair<std::string, std::string> * currentGamedata;
@@ -61,7 +59,7 @@ namespace server
         void unspawn();
         void manageNewGamedata();
 
-        void checkCollisionsCell(int entity_index, int cell_x, int cell_y);
+        void checkCollisionsCell(Entity * entity, int cell_x, int cell_y);
         bool willChangeCell(const Entity * entity);
         void spawnEntity(Entity * entity);
         

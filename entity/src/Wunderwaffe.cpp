@@ -48,7 +48,7 @@ Wunderwaffe::initialize(server::round_t round, const server::Grid & environment)
 }
 
 server::hp_t Wunderwaffe::getDamage() {
-    return DEFAULT_DAMAGE;
+    return 0;
 }
 
 server::Tribool Wunderwaffe::collidesWith(const server::Entity &entity) {

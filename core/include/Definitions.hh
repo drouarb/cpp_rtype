@@ -38,6 +38,7 @@ namespace server {
     typedef int gameId_t;
     typedef uint32_t entityId_t;
     typedef uint32_t eventId_t;
+    typedef uint32_t score_t;
 }
 
 #define FIELD_WIDTH 1920
