@@ -7,17 +7,16 @@
 
 server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
-    pInitialization->sprite.path = "media/sprites/magicalGirlB.png";
+    pInitialization->sprite.path = "media/sprites/magicalGirlD.png";
     return pInitialization;
 }
 
 server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
 //    setAttackWait(id, 50, round);
-    setAttackWait(id, 5, round);
+    setAttackWait(id, 50, round);
     return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
-                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileB.png");
-//    return new WallAttack(this, this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() + this->data->getSprite().sizeY / 2);
+                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileD.png");
 }
 
 /*
@@ -47,11 +46,13 @@ GreenPlayer::WallAttack::act(server::round_t current_round, const server::Grid &
         nextPlace = TOP;
         entityAction->newEntity = new WallElement(this->posX - 34,
                                                   this->posY - 34, getOwner());
+        std::cout << "Round " << current_round << ", element at " << this->posX - 34 << ", " << this->posY - 34 << std::endl;
         this->layerLeft--;
     } else {
         nextPlace = DOWN;
         entityAction->newEntity = new WallElement(this->posX - 34,
                                                   this->posY + 34, getOwner());
+        std::cout << "Round " << current_round << ", element at " << this->posX - 34 << ", " << this->posY + 34 << std::endl;
     }
     return entityAction;
 }
