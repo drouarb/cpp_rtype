@@ -73,7 +73,6 @@ bool NetworkManager::startPacketFactory()
 
 void NetworkManager:: addListenerToPacketFactory()
 {
-
     packetFactory->registerDisconnectionListener(new client::ClientListenerDisconnect(this));
     listeners.push_back(new client::ClientListenerCancelEvent(this));
     listeners.push_back(new client::ClientListenerDeleteEntity(this));
@@ -145,10 +144,8 @@ void NetworkManager::receiveQuit() {
 }
 
 void
-NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
-                                   int16_t pos_y, int16_t hp) {
+NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x, int16_t pos_y, int16_t hp) {
     gameClient->manageSpawnEntity(tick, eventId, spriteName, entityId, pos_x, pos_y, hp);
-
 }
 
 void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp) {
