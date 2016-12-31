@@ -40,8 +40,13 @@ server::EntityAction *CrazyEntity::act(server::round_t current_round, const serv
     a->hp = this->data->getHp() - lostHp;
     lostHp = 0;
 
-    if (current_round % 4 == 0) {
-        a->newEntity = new CrazyProjectile(this->data->getPosX() - 10, this->data->getPosY() + current_round % 33);
+    if (this->data->getPosX() < FIELD_BORDER_RIGHT - 50)
+    {
+        if (current_round % 6 == 0)
+        {
+            a->newEntity = new CrazyProjectile(this->data->getPosX() - 10,
+                                               this->data->getPosY() + current_round % 24 * 3 + 10);
+        }
     }
     return (a);
 }

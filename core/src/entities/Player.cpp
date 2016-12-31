@@ -27,7 +27,6 @@ void Player::collide(const Entity &entity, server::round_t current_round) {
     if (entity.data.getTeam() == server::Team::PLAYER) {
         return;
     }
-    std::cout << "Player " << this->data->getId() << " collides with player id " << entity.data.getId() << std::endl;
     this->lostHp += entity.obj->getDamage();
 }
 

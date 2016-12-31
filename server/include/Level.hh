@@ -36,6 +36,8 @@ namespace server {
         std::map<round_t, std::pair<std::string, std::string> > gamedata;
         std::string name;
         round_t end;
+
+        void addBorders();
     };
 }
 

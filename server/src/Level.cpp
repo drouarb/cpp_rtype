@@ -3,6 +3,7 @@
 #include "Level.hh"
 #include <JSON/JsonParser.hpp>
 #include <JSON/JsonArr.hpp>
+#include <Game.hh>
 
 server::Level::Level(const std::string &filepath) {
 
@@ -58,6 +59,8 @@ server::Level::Level(const std::string &filepath) {
         if (entry.first > end)
             end = entry.first;
     }
+
+    addBorders();
 }
 
 server::Level::~Level() {}
@@ -88,4 +91,26 @@ const std::pair<std::string, std::string> *server::Level::getNewData(server::rou
 bool server::Level::isOver(round_t tick) const
 {
     return (tick > end);
+}
+
+void server::Level::addBorders()
+{
+    for (int i = 0; i < FIELD_WIDTH; i += BORDER_OBSTACLE_SIZE)
+    {
+        Spawn spawn;
+        spawn.dlName = BORDER_OBSTACLE_LIB;
+        spawn.time = 1;
+        spawn.posX = i;
+        spawn.posY = 2;
+        this->spawns[1].push_back(spawn);
+    }
+    for (int i = 0; i < FIELD_WIDTH; i += BORDER_OBSTACLE_SIZE)
+    {
+        Spawn spawn;
+        spawn.dlName = BORDER_OBSTACLE_LIB;
+        spawn.time = 1;
+        spawn.posX = i;
+        spawn.posY = FIELD_HEIGHT - 2;
+        this->spawns[1].push_back(spawn);
+    }
 }

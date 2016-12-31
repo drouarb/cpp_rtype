@@ -3,64 +3,40 @@
   spawns:
   [
     {
-      dlName: "build/entity/libObstacle",
-      time: "10",
-      posX: "0",
-      posY: "0"
-    },
-    {
-      dlName: "build/entity/libObstacle",
-      time: "10",
-      posX: "100",
-      posY: "0"
-    },
-    {
-      dlName: "build/entity/libObstacle",
-      time: "10",
-      posX: "200",
-      posY: "0"
-    },
-    {
-      dlName: "build/entity/libObstacle",
-      time: "10",
-      posX: "300",
-      posY: "0"
-    },
-    {
-      dlName: "build/entity/libObstacle",
-      time: "10",
-      posX: "400",
-      posY: "0"
-    },
-    {
-      dlName: "build/entity/libObstacle",
-      time: "10",
-      posX: "500",
-      posY: "0"
-    },
-    {
-      dlName: "build/entity/libObstacle",
-      time: "10",
-      posX: "600",
-      posY: "0"
-    },
-    {
       dlName: "build/entity/libBasicNastyEntity",
-      time: "10",
+      time: "1",
       posX: "2000",
-      posY: "200"
+      posY: "250"
     },
     {
       dlName: "build/entity/libCrazyEntity",
       time: "180",
       posX: "2000",
-      posY: "400"
+      posY: "450"
     },
     {
       dlName: "build/entity/libWunderwaffe",
       time: "200",
       posX: "900",
       posY: "610"
+    },
+    {
+	dlName: "build/entity/libOstwind"
+	time: "1",
+	posX: "2000",
+	posY: "880"
+    },
+    {
+	dlName: "build/entity/libOstwind"
+	time: "400",
+	posX: "2000",
+	posY: "920"
+    },
+    {
+	dlName: "build/entity/libBomber"
+	time: "300",
+	posX: "2000",
+	posY: "100"
     }
   ]
   gamedata:

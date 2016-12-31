@@ -10,6 +10,9 @@
 #define ROUND_DURATION_MS 25
 #define MAX_PLAYERS 4
 
+#define BORDER_OBSTACLE_LIB "build/entity/libObstacle"
+#define BORDER_OBSTACLE_SIZE 200
+
 #define NOATTACK ((attackId_t)-1)
 
 namespace server {
