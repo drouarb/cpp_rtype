@@ -63,6 +63,7 @@ typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
 
 void GameUIInterface::UILoop()
 {
+  std::this_thread::sleep_for(std::chrono::milliseconds(10));
   helpers::IStopwatch *sw;
 
   running = true;

@@ -178,8 +178,9 @@ void GameClient::manageQuit() {
 
 void GameClient::run()
 {
-	GameThread = new Thread<decltype(&GameClient::gameLoop), GameClient *>(&GameClient::gameLoop, this);
-	gameui->UILoop();
+  //	GameThread = new Thread<decltype(&GameClient::gameLoop), GameClient *>(&GameClient::gameLoop, this);
+  //	gameui->UILoop();
+  gameLoop();
 }
 
 void GameClient::gameLoop() {
@@ -195,6 +196,7 @@ void GameClient::gameLoop() {
             if (tickcpt % PERIODTICKEVENT == 0) {
                 event = handler->getEvent();
                 if (event != -42) {
+		  std::this_thread::sleep_for(std::chrono::milliseconds(10));
                     receive = gameui->manageInput(event);
                     if (receive != nullptr) {
                         if (receive->info == I_QUIT) {
@@ -216,7 +218,9 @@ void GameClient::gameLoop() {
 		  }
 	    }
 	    if (world != nullptr)
-            world->applyTurn(tickRateClient, playerId);
+	      world->applyTurn(tickRateClient, playerId);
+	    gameui->updateListEntity();
+	    gameui->displaySimple();
 	    ++tickcpt;
 	    if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
 	      std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
