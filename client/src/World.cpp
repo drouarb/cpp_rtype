@@ -60,7 +60,7 @@ tick World::getTick() const {
     return (turn);
 }
 
-void World::applyTurn() {
+void World::applyTurn(int tickrate) {
     std::map<ide_t, Entity *>::iterator it;
     std::list<std::pair<tick, WorldEvent> >::iterator itEv;
     Entity *ent;
@@ -68,7 +68,7 @@ void World::applyTurn() {
 
     itEv = worldEvents.begin();
     while (itEv != worldEvents.end()) {
-        if (itEv->first < turn) {
+        if (itEv->first <= turn + tickrate / 2) {
             if (itEv->second.eventtype == SPAWN && (entitys.find(itEv->second.id) == entitys.end())) {
                 ent = new Entity(itEv->second.id, itEv->second.type, itEv->second.pos, itEv->first);
                 pos = ent->getPos();

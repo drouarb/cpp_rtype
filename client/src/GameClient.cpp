@@ -52,8 +52,8 @@ void GameClient::readaptTickRate(int servTickRate,
                                  std::pair<tick, uint64_t> servHoro) {
     double tickRateModif;
 
-    tickRateModif = (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
-      + (((double)((int64_t)estiClientHoro.first - (int64_t)servHoro.first)) * TICKCURRENTDIFFCONST);
+    tickRateModif = (((double)((tickRateClient) - servTickRate)) * TICKRATEDIFFCONST)
+      + (((double)(((int64_t)estiClientHoro.first) - (int64_t)servHoro.first)) * TICKCURRENTDIFFCONST);
     std::cout << "Server. current tick : [" << servHoro.first << "] tickrate : " << servTickRate << std::endl;
     std::cout << "Client. current tick : [" << estiClientHoro.first << "] tickrate : " << tickRateClient << std::endl;
     std::cout << "Client tickrate " << ((tickRateModif < 0.0) ? "increase of + 1" : "decrease of - 1") << std::endl;
@@ -208,7 +208,7 @@ void GameClient::gameLoop() {
 		  }
 	    }
 	    if (world != nullptr)
-	      world->applyTurn();
+	      world->applyTurn(tickRateClient);
 	    ++tickcpt;
 	    if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
 	      std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
