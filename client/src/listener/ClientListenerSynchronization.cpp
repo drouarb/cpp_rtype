@@ -18,6 +18,5 @@ ClientListenerSynchronization::~ClientListenerSynchronization()
 
 void ClientListenerSynchronization::notify(const network::packet::PacketSynchronization *packet)
 {
-  std::cout << "=======================receive synchro tick: " << packet->getTick() << " time: " << packet->getTime() << "==============================" << std::endl;
     networkManager->receiveSynchronization(packet->getTick(), packet->getTime());
 }
