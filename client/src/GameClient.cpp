@@ -121,10 +121,14 @@ void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t en
 
 void GameClient::managePlayerData(uint16_t nplayerId, uint8_t nbAttackPlayer) {
     if (world == nullptr) {
-        playerId = nplayerId;
-        nbrAttack = nbAttackPlayer;
+      horodatageTick.clear();
         world = new World(client_mut, gameui);
+      playerId = nplayerId;
+      nbrAttack = nbAttackPlayer;
         tickRateClient = TICKRATE;
+    } else {
+      playerId = nplayerId;
+      nbrAttack = nbAttackPlayer;
     }
 }
 
