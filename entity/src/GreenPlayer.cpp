@@ -2,8 +2,8 @@
 // Created by greg on 22/12/16.
 //
 
+#include <iostream>
 #include "GreenPlayer.hh"
-#include "../../server/include/Grid.hh"
 
 server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
@@ -13,8 +13,8 @@ server::EntityInitialization *GreenPlayer::initialize(server::round_t round, con
 
 server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
-    setAttackWait(id, 10, round);
-    return new WallAttack(this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() / 2 + 12);
+    setAttackWait(id, 50, round);
+    return new WallAttack(this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() + this->data->getSprite().sizeY / 2);
 }
 
 /*
@@ -41,13 +41,15 @@ GreenPlayer::WallAttack::act(server::round_t current_round, const server::Grid &
     }
     if (nextPlace == DOWN) {
         nextPlace = TOP;
-        entityAction->newEntity = new WallElement(this->posX - this->data->getSprite().sizeX,
-                                                  this->posY - this->data->getSprite().sizeY);
+        std::cout << "{x: " << this->posX << ", y:" << this->posY << "}, "
+                  << "{x: " << this->data->getSprite().sizeX << ", y:" << this->data->getSprite().sizeY << "}, " << std::endl;
+        entityAction->newEntity = new WallElement(this->posX - 34,
+                                                  this->posY - 34);
         this->layerLeft--;
     } else {
         nextPlace = DOWN;
-        entityAction->newEntity = new WallElement(this->posX - this->data->getSprite().sizeX,
-                                                  this->posY + this->data->getSprite().sizeY);
+        entityAction->newEntity = new WallElement(this->posX - 34,
+                                                  this->posY + 34);
     }
     return entityAction;
 }

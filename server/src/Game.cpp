@@ -16,44 +16,43 @@
 #include <network/packet/PacketQuit.hh>
 #include <helpers/Epoch.hh>
 #include <network/packet/PacketGameData.hh>
+#include <helpers/libloader/getDlLoader.hpp>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
-{ }
+Game::Game(network::PacketFactory &packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId),
+                                                           entityIdCount(0), lastSyn(0), going(true) {
+    initPlayers();
+}
 
-Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
-{ }
+Game::Game(network::PacketFactory &packetf, int lobbyId, const Level &lvl) : packetf(packetf), lvl(&lvl), round(0),
+                                                                             gameId(lobbyId), entityIdCount(0),
+                                                                             lastSyn(0), going(true) {
+    initPlayers();
+}
 
-Game::~Game()
-{
-    for (auto client : clientList)
-    {
+Game::~Game() {
+    for (auto client : clientList) {
         removePlayer(client);
     }
-    for (auto entity : entities)
-    {
+    for (auto entity : entities) {
         delete entity;
     }
-    for (auto entity : destroyedEntities)
-    {
+    for (auto entity : destroyedEntities) {
         delete entity;
     }
 }
 
-bool Game::operator==(const Game &other)
-{
+bool Game::operator==(const Game &other) {
     return (this == &other);
 }
 
-void Game::setLevel(const Level & lvl)
-{
+void Game::setLevel(const Level &lvl) {
     this->lvl = &lvl;
 }
 
-void Game::tick()
-{
+void Game::tick() {
     round++;
 
     progressLevel();
@@ -66,30 +65,23 @@ void Game::tick()
     sendData();
 }
 
-gameId_t Game::getLobbyId()
-{
+gameId_t Game::getLobbyId() {
     return (gameId);
 }
 
-void Game::progressLevel()
-{
-    if (lvl)
-    {
+void Game::progressLevel() {
+    if (lvl) {
         const std::vector<Spawn> *pVector = lvl->getNewSpawns(round);
-        if (pVector == NULL)
-        {
+        if (pVector == NULL) {
             return;
         }
-        for (auto spawn : *pVector)
-        {
-            Entity * entity = spawn.trigger(entityIdCount, round, grid);
-            if (entity == nullptr)
-            {
+        for (auto spawn : *pVector) {
+            Entity *entity = spawn.trigger(entityIdCount, round, grid);
+            if (entity == nullptr) {
                 LOG_ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
-            }
-            else
-            {
-                INFO("Game " << gameId << ": Adding new player(" << spawn.dlName << " on: " << entity->data.getPosX() << ", " << entity->data.getPosY());
+            } else {
+                INFO("Game " << gameId << ": Adding new player(" << spawn.dlName << " on: " << entity->data.getPosX()
+                             << ", " << entity->data.getPosY());
                 entityIdCount++;
                 spawnEntity(entity);
             }
@@ -97,12 +89,10 @@ void Game::progressLevel()
     }
 }
 
-void Game::checkCollisions()
-{
+void Game::checkCollisions() {
     collisions = std::map<Entity *, CollisionWall>();
 
-    for (size_t i = 0; i < entities.size(); ++i)
-    {
+    for (size_t i = 0; i < entities.size(); ++i) {
         int y = static_cast<int>(entities[i]->data.getPosY() / GRID_CELL_SIZE);
         int x = static_cast<int>(entities[i]->data.getPosX() / GRID_CELL_SIZE);
         checkCollisionsCell(i, y + 1, x + 1);
@@ -117,8 +107,7 @@ void Game::checkCollisions()
     }
 }
 
-void Game::checkCollision(Entity * entity_i, Entity * entity_j)
-{
+void Game::checkCollision(Entity *entity_i, Entity *entity_j) {
     //TODO: lighten code
 
     if (entity_i->obj->collidesWith(*entity_j) == T_FALSE && entity_j->obj->collidesWith(*entity_i) == T_FALSE)
@@ -134,40 +123,30 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
 
     // - left edge
     if (entity_j->data.getPosX() < entity_i->data.getPosX() &&
-        ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) || (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j))))
-    {
+        ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) ||
+         (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j)))) {
         dist = fx(entity_i) - fxp(entity_j);
-        if (dist <= 0)
-        {
+        if (dist <= 0) {
             entity_i->obj->collide(*entity_j, this->round);
             collisions[entity_i].add(X, NEG);
         }
-        if (dist < 0)
-        {
-            if (entity_i->data.getVectX() <= 0)
-            {
-                if (dist >= entity_i->data.getVectX())
-                {
+        if (dist < 0) {
+            if (entity_i->data.getVectX() <= 0) {
+                if (dist >= entity_i->data.getVectX()) {
                     entity_i->data.setVectX(entity_i->data.getVectX() - dist);
                     this->sim_move(entity_i);
                     dist = 0;
-                }
-                else
-                {
+                } else {
                     dist -= entity_i->data.getVectX();
                     entity_i->data.setVectX(0);
                     this->sim_move(entity_i);
                 }
             }
-            if (entity_j->data.getVectX() >= 0)
-            {
-                if (-dist <= entity_j->data.getVectX())
-                {
+            if (entity_j->data.getVectX() >= 0) {
+                if (-dist <= entity_j->data.getVectX()) {
                     entity_j->data.setVectX(entity_j->data.getVectX() - -dist);
                     this->sim_move(entity_i);
-                }
-                else
-                {
+                } else {
                     entity_j->data.setVectX(0);
                     this->sim_move(entity_i);
                 }
@@ -175,42 +154,32 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         }
     }
 
-    // - right edge
+        // - right edge
     else if (entity_j->data.getPosX() > entity_i->data.getPosX() &&
-        ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) || (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j))))
-    {
+             ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) ||
+              (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j)))) {
         dist = fx(entity_j) - fxp(entity_i);
-        if (dist <= 0)
-        {
+        if (dist <= 0) {
             entity_i->obj->collide(*entity_j, this->round);
             collisions[entity_i].add(X, POS);
         }
-        if (dist < 0)
-        {
-            if (entity_j->data.getVectX() <= 0)
-            {
-                if (dist >= entity_j->data.getVectX())
-                {
+        if (dist < 0) {
+            if (entity_j->data.getVectX() <= 0) {
+                if (dist >= entity_j->data.getVectX()) {
                     entity_j->data.setVectX(entity_j->data.getVectX() - dist);
                     this->sim_move(entity_i);
                     dist = 0;
-                }
-                else
-                {
+                } else {
                     dist -= entity_j->data.getVectX();
                     entity_j->data.setVectX(0);
                     this->sim_move(entity_i);
                 }
             }
-            if (entity_i->data.getVectX() >= 0)
-            {
-                if (-dist <= entity_i->data.getVectX())
-                {
+            if (entity_i->data.getVectX() >= 0) {
+                if (-dist <= entity_i->data.getVectX()) {
                     entity_i->data.setVectX(entity_i->data.getVectX() - -dist);
                     this->sim_move(entity_i);
-                }
-                else
-                {
+                } else {
                     entity_i->data.setVectX(0);
                     this->sim_move(entity_i);
                 }
@@ -222,40 +191,30 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
 
     // - upper edge
     if (entity_j->data.getPosY() < entity_i->data.getPosY() &&
-        ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) || (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j))))
-    {
+        ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) ||
+         (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j)))) {
         dist = fy(entity_i) - fyp(entity_j);
-        if (dist <= 0)
-        {
+        if (dist <= 0) {
             entity_i->obj->collide(*entity_j, this->round);
             collisions[entity_i].add(Y, NEG);
         }
-        if (dist < 0)
-        {
-            if (entity_i->data.getVectY() <= 0)
-            {
-                if (dist >= entity_i->data.getVectY())
-                {
+        if (dist < 0) {
+            if (entity_i->data.getVectY() <= 0) {
+                if (dist >= entity_i->data.getVectY()) {
                     entity_i->data.setVectY(entity_i->data.getVectY() - dist);
                     this->sim_move(entity_i);
                     dist = 0;
-                }
-                else
-                {
+                } else {
                     dist -= entity_i->data.getVectY();
                     entity_i->data.setVectY(0);
                     this->sim_move(entity_i);
                 }
             }
-            if (entity_j->data.getVectY() >= 0)
-            {
-                if (-dist <= entity_j->data.getVectY())
-                {
+            if (entity_j->data.getVectY() >= 0) {
+                if (-dist <= entity_j->data.getVectY()) {
                     entity_j->data.setVectY(entity_j->data.getVectY() - -dist);
                     this->sim_move(entity_i);
-                }
-                else
-                {
+                } else {
                     entity_j->data.setVectY(0);
                     this->sim_move(entity_i);
                 }
@@ -263,42 +222,32 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         }
     }
 
-    // - lower edge
+        // - lower edge
     else if (entity_j->data.getPosY() > entity_i->data.getPosY() &&
-        ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) || (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j))))
-    {
+             ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) ||
+              (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j)))) {
         dist = fy(entity_j) - fyp(entity_i);
-        if (dist <= 0)
-        {
+        if (dist <= 0) {
             entity_i->obj->collide(*entity_j, this->round);
             collisions[entity_i].add(Y, POS);
         }
-        if (dist < 0)
-        {
-            if (entity_j->data.getVectY() <= 0)
-            {
-                if (dist >= entity_j->data.getVectY())
-                {
+        if (dist < 0) {
+            if (entity_j->data.getVectY() <= 0) {
+                if (dist >= entity_j->data.getVectY()) {
                     entity_j->data.setVectY(entity_j->data.getVectY() - dist);
                     this->sim_move(entity_i);
                     dist = 0;
-                }
-                else
-                {
+                } else {
                     dist -= entity_j->data.getVectY();
                     entity_j->data.setVectY(0);
                     this->sim_move(entity_i);
                 }
             }
-            if (entity_i->data.getVectY() >= 0)
-            {
-                if (-dist <= entity_i->data.getVectY())
-                {
+            if (entity_i->data.getVectY() >= 0) {
+                if (-dist <= entity_i->data.getVectY()) {
                     entity_i->data.setVectY(entity_i->data.getVectY() - -dist);
                     this->sim_move(entity_i);
-                }
-                else
-                {
+                } else {
                     entity_i->data.setVectY(0);
                     this->sim_move(entity_i);
                 }
@@ -307,54 +256,44 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
     }
 }
 
-void Game::letEntitesAct()
-{
-    for (size_t i = 0; i != entities.size(); ++i)
-    {
+void Game::letEntitesAct() {
+    for (size_t i = 0; i != entities.size(); ++i) {
         auto it = entities.at(i);
-        EntityAction * action = it->obj->act(this->round, grid);
+        EntityAction *action = it->obj->act(this->round, grid);
 
         auto col = collisions.find(it);
         if (col != collisions.end())
             col->second.apply(action);
 
-        if (action->speedX != it->data.getVectX())
-        {
+        if (action->speedX != it->data.getVectX()) {
             it->data.setVectX(action->speedX);
             this->sim_move(entities[i]);
         }
-        if (action->speedY != it->data.getVectY())
-        {
+        if (action->speedY != it->data.getVectY()) {
             it->data.setVectY(action->speedY);
             this->sim_move(entities[i]);
         }
-        if (action->hp != it->data.getHp())
-        {
+        if (action->hp != it->data.getHp()) {
             it->data.setHp(action->hp);
             this->sim_update(entities[i]);
         }
-        if (action->newEntity)
-        {
+        if (action->newEntity) {
             auto newEntity = new Entity(action->newEntity, entityIdCount, round, grid);
             entityIdCount++;
             spawnEntity(newEntity);
         }
-        if (action->destroy)
-        {
+        if (action->destroy) {
             it->data.setDestroyed(true);
         }
-        if (action->soundToPlay != "")
-        {
+        if (action->soundToPlay != "") {
             sendSound(action->soundToPlay);
         }
         delete action;
     }
 }
 
-void Game::moveEntities()
-{
-    for (auto entity : entities)
-    {
+void Game::moveEntities() {
+    for (auto entity : entities) {
         bool change = willChangeCell(entity);
         if (change)
             grid.remove(entity);
@@ -377,8 +316,7 @@ void Game::unspawn()
             (*it)->data.setDestroyed(true);
             INFO("OUT OF RANGE : " << (*it)->data.getId())
         }
-        if ((*it)->data.isDestroyed())
-        {
+        if ((*it)->data.isDestroyed()) {
             INFO("delete player : " << (*it)->data.getId())
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
@@ -387,8 +325,7 @@ void Game::unspawn()
 
             if (going && isFinished())
                 endGame();
-        }
-        else
+        } else
             ++it;
     }
 }
@@ -412,22 +349,19 @@ void Game::manageNewGamedata()
     }
 }
 
-void Game::checkCollisionsCell(int entity_index, int cell_y, int cell_x)
-{
+
+void Game::checkCollisionsCell(int entity_index, int cell_y, int cell_x) {
     if (cell_y < 0 || cell_y >= GRID_HEIGHT || cell_x < 0 || cell_x >= GRID_WIDTH)
         return;
-    auto & cell = grid[cell_y][cell_x];
-    for (size_t j = 0; j < cell.size(); ++j)
-    {
-        if (cell[j]->data.getId() != entities[entity_index]->data.getId())
-        {
+    auto &cell = grid[cell_y][cell_x];
+    for (size_t j = 0; j < cell.size(); ++j) {
+        if (cell[j]->data.getId() != entities[entity_index]->data.getId()) {
             checkCollision(entities[entity_index], cell[j]);
         }
     }
 }
 
-bool Game::willChangeCell(const Entity * entity)
-{
+bool Game::willChangeCell(const Entity *entity) {
     auto old = entity->data.getPosX() / GRID_CELL_SIZE;
     if ((entity->data.getPosX() + entity->data.getVectX()) / GRID_CELL_SIZE != old)
         return (true);
@@ -436,9 +370,7 @@ bool Game::willChangeCell(const Entity * entity)
 }
 
 
-
-void Game::spawnEntity(Entity * entity)
-{
+void Game::spawnEntity(Entity *entity) {
     entities.push_back(entity);
     this->sim_spawn(entity);
     grid.add(entity);
@@ -447,8 +379,7 @@ void Game::spawnEntity(Entity * entity)
 void Game::newPlayer(Client *client) {
     INFO("Adding player from " << client->getClientId())
 
-    if (clientList.size() == 4)
-    {
+    if (clientList.size() == 4) {
         INFO("Full")
         network::packet::PacketErrorGame packet;
         packet.setMessage("Game room number " + std::to_string(gameId) + " is full.");
@@ -458,19 +389,21 @@ void Game::newPlayer(Client *client) {
 
     Controller *controller = new Controller();
     this->clientList.push_back(client);
-    Player *player = new Player();
     Entity *entity = new Entity();
     controller->setEntity(entity);
-    entity->initialize(player, entityIdCount, round, grid);
+    ADynamicObject *obj = this->players.top();
+    this->players.pop();
+    entity->initialize(obj, entityIdCount, round, grid);
     entityIdCount++;
-    controller->setEntity(player);
+    controller->setEntity(static_cast<Player *>(obj));
     client->setController(controller);
     spawnEntity(entity);
     greetNewPlayer(*client);
 }
 
 void Game::removePlayer(Client *client) {
-    const std::list<server::Client *>::iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
+    const std::list<server::Client *>::iterator &position = std::find(this->clientList.begin(), this->clientList.end(),
+                                                                      client);
     if (position == this->clientList.end()) {
         return;
     }
@@ -483,25 +416,20 @@ void Game::removePlayer(Client *client) {
     //TODO: send to simulation: destroy
 }
 
-bool Game::hasClient(const Client & client)
-{
-    for (auto c : clientList)
-    {
+bool Game::hasClient(const Client &client) {
+    for (auto c : clientList) {
         if (c == &client)
             return (true);
     }
     return (false);
 }
 
-bool Game::empty()
-{
+bool Game::empty() {
     return (clientList.empty());
 }
 
-std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator it, std::vector<Entity*> & vect)
-{
-    if (it == vect.end())
-    {
+std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator it, std::vector<Entity *> &vect) {
+    if (it == vect.end()) {
         return (vect.erase(it));
     }
 
@@ -510,33 +438,27 @@ std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator
     return (it);
 }
 
-pos_t Game::fx(const Entity * entity_i) const
-{
+pos_t Game::fx(const Entity *entity_i) const {
     return (entity_i->data.getPosX() + entity_i->data.getVectX());
 }
 
-pos_t Game::fy(const Entity * entity_i) const
-{
+pos_t Game::fy(const Entity *entity_i) const {
     return (entity_i->data.getPosY() + entity_i->data.getVectY());
 }
 
-pos_t Game::fxp(const Entity * entity_i) const
-{
+pos_t Game::fxp(const Entity *entity_i) const {
     return (entity_i->data.getPosX() + entity_i->data.getSprite().sizeX + entity_i->data.getVectX());
 }
 
-pos_t Game::fyp(const Entity * entity_i) const
-{
+pos_t Game::fyp(const Entity *entity_i) const {
     return (entity_i->data.getPosY() + entity_i->data.getSprite().sizeY + entity_i->data.getVectY());
 }
 
 void Game::sendData() {
     INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
-    for (auto & event : gameEvents)
-    {
+    for (auto &event : gameEvents) {
         auto packet = event->createPacket();
-        for (auto & client : clientList)
-        {
+        for (auto &client : clientList) {
             packetf.send(*packet, client->getClientId());
         }
         delete packet;
@@ -551,7 +473,8 @@ void Game::sendData() {
 
 void Game::sim_spawn(Entity *entity) {
     this->gameEvents.push_back(new server::event::Spawn
-                                       (this->round, entity->data.getId(), entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
+                                       (this->round, entity->data.getId(), entity->data.getPosX(),
+                                        entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
     INFO("spawn " << std::to_string(gameEvents.back()->getEntityId()))
 }
 
@@ -575,26 +498,20 @@ uint16_t Game::getClientSize() {
     return static_cast<uint16_t >(this->clientList.size());
 }
 
-round_t Game::getTick()
-{
+round_t Game::getTick() {
     return (round);
 }
 
-void Game::sendPacketSync(const Client * client)
-{
+void Game::sendPacketSync(const Client *client) {
     auto packet_syn = new network::packet::PacketSynchronization();
     packet_syn->setTick(round);
     packet_syn->setTime(static_cast<int64_t>(helpers::Epoch::getTimeMs()));
-    if (client == nullptr)
-    {
+    if (client == nullptr) {
         lastSyn = round;
-        for (auto client_it : clientList)
-        {
+        for (auto client_it : clientList) {
             packetf.send(*packet_syn, client_it->getClientId());
         }
-    }
-    else
-    {
+    } else {
         packetf.send(*packet_syn, client->getClientId());
     }
     delete packet_syn;
@@ -620,15 +537,13 @@ void Game::greetNewPlayer(const Client & client)
         sendSimToNewNotFirst(client);
 }
 
-void Game::sendSimToNewNotFirst(const Client &client)
-{
+void Game::sendSimToNewNotFirst(const Client &client) {
     //TODO
     //this is temporary
     //do this correctly when the simulation is done
 
     int id = 0;
-    for (auto entity : entities)
-    {
+    for (auto entity : entities) {
         auto pspawn = new network::packet::PacketSpawnEntity();
         pspawn->setTick(round);
         pspawn->setEventId(id);
@@ -655,13 +570,10 @@ void Game::sendSimToNewNotFirst(const Client &client)
     }
 }
 
-void Game::sendAllMoves()
-{
+void Game::sendAllMoves() {
     //TODO
-    for (auto client : clientList)
-    {
-        for (auto entity : entities)
-        {
+    for (auto client : clientList) {
+        for (auto entity : entities) {
             auto pmove = new network::packet::PacketMoveEntity();
             pmove->setTick(round);
             pmove->setEventId(0);
@@ -677,47 +589,54 @@ void Game::sendAllMoves()
     }
 }
 
-void Game::sendSound(const std::string &soundfile)
-{
+void Game::sendSound(const std::string &soundfile) {
     auto packet = new network::packet::PacketPlaySound();
     packet->setTick(round);
     packet->setEventId(0);
     /*packet->setSoundName(soundfile);*/ //TODO
-    for (auto client : clientList)
-    {
+    for (auto client : clientList) {
         packetf.send(*packet, client->getClientId());
     }
     delete (packet);
 }
 
-bool Game::isFinished()
-{
-    if (lvl->isOver(round))
-    {
-        for (auto entity : entities)
-        {
+bool Game::isFinished() {
+    if (lvl->isOver(round)) {
+        for (auto entity : entities) {
             if (entity->data.getTeam() == FOE)
                 return (false);
         }
         return (true);
-    }
-    else
-    {
+    } else {
         return (false);
     }
 }
 
-void Game::endGame()
-{
+void Game::endGame() {
     std::vector<std::pair<uint32_t, std::string>> vect;
     //TODO: scores
 
     network::packet::PacketLeaderBoard packet(vect);
     network::packet::PacketQuit packetQuit;
-    for (auto client : clientList)
-    {
+    for (auto client : clientList) {
         packetf.send(packet, client->getClientId());
         packetf.send(packetQuit, client->getClientId());
     }
     going = false;
+}
+
+void Game::initPlayers() {
+    try {
+        auto blue = getDlLoader<ADynamicObject>("build/entity/libBluePlayer")->getInstance();
+        this->players.push(blue);
+        auto red = getDlLoader<ADynamicObject>("build/entity/libRedPlayer")->getInstance();
+        this->players.push(red);
+        auto yellow = getDlLoader<ADynamicObject>("build/entity/libYellowPlayer")->getInstance();
+        this->players.push(yellow);
+        auto green = getDlLoader<ADynamicObject>("build/entity/libGreenPlayer")->getInstance();
+        this->players.push(green);
+    }
+    catch (std::runtime_error &e) {
+        std::cerr << "Entity creation error: " << e.what() << std::endl;
+    }
 }

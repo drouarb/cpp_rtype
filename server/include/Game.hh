@@ -8,6 +8,7 @@
 #include "CollisionWall.hh"
 #include "Grid.hh"
 #include <map>
+#include <stack>
 
 #define Y_BORDER_WIDTH 10
 
@@ -46,10 +47,12 @@ namespace server
         bool going;
         std::map<Entity *, CollisionWall> collisions;
         Grid grid;
+        std::stack<ADynamicObject *> players;
         const std::pair<std::string, std::string> * currentGamedata;
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
+        void initPlayers();
         void progressLevel();
         void checkCollisions();
         void checkCollision(Entity * entity1, Entity * entity2);

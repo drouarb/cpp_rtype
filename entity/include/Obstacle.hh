@@ -1,20 +1,24 @@
 //
-// Created by greg on 02/12/2016.
+// Created by greg on 30/12/16.
 //
 
 #ifndef CPP_RTYPE_OBSTACLE_HH
 #define CPP_RTYPE_OBSTACLE_HH
 
 
-#include <IEntity.hh>
+#include <entities/ADynamicObject.hh>
 
-class Obstacle : public server::IEntity {
+class Obstacle : public server::ADynamicObject {
 public:
-    Obstacle(const server::entityId_t entityId);
+    void collide(const server::Entity &entity, server::round_t current_round) override;
 
-    void collide(server::IEntity *);
+    server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
 
-    server::EntityAction *nextAction();
+    server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
+
+    server::hp_t getDamage() override;
+
+    server::Tribool collidesWith(const server::Entity &entity) override;
 };
 
 
