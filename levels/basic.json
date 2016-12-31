@@ -16,8 +16,8 @@
     },
     {
       dlName: "build/entity/libWunderwaffe",
-      time: "200",
-      posX: "900",
+      time: "2",
+      posX: "2000",
       posY: "610"
     },
     {

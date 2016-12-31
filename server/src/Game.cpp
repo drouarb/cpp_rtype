@@ -138,7 +138,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
 
     // - left edge
     if (entity_j->data.getPosX() < entity_i->data.getPosX() &&
-        ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) || (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j))))
+            !(fyp(entity_i) <= fy(entity_j) || fy(entity_i) >= fyp(entity_j)))
     {
         dist = fx(entity_i) - fxp(entity_j);
         if (dist <= 0)
@@ -182,7 +182,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
 
     // - right edge
     else if (entity_j->data.getPosX() > entity_i->data.getPosX() &&
-        ((fy(entity_i) > fy(entity_j) && fy(entity_i) < fyp(entity_j)) || (fyp(entity_i) > fy(entity_j) && fyp(entity_i) < fyp(entity_j))))
+            !(fyp(entity_i) <= fy(entity_j) || fy(entity_i) >= fyp(entity_j)))
     {
         dist = fx(entity_j) - fxp(entity_i);
         if (dist <= 0)
@@ -228,7 +228,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
 
     // - upper edge
     if (entity_j->data.getPosY() < entity_i->data.getPosY() &&
-        ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) || (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j))))
+            !(fxp(entity_i) <= fx(entity_j) || fx(entity_i) >= fxp(entity_j)))
     {
         dist = fy(entity_i) - fyp(entity_j);
         if (dist <= 0)
@@ -272,7 +272,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
 
     // - lower edge
     else if (entity_j->data.getPosY() > entity_i->data.getPosY() &&
-        ((fx(entity_i) > fx(entity_j) && fx(entity_i) < fxp(entity_j)) || (fxp(entity_i) > fx(entity_j) && fxp(entity_i) < fxp(entity_j))))
+            !(fxp(entity_i) <= fx(entity_j) || fx(entity_i) >= fxp(entity_j)))
     {
         dist = fy(entity_j) - fyp(entity_i);
         if (dist <= 0)
@@ -357,6 +357,7 @@ void Game::letEntitesAct()
         {
             sendSound(action->soundToPlay);
         }
+
         delete action;
     }
 }
@@ -686,6 +687,11 @@ void Game::sendAllMoves()
             pmove->setPosY(entity->data.getPosY());
             pmove->setVecX(entity->data.getVectX());
             pmove->setVecY(entity->data.getVectY());
+
+            if (entity->data.getHp() == 1000)
+            {
+                std::cout << "posx=" << entity->data.getPosX() << " vectx=" << entity->data.getVectX() << std::endl;
+            }
 
             packetf.send(*pmove, client->getClientId());
             delete pmove;

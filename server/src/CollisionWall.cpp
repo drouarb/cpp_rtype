@@ -3,6 +3,7 @@
 //
 
 #include <Entity.hh>
+#include <iostream>
 #include "CollisionWall.hh"
 #include "EntityAction.hh"
 

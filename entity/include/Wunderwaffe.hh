@@ -10,19 +10,7 @@
 
 class Wunderwaffe : public server::ADynamicObject {
 private:
-    static const int DEFAULT_DAMAGE = 40;
-    static const int MAX_MOVEMENT = 100;
     static const int DEFAULT_LIFE = 1000;
-
-    enum movement_t {
-        FRONT,
-        BACK
-    };
-
-
-    class ClassicBullet : public server::ADynamicObject {
-
-    };
 
     class BigBullet : public server::ADynamicObject {
     private:
@@ -52,8 +40,11 @@ private:
     server::hp_t damage;
     server::round_t startRound;
     server::pos_t pos;
+    server::ADynamicObject * firstHitbox;
 
 public:
+
+
     void collide(const server::Entity &entity, server::round_t current_round) override;
 
     server::EntityAction *act(server::round_t current_round, const server::Grid &vector) override;
@@ -63,6 +54,34 @@ public:
     server::hp_t getDamage() override;
 
     server::Tribool collidesWith(const server::Entity &entity) override;
+    
+    
+    
+    
+    
+    
+private:
+
+    class Hitbox : public server::ADynamicObject {
+    private:
+
+        server::pos_t x_offset;
+        server::ADynamicObject * owner;
+
+    public:
+
+        void setOwner(server::ADynamicObject * owner, server::pos_t x_offset);
+
+        void collide(const server::Entity &entity, server::round_t current_round) override;
+
+        server::EntityAction *act(server::round_t current_round, const server::Grid &vector) override;
+
+        server::EntityInitialization *initialize(server::round_t round, const server::Grid &vector) override;
+
+        server::hp_t getDamage() override;
+
+        server::Tribool collidesWith(const server::Entity &entity) override;
+    };
 };
 
 
