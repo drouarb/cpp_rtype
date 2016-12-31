@@ -108,7 +108,7 @@ server::EntityInitialization *BasicNastyEntity::VeryNastyProjectile::initialize(
     initialization->sprite.sizeY = 20;
     initialization->posX = this->posX;
     initialization->posY = this->posY - initialization->sprite.sizeY / 2;
-    initialization->sprite.path = "media/sprites/magicBullet.png";
+    initialization->sprite.path = "media/sprites/mediumBullet.png";
     return initialization;
 }
 

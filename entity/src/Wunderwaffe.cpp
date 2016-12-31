@@ -73,12 +73,12 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
             }
             if ((current_round / 10 % 4) == 1)
             {
-                BigBulletRight *bullet = new BigBulletRight(this->data->getPosX() + 600, this->data->getPosY() + 100);
+                BigBulletRight *bullet = new BigBulletRight(this->data->getPosX() + 610, this->data->getPosY() + 100);
                 action->newEntity = bullet;
             }
             if ((current_round / 10 % 4) == 3)
             {
-                BigBulletRight *bullet = new BigBulletRight(this->data->getPosX() + 540, this->data->getPosY() + 100);
+                BigBulletRight *bullet = new BigBulletRight(this->data->getPosX() + 560, this->data->getPosY() + 100);
                 action->newEntity = bullet;
             }
             if ((current_round / 10 % 4) == 2)
@@ -256,7 +256,7 @@ Wunderwaffe::BigBulletRight::initialize(server::round_t round, const server::Gri
 {
     auto init = BigBullet::initialize(round, environment);
 
-    init->sprite.path = "media/sprites/magicBullet.png";
+    init->sprite.path = "media/sprites/classicBulletGoingUpRight.png";
 
     return (init);
 }
@@ -268,8 +268,8 @@ server::EntityAction *Wunderwaffe::BigBulletLeft::act(server::round_t current_ro
 {
     auto act = BigBullet::act(current_round, environment);
 
-    act->speedX = -6;
-    act->speedY = -2;
+    act->speedX = -9;
+    act->speedY = -3;
 
     return (act);
 }
@@ -279,7 +279,7 @@ Wunderwaffe::BigBulletLeft::initialize(server::round_t round, const server::Grid
 {
     auto init = BigBullet::initialize(round, environment);
 
-    init->sprite.path = "media/sprites/magicBullet.png";
+    init->sprite.path = "media/sprites/BigBulletWunderwaffe.png";
 
     return (init);
 }

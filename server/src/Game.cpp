@@ -17,6 +17,7 @@
 #include <helpers/Epoch.hh>
 #include <network/packet/PacketGameData.hh>
 #include <helpers/libloader/getDlLoader.hpp>
+#include <network/packet/PacketUpdateEntity.hh>
 #include "Game.hh"
 
 using namespace server;
