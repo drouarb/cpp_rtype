@@ -105,8 +105,8 @@ void Game::checkCollisions()
 {
     for (auto entity : entities)
     {
-        int y = static_cast<int>(entity->data.getPosY() / GRID_CELL_SIZE);
-        int x = static_cast<int>(entity->data.getPosX() / GRID_CELL_SIZE);
+        int y = grid.getCoordinate(entity->data.getPosY());
+        int x = grid.getCoordinate(entity->data.getPosX());
         checkCollisionsCell(entity, y + 1, x + 1);
         checkCollisionsCell(entity, y, x + 1);
         checkCollisionsCell(entity, y - 1, x + 1);
@@ -437,11 +437,11 @@ void Game::checkCollisionsCell(Entity * entity, int cell_y, int cell_x)
 
 bool Game::willChangeCell(const Entity * entity)
 {
-    auto old = entity->data.getPosX() / GRID_CELL_SIZE;
-    if ((entity->data.getPosX() + entity->data.getVectX()) / GRID_CELL_SIZE != old)
+    auto old = grid.getCoordinate(entity->data.getPosX());
+    if (grid.getCoordinate(entity->data.getPosX() + entity->data.getVectX()) != old)
         return (true);
-    old = entity->data.getPosY() / GRID_CELL_SIZE;
-    return ((entity->data.getPosY() + entity->data.getVectY()) / GRID_CELL_SIZE != old);
+    old = grid.getCoordinate(entity->data.getPosY());
+    return (grid.getCoordinate(entity->data.getPosY() + entity->data.getVectY()) != old);
 }
 
 

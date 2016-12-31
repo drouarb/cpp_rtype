@@ -9,8 +9,8 @@
 #include <vector>
 
 #define GRID_CELL_SIZE 150
-#define GRID_HEIGHT (FIELD_HEIGHT / GRID_CELL_SIZE + 1)
-#define GRID_WIDTH ((FIELD_WIDTH + LEFT_MARGIN + RIGHT_MARGIN) / GRID_CELL_SIZE + 1)
+#define GRID_HEIGHT (FIELD_HEIGHT / GRID_CELL_SIZE + 2)
+#define GRID_WIDTH ((FIELD_WIDTH + LEFT_MARGIN + RIGHT_MARGIN) / GRID_CELL_SIZE + 2)
 
 namespace server
 {
@@ -24,6 +24,7 @@ namespace server
         void remove(const Entity * entity);
         void add(Entity * entity);
 
+        int getCoordinate(pos_t pos) const;
 
         line_t& operator[](int index);
         const line_t& operator[](int index) const;
