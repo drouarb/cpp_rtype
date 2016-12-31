@@ -3,7 +3,6 @@
 */
 
 #include <thread>
-#include <unistd.h>
 #include <sstream>
 #include <iostream>
 #include "GameClient.hh"
