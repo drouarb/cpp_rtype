@@ -4,17 +4,25 @@
 
 #include "../../include/UI/HUDLayer.hh"
 
-UI::HUDLayer::HUDLayer() {
-}
-
-UI::HUDLayer::~HUDLayer() {
-
+UI::Text* UI::HUDLayer::addTextBox(float x, float y) {
+    textBoxes.push_back(new Text());
+    if (!textBoxes.back()->initOK()) {
+        throw(1);
+    }
+    textBoxes.back()->setPosition(x, y);
+    return textBoxes.back();
 }
 
 void UI::HUDLayer::action() {
+    for (auto textBox : textBoxes) {
+        window->draw(*(textBox->getText()));
+    }
+}
+
+UI::HUDLayer::HUDLayer() {
 
 }
 
-void    UI::HUDLayer::loadAvatar(std::string filename) {
-
+void UI::HUDLayer::init(sf::RenderWindow* win) {
+    this->window = win;
 }

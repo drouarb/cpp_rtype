@@ -14,11 +14,9 @@ namespace UI {
 
     private:
         static ILayer* instantiateMenu();
-
         static ILayer* instantiateHUD();
         static ILayer* instantiateGame();
         static ILayer* instantiateBackground();
-
         typedef UI::ILayer* (*instantiateLayer)();
         const static std::map<UI::layerType, instantiateLayer> layerMap;
     };

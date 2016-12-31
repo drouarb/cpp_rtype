@@ -49,6 +49,9 @@ UI::AudioManager::AudioManager() {
 UI::AudioManager::~AudioManager() {
     music.~Music();
     sound.~Sound();
+    for (auto buffer : buffers) {
+        delete(buffer);
+    }
 }
 
 void UI::AudioManager::playSound(int soundID) {

@@ -8,14 +8,21 @@
 
 #include "ALayer.hh"
 
+#include "ALayer.hh"
+#include "Text.hh"
+#include "Window.hh"
+
 namespace UI {
     class HUDLayer : public ALayer {
     public:
         HUDLayer();
-        ~HUDLayer();
+        void init(sf::RenderWindow *win);
         void action();
+        Text * addTextBox(float x, float y);
 
-        void loadAvatar(std::string filename);
+    private:
+        std::vector<UI::Text*> textBoxes;
+        sf::RenderWindow *window;
     };
 }
 

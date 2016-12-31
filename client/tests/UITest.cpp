@@ -17,6 +17,7 @@
 #include <UI/Text.cpp>
 #include <UI/Background.cpp>
 #include <UI/MenuLayer.hh>
+#include <UI/HUDLayer.cpp>
 
 
 int testshitfunction(int modifier, UI::UIManager *neue) {
