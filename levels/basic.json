@@ -3,13 +3,55 @@
   spawns:
   [
     {
+      dlName: "build/entity/libObstacle",
+      time: "10",
+      posX: "0",
+      posY: "0"
+    },
+    {
+      dlName: "build/entity/libObstacle",
+      time: "10",
+      posX: "100",
+      posY: "0"
+    },
+    {
+      dlName: "build/entity/libObstacle",
+      time: "10",
+      posX: "200",
+      posY: "0"
+    },
+    {
+      dlName: "build/entity/libObstacle",
+      time: "10",
+      posX: "300",
+      posY: "0"
+    },
+    {
+      dlName: "build/entity/libObstacle",
+      time: "10",
+      posX: "400",
+      posY: "0"
+    },
+    {
+      dlName: "build/entity/libObstacle",
+      time: "10",
+      posX: "500",
+      posY: "0"
+    },
+    {
+      dlName: "build/entity/libObstacle",
+      time: "10",
+      posX: "600",
+      posY: "0"
+    },
+    {
       dlName: "build/entity/libBasicNastyEntity",
       time: "10",
       posX: "2000",
       posY: "200"
     },
     {
-      dlName: "build/entity/libBasicNastyEntity",
+      dlName: "build/entity/libCrazyEntity",
       time: "180",
       posX: "2000",
       posY: "400"

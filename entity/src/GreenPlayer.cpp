@@ -2,8 +2,8 @@
 // Created by greg on 22/12/16.
 //
 
+#include <iostream>
 #include "GreenPlayer.hh"
-#include "../../server/include/Grid.hh"
 
 server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
@@ -13,16 +13,17 @@ server::EntityInitialization *GreenPlayer::initialize(server::round_t round, con
 
 server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
-    setAttackWait(id, 10, round);
-    return new WallAttack(this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() / 2 + 12);
+    setAttackWait(id, 50, round);
+    return new WallAttack(this, this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() + this->data->getSprite().sizeY / 2);
 }
 
 /*
  * ----------------------------------------------------------------------------------------------------------
  */
 
-GreenPlayer::WallAttack::WallAttack(server::pos_t posX, server::pos_t posY) : posX(posX), posY(posY), initialRound(0),
-                                                                              layerLeft(3), nextPlace(TOP) {}
+GreenPlayer::WallAttack::WallAttack(server::APlayer *owner, server::pos_t posX, server::pos_t posY)
+        : Power(owner), posX(posX), posY(posY), initialRound(0),
+          layerLeft(3), nextPlace(TOP) {}
 
 void GreenPlayer::WallAttack::collide(const server::Entity &entity, server::round_t current_round) {}
 
@@ -41,13 +42,13 @@ GreenPlayer::WallAttack::act(server::round_t current_round, const server::Grid &
     }
     if (nextPlace == DOWN) {
         nextPlace = TOP;
-        entityAction->newEntity = new WallElement(this->posX - this->data->getSprite().sizeX,
-                                                  this->posY - this->data->getSprite().sizeY);
+        entityAction->newEntity = new WallElement(this->posX - 34,
+                                                  this->posY - 34, getOwner());
         this->layerLeft--;
     } else {
         nextPlace = DOWN;
-        entityAction->newEntity = new WallElement(this->posX - this->data->getSprite().sizeX,
-                                                  this->posY + this->data->getSprite().sizeY);
+        entityAction->newEntity = new WallElement(this->posX - 34,
+                                                  this->posY + 34, getOwner());
     }
     return entityAction;
 }
@@ -77,7 +78,9 @@ server::Tribool GreenPlayer::WallAttack::collidesWith(const server::Entity &enti
  * ----------------------------------------------------------------------------------------------------------
  */
 
-void GreenPlayer::WallAttack::WallElement::collide(const server::Entity &, server::round_t) {
+void GreenPlayer::WallAttack::WallElement::collide(const server::Entity &, server::round_t)
+{
+    modScore(getDamage());
     this->mustDestroy = true;
 }
 
@@ -112,8 +115,9 @@ server::Tribool GreenPlayer::WallAttack::WallElement::collidesWith(const server:
     return server::T_TRUE;
 }
 
-GreenPlayer::WallAttack::WallElement::WallElement(server::pos_t posX, server::pos_t posY) : mustDestroy(false),
-                                                                                            posX(posX), posY(posY) {}
+GreenPlayer::WallAttack::WallElement::WallElement(server::pos_t posX, server::pos_t posY, server::APlayer *owner)
+        : Power(owner), mustDestroy(false), posX(posX), posY(posY)
+{}
 
 extern "C"
 {

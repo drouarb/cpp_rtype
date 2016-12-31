@@ -38,14 +38,15 @@ namespace server {
     typedef int gameId_t;
     typedef uint32_t entityId_t;
     typedef uint32_t eventId_t;
+    typedef uint32_t score_t;
 }
 
 #define FIELD_WIDTH 1920
 #define FIELD_HEIGHT 1080
 #define FIELD_BORDER_LEFT 0
 #define FIELD_BORDER_RIGHT (FIELD_BORDER_LEFT + FIELD_WIDTH)
-#define LEFT_MARGIN 100
-#define RIGHT_MARGIN (LEFT_MARGIN)
+#define LEFT_MARGIN 0
+#define RIGHT_MARGIN 200
 
 #define ROUNDS_BETWEEN_SYN 30
 

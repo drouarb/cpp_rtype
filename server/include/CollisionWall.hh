@@ -5,10 +5,10 @@
 #ifndef CPP_RTYPE_COLLISIONWALL_HH
 #define CPP_RTYPE_COLLISIONWALL_HH
 
-#include "EntityAction.hh"
-
 namespace server
 {
+    class EntityAction;
+
     enum Axis
     {
         X,
@@ -30,15 +30,19 @@ namespace server
 
         CollisionWall &operator=(const CollisionWall & other);
 
-        void add(Axis axis, Direction dir);
-
+        void add(Axis axis, Direction dir, const Entity * entity);
         void apply(EntityAction * action);
+        bool isSet() const;
+        void reset();
+        bool includes(const Entity * entity) const;
 
     private:
         bool x_pos;
         bool x_neg;
         bool y_pos;
         bool y_neg;
+        bool is_set;
+        std::vector<const Entity*> collisions;
     };
 }
 

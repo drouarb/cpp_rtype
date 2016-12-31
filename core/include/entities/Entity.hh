@@ -7,6 +7,7 @@
 
 #include <helpers/libloader/IDlLoader.hh>
 #include "ADynamicObject.hh"
+#include "../../server/include/CollisionWall.hh"
 
 namespace server
 {
@@ -21,6 +22,7 @@ namespace server
 
         ADynamicObject * obj;
         EntityData data;
+        CollisionWall collisions;
 
         static Entity *
         make(const std::string &path, entityId_t id, round_t round, const Grid &environment);

@@ -19,7 +19,7 @@ namespace server {
         static const int DEFAULT_PLAYER_SPEED = 1;
         static const int TIMELINE_LENGTH = 60;
 
-        round_t mustDestroy;
+        bool mustDestroy;
         speed_t vectX;
         speed_t vectY;
         hp_t lostHp;
@@ -51,9 +51,9 @@ namespace server {
         EntityInitialization *initialize(round_t, const Grid &) override;
         hp_t getDamage() override;
 
-        class MagicMissile : public ADynamicObject {
+        class MagicMissile : public ADynamicObject, protected APlayer::Power {
         public:
-            MagicMissile(pos_t posX, pos_t posY, round_t startRound);
+            MagicMissile(APlayer *owner, pos_t posX, pos_t posY, round_t startRound);
 
             void collide(const Entity &entity, server::round_t current_round) override;
             EntityAction *act(round_t current_round, const Grid &) override;

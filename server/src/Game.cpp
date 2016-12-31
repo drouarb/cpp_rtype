@@ -16,21 +16,25 @@
 #include <network/packet/PacketQuit.hh>
 #include <helpers/Epoch.hh>
 #include <network/packet/PacketGameData.hh>
+#include <helpers/libloader/getDlLoader.hpp>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
-{ }
+Game::Game(network::PacketFactory &packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId),
+                                                           entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
+{}
 
-Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
-{ }
+Game::Game(network::PacketFactory &packetf, int lobbyId, const Level &lvl) : packetf(packetf), lvl(&lvl), round(0),
+                                                                             gameId(lobbyId), entityIdCount(0),
+                                                                             lastSyn(0), going(true), currentGamedata(nullptr)
+{}
 
 Game::~Game()
 {
-    for (auto client : clientList)
+    while (clientList.size() > 0)
     {
-        removePlayer(client);
+        removePlayer(clientList.back());
     }
     for (auto entity : entities)
     {
@@ -99,21 +103,19 @@ void Game::progressLevel()
 
 void Game::checkCollisions()
 {
-    collisions = std::map<Entity *, CollisionWall>();
-
-    for (size_t i = 0; i < entities.size(); ++i)
+    for (auto entity : entities)
     {
-        int y = static_cast<int>(entities[i]->data.getPosY() / GRID_CELL_SIZE);
-        int x = static_cast<int>(entities[i]->data.getPosX() / GRID_CELL_SIZE);
-        checkCollisionsCell(i, y + 1, x + 1);
-        checkCollisionsCell(i, y, x + 1);
-        checkCollisionsCell(i, y - 1, x + 1);
-        checkCollisionsCell(i, y + 1, x);
-        checkCollisionsCell(i, y, x);
-        checkCollisionsCell(i, y - 1, x);
-        checkCollisionsCell(i, y + 1, x - 1);
-        checkCollisionsCell(i, y, x - 1);
-        checkCollisionsCell(i, y - 1, x - 1);
+        int y = static_cast<int>(entity->data.getPosY() / GRID_CELL_SIZE);
+        int x = static_cast<int>(entity->data.getPosX() / GRID_CELL_SIZE);
+        checkCollisionsCell(entity, y + 1, x + 1);
+        checkCollisionsCell(entity, y, x + 1);
+        checkCollisionsCell(entity, y - 1, x + 1);
+        checkCollisionsCell(entity, y + 1, x);
+        checkCollisionsCell(entity, y, x);
+        checkCollisionsCell(entity, y - 1, x);
+        checkCollisionsCell(entity, y + 1, x - 1);
+        checkCollisionsCell(entity, y, x - 1);
+        checkCollisionsCell(entity, y - 1, x - 1);
     }
 }
 
@@ -121,6 +123,8 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
 {
     //TODO: lighten code
 
+    if (entity_i->collisions.includes(entity_j))
+        return;
     if (entity_i->obj->collidesWith(*entity_j) == T_FALSE && entity_j->obj->collidesWith(*entity_i) == T_FALSE)
         return;
     if (entity_i->obj->collidesWith(*entity_j) == NA || entity_j->obj->collidesWith(*entity_i) == NA)
@@ -139,8 +143,9 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         dist = fx(entity_i) - fxp(entity_j);
         if (dist <= 0)
         {
-            entity_i->obj->collide(*entity_j, this->round);
-            collisions[entity_i].add(X, NEG);
+            if (entity_i->collisions.includes(entity_j) == false)
+                entity_i->obj->collide(*entity_j, this->round);
+            entity_i->collisions.add(X, NEG, entity_j);
         }
         if (dist < 0)
         {
@@ -182,8 +187,9 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         dist = fx(entity_j) - fxp(entity_i);
         if (dist <= 0)
         {
-            entity_i->obj->collide(*entity_j, this->round);
-            collisions[entity_i].add(X, POS);
+            if (entity_i->collisions.includes(entity_j) == false)
+                entity_i->obj->collide(*entity_j, this->round);
+            entity_i->collisions.add(X, POS, entity_j);
         }
         if (dist < 0)
         {
@@ -227,8 +233,9 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         dist = fy(entity_i) - fyp(entity_j);
         if (dist <= 0)
         {
-            entity_i->obj->collide(*entity_j, this->round);
-            collisions[entity_i].add(Y, NEG);
+            if (entity_i->collisions.includes(entity_j) == false)
+                entity_i->obj->collide(*entity_j, this->round);
+            entity_i->collisions.add(Y, NEG, entity_j);
         }
         if (dist < 0)
         {
@@ -270,8 +277,9 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
         dist = fy(entity_j) - fyp(entity_i);
         if (dist <= 0)
         {
-            entity_i->obj->collide(*entity_j, this->round);
-            collisions[entity_i].add(Y, POS);
+            if (entity_i->collisions.includes(entity_j) == false)
+                entity_i->obj->collide(*entity_j, this->round);
+            entity_i->collisions.add(Y, POS, entity_j);
         }
         if (dist < 0)
         {
@@ -314,9 +322,11 @@ void Game::letEntitesAct()
         auto it = entities.at(i);
         EntityAction * action = it->obj->act(this->round, grid);
 
-        auto col = collisions.find(it);
-        if (col != collisions.end())
-            col->second.apply(action);
+        if (it->collisions.isSet())
+        {
+            it->collisions.apply(action);
+            it->collisions.reset();
+        }
 
         if (action->speedX != it->data.getVectX())
         {
@@ -384,13 +394,12 @@ void Game::unspawn()
             destroyedEntities.push_back(*it);
             grid.remove(*it);
             it = vect_erase(it, entities);
-
-            if (going && isFinished())
-                endGame();
         }
         else
             ++it;
     }
+    if (going && isFinished())
+        endGame();
 }
 
 void Game::manageNewGamedata()
@@ -412,16 +421,16 @@ void Game::manageNewGamedata()
     }
 }
 
-void Game::checkCollisionsCell(int entity_index, int cell_y, int cell_x)
+void Game::checkCollisionsCell(Entity * entity, int cell_y, int cell_x)
 {
     if (cell_y < 0 || cell_y >= GRID_HEIGHT || cell_x < 0 || cell_x >= GRID_WIDTH)
         return;
     auto & cell = grid[cell_y][cell_x];
     for (size_t j = 0; j < cell.size(); ++j)
     {
-        if (cell[j]->data.getId() != entities[entity_index]->data.getId())
+        if (cell[j]->data.getId() != entity->data.getId())
         {
-            checkCollision(entities[entity_index], cell[j]);
+            checkCollision(entity, cell[j]);
         }
     }
 }
@@ -458,20 +467,21 @@ void Game::newPlayer(Client *client) {
 
     Controller *controller = new Controller();
     this->clientList.push_back(client);
-    Player *player = new Player();
     Entity *entity = new Entity();
     controller->setEntity(entity);
-    entity->initialize(player, entityIdCount, round, grid);
+    entity->initialize(getDlLoader<ADynamicObject>(playerPaths[clientList.size()])->getInstance(), entityIdCount, round, grid);
     entityIdCount++;
-    controller->setEntity(player);
+    controller->setEntity(static_cast<Player *>(entity->obj));
     client->setController(controller);
     spawnEntity(entity);
     greetNewPlayer(*client);
 }
 
-void Game::removePlayer(Client *client) {
+void Game::removePlayer(Client *client)
+{
     const std::list<server::Client *>::iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
-    if (position == this->clientList.end()) {
+    if (position == this->clientList.end())
+    {
         return;
     }
     this->sim_destroy(client->getController()->getEntity());
@@ -493,7 +503,7 @@ bool Game::hasClient(const Client & client)
     return (false);
 }
 
-bool Game::empty()
+bool Game::empty() const
 {
     return (clientList.empty());
 }
@@ -571,13 +581,19 @@ void Game::sim_destroy(Entity *entity) {
     this->gameEvents.push_back(new server::event::Destroy(this->round, entity->data.getId()));
 }
 
-uint16_t Game::getClientSize() {
+uint16_t Game::getClientSize() const
+{
     return static_cast<uint16_t >(this->clientList.size());
 }
 
-round_t Game::getTick()
+round_t Game::getTick() const
 {
     return (round);
+}
+
+bool Game::mustClose() const
+{
+    return (!going || empty());
 }
 
 void Game::sendPacketSync(const Client * client)
@@ -697,7 +713,9 @@ bool Game::isFinished()
         for (auto entity : entities)
         {
             if (entity->data.getTeam() == FOE)
+            {
                 return (false);
+            }
         }
         return (true);
     }
@@ -707,17 +725,44 @@ bool Game::isFinished()
     }
 }
 
+bool scoreComp(const std::pair<uint32_t, std::string> & a, const std::pair<uint32_t, std::string> & b)
+{
+    return (a.first < b.first);
+}
+
 void Game::endGame()
 {
     std::vector<std::pair<uint32_t, std::string>> vect;
-    //TODO: scores
-
-    network::packet::PacketLeaderBoard packet(vect);
-    network::packet::PacketQuit packetQuit;
     for (auto client : clientList)
     {
-        packetf.send(packet, client->getClientId());
-        packetf.send(packetQuit, client->getClientId());
+        if (client->getName() != "")
+        {
+            vect.push_back(std::pair<uint32_t, std::string>(client->getController()->getPlayer()->getScore(), client->getName()));
+        }
+    }
+
+    std::sort(vect.begin(), vect.end(), &scoreComp);
+
+    std::cout << "SCORES" << std::endl;
+    for (auto it : vect)
+    {
+        std::cout << it.second << " -> " << std::to_string(it.first) << std::endl;
+    }
+
+    network::packet::PacketLeaderBoard packetscore(vect);
+    network::packet::PacketQuit packetquit;
+    for (auto client : clientList)
+    {
+        packetf.send(packetscore, client->getClientId());
+        packetf.send(packetquit, client->getClientId());
     }
     going = false;
 }
+
+const std::string Game::playerPaths[4] =
+    {
+            "build/entity/libRedPlayer",
+            "build/entity/libYellowPlayer",
+            "build/entity/libBluePlayer",
+            "build/entity/libGreenPlayer"
+    };

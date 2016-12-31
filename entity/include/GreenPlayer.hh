@@ -19,7 +19,7 @@ protected:
 
 private:
 
-    class WallAttack : public server::ADynamicObject {
+    class WallAttack : public server::ADynamicObject, protected server::APlayer::Power {
     private:
         static const int DAMMAGE = 1;
         static const int DEFAULT_LIFE = 1;
@@ -35,7 +35,7 @@ private:
         } nextPlace;
 
 
-        class WallElement : public server::ADynamicObject {
+        class WallElement : public server::ADynamicObject, protected server::APlayer::Power {
         private:
             bool mustDestroy;
             server::pos_t posX;
@@ -43,7 +43,7 @@ private:
 
             static const int DEFAULT_DAMAGE = 1;
         public:
-            WallElement(server::pos_t posX, server::pos_t posY);
+            WallElement(server::pos_t posX, server::pos_t posY, server::APlayer *owner);
 
             void collide(const server::Entity &entity, server::round_t current_round) override;
 
@@ -60,7 +60,7 @@ private:
 
     public:
 
-        WallAttack(server::pos_t posX, server::pos_t posY);
+        WallAttack(server::APlayer *owner, server::pos_t posX, server::pos_t posY);
 
         void collide(const server::Entity &entity, server::round_t current_round) override;
 

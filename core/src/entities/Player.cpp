@@ -12,13 +12,13 @@
 
 using namespace server;
 
-Player::Player() : mustDestroy(0), vectX(0), vectY(0), lostHp(0), nextAttack(NOATTACK) {
+Player::Player() : mustDestroy(false), vectX(0), vectY(0), lostHp(0), nextAttack(NOATTACK) {
     INFO("Player created")
+    score = 0;
 }
 
 void Player::shoot(round_t current_round, attackId_t attack)
 {
-    //TODO Create map of <attackId_t, ADynamicObject *>
     nextAttack = attack;
 }
 
@@ -40,7 +40,7 @@ EntityAction *Player::act(round_t current_round, const Grid &) {
         nextAttack = NOATTACK;
         INFO("PLayer " << this->data->getId() << " : BOUM /!\\")
     }
-    if ((mustDestroy && mustDestroy + 1 == current_round) || this->data->getHp() <= 0) {
+    if (mustDestroy || this->data->getHp() <= 0) {
         INFO("PLayer " << this->data->getId() << " : DED /!\\")
         act->destroy = true;
     }
@@ -108,7 +108,8 @@ void Player::cleanAttackTimeline(server::round_t round)
 ADynamicObject * Player::createAttack(attackId_t id, round_t round)
 {
     setAttackWait(id, 3, round);
-    return new MagicMissile(this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(), round);
+    return new MagicMissile(this, this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(),
+                            round);
 }
 
 void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound)
@@ -119,12 +120,17 @@ void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound
 }
 
 
-Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY)
+Player::MagicMissile::MagicMissile(APlayer *owner, pos_t posX, pos_t posY, round_t startRound)
+        : Power(owner), mustDestroy(false), posX(posX), posY(posY)
 { }
 
 
 void Player::MagicMissile::collide(const Entity &entity, server::round_t current_round) {
     INFO("MagicMissile collide with : " << entity.data.getId() << "(id: " << this->data->getId() << ")")
+    if (entity.data.getTeam() == FOE)
+    {
+        modScore(static_cast<score_t >(getDamage()));
+    }
     this->mustDestroy = true;
 }
 

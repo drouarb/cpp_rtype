@@ -10,13 +10,6 @@
 
 using namespace server;
 
-extern "C"
-{
-    ADynamicObject * getInstance()
-    {
-        return (new BasicEntity());
-    }
-}
 
 BasicEntity::BasicEntity() : destroyed(false)
 { }
@@ -52,4 +45,12 @@ hp_t BasicEntity::getDamage() {
 
 Tribool BasicEntity::collidesWith(const Entity &entity) {
     return (this->data->getTeam() != entity.data.getTeam() ? T_TRUE : T_FALSE);
+}
+
+extern "C"
+{
+ADynamicObject * getInstance()
+{
+    return (new BasicEntity());
+}
 }

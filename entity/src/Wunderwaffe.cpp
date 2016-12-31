@@ -27,7 +27,6 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
 
     if (current_round % (2 + (this->data->getHp() > DEFAULT_LIFE / 2)) == 0) {
         //TODO add bullet
-
     }
     return action;
 }
@@ -49,7 +48,7 @@ Wunderwaffe::initialize(server::round_t round, const server::Grid & environment)
 }
 
 server::hp_t Wunderwaffe::getDamage() {
-    return DEFAULT_DAMAGE;
+    return 0;
 }
 
 server::Tribool Wunderwaffe::collidesWith(const server::Entity &entity) {
@@ -66,7 +65,7 @@ void Wunderwaffe::BigBullet::collide(const server::Entity &entity, server::round
     this->mustDestroy = true;
 }
 
-server::EntityAction *Wunderwaffe::BigBullet::act(server::round_t current_round, const server::Grid &environment) {
+server::EntityAction *Wunderwaffe::BigBullet::act(server::round_t, const server::Grid &environment) {
     server::EntityAction *action = new server::EntityAction();
 
     action->destroy = this->mustDestroy;
@@ -76,7 +75,7 @@ server::EntityAction *Wunderwaffe::BigBullet::act(server::round_t current_round,
 }
 
 server::EntityInitialization *
-Wunderwaffe::BigBullet::initialize(server::round_t round, const server::Grid &environment) {
+Wunderwaffe::BigBullet::initialize(server::round_t, const server::Grid &environment) {
     server::EntityInitialization *initialization = new server::EntityInitialization();
     this->mustDestroy = false;
     initialization->sprite.path = "media/sprites/classicBulletGoingUpLeft.png";

@@ -19,6 +19,7 @@ namespace server {
         void destroy();
 
         Entity *getEntity() const;
+        const APlayer * getPlayer() const;
 
         void setEntity(Entity *entity);
     };

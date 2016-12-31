@@ -28,6 +28,25 @@ namespace server
          * @param vectY Of how many should the player move on the Y axis
          */
         virtual void move(speed_t vectX, speed_t vectY) = 0;
+
+        score_t getScore() const;
+        void modScore(score_t addition);
+
+        class Power
+        {
+        public:
+            Power(APlayer * player);
+
+        private:
+            APlayer * player;
+
+        protected:
+            void modScore(score_t addition);
+            APlayer * getOwner() const;
+        };
+
+    protected:
+        score_t score;
     };
 }
 

@@ -5,9 +5,9 @@
 #include "Client.hh"
 #include "network/PacketFactory.hh"
 #include "events/Timeline.hh"
-#include "CollisionWall.hh"
 #include "Grid.hh"
 #include <map>
+#include <stack>
 
 #define Y_BORDER_WIDTH 10
 
@@ -28,9 +28,10 @@ namespace server
         void tick();
         gameId_t getLobbyId();
         bool hasClient(const Client &);
-        bool empty();
-        uint16_t getClientSize();
-        round_t getTick();
+        bool empty() const;
+        uint16_t getClientSize() const;
+        round_t getTick() const;
+        bool mustClose() const;
 
     private:
         network::PacketFactory & packetf;
@@ -44,9 +45,10 @@ namespace server
         std::vector<server::event::AGameEvent *> gameEvents;
         round_t lastSyn;
         bool going;
-        std::map<Entity *, CollisionWall> collisions;
         Grid grid;
         const std::pair<std::string, std::string> * currentGamedata;
+
+        static const std::string playerPaths[4];
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
@@ -58,7 +60,7 @@ namespace server
         void unspawn();
         void manageNewGamedata();
 
-        void checkCollisionsCell(int entity_index, int cell_x, int cell_y);
+        void checkCollisionsCell(Entity * entity, int cell_x, int cell_y);
         bool willChangeCell(const Entity * entity);
         void spawnEntity(Entity * entity);
         

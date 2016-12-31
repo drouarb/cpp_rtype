@@ -2,7 +2,7 @@
 #include "entities/Player.hh"
 
 void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY) {
-    this->player->move(speedX, speedY);
+    this->player->move(speedX * 2, speedY * 2);
 }
 
 void server::Controller::playShoot(attackId_t attackId, round_t tick) {
@@ -28,5 +28,10 @@ server::Entity *server::Controller::getEntity() const {
 
 void server::Controller::setEntity(server::Entity *entity) {
     Controller::entity = entity;
+}
+
+const server::APlayer *server::Controller::getPlayer() const
+{
+    return (player);
 }
 
