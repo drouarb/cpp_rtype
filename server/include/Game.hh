@@ -46,6 +46,7 @@ namespace server
         bool going;
         std::map<Entity *, CollisionWall> collisions;
         Grid grid;
+        const std::pair<std::string, std::string> * currentGamedata;
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
@@ -55,6 +56,7 @@ namespace server
         void letEntitesAct();
         void moveEntities();
         void unspawn();
+        void manageNewGamedata();
 
         void checkCollisionsCell(int entity_index, int cell_x, int cell_y);
         bool willChangeCell(const Entity * entity);
