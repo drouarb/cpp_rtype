@@ -25,6 +25,7 @@ namespace UI {
         void setPosition(float x, float y);
         bool initOK();
         float getWidth();
+        void setBackgroundColor(sf::Color color);
 
     private:
         void setImage(std::string filename);
@@ -35,8 +36,6 @@ namespace UI {
         void addAnimation(UI::animationType animationType, short frames, unsigned int size);
         void addAnimation(UI::animationType animationType, short frames, unsigned int posX, unsigned int posY, unsigned int width,
                                   unsigned int height);
-
-        void setBackgroundColor(sf::Color color);
     };
 }
 
