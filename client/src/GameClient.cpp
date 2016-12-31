@@ -130,6 +130,8 @@ void GameClient::managePlayerData(uint16_t nplayerId, uint8_t nbAttackPlayer) {
       playerId = nplayerId;
       nbrAttack = nbAttackPlayer;
     }
+
+
 }
 
 void GameClient::manageSyncro(uint32_t turn, int64_t time) {
@@ -143,7 +145,6 @@ void GameClient::manageDisconnect() {
     std::cout << "Receive Disconnect" << std::endl;
     gameui->showError("Deconnection du serveur");
     manageQuit();
-    deleteNetworkManager();
     gameui->changeMenu("MenuStart");
 }
 
@@ -210,7 +211,7 @@ void GameClient::gameLoop() {
 		  }
 	    }
 	    if (world != nullptr)
-	      world->applyTurn(tickRateClient);
+            world->applyTurn(tickRateClient, playerId);
 	    ++tickcpt;
 	    if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
 	      std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));

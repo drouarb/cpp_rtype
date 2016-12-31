@@ -6,16 +6,16 @@
 #define CPP_RTYPE_CLIENTLISTENERDISCONNECT_HH
 
 
-#include <network/listener/ListenerTemplate.hpp>
+#include <network/listener/ISocketDisconnectionListener.hh>
 #include "network/packet/PacketDisconnect.hh"
 #include "NetworkManager.hh"
 namespace client {
-class ClientListenerDisconnect : public network::ListenerTemplate<network::packet::PacketDisconnect, network::packet::DISCONNECT>
+class ClientListenerDisconnect : public network::listener::ISocketDisconnectionListener
 {
 public:
     ClientListenerDisconnect(NetworkManager *networkManager);
     ~ClientListenerDisconnect();
-    void notify(const network::packet::PacketDisconnect * packet);
+    void notify(unsigned  long fd);
 
 private:
     NetworkManager *networkManager;

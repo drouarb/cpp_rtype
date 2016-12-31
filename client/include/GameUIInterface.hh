@@ -34,6 +34,10 @@ namespace client {
         UI::UIManager managerUi;
         UI::IWindow *window;
         Menu *currentMenu;
+        Entity* nplayer;
+        UI::Text* playerHp;
+        UI::AItem *playerSprite;
+    private:
         std::map<std::string ,client::Key>nav_map;
         std::map<std::string , std::vector<int>>anim_map;
         static const std::map<sf::Keyboard::Key, client::Key> keymap;
@@ -104,6 +108,9 @@ namespace client {
         void setStringToButtons(const std::string &name, const std::string &data, const std::string &menuName);
 
         const std::string getStringFromButtons(const std::string &name, const std::string &menuName);
+
+        void setNplayer(Entity *nplayer);
+
     private:
         typeide_t getNextId();
 

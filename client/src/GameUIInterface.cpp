@@ -108,12 +108,14 @@ void GameUIInterface::addEntity(Entity *listEntity) {
 
     addAnimaton(typeEntity[listEntity->getTypeid()], item);
     gameItem[listEntity] = item;
+
     ui_mut->unlock();
 }
 
 void GameUIInterface::updateListEntity() {
     ui_mut->lock();
     for (auto it = gameItem.begin(); it != gameItem.end(); it++) {
+
         it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
     }
     ui_mut->unlock();
@@ -423,4 +425,18 @@ const std::string GameUIInterface::getStringFromButtons(const std::string &name,
 
     }
     return("");
+}
+
+void GameUIInterface::setNplayer(Entity *nplayer) {
+    GameUIInterface::nplayer = nplayer;
+    if (nplayer != nullptr)
+    {
+     std::string res =    typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
+        this->playerSprite = window->getLayer(UI::GAME)->addItem(UI::ITEM, res + "vatar.png",
+                                                        0, 900);
+        playerSprite->setRatio(0.2);
+//       playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::GAME))->addTextBox(
+    //            100, 900);
+  //      playerHp->setString(std::to_string(nplayer->getHp()));
+    }
 }

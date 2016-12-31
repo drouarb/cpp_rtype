@@ -62,7 +62,7 @@ namespace client
     void					deleteEntity(ide_t, tick, UIevent_t);
     Entity					*getEntityById(ide_t nid);
     std::map<ide_t, Entity*>			getEntitys();
-    void					applyTurn(int tickrate);
+    void applyTurn(int tickrate, ide_t playerId);
     tick					getTick() const;
     std::vector<std::pair<UIevent_t, pos_t> >	getEvents();
   };

@@ -9,9 +9,9 @@ UI::Text::Text() : AItem(UI::TEXT) {
     initStatus = font.loadFromFile("media/font/Pixeled.ttf");
     text.setFont(font);
     text.setCharacterSize(24);
-    /*text.setOutlineColor(sf::Color::Black);
+    text.setOutlineColor(sf::Color::Black);
     text.setOutlineThickness(10);
-    text.setFillColor(sf::Color::White);*/
+    text.setFillColor(sf::Color::White);
 }
 
 UI::Text::~Text() {
@@ -23,7 +23,7 @@ bool UI::Text::initOK() {
 }
 
 void UI::Text::setBackgroundColor(sf::Color color) {
-  //    text.setOutlineColor(color);
+      text.setOutlineColor(color);
 }
 
 void UI::Text::setString(const std::string &string) {

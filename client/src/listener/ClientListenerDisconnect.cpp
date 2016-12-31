@@ -5,7 +5,7 @@
 #include "listener/ClientListenerDisconnect.hh"
 
 using namespace client;
-ClientListenerDisconnect::ClientListenerDisconnect(NetworkManager *networkManager) :  networkManager(networkManager),  APacketListener(network::packet::DISCONNECT)
+ClientListenerDisconnect::ClientListenerDisconnect(NetworkManager *networkManager) :  networkManager(networkManager)
 {
 }
 
@@ -14,7 +14,7 @@ ClientListenerDisconnect::~ClientListenerDisconnect()
 
 }
 
-void ClientListenerDisconnect::notify(const network::packet::PacketDisconnect *packet)
+void ClientListenerDisconnect::notify(unsigned long fd)
 {
   std::cout << "receive real disco" << std::endl;
     networkManager->receiveDisconnect();

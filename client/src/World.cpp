@@ -60,7 +60,7 @@ tick World::getTick() const {
     return (turn);
 }
 
-void World::applyTurn(int tickrate) {
+void World::applyTurn(int tickrate, ide_t playerId) {
     std::map<ide_t, Entity *>::iterator it;
     std::list<std::pair<tick, WorldEvent> >::iterator itEv;
     Entity *ent;
@@ -74,6 +74,8 @@ void World::applyTurn(int tickrate) {
                 pos = ent->getPos();
                 entitys.insert(std::pair<ide_t, Entity *>(itEv->second.id, ent));
                 gameui->addEntity(getEntityById(itEv->second.id));
+                if (itEv->second.id == playerId)
+                    gameui->setNplayer(ent);
             } else if (itEv->second.eventtype == UPDATE && (entitys.find(itEv->second.id) != entitys.end())) {
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();

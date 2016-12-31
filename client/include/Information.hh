@@ -70,11 +70,15 @@ namespace client {
             std::string resvalu;
                 struct  s_join* res = new s_join;
                 res->info = type;
-            if (value == "")
-                resvalu = "0";
-                else
                 resvalu = value;
+            try {
                 res->roomid  = static_cast<uint8_t >(std::stoi(resvalu));
+            }
+            catch (std::exception &e)
+            {
+                res->roomid = 0;
+            }
+
                 return res;
         }
         return nullptr;

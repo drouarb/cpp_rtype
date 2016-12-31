@@ -73,9 +73,10 @@ bool NetworkManager::startPacketFactory()
 
 void NetworkManager:: addListenerToPacketFactory()
 {
+
+    packetFactory->registerDisconnectionListener(new client::ClientListenerDisconnect(this));
     listeners.push_back(new client::ClientListenerCancelEvent(this));
     listeners.push_back(new client::ClientListenerDeleteEntity(this));
-    listeners.push_back(new client::ClientListenerDisconnect(this));
     listeners.push_back(new client::ClientListenerErrorList(this));
     listeners.push_back(new client::ClientListenerEventError(this));
     listeners.push_back(new client::ClientListenerGameList(this));

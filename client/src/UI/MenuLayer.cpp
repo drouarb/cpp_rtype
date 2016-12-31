@@ -2,6 +2,7 @@
 // Created by jonas_e on 12/21/16.
 //
 
+#include <iostream>
 #include "../../include/UI/MenuLayer.hh"
 
 UI::Text* UI::MenuLayer::addTextBox(float x, float y) {
