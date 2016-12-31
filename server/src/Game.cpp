@@ -688,11 +688,6 @@ void Game::sendAllMoves()
             pmove->setVecX(entity->data.getVectX());
             pmove->setVecY(entity->data.getVectY());
 
-            if (entity->data.getHp() == 1000)
-            {
-                std::cout << "posx=" << entity->data.getPosX() << " vectx=" << entity->data.getVectX() << std::endl;
-            }
-
             packetf.send(*pmove, client->getClientId());
             delete pmove;
         }

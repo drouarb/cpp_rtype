@@ -3,6 +3,7 @@
 //
 
 #include <entities/Entity.hh>
+#include <iostream>
 #include "Wunderwaffe.hh"
 
 void Wunderwaffe::collide(const server::Entity &entity, server::round_t) {
@@ -63,16 +64,28 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
         action->hp = this->data->getHp() - this->damage;
         this->damage = 0;
 
-        if ((current_round % (20)) == 0)
+        if (current_round % 10 == 0)
         {
-            BigBullet *bullet = new BigBullet(this->data->getPosX() + 280, this->data->getPosY());
-            action->newEntity = bullet;
-            return action;
-        }
-
-        if (current_round % (2 + (this->data->getHp() > DEFAULT_LIFE / 2)) == 0)
-        {
-            //TODO add bullet
+            if ((current_round / 10 % 4) == 0)
+            {
+                BigBullet *bullet = new BigBullet(this->data->getPosX() + 280, this->data->getPosY());
+                action->newEntity = bullet;
+            }
+            if ((current_round / 10 % 4) == 1)
+            {
+                BigBulletRight *bullet = new BigBulletRight(this->data->getPosX() + 600, this->data->getPosY() + 100);
+                action->newEntity = bullet;
+            }
+            if ((current_round / 10 % 4) == 3)
+            {
+                BigBulletRight *bullet = new BigBulletRight(this->data->getPosX() + 540, this->data->getPosY() + 100);
+                action->newEntity = bullet;
+            }
+            if ((current_round / 10 % 4) == 2)
+            {
+                BigBulletLeft *bullet = new BigBulletLeft(this->data->getPosX(), this->data->getPosY() + 30);
+                action->newEntity = bullet;
+            }
         }
     }
     return action;
@@ -152,6 +165,11 @@ server::Tribool Wunderwaffe::BigBullet::collidesWith(const server::Entity &entit
     return entity.obj->data->getTeam() == server::Team::PLAYER ? server::T_TRUE : server::T_FALSE;
 }
 
+Wunderwaffe::BigBullet::BigBullet()
+{
+
+}
+
 extern "C"
 {
 server::ADynamicObject * getInstance()
@@ -192,7 +210,7 @@ Wunderwaffe::Hitbox::initialize(server::round_t round, const server::Grid & envi
     auto initialization = new server::EntityInitialization();
 
     initialization->sprite = owner->data->getSprite();
-    initialization->sprite.path = "media/sprites/magicalGirlA.png";
+    initialization->sprite.path = "";
     initialization->posX = owner->data->getPosX() + x_offset;
     initialization->posY = owner->data->getPosY();
     initialization->action.speedX = owner->data->getVectX();
@@ -214,4 +232,54 @@ void Wunderwaffe::Hitbox::setOwner(server::ADynamicObject *owner, server::pos_t 
 {
     this->owner = owner;
     this->x_offset = x_offset;
+}
+
+
+
+
+
+Wunderwaffe::BigBulletRight::BigBulletRight(server::pos_t posX, server::pos_t posY) : BigBullet(posX, posY)
+{ }
+
+server::EntityAction *Wunderwaffe::BigBulletRight::act(server::round_t current_round, const server::Grid &environment)
+{
+    auto act = BigBullet::act(current_round, environment);
+
+    act->speedX = 3;
+    act->speedY = -3;
+
+    return (act);
+}
+
+server::EntityInitialization *
+Wunderwaffe::BigBulletRight::initialize(server::round_t round, const server::Grid &environment)
+{
+    auto init = BigBullet::initialize(round, environment);
+
+    init->sprite.path = "media/sprites/magicBullet.png";
+
+    return (init);
+}
+
+Wunderwaffe::BigBulletLeft::BigBulletLeft(server::pos_t posX, server::pos_t posY) : BigBullet(posX, posY)
+{ }
+
+server::EntityAction *Wunderwaffe::BigBulletLeft::act(server::round_t current_round, const server::Grid &environment)
+{
+    auto act = BigBullet::act(current_round, environment);
+
+    act->speedX = -6;
+    act->speedY = -2;
+
+    return (act);
+}
+
+server::EntityInitialization *
+Wunderwaffe::BigBulletLeft::initialize(server::round_t round, const server::Grid &environment)
+{
+    auto init = BigBullet::initialize(round, environment);
+
+    init->sprite.path = "media/sprites/magicBullet.png";
+
+    return (init);
 }

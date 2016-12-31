@@ -24,18 +24,41 @@ private:
 
     public:
 
+        BigBullet();
         BigBullet(server::pos_t posX, server::pos_t posY);
 
         void collide(const server::Entity &entity, server::round_t current_round) override;
 
-        server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
+        virtual server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
 
-        server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
+        virtual server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
 
         server::hp_t getDamage() override;
 
         server::Tribool collidesWith(const server::Entity &entity) override;
     };
+
+    class BigBulletRight : public BigBullet
+    {
+    public:
+        BigBulletRight(server::pos_t posX, server::pos_t posY);
+
+        server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
+
+        server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
+    };
+
+
+    class BigBulletLeft : public BigBullet
+    {
+    public:
+        BigBulletLeft(server::pos_t posX, server::pos_t posY);
+
+        server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
+
+        server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
+    };
+
 
     server::hp_t damage;
     server::round_t startRound;
