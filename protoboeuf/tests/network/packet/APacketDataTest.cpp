@@ -2,6 +2,7 @@
 // Created by drouar_b on 11/3/16.
 //
 
+#include <iostream>
 #include <assert.h>
 #include "network/utils/NetworkString.cpp"
 #include "network/utils/NetworkInteger.cpp"
