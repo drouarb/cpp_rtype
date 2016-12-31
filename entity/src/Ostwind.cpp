@@ -38,6 +38,8 @@ Ostwind::initialize(server::round_t round, const server::Grid & environment) {
     initialization->sprite.path = "media/sprites/wirbelwind.png";
     initialization->sprite.sizeX = 128;
     initialization->sprite.sizeY = 68;
+    initialization->posY = FIELD_HEIGHT - initialization->sprite.sizeY - 100;
+    initialization->posX = FIELD_WIDTH;
     initialization->team = server::Team::FOE;
     initialization->action.hp = DEFAULT_LIFE;
     initialization->action.speedX = 0;

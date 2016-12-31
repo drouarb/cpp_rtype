@@ -4,6 +4,7 @@
 
 #include <entities/Entity.hh>
 #include <iostream>
+#include <helpers/libloader/getDlLoader.hpp>
 #include "Wunderwaffe.hh"
 
 void Wunderwaffe::collide(const server::Entity &entity, server::round_t) {
@@ -86,6 +87,14 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
                 BigBulletLeft *bullet = new BigBulletLeft(this->data->getPosX(), this->data->getPosY() + 30);
                 action->newEntity = bullet;
             }
+        }
+        else if (current_round % 444 == 0)
+        {
+            action->newEntity = getDlLoader<server::ADynamicObject>("build/entity/libBomber")->getInstance();
+        }
+        else if (current_round % 222 == 0)
+        {
+            action->newEntity = getDlLoader<server::ADynamicObject>("build/entity/libOstwind")->getInstance();
         }
     }
     return action;

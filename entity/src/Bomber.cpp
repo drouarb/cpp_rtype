@@ -27,6 +27,8 @@ server::EntityInitialization *Bomber::initialize(server::round_t round, const se
     initialization->action.speedY = 0;
     initialization->sprite.sizeX = 350;
     initialization->sprite.sizeY = 110;
+    initialization->posY = 100;
+    initialization->posX = FIELD_WIDTH;
     initialization->sprite.path = "media/sprites/he111.png";
     this->startingRound = round;
 
