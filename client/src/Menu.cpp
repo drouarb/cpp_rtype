@@ -163,7 +163,7 @@ void Menu::changeTextBox(UI::AItem *box, const std::string &c) {
     std::string res = "";
     if (textBox.find(box) != textBox.end())
         res = textBox[box];
-    if (res.size() < 16)
+    if (res.size() < 32)
         textBox[box] = res  + c;
     static_cast<UI::Text *>(box)->setString(textBox[box]);
 }
