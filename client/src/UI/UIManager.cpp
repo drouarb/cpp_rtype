@@ -44,10 +44,6 @@ unsigned long UI::UIManager::addItemToLayer(UI::itemType type, std::string sprit
     return 0;
 }
 
-int UI::UIManager::UpdateItem(unsigned long layerID, unsigned long itemID) {
-
-}
-
 int UI::UIManager::addItemToGame(UI::itemType type, std::string sprite, int posX, int posY) {
     return 0;
 }
