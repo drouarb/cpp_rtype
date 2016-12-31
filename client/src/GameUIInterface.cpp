@@ -20,6 +20,8 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
             UI::BACKGROUND, "media/menu/black-background.jpg");
     addNavMap("config/navigation.json");
+    nplayer = nullptr;
+    this->playerSprite = nullptr;
 }
 
 GameUIInterface::~GameUIInterface() {
@@ -116,7 +118,13 @@ void GameUIInterface::updateListEntity() {
     ui_mut->lock();
     for (auto it = gameItem.begin(); it != gameItem.end(); it++) {
 
-        it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
+        if (nplayer != nullptr)
+        if (it->first == this->nplayer) {
+            playerHp->setString(std::to_string(nplayer->getHp()));
+            std::cout << nplayer->getHp() << std::endl;
+        }
+
+         it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
     }
     ui_mut->unlock();
 }
@@ -280,12 +288,18 @@ void GameUIInterface::changeMenu(const std::string &ne) {
             break;
         }
     }
-    if (currentMenu->getType() == DEFAULT)
-        static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
+    if (currentMenu->getType() == DEFAULT) {
+        static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(
+                UI::BACKGROUNDS))->setBackground(
                 UI::BACKGROUND, "media/menu/black-background.jpg");
-    else
-        static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
+
+        static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->close();
+    } else {
+        static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(
+                UI::BACKGROUNDS))->setBackground(
                 UI::BACKGROUND, "media/backgrounds/normal.png");
+        static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->open();
+    }
 }
 
 void GameUIInterface::manageTouch(client::Key key) {
@@ -432,11 +446,11 @@ void GameUIInterface::setNplayer(Entity *nplayer) {
     if (nplayer != nullptr)
     {
      std::string res =    typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
-        this->playerSprite = window->getLayer(UI::GAME)->addItem(UI::ITEM, res + "vatar.png",
+        this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + "vatar.png",
                                                         0, 900);
         playerSprite->setRatio(0.2);
-//       playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::GAME))->addTextBox(
-    //            100, 900);
-  //      playerHp->setString(std::to_string(nplayer->getHp()));
+       playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->addTextBox(
+                100, 900);
+        playerHp->setString(std::to_string(nplayer->getHp()));
     }
 }

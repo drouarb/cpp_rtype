@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <UI/MenuLayer.hh>
+#include <UI/HUDLayer.hh>
 
 
 UI::Window::Window() {
@@ -65,6 +66,9 @@ unsigned long UI::Window::addLayer(UI::layerType layer) {
     layers.push_back(layerFactory->instantiate(layer));
     if (layer == MENU) {
         static_cast<UI::MenuLayer*>(layers.back())->init(window);
+    }
+    if (layer == HUD) {
+        static_cast<UI::HUDLayer*>(layers.back())->init(window);
     }
     return layers.size() - 1;
 }

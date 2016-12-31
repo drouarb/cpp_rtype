@@ -17,6 +17,7 @@
 #include <UI/Text.cpp>
 #include <UI/Background.cpp>
 #include <UI/MenuLayer.hh>
+#include <UI/HUDLayer.cpp>
 
 
 int testshitfunction(int modifier, UI::UIManager *neue) {
@@ -54,7 +55,7 @@ int main()
     ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
     item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/ALL_GONE.jpg", 250, 250);
     /*static_cast<UI::Item*>(item)->setTexture(reinterpret_cast<sf::Texture*>(&text));*/
-    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/5af.png", 300, 360);
+    item2 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/references/5af.png", 300, 360);
     item3 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready.png", 100, 400);
     ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/tower.png", 800, 1080 - 463);
 
@@ -82,6 +83,11 @@ int main()
     item4->setRatio(0.75);
     item4->addAnimation(UI::IDLE, 6, 350);
     item4->changeStatus(UI::IDLE);
+    //ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "media/sprites/zeppelin.png", 400, 400);
+
+    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/hindenburg.png", 400 , 400);
+    item4->addAnimation(UI::IDLE, 6, 1035);
+    item4->changeStatus(UI::IDLE);
 
     item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/he111.png", 800 , 300);
     item4->addAnimation(UI::IDLE, 16, 350);
@@ -96,6 +102,7 @@ int main()
     item2->setRatio(0.20);
     testshitfunction(0, ui);
     ui->alert("SHIT IS BROKEN AAAAH");
+    ui->getAudioManager()->playMenuSound();
     while (window->isOpen()) {
         window->display();
         if (ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->isVisible()) {
@@ -110,6 +117,7 @@ int main()
         if (lermi == 400)
             lermi = -200;
         eventObserver->getEvent();
+
     }
     return 0;
 }
