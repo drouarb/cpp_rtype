@@ -6,6 +6,7 @@
 #include <iostream>
 #include <UI/BackgroundLayer.hh>
 #include <UI/MenuLayer.hh>
+#include <SFML/Graphics.hpp>
 #include "GameUIInterface.hh"
 #include "helpers/IStopwatch.hh"
 
@@ -42,22 +43,30 @@ void GameUIInterface::initUI() {
 }
 
 void GameUIInterface::displaySimple() {
-    window->display();
-    managerUi.getEventObserver()->getEvent();
+  sf::Clock clock;
+  clock.restart();
+  window->display();
+  std::cout << "c'est quoi ce bordel" << clock.getElapsedTime().asMilliseconds() << std::endl;
+  clock.restart();
+  managerUi.getEventObserver()->getEvent();
+    std::cout << "couille" << clock.getElapsedTime().asMilliseconds() << std::endl;
 }
 
 typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
     std::map<typeide_t, std::string>::iterator it;
 
+      ui_mut->lock();
     it = typeEntity.begin();
     while (it != typeEntity.end()) {
         if (it->second == str) {
+      ui_mut->unlock();
             return (it->first);
         }
         ++it;
     }
     typeide_t newid = getNextId();
     typeEntity.insert(std::pair<typeide_t, std::string>(newid, str));
+      ui_mut->unlock();
     return (newid);
 }
 

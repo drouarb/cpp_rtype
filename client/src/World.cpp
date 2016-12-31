@@ -9,7 +9,7 @@
 using namespace client;
 
 World::World(std::mutex *mmut, GameUIInterface *ngame) {
-    world_mut = mmut;
+  world_mut = mmut;
     gameui = ngame;
     turn = 0;
 }
@@ -88,7 +88,9 @@ void World::applyTurn(int tickrate, ide_t playerId) {
                 gameui->deleteEntity(entitys.at(itEv->second.id));
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
+		world_mut->lock();
                 entitys.erase(itEv->second.id);
+		world_mut->unlock();
                 delete ent;
             }
             worldEvents.erase(itEv);
