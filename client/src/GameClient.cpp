@@ -35,7 +35,7 @@ void client::GameClient::createNetworkManager(const std::string &ip, unsigned sh
         manager->addListenerToPacketFactory();
         manager->startPacketFactory();
     }
-    catch (std::runtime_error &e) {
+    catch (std::runtime_error *e) {
         gameui->showError("Impossible de joindre ce serveur");
         manager = nullptr;
     }
@@ -51,21 +51,26 @@ void GameClient::readaptTickRate(int servTickRate,
                                  std::pair<tick, uint64_t> servHoro) {
     double tickRateModif;
 
-    tickRateModif = (((double)(tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
-      + (((double)((int64_t)estiClientHoro.first - (int64_t)servHoro.first)) * TICKCURRENTDIFFCONST);
-    std::cout << "tickrate result : " << (tickRateClient - servTickRate) * TICKRATEDIFFCONST << " client server : [" << tickRateClient << ":" << servTickRate << "] CONST : " << TICKRATEDIFFCONST << std::endl;
-    std::cout << "tickcurrent result : " << ((int64_t)estiClientHoro.first - (int64_t)servHoro.first) * TICKCURRENTDIFFCONST << " client server : [" << estiClientHoro.first << ":" << servHoro.first << "] CONST : " << TICKCURRENTDIFFCONST << std::endl;
+    tickRateModif = (((double) (tickRateClient - servTickRate)) * TICKRATEDIFFCONST)
+                    + (((double) ((int64_t) estiClientHoro.first - (int64_t) servHoro.first)) * TICKCURRENTDIFFCONST);
+    std::cout << "tickrate result : " << (tickRateClient - servTickRate) * TICKRATEDIFFCONST << " client server : ["
+              << tickRateClient << ":" << servTickRate << "] CONST : " << TICKRATEDIFFCONST << std::endl;
+    std::cout << "tickcurrent result : "
+              << ((int64_t) estiClientHoro.first - (int64_t) servHoro.first) * TICKCURRENTDIFFCONST
+              << " client server : [" << estiClientHoro.first << ":" << servHoro.first << "] CONST : "
+              << TICKCURRENTDIFFCONST << std::endl;
     std::cout << "modif : " << tickRateModif << std::endl;
     if (tickRateModif < 0.0)
-      ++tickRateClient;
+        ++tickRateClient;
     else if (tickRateModif > 0.0)
-      --tickRateClient;
+        --tickRateClient;
 }
 
 int GameClient::calcTickRate(int nbrLevel) {
     std::map<tick, uint64_t>::iterator it;
     tick tickBegin;
     uint64_t timeBegin;
+
     tick tickEnd;
     uint64_t timeEnd;
 
@@ -136,6 +141,7 @@ void GameClient::manageGameData() {
 
 void GameClient::manageDisconnect() {
     std::cout << "Receive Disconnect" << std::endl;
+    gameui->showError("Deconnection du serveur");
     manageQuit();
     deleteNetworkManager();
     gameui->changeMenu("MenuStart");
@@ -173,62 +179,59 @@ void GameClient::gameLoop() {
     short event;
     std::vector<std::pair<UIevent_t, pos_t> > WorldEvent;
     s_info *receive = nullptr;
-    tick		tickcpt;
-    
-    while (gameui->windowIsOpen())
-      {
-	tickcpt = 0;
-	while (tickcpt < tickRateClient)
-	{
-	    sw->set();
-	    if (tickcpt % PERIODTICKEVENT == 0)
-	      {
-		event = handler->getEvent();
-		if (event != -42)
-		  {
-		    receive = gameui->manageInput(event);
-		    if (receive != nullptr)
-		      {
-			if (receive->info == I_QUIT)
-			  break;
-			sendAll(receive);
-			delete (receive);
-		      }
-		    event = -42;
-		  }
-		else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr)
-		  {
-		    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
+    tick tickcpt;
+
+    while (gameui->windowIsOpen()) {
+        tickcpt = 0;
+        while (tickcpt < tickRateClient) {
+            sw->set();
+            if (tickcpt % PERIODTICKEVENT == 0) {
+                event = handler->getEvent();
+                if (event != -42) {
+                    receive = gameui->manageInput(event);
+                    if (receive != nullptr) {
+                        if (receive->info == I_QUIT) {
+                            deleteNetworkManager();
+                            return;
+                        }
+                        sendAll(receive);
+                        delete (receive);
+                    }
+                    event = -42;
+                } else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr) {
+                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
+                                                               pos_t(world->getEntityById(playerId)->getPos().first,
+                                                                     world->getEntityById(playerId)->getPos().second),
+                                                               world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,
                                             world->getEntityById(playerId)->getPos().second);
-		  }
-	    }
-	    if (world != nullptr)
-	      world->applyTurn();
-	    gameui->updateListEntity();
-	    gameui->displaySimple();
-	    ++tickcpt;
-	    if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
-		std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
-	}
-	if (world != nullptr && horodatageTick.size() > 1)
-	  {
-	    std::map<tick, uint64_t>::iterator it;
-	    it = horodatageTick.end();
-	    --it;
-	    readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)), std::pair<tick, uint64_t>(it->first, it->second));
-	  }
-	else
-	  tickRateClient = TICKRATE;
+                }
+            }
+            if (world != nullptr)
+                world->applyTurn();
+            gameui->updateListEntity();
+            gameui->displaySimple();
+            ++tickcpt;
+            if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
+                std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
+        }
+        if (world != nullptr && horodatageTick.size() > 1) {
+            std::map<tick, uint64_t>::iterator it;
+            it = horodatageTick.end();
+            --it;
+            readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)),
+                            std::pair<tick, uint64_t>(it->first, it->second));
+        } else
+            tickRateClient = TICKRATE;
     }
-    deleteNetworkManager();
+
 }
 
 void GameClient::sendAll(struct s_info *info) {
-  switch (info->info) {
-  case I_CONNECTION: {
+    switch (info->info) {
+        case I_CONNECTION: {
             createNetworkManager(static_cast<s_connection *>(info)->ip, static_cast<s_connection *>(info)->port);
             if (manager != nullptr)
                 gameui->changeMenu("MenuRegister");
@@ -246,7 +249,7 @@ void GameClient::sendAll(struct s_info *info) {
             if (manager != nullptr) {
                 manager->sendQuit();
                 manager->sendAskList();
-		manageQuit();
+                manageQuit();
                 gameui->changeMenu("roomList");
                 manageQuit();
             }
@@ -273,7 +276,10 @@ void GameClient::sendAll(struct s_info *info) {
         case I_PLAYER : {
             if (manager != nullptr && world != nullptr) {
                 if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end()) {
-		  world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player*>(info)->key], pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
+                    world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player *>(info)->key],
+                                                               pos_t(world->getEntityById(playerId)->getPos().first,
+                                                                     world->getEntityById(playerId)->getPos().second),
+                                                               world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,
@@ -346,12 +352,12 @@ void GameClient::saveConfig() {
         if (touchExit(gameui->getStringFromButtons("key" + *it, "MenuOption")) == true) {
             key = (gameui->getStringFromButtons("key" + *it, "MenuOption"));
             BOOST_FOREACH(boost::property_tree::ptree::value_type
-                                  & child, root.get_child("Move")) {
+                                  &child, root.get_child("Move")) {
                             if (child.second.get<std::string>("name") == (*it))
                                 child.second.put<int>("value", getTouch(key));
                         }
             BOOST_FOREACH(boost::property_tree::ptree::value_type
-                                  & child, root.get_child("Attack")) {
+                                  &child, root.get_child("Attack")) {
                             if (child.second.get<std::string>("name") == (*it))
                                 child.second.put<int>("value", getTouch(key));
                         }
@@ -361,7 +367,7 @@ void GameClient::saveConfig() {
                                 child.second.put<int>("value", getTouch(key));
                         }
             BOOST_FOREACH(boost::property_tree::ptree::value_type
-                                  & child, root.get_child("gameList")) {
+                                  &child, root.get_child("gameList")) {
                             if (child.second.get<std::string>("name") == (*it)) {
                                 child.second.put<int>("value", getTouch(key));
 
@@ -386,7 +392,7 @@ int GameClient::getTickRate() const {
     return (tickRateClient);
 }
 
-int GameClient::getTouch(const std::string & data) {
+int GameClient::getTouch(const std::string &data) {
     for (auto it = keyStringMap.begin(); it != keyStringMap.end(); it++) {
         if (it->second == data)
             return static_cast<int>(it->first);

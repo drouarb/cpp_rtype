@@ -7,8 +7,8 @@
   "Buttons": [
     {
       "buttons_name": "register",
-      "selected": "registerplayer.png",
-      "noselected": "registerplayer.png",
+      "selected": "entername.png",
+      "noselected": "entername.png",
       "default_selected" : 0,
       "lock" : 0,
       "position": [

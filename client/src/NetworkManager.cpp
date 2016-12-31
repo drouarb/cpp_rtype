@@ -157,42 +157,76 @@ void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16
 void NetworkManager::sendRegister(const std::string &name) {
 
     network::packet::PacketRegister packetRegister(name);
-    packetFactory->broadcast(packetRegister);
+    try { packetFactory->broadcast(packetRegister);}
+    catch (std::runtime_error & e)
+    {
+
+    }
 }
 
 void NetworkManager::sendDisconnect() {
     network::packet::PacketDisconnect disconnect;
-    packetFactory->broadcast(disconnect);
+    try { packetFactory->broadcast(disconnect);}
+    catch (std::runtime_error & e)
+    {
+
+    }
 }
 
 void NetworkManager::sendAskLearderBoard()
 {
     network::packet::PacketAskLeaderBoard packetLeaderBoard;
-    packetFactory->broadcast(packetLeaderBoard);
+        try { packetFactory->broadcast(packetLeaderBoard);
+    }
+    catch (std::runtime_error & e)
+    {
+        
+    }
+    
 }
 void NetworkManager::sendAskList() {
     network::packet::PacketAskList askList;
-    packetFactory->broadcast(askList);
+    try { packetFactory->broadcast(askList);}
+    catch (std::runtime_error & e)
+    {
+
+    }
 }
 
 void NetworkManager::sendJoin(uint8_t roomId) {
     network::packet::PacketJoin join(roomId);
-    packetFactory->broadcast(join);
+    try { packetFactory->broadcast(join);}
+    catch (std::runtime_error & e)
+    {
+
+    }
 }
 
 void NetworkManager::sendQuit() {
     network::packet::PacketQuit quit;
-    packetFactory->broadcast(quit);
+    try { packetFactory->broadcast(quit);}
+    catch (std::runtime_error & e)
+    {
+
+    }
 }
 
 void NetworkManager::sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y) {
   network::packet::PacketPlayerMove playerMove(tick - gameClient->getTickRate() * 100, vect_x, vect_y, pos_x, pos_y);
-    packetFactory->broadcast(playerMove);
+    try { packetFactory->broadcast(playerMove);}
+    catch (std::runtime_error & e)
+    {
+
+    }
 }
 
 void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
   network::packet::PacketPlayerAttack packetPlayerAttack(tick - gameClient->getTickRate() * 100, attackId);
-    packetFactory->broadcast(packetPlayerAttack);
+    try { packetFactory->broadcast(packetPlayerAttack);}
+    catch (std::runtime_error & e)
+    {
+
+    }
 }
 
 void NetworkManager::receiveSynchronization(uint32_t turn, int64_t time) {

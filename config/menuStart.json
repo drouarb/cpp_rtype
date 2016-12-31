@@ -1,8 +1,8 @@
 {
   "Name": "MenuStart",
   "Default_Visibility": 0,
-  "padding_up" : 100,
-  "padding_left" : 700,
+  "padding_up" : 280,
+  "padding_left" : 690,
   "type" :  0,
   "Buttons": [
     {
@@ -13,8 +13,8 @@
       "lock" : 0,
       "position": [
         {
-          "x": -700,
-          "y": -100
+          "x": -690,
+          "y": -280
         }
       ],
       "type" : 0
