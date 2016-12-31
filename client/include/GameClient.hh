@@ -16,7 +16,7 @@
 #include "thread/Thread.hpp"
 #include "helpers/IStopwatch.hh"
 
-#define TICKRATE 60
+#define TICKRATE 40
 #define TICKRATEDIFFCONST 0.1
 #define TICKCURRENTDIFFCONST (1.0 / (((double)TICKRATE) * 5.0))
 #define PERIODTICKEVENT 2
