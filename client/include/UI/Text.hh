@@ -35,6 +35,8 @@ namespace UI {
         void addAnimation(UI::animationType animationType, short frames, unsigned int size);
         void addAnimation(UI::animationType animationType, short frames, unsigned int posX, unsigned int posY, unsigned int width,
                                   unsigned int height);
+
+        void setBackgroundColor(sf::Color color);
     };
 }
 
