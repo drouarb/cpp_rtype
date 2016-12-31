@@ -213,7 +213,6 @@ void NetworkManager::sendQuit() {
 
 void NetworkManager::sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y) {
   network::packet::PacketPlayerMove playerMove(tick - gameClient->getTickRate(), vect_x, vect_y, pos_x, pos_y);
-    packetFactory->broadcast(playerMove);
     try { packetFactory->broadcast(playerMove);}
     catch (std::runtime_error & e)
     {

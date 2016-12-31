@@ -1,10 +1,24 @@
 {
   "Name": "MenuRegister",
   "Default_Visibility": 1,
-  "padding_up" : 100,
-  "padding_left" : 600,
+  "padding_up" : 300,
+  "padding_left" : 200,
   "type" : 0,
   "Buttons": [
+    {
+      "buttons_name": "register_flag",
+      "selected": "rtype2.png",
+      "noselected": "rtype2.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -200,
+          "y": -300
+        }
+      ],
+      "type" : 0
+    },
     {
       "buttons_name": "register",
       "selected": "entername.png",
@@ -26,7 +40,7 @@
       "default_value" : "Regis",
       "position": [
         {
-          "x": 0,
+          "x": 200,
           "y": 200
         }
       ],

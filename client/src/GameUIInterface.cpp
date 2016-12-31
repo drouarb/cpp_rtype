@@ -15,10 +15,10 @@ GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
     managerUi.init(1920, 1020);
     managerUi.getEventObserver()->setEventManager(handler);
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
-    static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
-            UI::BACKGROUND, "media/backgrounds/normal.png");
     ui_mut = mut;
     currentMenu = nullptr;
+    static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
+            UI::BACKGROUND, "media/menu/black-background.jpg");
     addNavMap("config/navigation.json");
 }
 
@@ -219,7 +219,7 @@ s_info *GameUIInterface::manageInput(short key1) {
     if (keymap.find(key) != keymap.end()) {
         client::Key tmp = keymap.at(key);
         if (currentMenu->getType() == DEFAULT) {
-            if ((res = isNavKey(tmp)) != "")
+             if ((res = isNavKey(tmp)) != "")
                 manageNavkey(res);
             else if (tmp == client::KEY_ENTER)
                 return (manageEnter());
@@ -278,6 +278,12 @@ void GameUIInterface::changeMenu(const std::string &ne) {
             break;
         }
     }
+    if (currentMenu->getType() == DEFAULT)
+        static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
+                UI::BACKGROUND, "media/menu/black-background.jpg");
+    else
+        static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
+                UI::BACKGROUND, "media/backgrounds/normal.png");
 }
 
 void GameUIInterface::manageTouch(client::Key key) {
@@ -307,8 +313,8 @@ void GameUIInterface::createStaticMenu() {
 }
 
 void GameUIInterface::reloadMenuRoomList() {
-    int x = 100;
-    int y = 100;
+    int x = 1200;
+    int y = 50;
     for (int i = 0; i != listMenu.size(); i++) {
         if (listMenu[i]->getName() == "roomList") {
             ui_mut->lock();

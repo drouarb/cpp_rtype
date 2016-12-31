@@ -20,9 +20,24 @@
       "type": 0
     },
     {
-      "buttons_name": "back",
-      "selected": "back2.png",
-      "noselected": "back.png",
+      "buttons_name": "roomList",
+      "selected": "roomlist2.png",
+      "noselected": "roomlist.png",
+      "default_selected": 1,
+      "lock": 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 700
+        }
+      ],
+      "type" : 3,
+      "send" : 6
+    },
+    {
+      "buttons_name": "game",
+      "selected": "game2.png",
+      "noselected": "game.png",
       "default_selected": 1,
       "lock": 1,
       "position": [
@@ -35,4 +50,6 @@
       "goto": "game"
     }
   ]
+
+
 }

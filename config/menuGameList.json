@@ -2,9 +2,23 @@
   "Name": "roomList",
   "Default_Visibility": 1,
   "padding_up": 100,
-  "padding_left": 800,
+  "padding_left": 200,
   "type": 0,
   "Buttons": [
+    {
+      "buttons_name": "register",
+      "selected": "rtype4.png",
+      "noselected": "rtype4.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -200,
+          "y": -100
+        }
+      ],
+      "type" : 0
+    },
     {
       "buttons_name": "roomdId",
       "selected": "joinroom.png",
@@ -26,7 +40,7 @@
       "default_value": "0",
       "position": [
         {
-          "x": 0,
+          "x": 100,
           "y": 450
         }
       ],
