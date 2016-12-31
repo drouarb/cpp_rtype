@@ -11,15 +11,27 @@
     {
       dlName: "build/entity/libBasicNastyEntity",
       time: "180",
-      posX: "1960",
+      posX: "2000",
       posY: "400"
+    },
+    {
+      dlName: "build/entity/libWunderwaffe",
+      time: "200",
+      posX: "900",
+      posY: "610"
     }
-  ],
-  boss:
-  {
-    dlName: "build/entity/libWunderwaffe",
-    time: "1000",
-    posX: "900",
-    posY: "200"
-  }
+  ]
+  gamedata:
+  [
+      {
+	  time: "1",
+	  background: "backgrounds/normal.png",
+	  music: "musics/wind.ogg"
+      },
+      {
+	  time: "200",
+	  background: "backgrounds/nightfall.png",
+	  music: "musics/Lady_Crimson.ogg"
+      }
+  ]
 }

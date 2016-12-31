@@ -2,7 +2,6 @@
 // Created by greg on 15/12/2016.
 //
 
-#define LOG_INFO
 
 #include "Definitions.hh"
 #include "../../server/include/Grid.hh"
@@ -24,13 +23,29 @@ void BasicNastyEntity::collide(const server::Entity &entity, server::round_t cur
     }
 }
 
+server::EntityInitialization *BasicNastyEntity::initialize(server::round_t round, const server::Grid &environment)
+{
+    server::EntityInitialization *initialization = new server::EntityInitialization("");
+    initialization->action.hp = DEFAULT_HP;
+    initialization->team = server::Team::FOE;
+    initialization->action.speedX = -3;
+    initialization->action.speedY = 0;
+    initialization->sprite.sizeX = 350;
+    initialization->sprite.sizeY = 100;
+    initialization->sprite.path = "media/sprites/bf109.png";
+    this->startingRound = round;
+
+    INFO("I'm the vilain nasty player: ");
+    return initialization;
+}
+
 server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const server::Grid &)
 {
     INFO("Next action NastyEntity (hp: " << this->data->getHp() << ", id: " << this->data->getId() << ", round:" << current_round << ")")
     server::EntityAction * a;
     a = new server::EntityAction();
     a->destroy = mustDestroy;
-    a->speedX = 0;
+    a->speedX = -3;
     a->speedY = 0;
     a->hp = this->data->getHp() - lostHp;
     lostHp = 0;
@@ -53,24 +68,8 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const
     return (a);
 }
 
-server::EntityInitialization *BasicNastyEntity::initialize(server::round_t round, const server::Grid &environment)
-{
-    server::EntityInitialization *initialization = new server::EntityInitialization("");
-    initialization->action.hp = DEFAULT_HP;
-    initialization->team = server::Team::FOE;
-    initialization->action.speedX = 0;
-    initialization->action.speedY = 0;
-    initialization->sprite.sizeX = 350;
-    initialization->sprite.sizeY = 100;
-    initialization->sprite.path = "media/references/bf109.png";
-    this->startingRound = round;
-
-    INFO("I'm the vilain nasty player: ");
-    return initialization;
-}
-
 server::hp_t BasicNastyEntity::getDamage() {
-    return 0;
+    return (32000);
 }
 
 server::Tribool BasicNastyEntity::collidesWith(const server::Entity &entity) {
@@ -94,7 +93,7 @@ server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
     }
-    a->speedX = -3;
+    a->speedX = -12;
     return (a);
 }
 

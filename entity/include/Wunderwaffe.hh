@@ -14,7 +14,12 @@ static const int DEFAULT_LIFE = 1000;
 class Wunderwaffe : public server::ADynamicObject {
 private:
     static const int DEFAULT_DAMAGE = 40;
+    static const int MAX_MOVEMENT = 100;
 
+    enum movement_t {
+        FRONT,
+        BACK
+    };
 
 
     class ClassicBullet : public server::ADynamicObject {
@@ -24,7 +29,6 @@ private:
     class BigBullet : public server::ADynamicObject {
     private:
         static const int DEFAULT_DAMAGE = 40;
-
 
         bool mustDestroy;
         server::round_t startRound;
@@ -49,6 +53,7 @@ private:
 
     server::hp_t damage;
     server::round_t startRound;
+    server::pos_t pos;
 
 public:
     void collide(const server::Entity &entity, server::round_t current_round) override;

@@ -11,8 +11,9 @@
 #include "../../server/include/Grid.hh"
 
 class GreenPlayer : public server::Player {
-public:
-    void shoot(server::round_t attackId) override;
+protected:
+
+    server::ADynamicObject * createAttack(server::attackId_t id, server::round_t round) override;
 
     server::EntityInitialization *initialize(server::round_t round, const server::Grid &entity) override;
 

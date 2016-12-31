@@ -5,16 +5,16 @@
 #include "GreenPlayer.hh"
 #include "../../server/include/Grid.hh"
 
-void GreenPlayer::shoot(server::round_t round) {
-//    server::Player::shoot(round);
-    this->attackQueue.push(
-            new WallAttack(this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() / 2 + 12));
-}
-
 server::EntityInitialization *GreenPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
     pInitialization->sprite.path = "media/sprites/magicalGirlB.png";
     return pInitialization;
+}
+
+server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server::round_t round)
+{
+    setAttackWait(id, 10, round);
+    return new WallAttack(this->data->getPosX() + 10 + this->data->getSprite().sizeX, this->data->getPosY() / 2 + 12);
 }
 
 /*

@@ -45,13 +45,13 @@ server::Core::Core(const std::string &path, const unsigned short port)
 
     std::cout << std::to_string(levels.size()) << " levels loaded" << std::endl;
 
-    std::cout << "Preparing packet factory" << std::endl;
+    std::cout << "Preparing packet factory on port " << std::to_string(port) << std::endl;
 
     //this->packetFactory = new PacketFactoryTest(port);
     this->packetFactory = new network::PacketFactory(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
-    this->packetFactory->registerListener(new ServerListenerAskLeaderboard());
+    this->packetFactory->registerListener(new ServerListenerAskLeaderboard(nullptr));
     this->packetFactory->registerListener(new ServerListenerAskList(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerJoin(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerPlayerAttack(this->networkManager));
@@ -71,7 +71,7 @@ void server::Core::run() {
         mutex.lock();
 
         for (auto &game : games) {
-            std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
+            INFO("- game " << std::to_string(game->getLobbyId()) << " - - -");
             game->tick();
         }
         mutex.unlock();

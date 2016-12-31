@@ -10,6 +10,8 @@
 #define ROUND_DURATION_MS 33
 #define MAX_PLAYERS 4
 
+#define NOATTACK ((attackId_t)-1)
+
 namespace server {
 
     enum Team : unsigned int

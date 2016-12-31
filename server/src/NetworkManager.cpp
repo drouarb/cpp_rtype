@@ -1,8 +1,8 @@
 #include <NetworkManager.hh>
 #include <iostream>
 #include <thread/Mutexer.hh>
-#include <thread/Mutex.hh>
 #include <network/packet/PacketGameList.hh>
+#include <network/packet/PacketLeaderBoard.hh>
 
 server::NetworkManager::NetworkManager(server::Core *core) : core(core), mutex(new Mutex()), connectionListener(
         new ConnectionListener(this->clientContainer)), disconnectionListener(
@@ -79,6 +79,7 @@ server::NetworkManager::DisconnectionListener *server::NetworkManager::getDiscon
 }
 
 void server::NetworkManager::askGame(clientId_t src) {
+    Mutexer(this->mutex);
     const std::vector<Game *> &games = this->core->getGames();
     network::PacketFactory *pFactory = this->core->getPacketFactory();
 
@@ -91,6 +92,12 @@ void server::NetworkManager::askGame(clientId_t src) {
     pFactory->send(list, src);
 }
 
+void server::NetworkManager::askLeaderBoard(server::clientId_t src) {
+    Mutexer(this->mutex);
+    network::packet::PacketLeaderBoard board = network::packet::PacketLeaderBoard(std::vector<std::pair<uint32_t, std::string>>());
+    this->core->getPacketFactory()->send(board, src);
+}
+
 server::NetworkManager::ConnectionListener::ConnectionListener(server::ClientContainer &clientContainer)
         : clientContainer(clientContainer) {}
 
@@ -98,6 +105,11 @@ void server::NetworkManager::ConnectionListener::notify(unsigned long fd) {
     std::cout << "New client: " << std::to_string(fd) << std::endl;
     this->clientContainer.create(fd);
 }
+
+
+/*
+ * -------------------------------------------------------------------------------------------------
+ */
 
 server::NetworkManager::DisconnectionListener::DisconnectionListener(server::ClientContainer &clientContainer,
                                                                      server::Core *core)
@@ -110,5 +122,4 @@ void server::NetworkManager::DisconnectionListener::notify(unsigned long fd) {
     Client &client = this->clientContainer.get(fd);
     core->removeClient(client);
     this->clientContainer.remove(fd);
-
 }

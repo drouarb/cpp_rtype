@@ -15,11 +15,12 @@ using namespace network;
 class ConL: public listener::ISocketConnectionListener {
 private:
     bool connected;
+    std::string prefix;
 public:
-    ConL(): connected(false) {}
+    ConL(std::string prefix): connected(false), prefix(prefix) {}
 
     virtual void notify(unsigned long fd) {
-        std::cout << "Connected " << fd << std::endl;
+        std::cout << prefix << "Connected " << fd << std::endl;
         connected = true;
     }
 
@@ -31,11 +32,12 @@ public:
 class DisconL: public listener::ISocketDisconnectionListener {
 private:
     bool disconnected;
+    std::string prefix;
 public:
-    DisconL(): disconnected(false) {}
+    DisconL(std::string prefix): disconnected(false), prefix(prefix) {}
 
     virtual void notify(unsigned long fd) {
-        std::cout << "Disconnected " << fd << std::endl;
+        std::cout << prefix << "Disconnected " << fd << std::endl;
         disconnected = true;
     }
 
@@ -45,10 +47,14 @@ public:
 };
 
 class DataL: public listener::ISocketDataListener {
+private:
     std::vector<uint8_t> data;
+    std::string prefix;
 public:
+    DataL(std::string prefix): prefix(prefix) { };
+
     virtual void notify(unsigned long fd, const std::vector<unsigned char> &data) {
-        std::cout << "Received " << data.size() << std::endl;
+        std::cout << prefix << "Received " << data.size() << std::endl;
         this->data.insert(this->data.end(), data.begin(), data.end());
     }
 
@@ -58,17 +64,20 @@ public:
 };
 
 int main() {
-    ConL *conL = new ConL;
-    DataL *dataL = new DataL;
+    ConL *conL = new ConL("[SRV]");
+    DataL *dataL = new DataL("[SRV]");
+    DisconL *disconL = new DisconL("[SRV]");
+    DisconL *cliDisc = new DisconL("[CLI]");
     std::vector<uint8_t> data;
-    DisconL *disconL = new DisconL;
     socket::UnixUDPSocket *server = new socket::UnixUDPSocket(PORT);
     socket::UnixUDPSocket *client = new socket::UnixUDPSocket("127.0.0.1", PORT);
 
-    server->run();
     server->registerConnectionListener(conL);
     server->registerDataListener(dataL);
     server->registerDisconnectionListener(disconL);
+    server->run();
+
+    client->registerDisconnectionListener(cliDisc);
 
     for (uint8_t i = 0; i < 10; i++) {
         data.push_back(i);
@@ -80,8 +89,6 @@ int main() {
 
     assert(conL->isConnected());
 
-    usleep(500000);
-
     client->broadcast(data);
 
     for (int i = 0; i < dataL->getData().size(); i++) {
@@ -90,7 +97,13 @@ int main() {
 
     client->stop();
 
-    sleep(7);
+    usleep(10000);
 
     assert(disconL->isDisconnected());
+
+    client->run();
+
+    server->stop();
+    usleep(100000);
+    assert(cliDisc->isDisconnected());
 }

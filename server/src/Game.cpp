@@ -15,14 +15,15 @@
 #include <network/packet/PacketErrorGame.hh>
 #include <network/packet/PacketQuit.hh>
 #include <helpers/Epoch.hh>
+#include <network/packet/PacketGameData.hh>
 #include "Game.hh"
 
 using namespace server;
 
-Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true)
+Game::Game(network::PacketFactory & packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
 { }
 
-Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true)
+Game::Game(network::PacketFactory & packetf, int lobbyId, const Level & lvl) : packetf(packetf), lvl(&lvl), round(0), gameId(lobbyId), entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
 { }
 
 Game::~Game()
@@ -54,12 +55,15 @@ void Game::setLevel(const Level & lvl)
 void Game::tick()
 {
     round++;
+
     progressLevel();
     checkCollisions(); //must be before moveEntities
     moveEntities();
     letEntitesAct(); //must be called after checkCollisions
     unspawn(); //must be after letEntitiesAct
-    this->sendData();
+    manageNewGamedata();
+
+    sendData();
 }
 
 gameId_t Game::getLobbyId()
@@ -367,8 +371,8 @@ void Game::unspawn()
 {
     for (auto it = entities.begin(); it != entities.end();)
     {
-        if ((*it)->data.getPosX() <= FIELD_BORDER_LEFT - LEFT_MARGIN || (*it)->data.getPosX() > FIELD_BORDER_RIGHT + RIGHT_MARGIN
-                || (*it)->data.getPosY() + (*it)->data.getSprite().sizeY < 0 || (*it)->data.getPosY() > FIELD_HEIGHT)
+        if ((*it)->data.getPosX() + (*it)->data.getSprite().sizeX <= FIELD_BORDER_LEFT - LEFT_MARGIN || (*it)->data.getPosX() > FIELD_BORDER_RIGHT + RIGHT_MARGIN
+                || (*it)->data.getPosY() + (*it)->data.getSprite().sizeY < Y_BORDER_WIDTH || (*it)->data.getPosY() > FIELD_HEIGHT + Y_BORDER_WIDTH)
         {
             (*it)->data.setDestroyed(true);
             INFO("OUT OF RANGE : " << (*it)->data.getId())
@@ -386,6 +390,25 @@ void Game::unspawn()
         }
         else
             ++it;
+    }
+}
+
+void Game::manageNewGamedata()
+{
+    auto gamedata = lvl->getNewData(round);
+    if (gamedata != nullptr)
+    {
+        auto packet = network::packet::PacketGameData();
+        packet.setBackground(gamedata->first);
+        packet.setAudio(gamedata->second);
+
+        std::cout << "new gamedata " << gamedata->first << " " << gamedata->second << std::endl;
+
+        for (auto client : clientList)
+        {
+            packetf.send(packet, client->getClientId());
+        }
+        currentGamedata = gamedata;
     }
 }
 
@@ -579,11 +602,18 @@ void Game::sendPacketSync(const Client * client)
 
 void Game::greetNewPlayer(const Client & client)
 {
-    auto packetPlayerData = new network::packet::PacketPlayerData();
-    packetPlayerData->setNbAttack(1);
-    packetPlayerData->setPlayerId(client.getController()->getEntity()->data.getId());
-    packetf.send(*packetPlayerData, client.getClientId());
-    delete packetPlayerData;
+    auto packetPlayerData = network::packet::PacketPlayerData();
+    packetPlayerData.setNbAttack(1);
+    packetPlayerData.setPlayerId(client.getController()->getEntity()->data.getId());
+    packetf.send(packetPlayerData, client.getClientId());
+
+    if (currentGamedata != nullptr)
+    {
+        auto packetGameData = network::packet::PacketGameData();
+        packetGameData.setBackground(currentGamedata->first);
+        packetGameData.setAudio(currentGamedata->second);
+        packetf.send(packetGameData, client.getClientId());
+    }
 
     sendPacketSync(&client);
     if (clientList.size() > 1) //if not first client

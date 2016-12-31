@@ -73,6 +73,8 @@ namespace server {
 
         void askGame(clientId_t src) override;
 
+        void askLeaderBoard(clientId_t src) override;
+
         ConnectionListener *getConnectionListener() const;
 
         DisconnectionListener *getDisconnectionListener() const;

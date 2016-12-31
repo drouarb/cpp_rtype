@@ -12,13 +12,14 @@
 
 using namespace server;
 
-Player::Player() : mustDestroy(0), vectX(0), vectY(0), newHp(0) {
+Player::Player() : mustDestroy(0), vectX(0), vectY(0), lostHp(0), nextAttack(NOATTACK) {
     INFO("Player created")
 }
 
-void Player::shoot(round_t current_round) {
+void Player::shoot(round_t current_round, attackId_t attack)
+{
     //TODO Create map of <attackId_t, ADynamicObject *>
-    this->attackQueue.push(new MagicMissile(this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(), current_round));
+    nextAttack = attack;
 }
 
 void Player::collide(const Entity &entity, server::round_t current_round) {
@@ -27,16 +28,16 @@ void Player::collide(const Entity &entity, server::round_t current_round) {
         return;
     }
     std::cout << "Player " << this->data->getId() << " collides with player id " << entity.data.getId() << std::endl;
-    this->newHp += entity.obj->getDamage();
+    this->lostHp += entity.obj->getDamage();
 }
 
 EntityAction *Player::act(round_t current_round, const Grid &) {
+    cleanAttackTimeline(current_round);
     INFO("Player hp: " << this->data->getHp())
     EntityAction *act = new EntityAction();
-    if (!attackQueue.empty()) {
-        ADynamicObject *pObject = attackQueue.back();
-        act->newEntity = pObject;
-        attackQueue.pop();
+    if (nextAttack != NOATTACK && attackTimeline.find(current_round) == attackTimeline.end()) {
+        act->newEntity = this->createAttack(nextAttack, current_round);
+        nextAttack = NOATTACK;
         INFO("PLayer " << this->data->getId() << " : BOUM /!\\")
     }
     if ((mustDestroy && mustDestroy + 1 == current_round) || this->data->getHp() <= 0) {
@@ -45,9 +46,10 @@ EntityAction *Player::act(round_t current_round, const Grid &) {
     }
     act->speedX = vectX;
     act->speedY = vectY;
-    act->hp = this->data->getHp() - this->newHp;
+    act->hp = this->data->getHp() - this->lostHp;
 
-    this->newHp = 0;
+    this->lostHp = 0;
+    this->lastRound = current_round;
     return act;
 }
 
@@ -63,7 +65,7 @@ EntityInitialization *Player::initialize(round_t, const Grid &)
     ei->action.hp = DEFAULT_LIFE;
     ei->sprite.path = "media/sprites/magicalGirlD.png";
 
-    this->newHp = 0;
+    this->lostHp = 0;
     return (ei);
 }
 
@@ -79,6 +81,43 @@ void Player::move(speed_t vectX, speed_t vectY) {
 Tribool Player::collidesWith(const Entity &entity) {
     return (entity.data.getTeam() != server::Team::PLAYER ? T_TRUE : T_FALSE);
 }
+
+void Player::cleanAttackTimeline(server::round_t round)
+{
+    //manage rewind
+    round_t first = lastRound - (TIMELINE_LENGTH - 1);
+    if (first < 0)
+        first = 0;
+    round_t r = lastRound;
+    while (r > round && r >= first)
+    {
+        while (r >= first && attackTimeline[r] != NOATTACK)
+        {
+            attackTimeline.erase(r);
+            --r;
+        }
+    }
+
+    //remove old ones
+    if (lastRound >= TIMELINE_LENGTH)
+    {
+        attackTimeline.erase(lastRound - TIMELINE_LENGTH);
+    }
+}
+
+ADynamicObject * Player::createAttack(attackId_t id, round_t round)
+{
+    setAttackWait(id, 3, round);
+    return new MagicMissile(this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(), round);
+}
+
+void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound)
+{
+    attackTimeline[currentRound] = 0;
+    for (int i = 1; i < nbRounds; ++i)
+        attackTimeline[currentRound + i] = NOATTACK;
+}
+
 
 Player::MagicMissile::MagicMissile(pos_t posX, pos_t posY, round_t startRound) : mustDestroy(0), posX(posX), posY(posY)
 { }

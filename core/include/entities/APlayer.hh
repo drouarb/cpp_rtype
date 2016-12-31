@@ -21,7 +21,7 @@ namespace server
          * \brief Tell the player 'attack' => this can lead to creation of new ADynamicObject (missile for example)
          * @param round Current round in the game
          */
-        virtual void shoot(round_t round) = 0;
+        virtual void shoot(round_t round, attackId_t attack) = 0;
         /**
          * Move the player with specified vector
          * @param vectX Of how many should the player move on the X axis
