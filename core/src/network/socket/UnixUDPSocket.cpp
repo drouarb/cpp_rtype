@@ -307,29 +307,37 @@ void network::socket::UnixUDPSocket::clientTimeout() {
 
 void network::socket::UnixUDPSocket::handleData(const std::vector<uint8_t> &data, const struct sockaddr_in &client) {
     try {
-        packet::PacketDisconnect packetDisconnect;
+        switch ((packet::PacketId)data.at(0)) {
+            case packet::PacketId::DISCONNECT: {
+                packet::PacketDisconnect packetDisconnect;
 
-        packetDisconnect.deserialize(const_cast<std::vector<uint8_t> *>(&data));
-        if (type == CLIENT)
-            clientDisconnect();
-        else
-            serverDisconnect(client);
-    } catch (std::exception e) {
-        try {
-            std::vector<uint8_t> buff;
-
-            packet::PacketPing packetPing;
-            packet::PacketPong packetPong;
-
-            //TODO Const APacket Protoboeuf
-            packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
-            packetPong.serialize(&buff);
-            send(buff, getClientId(client));
-        } catch (std::exception e) {
-            for (auto &l : dataListeners) {
-                l->notify(getClientId(client), data);
+                packetDisconnect.deserialize(const_cast<std::vector<uint8_t> *>(&data));
+                if (type == CLIENT)
+                    clientDisconnect();
+                else
+                    serverDisconnect(client);
+                return;
             }
+
+            case packet::PacketId::PING: {
+                std::vector<uint8_t> buff;
+
+                packet::PacketPing packetPing;
+                packet::PacketPong packetPong;
+
+                //TODO Const APacket Protoboeuf
+                packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
+                packetPong.serialize(&buff);
+                send(buff, getClientId(client));
+                return;
+            }
+
+            default: { }
         }
+    } catch (std::exception) {}
+
+    for (auto &l : dataListeners) {
+        l->notify(getClientId(client), data);
     }
 }
 
