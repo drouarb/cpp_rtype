@@ -8,9 +8,7 @@
 using namespace server;
 
 EntityData::EntityData()
-{
-    std::memset(this, 0, sizeof(*this));
-}
+{}
 
 EntityData::~EntityData()
 { }
