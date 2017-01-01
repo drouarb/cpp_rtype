@@ -763,8 +763,8 @@ void Game::endGame()
 
 const std::string Game::playerPaths[4] =
     {
-            "build/entity/RedPlayer",
-            "build/entity/BluePlayer",
             "build/entity/YellowPlayer",
+            "build/entity/BluePlayer",
+            "build/entity/RedPlayer",
             "build/entity/GreenPlayer",
     };
