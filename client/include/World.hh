@@ -8,7 +8,7 @@
 #include "Definitions.hh"
 #include "Entity.hh"
 #include "GameUIInterface.hh"
-
+#include "thread/Mutex.hh"
 #ifndef WORLD_HH_
 # define WORLD_HH_
 
@@ -47,14 +47,14 @@ namespace client
   class World
   {
   private:
-      std::mutex *world_mut;
+      Mutex *world_mut;
     tick					turn;	
     std::map<ide_t, Entity*>			entitys;
     std::vector<std::pair<UIevent_t, pos_t> >	UIevents;
     std::list<std::pair<tick, WorldEvent> >			worldEvents;
       GameUIInterface *gameui;
   public:
-    World(std::mutex *mmut, GameUIInterface *ngameui);
+    World(GameUIInterface *ngameui);
     ~World();
     void					spawnEntity(ide_t, pos_t, typeide_t, UIevent_t, tick);
     void					moveEntity(vec_t, pos_t, tick, ide_t, UIevent_t);

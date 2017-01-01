@@ -6,7 +6,7 @@
 #define CPP_RTYPE_GAMECLIENT_HH
 
 #include <utility>
-#include <mutex>
+#include "thread/Mutex.hh"
 #include "World.hh"
 #include "Entity.hh"
 #include "NetworkManager.hh"
@@ -31,7 +31,7 @@ namespace client {
     private:
         World *world;
         EventManager *handler;
-        std::mutex *client_mut;
+        Mutex *client_mut;
         NetworkManager *manager;
       int tickRateClient;
         std::map<tick, uint64_t> horodatageTick;

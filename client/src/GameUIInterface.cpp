@@ -12,11 +12,11 @@
 
 using namespace client;
 
-GameUIInterface::GameUIInterface(IEventHandler *handler, std::mutex *mut) {
+GameUIInterface::GameUIInterface(IEventHandler *handler) {
     managerUi.init(1920, 1020);
     managerUi.getEventObserver()->setEventManager(handler);
     managerUi.getEventObserver()->listen(managerUi.getWindow(UI::MAIN_WINDOW));
-    ui_mut = new std::mutex();
+    ui_mut = new Mutex;
     currentMenu = nullptr;
     static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
             UI::BACKGROUND, "media/menu/black-background.jpg");

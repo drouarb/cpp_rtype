@@ -8,8 +8,8 @@
 
 using namespace client;
 
-World::World(std::mutex *mmut, GameUIInterface *ngame) {
-  world_mut = new std::mutex();
+World::World(GameUIInterface *ngame) {
+  world_mut = new Mutex;
     gameui = ngame;
     turn = 0;
 }

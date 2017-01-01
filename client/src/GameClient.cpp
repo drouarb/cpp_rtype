@@ -21,9 +21,9 @@ client::GameClient::GameClient() {
     manager = nullptr;
     tickRateClient = TICKRATE;
     world = nullptr;
-    client_mut = new std::mutex;
+    client_mut = new Mutex;
     sw = helpers::IStopwatch::getInstance();
-    gameui = new GameUIInterface(handler, client_mut);
+    gameui = new GameUIInterface(handler);
     gameui->initUI();
     createKeyMap("config/gameCommand.json");
 }
@@ -126,7 +126,7 @@ void GameClient::managePlayerData(uint16_t nplayerId, uint8_t nbAttackPlayer) {
     if (world == nullptr) {
         horodatageTick.clear();
 	firstSynchro = false;
-        world = new World(client_mut, gameui);
+        world = new World(gameui);
         playerId = nplayerId;
         nbrAttack = nbAttackPlayer;
         tickRateClient = TICKRATE;
@@ -152,7 +152,7 @@ void GameClient::manageGameData() {
 
 void GameClient::manageDisconnect() {
     std::cout << "Receive Disconnect" << std::endl;
-    gameui->showError("Deconnect from the server");
+    gameui->showError("Disconnect from the server");
     manageQuit();
     gameui->changeMenu("MenuSplash");
 }
