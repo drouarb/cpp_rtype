@@ -1,0 +1,81 @@
+{
+  "Name": "roomList",
+  "Default_Visibility": 1,
+  "padding_up": 100,
+  "padding_left": 200,
+  "type": 0,
+  "Buttons": [
+    {
+      "buttons_name": "register",
+      "selected": "rtype4.png",
+      "noselected": "rtype4.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -200,
+          "y": -100
+        }
+      ],
+      "type" : 0
+    },
+    {
+      "buttons_name": "roomdId",
+      "selected": "joinroom.png",
+      "noselected": "joinroom.png",
+      "default_selected": 0,
+      "lock": 0,
+      "position": [
+        {
+          "x": 0,
+          "y": 250
+        }
+      ],
+      "type": 0
+    },
+    {
+      "buttons_name": "roomId",
+      "default_selected": 1,
+      "lock": 1,
+      "default_value": "0",
+      "position": [
+        {
+          "x": 100,
+          "y": 450
+        }
+      ],
+      "type": 2,
+      "send": 1
+    },
+    {
+      "buttons_name": "roomList",
+      "selected": "roomlist2.png",
+      "noselected": "roomlist.png",
+      "default_selected": 0,
+      "lock": 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 500
+        }
+      ],
+      "type": 3,
+      "send": 10
+    },
+    {
+      "buttons_name": "back",
+      "selected": "back2.png",
+      "noselected": "back.png",
+      "default_selected": 0,
+      "lock": 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 650
+        }
+      ],
+      "type": 1,
+      "goto": "MenuConnection"
+    }
+  ]
+}

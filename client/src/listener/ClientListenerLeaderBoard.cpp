@@ -4,7 +4,7 @@
 
 #include "listener/ClientListenerLeaderBoard.hh"
 using namespace client;
-ClientListenerLeaderBoard::ClientListenerLeaderBoard(GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::LEADER_BOARD)
+ClientListenerLeaderBoard::ClientListenerLeaderBoard(NetworkManager *networkManager) : networkManager(networkManager), APacketListener(network::packet::LEADER_BOARD)
 {
 
 }
@@ -16,5 +16,5 @@ ClientListenerLeaderBoard::~ClientListenerLeaderBoard()
 
 void ClientListenerLeaderBoard::notify(const network::packet::PacketLeaderBoard *packet)
 {
-
+    networkManager->receiveLeaderBoard(packet->getLeaderBoard());
 }

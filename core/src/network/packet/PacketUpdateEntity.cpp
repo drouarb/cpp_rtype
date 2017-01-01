@@ -10,6 +10,7 @@ network::packet::PacketUpdateEntity::PacketUpdateEntity(uint32_t tick, uint32_t 
                         UPDATE_ENTITY,
                         {
                                 new utils::NetworkInteger(4, tick),
+                                
                                 new utils::NetworkInteger(4, eventId),
                                 new utils::NetworkInteger(4, entityId),
                                 new utils::NetworkInteger(2, hp)

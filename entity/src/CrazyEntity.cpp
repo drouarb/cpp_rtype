@@ -43,7 +43,7 @@ server::EntityAction *CrazyEntity::act(server::round_t current_round, const serv
 
     if (mustDestroy)
     {
-        a->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_C, "media/sprites/explosionC.png", "", 100);
+        a->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_C, "media/sprites/explosionC.png", "media/sounds/explosion4.ogg", 100);
         return (a);
     }
 

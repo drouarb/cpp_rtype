@@ -1,0 +1,84 @@
+{
+  "Name": "MenuStart",
+  "Default_Visibility": 1,
+  "padding_up" : 280,
+  "padding_left" : 690,
+  "type" :  0,
+  "Buttons": [
+    {
+      "buttons_name": "register",
+      "selected": "rtype1.png",
+      "noselected": "rtype1.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -690,
+          "y": -280
+        }
+      ],
+      "type" : 0
+    },
+    {
+      "buttons_name": "Play",
+      "selected": "play2.png",
+      "noselected": "play.png",
+      "lock" : 1,
+      "default_selected" : 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 0
+        }
+
+      ],
+      "type" : 1,
+      "goto" : "MenuConnection"
+    },
+    {
+      "buttons_name": "Settings",
+      "selected": "settings2.png",
+      "noselected": "settings.png",
+      "default_selected" : 0,
+      "lock" : 1,
+      "type" : 1,
+      "goto" : "MenuOption",
+      "position": [
+        {
+          "x": 0,
+          "y": 150
+        }
+      ]
+    },
+    {
+      "buttons_name": "Crédit",
+      "selected": "credits2.png",
+      "noselected": "credits.png",
+      "default_selected" : 0,
+      "lock" : 1,
+      "type" : 3,
+      "send" : 12,
+      "position": [
+        {
+          "x": 0,
+          "y": 300
+        }
+      ]
+    },
+    {
+      "buttons_name": "Quit",
+      "selected": "quit2.png",
+      "noselected": "quit.png",
+      "default_selected" : 0,
+      "lock" : 1,
+      "type" : 3,
+      "send" : 4,
+      "position": [
+        {
+          "x": 0,
+          "y": 450
+        }
+      ]
+    }
+  ]
+}
