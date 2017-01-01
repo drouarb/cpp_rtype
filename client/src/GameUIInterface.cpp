@@ -19,7 +19,7 @@ GameUIInterface::GameUIInterface(IEventHandler *handler) {
     ui_mut = new Mutex;
     currentMenu = nullptr;
     static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
-            UI::BACKGROUND, "media/menu/black-background.jpg");
+            UI::BACKGROUND, BLACK_BACKGROUND);
     nplayer = nullptr;
     this->playerSprite = nullptr;
     this->playerHp = nullptr;
@@ -42,7 +42,7 @@ void GameUIInterface::initUI() {
     if (listMenu.size() > 1) {
         currentMenu = listMenu[0];
         if (currentMenu->getMusic() != "") {
-            managerUi.getAudioManager()->playMusic("media/musics/" +currentMenu->getMusic());
+            managerUi.getAudioManager()->playMusic(MUSIC_PATH +currentMenu->getMusic());
         }
 
     }
@@ -210,11 +210,11 @@ void GameUIInterface::addMenu(const std::string &path) {
                         static_cast<UI::Text *>(item)->setString(child.second.get<std::string>("default_value"));
 
                     } else {
-                        item = window->getLayer(id)->addItem(UI::ITEM, "media/menu/" +
+                        item = window->getLayer(id)->addItem(UI::ITEM, MENU_PATH +
                                                                        child.second.get<std::string>("noselected"),
                                                              x + padding_left, y + padding_up);
                         window->getLayer(id)->addTexture(item, UI::ACTIVE,
-                                                         "media/menu/" + child.second.get<std::string>("selected"));
+                                                         MENU_PATH + child.second.get<std::string>("selected"));
 
                     }
                     temp->addButtonsName(child.second.get<std::string>("buttons_name"), item);
@@ -316,18 +316,18 @@ void GameUIInterface::changeMenu(const std::string &ne) {
     if (currentMenu->getType() == DEFAULT) {
         static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(
                 UI::BACKGROUNDS))->setBackground(
-                UI::BACKGROUND, "media/menu/black-background.jpg");
+                UI::BACKGROUND, BLACK_BACKGROUND);
         if (playerHp != nullptr)
             playerHp->setString("");
         static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->close();
     } else {
         static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(
                 UI::BACKGROUNDS))->setBackground(
-                UI::BACKGROUND, "media/backgrounds/normal.png");
+                UI::BACKGROUND, BASIC_BACKGROUND);
         static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->open();
     }
     if (currentMenu->getMusic() != "") {
-        managerUi.getAudioManager()->playMusic("media/musics/" +currentMenu->getMusic());
+        managerUi.getAudioManager()->playMusic(MUSIC_PATH +currentMenu->getMusic());
     }
 }
 
@@ -407,7 +407,7 @@ void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
         tmp = anim_map[path];
     else {
         new_path = path.substr(0, path.find("."));
-        std::fstream file(new_path + ".rtype");
+        std::fstream file(new_path + RTYPE_EX);
         if (file.is_open()) {
             for (buf; getline(file, buf);) {
                 tmp.push_back(std::stoi(buf));
@@ -484,7 +484,7 @@ void GameUIInterface::setNplayer(Entity *nplayer) {
       ui_mut->lock();
 
       std::string res =    typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
-      this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + "vatar.png",
+      this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + AVATAR_EX,
 							      0, 900);
       playerSprite->setRatio(0.2);
       playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->addTextBox(

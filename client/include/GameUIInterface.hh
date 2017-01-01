@@ -26,6 +26,12 @@
 
 #define TICKRATEUI 60
 
+#define MUSIC_PATH "media/musics/"
+#define MENU_PATH "media/menu/"
+#define BLACK_BACKGROUND "media/menu/black-background.jpg"
+#define BASIC_BACKGROUND "media/backgrounds/normal.png"
+#define RTYPE_EX ".rtype"
+#define AVATAR_EX "vatar.png"
 namespace client {
     class GameUIInterface {
     private:
