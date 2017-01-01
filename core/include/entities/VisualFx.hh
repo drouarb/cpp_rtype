@@ -43,6 +43,8 @@ namespace server
         pos_t x_offset;
         pos_t y_offset;
 
+    public:
+
         class PowerUp : public server::ADynamicObject {
         private:
             bool mustDestroy;
@@ -51,6 +53,7 @@ namespace server
 
         public:
             PowerUp(pos_t posX, pos_t posY);
+            PowerUp();
 
             void collide(const server::Entity &entity, server::round_t current_round) override;
 

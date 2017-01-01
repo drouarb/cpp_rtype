@@ -101,3 +101,9 @@ VisualFx::PowerUp::PowerUp(pos_t posX, pos_t posY)
     this->posX = posX;
     this->posY = posY;
 }
+
+VisualFx::PowerUp::PowerUp()
+{
+    this->posX = -100;
+    this->posY = 0;
+}
