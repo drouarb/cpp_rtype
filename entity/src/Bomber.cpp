@@ -49,7 +49,9 @@ server::EntityAction *Bomber::act(server::round_t current_round, const server::G
 
     if (mustDestroy)
     {
-        a->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_A, "media/sprites/explosionA.png", "media/sounds/explosion3.ogg", 100);
+        a->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_A,
+                                            "media/sprites/explosionA.png", "media/sounds/explosion3.ogg", 100,
+                                            0, server::VisualFx::Y_EXPLOSION_A);
         return (a);
     }
 
