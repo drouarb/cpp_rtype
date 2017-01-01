@@ -37,6 +37,12 @@
 	time: "300",
 	posX: "2000",
 	posY: "100"
+    },
+    {
+	dlName: "build/entity/Tower"
+	time: "10",
+	posX: "2000",
+	posY: "1000"
     }
   ]
   gamedata:
