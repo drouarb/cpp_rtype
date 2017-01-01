@@ -327,6 +327,9 @@ void GameUIInterface::changeMenu(const std::string &ne) {
                 UI::BACKGROUND, "media/backgrounds/normal.png");
         static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->open();
     }
+    if (currentMenu->getMusic() != "") {
+        managerUi.getAudioManager()->playMusic("media/musics/" +currentMenu->getMusic());
+    }
 }
 
 void GameUIInterface::manageTouch(client::Key key) {
@@ -491,4 +494,13 @@ void GameUIInterface::setNplayer(Entity *nplayer) {
       ui_mut->unlock();
       
     }
+}
+
+void GameUIInterface::playSound(const std::string &path) {
+    managerUi.getAudioManager()->playMusic(path);
+}
+
+void GameUIInterface::addBackground(const std::string &path) {
+    static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
+            UI::BACKGROUND, path);
 }

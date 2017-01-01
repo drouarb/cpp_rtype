@@ -116,6 +116,9 @@ namespace client {
 
 		void updateHp();
 
+		void playSound(const std::string & path);
+
+        void  addBackground(const std::string & path);
     private:
         typeide_t getNextId();
 

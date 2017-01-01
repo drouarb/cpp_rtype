@@ -2,8 +2,8 @@
 // Created by celeriy on 16/12/16.
 //
 
-#ifndef CPP_RTYPE_CLIENTLISTENERGAMEDATA_HH
-#define CPP_RTYPE_CLIENTLISTENERGAMEDATA_HH
+#ifndef CPP_RTYPE_CLIENTLISTENERSYNCHRONISATION_HH
+#define CPP_RTYPE_CLIENTLISTENERSYNCHRONISATION_HH
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketSynchronization.hh"

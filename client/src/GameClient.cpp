@@ -148,7 +148,7 @@ void GameClient::manageDisconnect() {
     std::cout << "Receive Disconnect" << std::endl;
     gameui->showError("Deconnect from the server");
     manageQuit();
-    gameui->changeMenu("MenuStart");
+    gameui->changeMenu("MenuSplash");
 }
 
 void GameClient::manageCancelEvent(uint32_t eventId) {
@@ -264,6 +264,7 @@ void GameClient::sendAll(struct s_info *info) {
             if (manager != nullptr) {
                 manager->sendQuit();
                 manager->sendAskList();
+                gameui->playSound("media/musics/moh.ogg");
                 gameui->changeMenu("roomList");
                 if (world != nullptr) {
                     delete world;
@@ -425,4 +426,10 @@ int GameClient::getTouch(const std::string &data) {
             return static_cast<int>(it->first);
     }
     return 1000;
+}
+
+void GameClient::manageGameData(const std::string &audio, const std::string &background) {
+    gameui->playSound("media/" + audio);
+    gameui->addBackground("media/" + background);
+
 }

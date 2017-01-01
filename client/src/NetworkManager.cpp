@@ -10,13 +10,13 @@
 #include <listener/ClientListenerErrorList.hh>
 #include <listener/ClientListenerEventError.hh>
 #include <listener/ClientListenerGameList.hh>
+#include <listener/ClientListenerGameData.hh>
 #include <listener/ClientListenerLeaderBoard.hh>
 #include <listener/ClientListenerMoveEntity.hh>
 #include <listener/ClientListenerPlaySound.hh>
 #include <listener/ClientListenerQuit.hh>
 #include <listener/ClientListenerSpawnEntity.hh>
 #include <listener/ClientListenerUpdateEntity.hh>
-#include <iostream>
 #include <network/packet/PacketAck.hh>
 #include <network/packet/PacketRegister.hh>
 #include <network/packet/PacketAskList.hh>
@@ -26,7 +26,7 @@
 #include <listener/ClientListenerPlayerData.hh>
 #include <listener/ClientListenerSynchronization.hh>
 #include <network/packet/PacketAskLeaderBoard.hh>
-#include "NetworkManager.hh"
+#include <listener/ClientListenerGameData.hh>
 
 using namespace client;
 
@@ -75,6 +75,7 @@ void NetworkManager:: addListenerToPacketFactory()
 {
     packetFactory->registerDisconnectionListener(new client::ClientListenerDisconnect(this));
     listeners.push_back(new client::ClientListenerCancelEvent(this));
+    listeners.push_back(new client::ClientListenerGameData(this));
     listeners.push_back(new client::ClientListenerDeleteEntity(this));
     listeners.push_back(new client::ClientListenerErrorList(this));
     listeners.push_back(new client::ClientListenerEventError(this));
@@ -216,3 +217,8 @@ void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
 void NetworkManager::receiveSynchronization(uint32_t turn, int64_t time) {
   gameClient->manageSyncro(turn, time);
 }
+
+void NetworkManager::receiveGameData(const std::string &audio, const std::string &background) {
+    gameClient->manageGameData(audio, background);
+}
+

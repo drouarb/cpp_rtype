@@ -96,6 +96,8 @@ namespace client {
         World *getWorld() const;
 
 
+
+        void  manageGameData(const std::string &audio, const std::string &background);
         void createKeyMap(const std::string &path);
 
         void saveConfig();
