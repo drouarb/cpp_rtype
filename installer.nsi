@@ -56,7 +56,13 @@ Section "rtype (required)"
   
   SetOutPath $INSTDIR\build\entity
   File "build\entity\Release\*.dll"
-
+  
+  SetOutPath $INSTDIR\media
+  File /nonfatal /a /r "media\"
+  
+  SetOutPath $INSTDIR\config
+  File /nonfatal /a /r "config\"
+  
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\NSIS_rtype "Install_Dir" "$INSTDIR"
   
