@@ -118,8 +118,8 @@ void Player::cleanAttackTimeline(server::round_t round)
 ADynamicObject * Player::createAttack(attackId_t id, round_t round)
 {
     setAttackWait(id, BASIC_MISSILE_TIME, round);
-    return new MagicMissile(this, this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(),
-                            round, "media/sprites/crystalA.png");
+    return new BasicMissile(this, this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(),
+                            "media/sprites/magicBullet.png");
 }
 
 void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound)
