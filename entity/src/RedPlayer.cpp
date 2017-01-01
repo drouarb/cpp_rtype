@@ -12,11 +12,18 @@ server::EntityInitialization *RedPlayer::initialize(server::round_t r, const ser
 
 server::ADynamicObject *RedPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
-    setAttackWait(id, 5, round);
     if (id == 0)
-        return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
-                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileA.png");
-    return server::Player::createAttack(id, round);
+    {
+        setAttackWait(id, BASIC_MISSILE_TIME, round);
+        return new BasicMissile(this, this->data->getPosX() + this->data->getSprite().sizeX - 40, this->data->getPosY() + 10,
+                                "media/sprites/daggerA.png");
+    }
+    else
+    {
+        setAttackWait(id, BASIC_MISSILE_TIME, round);
+        return new BasicMissile(this, this->data->getPosX() + this->data->getSprite().sizeX - 40, this->data->getPosY() + 10,
+                                "media/sprites/daggerA.png");
+    }
 }
 
 extern "C"

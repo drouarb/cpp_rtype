@@ -14,9 +14,7 @@ namespace server {
     private:
 
         static const int DEFAULT_LIFE = 500;
-        static const int MAX_ATTACK_QUEUE = 10;
         static const int CIRCLE_RADIUS = 15;
-        static const int DEFAULT_PLAYER_SPEED = 1;
         static const int TIMELINE_LENGTH = 60;
 
         bool mustDestroy;
@@ -32,6 +30,8 @@ namespace server {
 
     protected:
         static const int BULLET_SIZE = 25;
+        static const int BASIC_MISSILE_TIME = 8;
+
         std::map<server::round_t, server::attackId_t> attackTimeline;
         round_t lastRound;
         attackId_t nextAttack;
@@ -39,14 +39,14 @@ namespace server {
         void setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound);
         virtual ADynamicObject * createAttack(attackId_t id, round_t round);
 
-        class BasicMissile : public ADynamicObject {
+        class BasicMissile : public ADynamicObject, private Player::Power {
         private:
             bool mustDestroy;
             pos_t posX;
             pos_t posY;
             std::string sprite;
         public:
-            BasicMissile(pos_t posX, pos_t posY, const std::string &sprite);
+            BasicMissile(APlayer * owner, pos_t posX, pos_t posY, const std::string &sprite);
 
             void collide(const server::Entity &entity, server::round_t current_round) override;
 
@@ -73,7 +73,7 @@ namespace server {
 
         class MagicMissile : public ADynamicObject, protected APlayer::Power {
         public:
-            MagicMissile(APlayer *owner, pos_t posX, pos_t posY, round_t startRound);
+            MagicMissile(APlayer *owner, pos_t posX, pos_t posY, round_t startRound, const std::string & sprite);
 
             void collide(const Entity &entity, server::round_t current_round) override;
             EntityAction *act(round_t current_round, const Grid &) override;
@@ -84,10 +84,11 @@ namespace server {
         private:
             bool mustDestroy;
             round_t startRound;
+            std::string sprite;
 
             pos_t posX;
             pos_t posY;
-            static const int DAMAGE = 20;
+            static const int DAMAGE = 15;
         };
     };
 }

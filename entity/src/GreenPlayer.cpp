@@ -14,12 +14,18 @@ server::EntityInitialization *GreenPlayer::initialize(server::round_t round, con
 
 server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server::round_t round)
 {
-//    setAttackWait(id, 50, round);
-    setAttackWait(id, 10, round);
-//    return new BasicMissile(this->data->getPosX() + this->data->getSprite().sizeX,
-//                            this->data->getPosY() + this->data->getSprite().sizeY, "media/sprites/missileD.png");
-    return new WallAttack(this, this->data->getPosX() + this->data->getSprite().sizeX,
-                          this->data->getPosY() + this->data->getSprite().sizeY);
+    if (id == 1)
+    {
+        setAttackWait(id, 20, round);
+        return new WallAttack(this, this->data->getPosX() + this->data->getSprite().sizeX - 40,
+                              this->data->getPosY() + 10);
+    }
+    else
+    {
+        setAttackWait(id, BASIC_MISSILE_TIME, round);
+        return new BasicMissile(this, this->data->getPosX() + this->data->getSprite().sizeX - 40, this->data->getPosY() + 10,
+                                "media/sprites/daggerD.png");
+    }
 }
 
 /*
@@ -27,35 +33,32 @@ server::ADynamicObject *GreenPlayer::createAttack(server::attackId_t id, server:
  */
 
 GreenPlayer::WallAttack::WallAttack(server::APlayer *owner, server::pos_t posX, server::pos_t posY)
-        : Power(owner), posX(posX), posY(posY), initialRound(0),
-          layerLeft(6), nextPlace(TOP) {}
+        : Power(owner), posX(posX), posY(posY), initialRound(0)
+{}
 
 void GreenPlayer::WallAttack::collide(const server::Entity &entity, server::round_t current_round) {}
 
 server::EntityAction *
-GreenPlayer::WallAttack::act(server::round_t current_round, const server::Grid &vector) {
+GreenPlayer::WallAttack::act(server::round_t current_round, const server::Grid &vector)
+{
     server::EntityAction *entityAction = new server::EntityAction();
-    if (!this->initialRound) {
-        this->initialRound = current_round;
-    }
-    entityAction->hp = this->data->getHp();
-    entityAction->speedX = 3;
-    entityAction->speedY = 0;
-    if (this->layerLeft == 0) {
+
+    if (current_round - initialRound >= 2 * WALL_SIZE)
+    {
         entityAction->destroy = true;
-        return entityAction;
+        return (entityAction);
     }
-    if (nextPlace == DOWN) {
-        nextPlace = TOP;
-        entityAction->newEntity = new WallElement(this->posX - (21 * layerLeft) + 50,
-                                                  this->posY - (11 * layerLeft), getOwner());
-//        std::cout << "Round " << current_round << ", element at " << this->posX - 34 << ", " << this->posY - 34 << std::endl;
-        this->layerLeft--;
-    } else {
-        nextPlace = DOWN;
-        entityAction->newEntity = new WallElement(this->posX - (21 * layerLeft) + 50,
-                                                  this->posY + (11 * layerLeft), getOwner());
-//        std::cout << "Round " << current_round << ", element at " << this->posX - 34 << ", " << this->posY + 34 << std::endl;
+
+    if (current_round - initialRound == 1)
+    {
+        entityAction->newEntity = new WallElement(this->posX, this->posY, getOwner());
+    }
+    else if (current_round - initialRound > 1)
+    {
+        server::pos_t y_diff = (current_round - initialRound) / 2 * ELEM_SIZE;
+        if ((current_round - initialRound) % 2 == 0)
+            y_diff *= -1;
+        entityAction->newEntity = new WallElement(this->posX, this->posY + y_diff, getOwner());
     }
     return entityAction;
 }
@@ -69,11 +72,12 @@ server::EntityInitialization *GreenPlayer::WallAttack::initialize(server::round_
     initialization->sprite.sizeX = 0;
     initialization->sprite.sizeY = 0;
     initialization->sprite.path = "";
+    this->initialRound = round;
     return initialization;
 }
 
 server::hp_t GreenPlayer::WallAttack::getDamage() {
-    return DAMMAGE;
+    return 0;
 }
 
 server::Tribool GreenPlayer::WallAttack::collidesWith(const server::Entity &entity) {
@@ -110,12 +114,12 @@ server::EntityInitialization *GreenPlayer::WallAttack::WallElement::initialize(s
     initialization->team = server::Team::PLAYER;
     initialization->sprite.sizeX = 21;
     initialization->sprite.sizeY = 11;
-    initialization->sprite.path = "media/sprites/daggerA_b.png";
+    initialization->sprite.path = "media/sprites/magicBulletGreen.png";
     return initialization;
 }
 
 server::hp_t GreenPlayer::WallAttack::WallElement::getDamage() {
-    return DEFAULT_DAMAGE;
+    return 3;
 }
 
 server::Tribool GreenPlayer::WallAttack::WallElement::collidesWith(const server::Entity &entity) {

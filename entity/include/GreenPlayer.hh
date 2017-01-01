@@ -21,19 +21,14 @@ private:
 
     class WallAttack : public server::ADynamicObject, protected server::APlayer::Power {
     private:
-        static const int DAMMAGE = 100;
         static const int DEFAULT_LIFE = 100;
+        static const int WALL_SIZE = 5;
+        static const int ELEM_SIZE = 15;
 
         server::pos_t posX;
         server::pos_t posY;
 
         server::round_t initialRound;
-        uint8_t layerLeft;
-        enum {
-            TOP,
-            DOWN
-        } nextPlace;
-
 
         class WallElement : public server::ADynamicObject, protected server::APlayer::Power {
         private:

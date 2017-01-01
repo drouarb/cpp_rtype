@@ -766,5 +766,5 @@ const std::string Game::playerPaths[4] =
             "build/entity/GreenPlayer",
             "build/entity/RedPlayer",
             "build/entity/YellowPlayer",
-            "build/entity/BluePlayer",
+            "build/entity/GreenPlayer",
     };

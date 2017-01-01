@@ -108,7 +108,7 @@ ADynamicObject * Player::createAttack(attackId_t id, round_t round)
 {
     setAttackWait(id, 3, round);
     return new MagicMissile(this, this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(),
-                            round);
+                            round, "media/sprites/magicBullet.png");
 }
 
 void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound)
@@ -119,8 +119,8 @@ void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound
 }
 
 
-Player::MagicMissile::MagicMissile(APlayer *owner, pos_t posX, pos_t posY, round_t startRound)
-        : Power(owner), mustDestroy(false), posX(posX), posY(posY)
+Player::MagicMissile::MagicMissile(APlayer *owner, pos_t posX, pos_t posY, round_t startRound, const std::string & sprite)
+        : Power(owner), mustDestroy(false), posX(posX), posY(posY), sprite(sprite)
 { }
 
 
@@ -167,7 +167,7 @@ EntityInitialization *Player::MagicMissile::initialize(round_t round, const Grid
     initialization->team = server::Team::PLAYER;
     initialization->sprite.sizeX = BULLET_SIZE;
     initialization->sprite.sizeY = BULLET_SIZE;
-    initialization->sprite.path = "media/sprites/magicBullet.png";
+    initialization->sprite.path = sprite;
     this->startRound = round;
     return initialization;
 }
@@ -184,8 +184,8 @@ Tribool Player::MagicMissile::collidesWith(const Entity &entity) {
  * ----------------------------------------------------------------------------------------------
  */
 
-Player::BasicMissile::BasicMissile(pos_t posX, pos_t posY, const std::string &sprite) : posX(posX), posY(posY),
-                                                                                        sprite(sprite) {}
+Player::BasicMissile::BasicMissile(APlayer * owner, pos_t posX, pos_t posY, const std::string &sprite) :
+        Power(owner), posX(posX), posY(posY), sprite(sprite) {}
 
 EntityInitialization *Player::BasicMissile::initialize(round_t, const server::Grid &environment) {
     this->mustDestroy = false;
@@ -201,7 +201,12 @@ EntityInitialization *Player::BasicMissile::initialize(round_t, const server::Gr
     return initialization;
 }
 
-void Player::BasicMissile::collide(const server::Entity &entity, server::round_t) {
+void Player::BasicMissile::collide(const server::Entity &entity, server::round_t)
+{
+    if (entity.data.getTeam() == FOE)
+    {
+        modScore(static_cast<score_t >(getDamage()));
+    }
     this->mustDestroy = true;
 }
 
@@ -214,7 +219,7 @@ EntityAction *Player::BasicMissile::act(round_t current_round, const server::Gri
 }
 
 hp_t Player::BasicMissile::getDamage() {
-    return 40;
+    return 30;
 }
 
 Tribool Player::BasicMissile::collidesWith(const Entity &entity) {
