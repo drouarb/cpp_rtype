@@ -483,7 +483,7 @@ void Game::newPlayer(Client *client) {
 void Game::removePlayer(Client *client)
 {
     this->player -= 1;
-    this->player = this->player < 0c ? 0c : this->player;
+    this->player = this->player < 0 ? 0 : this->player;
     const std::list<server::Client *>::iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
     if (position == this->clientList.end())
     {
