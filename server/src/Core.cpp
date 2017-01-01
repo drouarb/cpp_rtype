@@ -95,9 +95,9 @@ void server::Core::run() {
 }
 
 void server::Core::setClient(server::Client &client, server::gameId_t gameId) {
-    mutex.lock();
+//    mutex.lock();
     psetClient(client, gameId);
-    mutex.unlock();
+//    mutex.unlock();
 }
 
 void server::Core::psetClient(server::Client &client, server::gameId_t gameId) {
@@ -116,9 +116,9 @@ void server::Core::psetClient(server::Client &client, server::gameId_t gameId) {
 
 
 void server::Core::removeClient(server::Client &client) {
-    mutex.lock();
+//    mutex.lock();
     premoveClient(client);
-    mutex.unlock();
+//    mutex.unlock();
 }
 
 void server::Core::premoveClient(server::Client &client) {
@@ -172,8 +172,8 @@ server::Core::Core(const std::string &path, server::NetworkManager *networkManag
 }
 
 server::Core::~Core() {
-    mutex.lock();
-    mutex.unlock();
+//    mutex.lock();
+//    mutex.unlock();
     delete sw;
     if (networkManager)
         delete networkManager;
