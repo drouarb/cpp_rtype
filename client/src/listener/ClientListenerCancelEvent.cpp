@@ -5,7 +5,7 @@
 #include "listener/ClientListenerCancelEvent.hh"
 
 using namespace client;
-ClientListenerCancelEvent::ClientListenerCancelEvent(client::GameClient *gameClient) : gameclient(gameClient), APacketListener(network::packet::CANCEL_EVENT)
+ClientListenerCancelEvent::ClientListenerCancelEvent(client::NetworkManager *networkManager) : networkManager(networkManager), APacketListener(network::packet::CANCEL_EVENT)
 {
 
 }
@@ -17,5 +17,5 @@ ClientListenerCancelEvent::~ClientListenerCancelEvent()
 
 void ClientListenerCancelEvent::notify(const network::packet::PacketCancelEvent *packet)
 {
-
+    networkManager->receiveCancelEvent(packet->getCancelEvent());
 }

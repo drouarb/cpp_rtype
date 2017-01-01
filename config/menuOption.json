@@ -1,0 +1,261 @@
+{
+  "Name": "MenuOption",
+  "Default_Visibility": 1,
+  "padding_up": 0,
+  "padding_left": 600,
+  "type": 0,
+  "Buttons": [
+    {
+      "buttons_name": "register",
+      "selected": "rtype5.png",
+      "noselected": "rtype5.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -600,
+          "y": -0
+        }
+      ],
+      "type" : 0
+    },
+    {
+      "buttons_name": "up",
+      "default_selected": 0,
+      "lock": 0,
+      "default_value": "MOVE UP",
+      "position": [
+        {
+          "x": 0,
+          "y": 100
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "keyup",
+      "default_selected": 1,
+      "lock": 1,
+      "default_value": "",
+      "position": [
+        {
+          "x": 350,
+          "y": 100
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "down",
+      "default_selected": 0,
+      "lock": 0,
+      "default_value": "MOVE DOWN",
+      "position": [
+        {
+          "x": 0,
+          "y": 150
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "keydown",
+      "default_selected": 0,
+      "lock": 1,
+      "default_value": "",
+      "position": [
+        {
+          "x": 350,
+          "y": 150
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "left",
+      "default_selected": 0,
+      "lock": 0,
+      "default_value": "MOVE LEFT",
+      "position": [
+        {
+          "x": 0,
+          "y": 200
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "keyleft",
+      "default_selected": 0,
+      "lock": 1,
+      "default_value": "",
+      "position": [
+        {
+          "x": 350,
+          "y": 200
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "right",
+      "default_selected": 0,
+      "lock": 0,
+      "default_value": "MOVE RIGHT",
+      "position": [
+        {
+          "x": 0,
+          "y": 250
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "keyright",
+      "default_selected": 0,
+      "lock": 1,
+      "default_value": "",
+      "position": [
+        {
+          "x": 350,
+          "y": 250
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "Attack1",
+      "default_selected": 0,
+      "lock": 0,
+      "default_value": "ATTACK 1",
+      "position": [
+        {
+          "x": 0,
+          "y": 300
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "keyAttack1",
+      "default_selected": 0,
+      "lock": 1,
+      "default_value": "",
+      "position": [
+        {
+          "x": 350,
+          "y": 300
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "Attack2",
+      "default_selected": 0,
+      "lock": 0,
+      "default_value": "ATTACK 2",
+      "position": [
+        {
+          "x": 0,
+          "y": 350
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "keyAttack2",
+      "default_selected": 0,
+      "lock": 1,
+      "default_value": "",
+      "position": [
+        {
+          "x": 350,
+          "y": 350
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "GameList",
+      "default_selected": 0,
+      "lock": 0,
+      "default_value": "GAMELIST",
+      "position": [
+        {
+          "x": 0,
+          "y": 400
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "keyGameList",
+      "default_selected": 0,
+      "lock": 1,
+      "default_value": "",
+      "position": [
+        {
+          "x": 350,
+          "y": 400
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "LeaderBoard",
+      "default_selected": 0,
+      "lock": 0,
+      "default_value": "LEADERBOARD",
+      "position": [
+        {
+          "x": 0,
+          "y": 450
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "keyLeaderBoard",
+      "default_selected": 0,
+      "lock": 1,
+      "default_value": "",
+      "position": [
+        {
+          "x": 350,
+          "y": 450
+        }
+      ],
+      "type": 2
+    },
+    {
+      "buttons_name": "save",
+      "selected": "save2.png",
+      "noselected": "save.png",
+      "default_selected": 0,
+      "lock": 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 600
+        }
+      ],
+      "type" : 3,
+      "send" : 9
+    },
+    {
+      "buttons_name": "back",
+      "selected": "back2.png",
+      "noselected": "back.png",
+      "default_selected": 0,
+      "lock": 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 750
+        }
+      ],
+      "type": 1,
+      "goto": "MenuStart"
+    }
+  ]
+}

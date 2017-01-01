@@ -7,19 +7,19 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketQuit.hh"
-#include "GameClient.hh"
+#include "NetworkManager.hh"
 namespace client {
     class ClientListenerQuit : public network::ListenerTemplate<network::packet::PacketQuit, network::packet::QUIT> {
 
     public:
-        ClientListenerQuit(GameClient *gameClient);
+        ClientListenerQuit(NetworkManager *networkManager);
 
         ~ClientListenerQuit();
 
         void notify(const network::packet::PacketQuit *packet);
 
     private:
-        GameClient *gameclient;
+        NetworkManager *networkManager;
     };
 }
 

@@ -1,3 +1,4 @@
+
 //
 // Created by drouar_b on 11/29/16.
 //
@@ -154,6 +155,7 @@ const std::map<network::packet::PacketId, network::PacketFactory::createPacketFu
         {packet::QUIT,            &PacketFactory::createPacket < packet::PacketQuit > },
         {packet::PLAYER_DATA,            &PacketFactory::createPacket < packet::PacketPlayerData > },
         {packet::SYNCHRONIZATION,            &PacketFactory::createPacket < packet::PacketSynchronization>},
+        {packet::GAME_DATA,            &PacketFactory::createPacket < packet::PacketGameData>},
 
         {packet::EVENT_ERROR,     &PacketFactory::createPacket < packet::PacketEventError > },
         {packet::CANCEL_EVENT,    &PacketFactory::createPacket < packet::PacketCancelEvent > },

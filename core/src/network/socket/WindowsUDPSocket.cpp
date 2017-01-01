@@ -347,7 +347,7 @@ void network::socket::WindowsUDPSocket::clientDisconnect() {
     for (auto &l : disconnectionListeners) {
         l->notify(getClientId(mainSocket));
     }
-    close(mainSocketFd);
+//    close(mainSocketFd);
 }
 
 void network::socket::WindowsUDPSocket::serverDisconnect(const struct sockaddr_in &client) {
