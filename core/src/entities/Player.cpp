@@ -24,7 +24,8 @@ void Player::shoot(round_t current_round, attackId_t attack)
 
 void Player::collide(const Entity &entity, server::round_t current_round) {
     INFO("Collide test")
-    if (entity.data.getTeam() == server::Team::PLAYER) {
+    if (entity.data.getTeam() == server::Team::PLAYER)
+    {
         return;
     }
     this->lostHp += entity.obj->getDamage();
@@ -39,15 +40,24 @@ EntityAction *Player::act(round_t current_round, const Grid &) {
         nextAttack = NOATTACK;
         INFO("PLayer " << this->data->getId() << " : BOUM /!\\")
     }
-    if (mustDestroy || this->data->getHp() <= 0) {
+    if (mustDestroy)
+    {
         INFO("PLayer " << this->data->getId() << " : DED /!\\")
         act->destroy = true;
     }
+    if (data->getHp() <= 0)
+    {
+        INFO("PLayer " << this->data->getId() << " : FALLING /!\\")
+        vectX = 0;
+        vectY = 20;
+    }
     act->speedX = vectX;
     act->speedY = vectY;
-    act->hp = this->data->getHp() - this->lostHp;
 
+    if (data->getHp() > 0)
+        act->hp = this->data->getHp() - this->lostHp;
     this->lostHp = 0;
+
     this->lastRound = current_round;
     return act;
 }
@@ -77,7 +87,10 @@ void Player::move(speed_t vectX, speed_t vectY) {
     this->vectY = vectY;
 }
 
-Tribool Player::collidesWith(const Entity &entity) {
+Tribool Player::collidesWith(const Entity &entity)
+{
+    if (data->getHp() <= 0)
+        return server::NA;
     return (entity.data.getTeam() != server::Team::PLAYER ? T_TRUE : T_FALSE);
 }
 
@@ -223,5 +236,5 @@ hp_t Player::BasicMissile::getDamage() {
 }
 
 Tribool Player::BasicMissile::collidesWith(const Entity &entity) {
-    return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
+    return (entity.data.getTeam() == server::PLAYER ? T_FALSE : T_TRUE);
 }

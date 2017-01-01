@@ -39,7 +39,8 @@ namespace server {
         void setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound);
         virtual ADynamicObject * createAttack(attackId_t id, round_t round);
 
-        class BasicMissile : public ADynamicObject, private Player::Power {
+        class BasicMissile : public ADynamicObject, private Player::Power
+        {
         private:
             bool mustDestroy;
             pos_t posX;

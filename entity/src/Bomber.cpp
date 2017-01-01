@@ -80,8 +80,8 @@ server::EntityAction *Bomber::BomberProjectile::act(server::round_t current_roun
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
     }
-    a->speedX = -3;
-    a->speedY = 4;
+    a->speedX = 0;
+    a->speedY = 5;
     return (a);
 }
 

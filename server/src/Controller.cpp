@@ -1,12 +1,18 @@
 #include <Controller.hh>
-#include "entities/Player.hh"
+#include <Entity.hh>
 
-void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY) {
+void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY)
+{
+    if (!player || !entity || entity->data.getHp() <= 0)
+    {
+        return;
+    }
     this->player->move(speedX * 2, speedY * 2);
 }
 
-void server::Controller::playShoot(attackId_t attackId, round_t tick) {
-    if (!player)
+void server::Controller::playShoot(attackId_t attackId, round_t tick)
+{
+    if (!player || !entity || entity->data.getHp() <= 0)
     {
         return;
     }
