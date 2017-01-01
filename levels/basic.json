@@ -3,6 +3,12 @@
   spawns:
   [
     {
+      dlName: "build/entity/PowerUp",
+      time: "1",
+      posX: "1000",
+      posY: "250"
+    },
+    {
       dlName: "build/entity/BasicNastyEntity",
       time: "1",
       posX: "2000",
