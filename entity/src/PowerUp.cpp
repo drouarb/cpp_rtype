@@ -33,7 +33,7 @@ server::hp_t PowerUp::getDamage() {
 }
 
 server::Tribool PowerUp::collidesWith(const server::Entity &entity) {
-    return entity.data.getTeam() ? server::T_TRUE : server::NA;
+    return entity.data.getTeam() && entity.data.getHp() > 0 ? server::T_TRUE : server::NA;
 }
 
 
