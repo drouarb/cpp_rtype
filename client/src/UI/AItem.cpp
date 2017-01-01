@@ -10,6 +10,7 @@ UI::AItem::AItem(itemType t) {
     type = t;
     status = UI::IDLE;
     animated = false;
+    onetime = false;
 }
 
 UI::AItem::~AItem() {
@@ -43,4 +44,8 @@ uint32_t UI::AItem::getID() {
 
 void UI::AItem::changeStatus(UI::animationType type) {
     status = type;
+}
+
+void UI::AItem::finished() {
+    onetime = true;
 }

@@ -41,6 +41,7 @@ namespace UI {
         float px;
         float py;
         float scale;
+        short frame;
         unsigned short animationTick;
     };
 }

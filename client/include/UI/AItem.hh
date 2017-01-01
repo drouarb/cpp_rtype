@@ -40,12 +40,14 @@ namespace UI {
         uint32_t getID();
         void playAnimation(animationType animation);
         itemType getType();
+        void finished();
 
     protected:
         itemType type;
         animationType status;
         uint32_t id;
         bool animated;
+        bool onetime;
         //std::map<UI::animationType, Animation> sprites; //changer unsigned int dans un type plus générique ?
         //sf::Sprite createSprite(const std::string filename, unsigned long part);
     };
