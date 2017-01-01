@@ -17,7 +17,7 @@ server::EntityAction *Ostwind::act(server::round_t current_round, const server::
     if (this->data->getHp() < 0)
     {
         action->destroy = true;
-        action->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_A, "media/sprites/explosionA.png", "", 100);
+        action->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_A, "media/sprites/explosionA.png", "media/sounds/explosion1.ogg", 100);
     }
     else
     {
