@@ -90,7 +90,7 @@ void server::Core::run() {
 
         if (sw->elapsedMs() < ROUND_DURATION_MS)
             std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - sw->elapsedMs()));
-        std::cout << "durée du dernier tick:" << sw->elapsedMs() << std::endl;
+        //std::cout << "durée du dernier tick:" << sw->elapsedMs() << std::endl;
     }
 }
 
