@@ -51,7 +51,9 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const
 
     if (mustDestroy)
     {
-        a->newEntity = new server::VisualFx(data->getPosX(), data->getPosY() + server::VisualFx::Y_EXPLOSION_C, "media/sprites/explosionC.png", "media/sounds/explosion2.ogg", 100);
+        a->newEntity = new server::VisualFx(data->getPosX(), data->getPosY() + server::VisualFx::Y_EXPLOSION_C,
+                                            "media/sprites/explosionC.png", "media/sounds/explosion2.ogg", 100,
+                                            0, server::VisualFx::Y_EXPLOSION_C);
     }
     else
     {

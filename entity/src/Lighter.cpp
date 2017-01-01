@@ -48,7 +48,9 @@ server::EntityAction *Lighter::act(server::round_t current_round, const server::
 
     if (mustDestroy)
     {
-        a->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_C, "media/sprites/explosionC.png", "media/sounds/explosion1.ogg", 100);
+        a->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_C,
+                                            "media/sprites/explosionC.png", "media/sounds/explosion1.ogg", 100,
+                                            0, server::VisualFx::Y_EXPLOSION_C);
         return (a);
     }
 
