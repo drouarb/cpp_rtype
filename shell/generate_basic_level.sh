@@ -9,14 +9,14 @@ echo "  spawns:
 
 function addWall() {
     echo -n "    {
-      dlName: \"build/entity/libObstacle\",
+      dlName: \"build/entity/Obstacle\",
       time: \"10\",
       posX: \"$1\",
       posY: \"$2\"
     }"
 }
 
-I=0
+I=1800
 while [ $I -ne 1800 ]
 do
     addWall $I 0
@@ -24,7 +24,7 @@ do
     echo ","
 done
 
-I=0
+I=1800
 while [ $I -ne 1800 ]
 do
     addWall $I 1050
@@ -44,9 +44,9 @@ function addEntity() {
 "
 }
 
-while [ $I -le 2000 ]
+while [ $I -le 200000 ]
 do
-    NB=$(($RANDOM % 5 + 1))
+    NB=$(($RANDOM % 3 + 1))
 
     LAST=0
 
@@ -54,16 +54,16 @@ do
     do
         case $(($RANDOM % 4 + 1)) in
         "1")
-        addEntity "build/entity/libCrazyEntity" $I 1920 $(($RANDOM % 800 + 50))
+        addEntity "build/entity/CrazyEntity" $I 1920 $(($RANDOM % 800 + 50))
         ;;
         "2")
-        addEntity "build/entity/libBasicNastyEntity" $I 1920 $(($RANDOM % 800 + 50))
+        addEntity "build/entity/BasicNastyEntity" $I 1920 $(($RANDOM % 800 + 50))
         ;;
         "3")
-        addEntity "build/entity/libBomber" $I 1920 $(($RANDOM % 800 + 50))
+        addEntity "build/entity/Bomber" $I 1920 $(($RANDOM % 800 + 50))
         ;;
         "4")
-        addEntity "build/entity/libOstwind" $I 1920 920
+        addEntity "build/entity/Ostwind" $I 1920 920
         ;;
         esac
         echo -n ""
