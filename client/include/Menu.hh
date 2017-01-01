@@ -10,23 +10,21 @@
 #include "UI/AItem.hh"
 
 namespace client {
-    enum MenuType : int
-    {
+    enum MenuType : int {
         DEFAULT = 0,
         GAME = 1
     };
-    enum ButtonsType : int
-    {
+    enum ButtonsType : int {
         NONE = 0,
-        GOTO  = 1,
+        GOTO = 1,
         TEXTBOX = 2,
         SEND = 3
     };
-    enum ButtonsStats : int
-    {
+    enum ButtonsStats : int {
         LOCK = 0,
         UNLOCK = 1
     };
+
     class Menu {
     private:
         unsigned long layer_id;
@@ -35,10 +33,11 @@ namespace client {
         MenuType type;
         UI::AItem *default_selected;
         std::string text;
-        std::map<UI::AItem*, ButtonsStats> buttonsStats;
-        std::map<UI::AItem*, std::string> textBox;
-        std::map<UI::AItem*, int>SendInfo;
-        std::map<std::string , UI::AItem*>ButtonsName;
+        std::map<UI::AItem *, ButtonsStats> buttonsStats;
+        std::map<UI::AItem *, std::string> textBox;
+        std::map<UI::AItem *, int> SendInfo;
+        std::map<std::string, UI::AItem *> ButtonsName;
+        std::string music;
 
     public:
         const std::string &getText() const;
@@ -50,10 +49,15 @@ namespace client {
 
     private:
         UI::AItem *current_selected;
-        std::map<UI::AItem*, std::string>goToMap;
-        std::map<UI::AItem*, ButtonsType> TypeMap;
+        std::map<UI::AItem *, std::string> goToMap;
+        std::map<UI::AItem *, ButtonsType> TypeMap;
     public:
         MenuType getType() const;
+
+
+        const std::string &getMusic() const;
+
+        void setMusic(const std::string &music);
 
         void setType(MenuType type);
 
@@ -64,6 +68,7 @@ namespace client {
         UI::ILayer *getLayer() const;
 
         void setLayer(UI::ILayer *layer);
+
         ButtonsType getType(UI::AItem *item);
 
     public:
@@ -80,9 +85,9 @@ namespace client {
 
         void addButtons(UI::AItem *, ButtonsType type);
 
-        void addButtonsType(const std::string & menu, UI::AItem* item);
+        void addButtonsType(const std::string &menu, UI::AItem *item);
 
-        const std::string &getMenuName(UI::AItem*);
+        const std::string &getMenuName(UI::AItem *);
 
         void setButtonsStats(UI::AItem *item, ButtonsStats type);
 
@@ -96,17 +101,18 @@ namespace client {
 
         int getInfo(UI::AItem *item);
 
-        const  std::string &getTextFromtextBox(UI::AItem *item);
+        const std::string &getTextFromtextBox(UI::AItem *item);
 
         void erraseTextBox();
 
         void addButtonsName(const std::string &name, UI::AItem *item);
 
-        UI::AItem *getButtonsByName(const std::string & name);
+        UI::AItem *getButtonsByName(const std::string &name);
 
         void erraseTextFromTextBox(UI::AItem *item);
 
         void addTextToButtons(UI::AItem *item, const std::string &data);
+
     private:
         std::vector<UI::AItem *> listItem;
     public:

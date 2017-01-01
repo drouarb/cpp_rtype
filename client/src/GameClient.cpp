@@ -36,7 +36,7 @@ void client::GameClient::createNetworkManager(const std::string &ip, unsigned sh
         manager->startPacketFactory();
     }
     catch (std::runtime_error *e) {
-        gameui->showError("Impossible de joindre ce serveur");
+        gameui->showError("Cannot join the server");
         manager = nullptr;
     }
 }
@@ -142,7 +142,7 @@ void GameClient::manageGameData() {
 
 void GameClient::manageDisconnect() {
     std::cout << "Receive Disconnect" << std::endl;
-    gameui->showError("Deconnection du serveur");
+    gameui->showError("Deconnect from the server");
     manageQuit();
     gameui->changeMenu("MenuStart");
 }
@@ -159,6 +159,7 @@ void GameClient::manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameL
 void GameClient::manageLeaderBoard(std::vector<std::pair<uint32_t, std::string> > LeaderBoard) {
     gameui->feedLeaderBoard(LeaderBoard);
     gameui->reloadMenuRoomList();
+    std::cerr << "je passe" << std::endl;
 }
 
 void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {
@@ -170,7 +171,7 @@ void GameClient::manageQuit() {
         horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
-        sendAll(client::parse(I_ASKLIST, client::Key::KEY_ESCAPE));
+        sendAll(client::parse(I_LEADERBOARD, client::Key::KEY_ESCAPE));
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         horodatageTick.clear();
     }
@@ -287,6 +288,12 @@ void GameClient::sendAll(struct s_info *info) {
             saveConfig();
         }
             break;
+      case I_LEADERBOARD: {
+          if (manager != nullptr) {
+              gameui->changeMenu("LeaderBoard");
+          }
+      }
+          break;
         case I_ASKLEADERBOARD: {
             if (manager != nullptr) {
                 manager->sendAskLearderBoard();

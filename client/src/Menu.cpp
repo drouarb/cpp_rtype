@@ -10,6 +10,7 @@ using namespace client;
 Menu::Menu() : current_selected(nullptr) {
     layer = nullptr;
     default_selected = nullptr;
+    music = "";
 }
 
 unsigned long Menu::getLayer_id() const {
@@ -193,16 +194,17 @@ const std::string &Menu::getTextFromtextBox(UI::AItem *item) {
 void Menu::erraseTextBox() {
 
 
-    for (auto it =  listItem.begin(); it != listItem.end() ; it++)
+    std::vector<UI::AItem*>vec;
+    for (auto it =  listItem.begin(); it != listItem.end() ; it++) {
+        if (TypeMap[*it] == TEXTBOX && buttonsStats[*it] == LOCK)
+            vec.push_back(*it);
+    }
+    for (int i = 0; i != vec.size() ; i++)
     {
-        if (textBox.find(*it) != textBox.end() && buttonsStats[*it] == LOCK)
-        {
-            textBox.erase(*it);
-            SendInfo.erase(*it);
-            buttonsStats.erase(*it);
-            it++;
-            listItem.erase(it--);
-        }
+        textBox.erase(vec[i]);
+        SendInfo.erase(vec[i]);
+        buttonsStats.erase(vec[i]);
+        static_cast<UI::Text*>(vec[i])->setString("");
     }
 }
 
@@ -222,5 +224,13 @@ void Menu::erraseTextFromTextBox(UI::AItem *item) {
 
 void Menu::addTextToButtons(UI::AItem *item, const std::string &data) {
     textBox[item] = data;
+}
+
+void Menu::setMusic(const std::string &music) {
+    Menu::music = music;
+}
+
+const std::string &Menu::getMusic() const {
+    return music;
 }
 

@@ -39,7 +39,14 @@ void GameUIInterface::initUI() {
     addMenu("config/LearderBoard.json");
     addMenu("config/menuOption.json");
     createStaticMenu();
-    currentMenu = listMenu[0];
+    if (listMenu.size() > 1) {
+        currentMenu = listMenu[0];
+        if (currentMenu->getMusic() != "") {
+            managerUi.getAudioManager()->playMusic("media/musics/" +currentMenu->getMusic());
+        }
+
+    }
+
 }
 
 void GameUIInterface::displaySimple() {

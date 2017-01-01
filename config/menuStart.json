@@ -4,6 +4,7 @@
   "padding_up" : 280,
   "padding_left" : 690,
   "type" :  0,
+  "son" : "moh.ogg",
   "Buttons": [
     {
       "buttons_name": "register",
