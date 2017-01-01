@@ -67,7 +67,6 @@ void World::applyTurn(int tickrate, ide_t playerId) {
     while (itEv != worldEvents.end()) {
         if (1) {
             if (itEv->second.eventtype == SPAWN && (entitys.find(itEv->second.id) == entitys.end())) {
-	      std::cout << "apply spawn" << std::endl;
                 ent = new Entity(itEv->second.id, itEv->second.type, itEv->second.pos, itEv->first);
                 pos = ent->getPos();
                 entitys.insert(std::pair<ide_t, Entity *>(itEv->second.id, ent));
@@ -79,17 +78,14 @@ void World::applyTurn(int tickrate, ide_t playerId) {
 		  }
 
             } else if (itEv->second.eventtype == UPDATE && (entitys.find(itEv->second.id) != entitys.end())) {
-	      	      std::cout << "apply update" << std::endl;
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
                 ent->updateEntity(itEv->second.hp);
             } else if (itEv->second.eventtype == MOVE && (entitys.find(itEv->second.id) != entitys.end())) {
-	      	      std::cout << "apply move" << std::endl;
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
                 ent->moveEntity(itEv->second.vec, itEv->second.pos, itEv->second.turn);
             } else if (itEv->second.eventtype == DELETE && (entitys.find(itEv->second.id) != entitys.end())) {
-	      	      std::cout << "apply delete" << std::endl;
                 gameui->deleteEntity(entitys.at(itEv->second.id));
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
