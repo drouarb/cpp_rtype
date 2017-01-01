@@ -5,6 +5,9 @@
 
 This is an multiplayer implementation of the game r-type.
 
+## Installation
+You can download an installer at this address http://minewolf.tf/down/rtype_setup.exe
+
 ## Build [![build status](http://git.minewolf.tf/root/rtype/badges/master/build.svg)](http://git.minewolf.tf/root/rtype/commits/master)
 
 To build this project you need cmake and SFML and a compilation toolchain (gcc+make,mingw,visual studio...). To enable tests compilation you need to set `RTYPE_TESTS=ON`. All unit tests are written with ctest, to execute it run the command `ctest`.
