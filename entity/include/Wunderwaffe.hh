@@ -12,20 +12,26 @@ class Wunderwaffe : public server::ADynamicObject {
 private:
     static const int DEFAULT_LIFE = 1000;
 
-    class BigBullet : public server::ADynamicObject {
+    class BigBullet : public server::ADynamicObject
+    {
     private:
-        static const int DEFAULT_DAMAGE = 40;
 
         bool mustDestroy;
         server::round_t startRound;
 
         server::pos_t posX;
         server::pos_t posY;
+        server::speed_t speedX;
+        server::speed_t speedY;
+        int sizeX;
+        int sizeY;
+        std::string sprite;
+        server::hp_t damage;
 
     public:
 
-        BigBullet();
-        BigBullet(server::pos_t posX, server::pos_t posY);
+        BigBullet(server::pos_t posX, server::pos_t posY, server::speed_t speedX, server::speed_t speedY, int sizeX,
+                          int sizeY, const std::string &sprite, server::hp_t damage);
 
         void collide(const server::Entity &entity, server::round_t current_round) override;
 
@@ -38,28 +44,7 @@ private:
         server::Tribool collidesWith(const server::Entity &entity) override;
     };
 
-    class BigBulletRight : public BigBullet
-    {
-    public:
-        BigBulletRight(server::pos_t posX, server::pos_t posY);
-
-        server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
-
-        server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
-    };
-
-
-    class BigBulletLeft : public BigBullet
-    {
-    public:
-        BigBulletLeft(server::pos_t posX, server::pos_t posY);
-
-        server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
-
-        server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
-    };
-
-
+    static const int ROUNDS_MOVING = 275;
     server::hp_t damage;
     server::round_t startRound;
     server::pos_t pos;

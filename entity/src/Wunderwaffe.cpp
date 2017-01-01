@@ -16,7 +16,7 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
     server::EntityAction *action = new server::EntityAction();
 
     action->hp = this->data->getHp();
-    if (current_round - startRound < 350)
+    if (current_round - startRound < ROUNDS_MOVING)
     {
         action->speedX = -2;
         if (current_round - startRound == 125)
@@ -36,23 +36,16 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
     else
     {
         action->speedX = 0;
-        if ((current_round - (startRound + 350)) / 500 % 2 == 0)
+        if ((current_round - (startRound + ROUNDS_MOVING)) / 500 % 2 == 0)
         {
             if (this->data->getPosX() > 2)
                 action->speedX = -2;
         }
         else
         {
-            if (this->data->getPosX() + 3 * this->data->getSprite().sizeX < FIELD_WIDTH - 2)
+            if (this->data->getPosX() + this->data->getSprite().sizeX < FIELD_WIDTH - 2)
             {
                 action->speedX = 2;
-/*
-                if (lastHitbox)
-                {
-                    server::pos_t whereIShouldBe = lastHitbox->data->getPosX() - this->data->getSprite().sizeX * 2;
-                    action->speedX -= data->getPosX() - whereIShouldBe;
-                }
-*/
             }
         }
 
@@ -65,37 +58,85 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
         action->hp = this->data->getHp() - this->damage;
         this->damage = 0;
 
-        if (current_round % 10 == 0)
+        auto m = current_round % 30;
+        if (m == 0 || m == 15) //top small cannon
         {
-            if ((current_round / 10 % 4) == 0)
-            {
-                BigBullet *bullet = new BigBullet(this->data->getPosX() + 280, this->data->getPosY());
-                action->newEntity = bullet;
-            }
-            if ((current_round / 10 % 4) == 1)
-            {
-                BigBulletRight *bullet = new BigBulletRight(this->data->getPosX() + 610, this->data->getPosY() + 100);
-                action->newEntity = bullet;
-            }
-            if ((current_round / 10 % 4) == 3)
-            {
-                BigBulletRight *bullet = new BigBulletRight(this->data->getPosX() + 560, this->data->getPosY() + 100);
-                action->newEntity = bullet;
-            }
-            if ((current_round / 10 % 4) == 2)
-            {
-                BigBulletLeft *bullet = new BigBulletLeft(this->data->getPosX(), this->data->getPosY() + 30);
-                action->newEntity = bullet;
-            }
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 300, this->data->getPosY() + 30, -5, -5, 9, 9,
+                                              "media/sprites/classicBulletGoingUpLeft.png", 30);
+            action->newEntity = bullet;
         }
-        else if (current_round % 444 == 0)
+        if (m == 1) //top medium cannon 1
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 330, this->data->getPosY(), -5, -5, 19, 19,
+                                              "media/sprites/mediumBulletGoingUpLeft.png", 60);
+            action->newEntity = bullet;
+        }
+        if (m == 2) //top medium cannon 2
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 340, this->data->getPosY(), -5, -5, 19, 19,
+                                              "media/sprites/mediumBulletGoingUpLeft.png", 60);
+            action->newEntity = bullet;
+        }
+        if (m == 3 || m == 18) //small cannon on the back 1
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 490, this->data->getPosY() + 110, -3, -3, 9, 9,
+                                              "media/sprites/classicBulletGoingUpLeft.png", 30);
+            action->newEntity = bullet;
+        }
+        if (m == 4) //small cannon on the back 2
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 555, this->data->getPosY() + 110, -3, -3, 9, 9,
+                                              "media/sprites/classicBulletGoingUpLeft.png", 30);
+            action->newEntity = bullet;
+        }
+        if (m == 5) //big cannon on the back
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 510, this->data->getPosY() + 65, -8, -4, 29, 25,
+                                              "media/sprites/BigBulletWunderwaffeBack.png", 100);
+            action->newEntity = bullet;
+        }
+        if (m == 6) //huge cannon
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 10, this->data->getPosY() + 30, -9, -3, 41, 30,
+                                              "media/sprites/FieryBulletWunderwaffe.png", 200);
+            action->newEntity = bullet;
+        }
+        if (m == 7) //medium-big cannon in front
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 30, this->data->getPosY() + 120, -9, -2, 38, 14,
+                                              "media/sprites/BigBulletWunderwaffeFront.png", 100);
+            action->newEntity = bullet;
+        }
+        if (m == 8 || m == 23) //small cannon in front
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 80, this->data->getPosY() + 185, -9, 0, 12, 4,
+                                              "media/sprites/classicBullet.png", 30);
+            action->newEntity = bullet;
+        }
+        if (m == 9) //small cannon behind next to the big one
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 610, this->data->getPosY() + 80, -4, -2, 9, 9,
+                                              "media/sprites/classicBulletGoingUpLeft.png", 30);
+            action->newEntity = bullet;
+        }
+        if (m == 10 || m == 25) //small cannon behind
+        {
+            BigBullet *bullet = new BigBullet(this->data->getPosX() + 715, this->data->getPosY() + 80, 3, -3, 9, 9,
+                                              "media/sprites/classicBulletGoingUpRight.png", 30);
+            action->newEntity = bullet;
+        }
+
+
+/*
+        if (current_round % 1000 == 0)
         {
             action->newEntity = getDlLoader<server::ADynamicObject>("build/entity/Bomber")->getInstance();
         }
-        else if (current_round % 222 == 0)
+        else if (current_round % 500 == 0)
         {
             action->newEntity = getDlLoader<server::ADynamicObject>("build/entity/Ostwind")->getInstance();
         }
+*/
     }
     return action;
 }
@@ -107,7 +148,7 @@ Wunderwaffe::initialize(server::round_t round, const server::Grid & environment)
     this->lastHitbox = nullptr;
     this->damage = 0;
     this->startRound = round;
-    initialization->sprite.path = "media/sprites/wunderwaffe1.png";
+    initialization->sprite.path = "media/sprites/wunderwaffe1v2.png";
     initialization->sprite.sizeX = 276;
     initialization->sprite.sizeY = 270;
     initialization->team = server::Team::FOE;
@@ -131,7 +172,10 @@ server::Tribool Wunderwaffe::collidesWith(const server::Entity &entity) {
  * ----------------------------------------------------------------------------------------
  */
 
-Wunderwaffe::BigBullet::BigBullet(server::pos_t posX, server::pos_t posY) : posX(posX), posY(posY) {}
+Wunderwaffe::BigBullet::BigBullet(server::pos_t posX, server::pos_t posY, server::speed_t speedX, server::speed_t speedY, int sizeX,
+                                  int sizeY, const std::string &sprite, server::hp_t damage) :
+        posX(posX), posY(posY), speedX(speedX), speedY(speedY), sizeX(sizeX), sizeY(sizeY), sprite(sprite), damage(damage)
+{}
 
 void Wunderwaffe::BigBullet::collide(const server::Entity &entity, server::round_t current_round) {
     this->mustDestroy = true;
@@ -141,8 +185,8 @@ server::EntityAction *Wunderwaffe::BigBullet::act(server::round_t, const server:
     server::EntityAction *action = new server::EntityAction();
 
     action->destroy = this->mustDestroy;
-    action->speedX = -5;
-    action->speedY = -5;
+    action->speedX = speedX;
+    action->speedY = speedY;
     return action;
 }
 
@@ -150,35 +194,29 @@ server::EntityInitialization *
 Wunderwaffe::BigBullet::initialize(server::round_t, const server::Grid &environment) {
     server::EntityInitialization *initialization = new server::EntityInitialization();
     this->mustDestroy = false;
-    initialization->sprite.path = "media/sprites/classicBulletGoingUpLeft.png";
-    initialization->sprite.sizeX = 10;
-    initialization->sprite.sizeY = 10;
+    initialization->sprite.path = sprite;
+    initialization->sprite.sizeX = sizeX;
+    initialization->sprite.sizeY = sizeY;
     initialization->team = server::Team::FOE;
     initialization->action.hp = DEFAULT_LIFE;
     initialization->action.hp = 1;
     initialization->action.destroy = false;
     initialization->action.newEntity = nullptr;
     initialization->action.soundToPlay = "";
-    initialization->action.speedX = -3;
-    initialization->action.speedY = -3;
+    initialization->action.speedX = speedX;
+    initialization->action.speedY = speedY;
     initialization->posY = this->posY;
     initialization->posX = this->posX;
     return initialization;
 }
 
 server::hp_t Wunderwaffe::BigBullet::getDamage() {
-    return 100;
+    return damage;
 }
 
 server::Tribool Wunderwaffe::BigBullet::collidesWith(const server::Entity &entity) {
     return entity.obj->data->getTeam() == server::Team::PLAYER ? server::T_TRUE : server::T_FALSE;
 }
-
-Wunderwaffe::BigBullet::BigBullet()
-{
-
-}
-
 
 
 
@@ -242,54 +280,4 @@ void Wunderwaffe::Hitbox::setOwner(server::ADynamicObject *owner, server::pos_t 
 {
     this->owner = owner;
     this->x_offset = x_offset;
-}
-
-
-
-
-
-Wunderwaffe::BigBulletRight::BigBulletRight(server::pos_t posX, server::pos_t posY) : BigBullet(posX, posY)
-{ }
-
-server::EntityAction *Wunderwaffe::BigBulletRight::act(server::round_t current_round, const server::Grid &environment)
-{
-    auto act = BigBullet::act(current_round, environment);
-
-    act->speedX = 3;
-    act->speedY = -3;
-
-    return (act);
-}
-
-server::EntityInitialization *
-Wunderwaffe::BigBulletRight::initialize(server::round_t round, const server::Grid &environment)
-{
-    auto init = BigBullet::initialize(round, environment);
-
-    init->sprite.path = "media/sprites/classicBulletGoingUpRight.png";
-
-    return (init);
-}
-
-Wunderwaffe::BigBulletLeft::BigBulletLeft(server::pos_t posX, server::pos_t posY) : BigBullet(posX, posY)
-{ }
-
-server::EntityAction *Wunderwaffe::BigBulletLeft::act(server::round_t current_round, const server::Grid &environment)
-{
-    auto act = BigBullet::act(current_round, environment);
-
-    act->speedX = -9;
-    act->speedY = -3;
-
-    return (act);
-}
-
-server::EntityInitialization *
-Wunderwaffe::BigBulletLeft::initialize(server::round_t round, const server::Grid &environment)
-{
-    auto init = BigBullet::initialize(round, environment);
-
-    init->sprite.path = "media/sprites/BigBulletWunderwaffe.png";
-
-    return (init);
 }

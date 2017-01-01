@@ -24,7 +24,7 @@
       dlName: "build/entity/Wunderwaffe",
       time: "350",
       posX: "2000",
-      posY: "610"
+      posY: "750"
     },
     {
 	dlName: "build/entity/Ostwind"
@@ -36,7 +36,7 @@
 	dlName: "build/entity/Ostwind"
 	time: "400",
 	posX: "2000",
-	posY: "920"
+	posY: "850"
     },
     {
 	dlName: "build/entity/Bomber"
