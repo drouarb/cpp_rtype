@@ -143,7 +143,7 @@ void UI::Credit::HereWeGo(UI::UIManager *ui) {
                 flag = false;
             }
         }
-        ui->display();
+        //ui->display();
         if (ui->getEventObserver()->received())
             break;
     }

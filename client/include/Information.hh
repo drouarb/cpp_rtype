@@ -22,7 +22,8 @@ namespace client {
         I_CONNECTION = 8,
         I_SAVE = 9,
         I_ASK = 10,
-        I_LEADERBOARD = 11
+        I_LEADERBOARD = 11,
+        I_CREDIT = 12
 
     };
     struct  s_info

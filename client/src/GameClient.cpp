@@ -281,6 +281,9 @@ void GameClient::sendAll(struct s_info *info) {
             }
         }
             break;
+        case I_CREDIT:
+            gameui->credit();
+            break;
         case I_JOIN: {
             if (manager != nullptr) {
                 manager->sendJoin(static_cast<s_join *>(info)->roomid);

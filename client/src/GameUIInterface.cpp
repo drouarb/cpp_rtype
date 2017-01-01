@@ -7,6 +7,7 @@
 #include <UI/BackgroundLayer.hh>
 #include <UI/MenuLayer.hh>
 #include <SFML/Graphics.hpp>
+#include <UI/CreditLayer.hh>
 #include "GameUIInterface.hh"
 #include "helpers/IStopwatch.hh"
 
@@ -37,12 +38,12 @@ void GameUIInterface::initUI() {
                           child, root.get_child("all")) {
                     addMenu(child.second.get<std::string>("name"));
                 }
-                    addNavMap(CONF_NAV);
+    addNavMap(CONF_NAV);
     createStaticMenu();
     if (listMenu.size() > 1) {
         currentMenu = listMenu[0];
         if (currentMenu->getMusic() != "") {
-            managerUi.getAudioManager()->playMusic(MUSIC_PATH +currentMenu->getMusic());
+            managerUi.getAudioManager()->playMusic(MUSIC_PATH + currentMenu->getMusic());
         }
 
     }
@@ -50,51 +51,48 @@ void GameUIInterface::initUI() {
 }
 
 void GameUIInterface::displaySimple() {
-  window->display();
-  managerUi.getEventObserver()->getEvent();
+    window->display();
+    managerUi.getEventObserver()->getEvent();
 }
 
 typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
     std::map<typeide_t, std::string>::iterator it;
 
-      ui_mut->lock();
+    ui_mut->lock();
     it = typeEntity.begin();
     while (it != typeEntity.end()) {
         if (it->second == str) {
-	  ui_mut->unlock();
+            ui_mut->unlock();
             return (it->first);
         }
         ++it;
     }
     typeide_t newid = getNextId();
     typeEntity.insert(std::pair<typeide_t, std::string>(newid, str));
-      ui_mut->unlock();
+    ui_mut->unlock();
     return (newid);
 }
 
-void GameUIInterface::UILoop()
-{
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  helpers::IStopwatch *sw;
+void GameUIInterface::UILoop() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    helpers::IStopwatch *sw;
 
-  running = true;
-  sw = helpers::IStopwatch::getInstance();
-  while (running == true)
-    {
-      sw->set();
-      updateListEntity();
-      ui_mut->lock();
-      displaySimple();
-      ui_mut->unlock();
-      std::this_thread::sleep_for(std::chrono::milliseconds(5));
-      if (sw->elapsedMs() < 1000 / (TICKRATEUI))
-	std::this_thread::sleep_for(std::chrono::milliseconds((1000 / TICKRATEUI) - sw->elapsedMs()));
+    running = true;
+    sw = helpers::IStopwatch::getInstance();
+    while (running == true) {
+        sw->set();
+        updateListEntity();
+        ui_mut->lock();
+        displaySimple();
+        ui_mut->unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        if (sw->elapsedMs() < 1000 / (TICKRATEUI))
+            std::this_thread::sleep_for(std::chrono::milliseconds((1000 / TICKRATEUI) - sw->elapsedMs()));
     }
 }
 
-void GameUIInterface::stopUI()
-{
-	running = false;
+void GameUIInterface::stopUI() {
+    running = false;
 }
 
 void GameUIInterface::feedLeaderBoard(std::vector<std::pair<uint32_t, std::string> > nleaderBoard) {
@@ -137,12 +135,12 @@ void GameUIInterface::addEntity(Entity *listEntity) {
 }
 
 void GameUIInterface::updateListEntity() {
-  ui_mut->lock();
+    ui_mut->lock();
     for (auto it = gameItem.begin(); it != gameItem.end(); it++) {
         if (nplayer != nullptr)
-        if (it->first == this->nplayer)
-            updateHp();
-          it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
+            if (it->first == this->nplayer)
+                updateHp();
+        it->second->setPosition(it->first->getPos().first, it->first->getPos().second);
     }
     ui_mut->unlock();
 }
@@ -188,8 +186,7 @@ void GameUIInterface::addMenu(const std::string &path) {
     try {
         temp->setMusic(root.get_child("son").get_value<std::string>());
     }
-    catch (std::exception &)
-    {
+    catch (std::exception &) {
 
     }
 
@@ -253,13 +250,13 @@ s_info *GameUIInterface::manageInput(short key1) {
     if (keymap.find(key) != keymap.end()) {
         client::Key tmp = keymap.at(key);
         if (currentMenu->getType() == DEFAULT) {
-             if ((res = isNavKey(tmp)) != "")
+            if ((res = isNavKey(tmp)) != "")
                 manageNavkey(res);
             else if (tmp == client::KEY_ENTER)
                 return (manageEnter());
             else
                 manageTouch(tmp);
-        } else if (tmp ==  KeyLeaderBoard)
+        } else if (tmp == KeyLeaderBoard)
             return (client::parse(I_ASKLEADERBOARD, tmp));
         else if (tmp == KeygameList)
             return (client::parse(I_ASKLIST, tmp));
@@ -327,7 +324,7 @@ void GameUIInterface::changeMenu(const std::string &ne) {
         static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->open();
     }
     if (currentMenu->getMusic() != "") {
-        managerUi.getAudioManager()->playMusic(MUSIC_PATH +currentMenu->getMusic());
+        managerUi.getAudioManager()->playMusic(MUSIC_PATH + currentMenu->getMusic());
     }
 }
 
@@ -467,31 +464,29 @@ const std::string GameUIInterface::getStringFromButtons(const std::string &name,
         }
 
     }
-    return("");
+    return ("");
 }
 
-void GameUIInterface::updateHp()
-{
-    if (nplayer != nullptr && playerHp != nullptr)
-    {
-      playerHp->setString(std::to_string(nplayer->getHp()));
+void GameUIInterface::updateHp() {
+    if (nplayer != nullptr && playerHp != nullptr) {
+        playerHp->setString(std::to_string(nplayer->getHp()));
     }
 }
+
 void GameUIInterface::setNplayer(Entity *nplayer) {
     GameUIInterface::nplayer = nplayer;
-    if (nplayer != nullptr)
-    {
-      ui_mut->lock();
+    if (nplayer != nullptr) {
+        ui_mut->lock();
 
-      std::string res =    typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
-      this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + AVATAR_EX,
-							      0, 900);
-      playerSprite->setRatio(0.2);
-      playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->addTextBox(
-										     100, 900);
-      playerHp->setString(std::to_string(nplayer->getHp()));
-      ui_mut->unlock();
-      
+        std::string res = typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
+        this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + AVATAR_EX,
+                                                                0, 900);
+        playerSprite->setRatio(0.2);
+        playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->addTextBox(
+                100, 900);
+        playerHp->setString(std::to_string(nplayer->getHp()));
+        ui_mut->unlock();
+
     }
 }
 
@@ -502,4 +497,22 @@ void GameUIInterface::playSound(const std::string &path) {
 void GameUIInterface::addBackground(const std::string &path) {
     static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
             UI::BACKGROUND, path);
+}
+
+void GameUIInterface::credit() {
+    UI::Credit toto;
+    currentMenu->popMenu();
+    toto.HereWeGo(&managerUi);
+    currentMenu->putMenu();
+    managerUi.getAudioManager()->playMusic(MUSIC_PATH + std::string("moh.ogg"));
+}
+
+void GameUIInterface::addSound(const std::string &sound) {
+    soundName[sound] = managerUi.getAudioManager()->addSound(sound);
+}
+
+void GameUIInterface::playSoundEffect(const std::string &sound) {
+    if (soundName.find(sound) != soundName.end()) {
+        managerUi.getAudioManager()->playSound(soundName[sound]);
+    }
 }

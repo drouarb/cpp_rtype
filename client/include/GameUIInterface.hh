@@ -32,6 +32,7 @@
 #define BASIC_BACKGROUND "media/backgrounds/normal.png"
 #define RTYPE_EX ".rtype"
 #define AVATAR_EX "vatar.png"
+
 namespace client {
     class GameUIInterface {
     private:
@@ -40,7 +41,8 @@ namespace client {
         std::vector<std::pair<uint8_t, uint16_t> > gameList;
         std::vector<std::pair<uint32_t, std::string> > leaderBoard;
         std::map<Entity*, UI::AItem *> gameItem;
-        std::vector<Menu*> listMenu;
+        std::map<const std::string, int>soundName;
+		std::vector<Menu*> listMenu;
         UI::UIManager managerUi;
         UI::IWindow *window;
         Menu *currentMenu;
@@ -129,6 +131,12 @@ namespace client {
 		void playSound(const std::string & path);
 
         void  addBackground(const std::string & path);
+
+        void credit();
+
+		void addSound(const std::string &sound);
+
+		void playSoundEffect(const std::string &sound);
     private:
         typeide_t getNextId();
 
