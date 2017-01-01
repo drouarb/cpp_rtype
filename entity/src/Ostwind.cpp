@@ -105,7 +105,7 @@ server::Tribool Ostwind::OstwindBullet::collidesWith(const server::Entity &entit
 
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new Ostwind());
 }

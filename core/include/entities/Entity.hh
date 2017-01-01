@@ -24,8 +24,7 @@ namespace server
         EntityData data;
         CollisionWall collisions;
 
-        static Entity *
-        make(const std::string &path, entityId_t id, round_t round, const Grid &environment);
+        static Entity *make(const std::string &path, entityId_t id, round_t round, const Grid &environment);
     };
 }
 

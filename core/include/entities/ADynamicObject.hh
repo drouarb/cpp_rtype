@@ -13,6 +13,12 @@
 //TODO
 #include "../../../server/include/Grid.hh"
 
+#ifdef WIN32
+#define EXPORT_SYM __declspec(dllexport)
+#else
+#define EXPORT_SYM
+#endif
+
 namespace server
 {
     class Entity;

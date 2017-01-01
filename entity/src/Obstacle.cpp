@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Obstacle.hh"
+#include "../../server/include/Grid.hh"
 
 void Obstacle::collide(const server::Entity &entity, server::round_t) {
 }
@@ -37,7 +38,7 @@ server::Tribool Obstacle::collidesWith(const server::Entity &entity) {
 
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new Obstacle());
 }

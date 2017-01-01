@@ -128,7 +128,7 @@ server::Tribool BasicNastyEntity::VeryNastyProjectile::collidesWith(const server
 
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new BasicNastyEntity());
 }

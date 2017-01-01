@@ -132,7 +132,7 @@ GreenPlayer::WallAttack::WallElement::WallElement(server::pos_t posX, server::po
 
 extern "C"
 {
-server::ADynamicObject *getInstance() {
+EXPORT_SYM server::ADynamicObject *getInstance() {
     return (new GreenPlayer());
 }
 }

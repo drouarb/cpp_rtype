@@ -30,7 +30,7 @@ server::ADynamicObject *BluePlayer::createAttack(server::attackId_t id, server::
 
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new BluePlayer());
 }

@@ -126,7 +126,7 @@ const double YellowPlayer::NovaMissile::startingAngle[8] =
 
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new YellowPlayer());
 }

@@ -116,7 +116,7 @@ server::Tribool Bomber::BomberProjectile::collidesWith(const server::Entity &ent
 
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new Bomber());
 }

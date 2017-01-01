@@ -179,18 +179,19 @@ Wunderwaffe::BigBullet::BigBullet()
 
 }
 
+
+
+
+
+
+
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new Wunderwaffe());
 }
 }
-
-
-
-
-
 
 void Wunderwaffe::Hitbox::collide(const server::Entity &entity, server::round_t round)
 {

@@ -112,7 +112,7 @@ server::Tribool CrazyEntity::CrazyProjectile::collidesWith(const server::Entity 
 
 extern "C"
 {
-server::ADynamicObject *getInstance() {
+EXPORT_SYM server::ADynamicObject *getInstance() {
     return (new CrazyEntity());
 }
 }

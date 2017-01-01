@@ -49,7 +49,7 @@ Tribool BasicEntity::collidesWith(const Entity &entity) {
 
 extern "C"
 {
-ADynamicObject * getInstance()
+EXPORT_SYM ADynamicObject * getInstance()
 {
     return (new BasicEntity());
 }

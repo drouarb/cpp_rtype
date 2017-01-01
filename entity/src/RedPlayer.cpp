@@ -83,7 +83,7 @@ server::Tribool RedPlayer::RegenMissile::collidesWith(const server::Entity &enti
 
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new RedPlayer());
 }
