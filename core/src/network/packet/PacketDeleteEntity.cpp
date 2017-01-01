@@ -4,14 +4,14 @@
 
 #include "network/packet/PacketDeleteEntity.hh"
 
-network::packet::PacketDeleteEntity::PacketDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) :
+network::packet::PacketDeleteEntity::PacketDeleteEntity(uint32_t tick, uint32_t eventId, uint32_t entityId) :
 APacket
         (
                 DELETE_ENTITY,
                 {
                         new utils::NetworkInteger(4, tick),
                         new utils::NetworkInteger(4, eventId),
-                        new utils::NetworkInteger(2, entityId)
+                        new utils::NetworkInteger(4, entityId)
                 }
         )
 {
@@ -43,12 +43,12 @@ uint32_t network::packet::PacketDeleteEntity::getEventId() const
     return GET_NETINT(schema, 1);
 }
 
-void network::packet::PacketDeleteEntity::setEntityId(uint16_t entityId)
+void network::packet::PacketDeleteEntity::setEntityId(uint32_t entityId)
 {
     SET_NETINT(schema, 2 , entityId);
 }
 
-uint16_t network::packet::PacketDeleteEntity::getEntityId() const
+uint32_t network::packet::PacketDeleteEntity::getEntityId() const
 {
     return GET_NETINT(schema, 2);
 }

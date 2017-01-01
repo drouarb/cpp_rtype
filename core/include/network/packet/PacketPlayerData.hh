@@ -11,11 +11,10 @@ namespace network {
     namespace packet {
         class PacketPlayerData : public APacket {
         public:
-            PacketPlayerData(uint16_t playerId = 0, uint8_t nbAttack = 0);
+            PacketPlayerData(uint32_t playerId = 0, uint8_t nbAttack = 0);
             virtual ~PacketPlayerData();
-	  
-            void setPlayerId(uint16_t id);
-            uint16_t  getPlayerId() const;
+            void setPlayerId(uint32_t id);
+            uint32_t  getPlayerId() const;
 	    void setNbAttack(uint8_t nb);
 	    uint8_t getNbAttack() const;
         };

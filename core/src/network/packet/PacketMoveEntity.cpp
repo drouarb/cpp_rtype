@@ -5,14 +5,14 @@
 #include "network/packet/PacketMoveEntity.hh"
 
 
-network::packet::PacketMoveEntity::PacketMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId , int16_t vecX, int16_t vecY, int16_t posx, int16_t posy ) :
+network::packet::PacketMoveEntity::PacketMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId , int16_t vecX, int16_t vecY, int16_t posx, int16_t posy ) :
         APacket
                 (
                         MOVE_ENTITY,
                         {
                                 new utils::NetworkInteger(4, tick),
                                 new utils::NetworkInteger(4, eventId),
-                                new utils::NetworkInteger(2, entityId),
+                                new utils::NetworkInteger(4, entityId),
                                 new utils::NetworkInteger(2, vecX),
                                 new utils::NetworkInteger(2, vecY),
                                 new utils::NetworkInteger(2, posx),
@@ -48,12 +48,12 @@ uint32_t network::packet::PacketMoveEntity::getEventId() const
     return GET_NETINT(schema, 1);
 }
 
-void network::packet::PacketMoveEntity::setEntityId(uint16_t entityId)
+void network::packet::PacketMoveEntity::setEntityId(uint32_t entityId)
 {
     SET_NETINT(schema, 2 , entityId);
 }
 
-uint16_t network::packet::PacketMoveEntity::getEntityId() const
+uint32_t network::packet::PacketMoveEntity::getEntityId() const
 {
     return GET_NETINT(schema, 2);
 }
