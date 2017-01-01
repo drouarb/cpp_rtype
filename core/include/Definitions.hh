@@ -7,10 +7,10 @@
 
 #include "cstdint"
 
-#define ROUND_DURATION_MS 16
+#define ROUND_DURATION_MS 22
 #define MAX_PLAYERS 4
 
-#define BORDER_OBSTACLE_LIB "build/entity/libObstacle"
+#define BORDER_OBSTACLE_LIB "build/entity/Obstacle"
 #define BORDER_OBSTACLE_SIZE 200
 
 #define NOATTACK ((attackId_t)-1)

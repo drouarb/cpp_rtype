@@ -3,37 +3,37 @@
   spawns:
   [
     {
-      dlName: "build/entity/libBasicNastyEntity",
+      dlName: "build/entity/BasicNastyEntity",
       time: "1",
       posX: "2000",
       posY: "250"
     },
     {
-      dlName: "build/entity/libCrazyEntity",
+      dlName: "build/entity/CrazyEntity",
       time: "180",
       posX: "2000",
       posY: "450"
     },
     {
-      dlName: "build/entity/libWunderwaffe",
+      dlName: "build/entity/Wunderwaffe",
       time: "350",
       posX: "2000",
       posY: "610"
     },
     {
-	dlName: "build/entity/libOstwind"
+	dlName: "build/entity/Ostwind"
 	time: "1",
 	posX: "2000",
 	posY: "880"
     },
     {
-	dlName: "build/entity/libOstwind"
+	dlName: "build/entity/Ostwind"
 	time: "400",
 	posX: "2000",
 	posY: "920"
     },
     {
-	dlName: "build/entity/libBomber"
+	dlName: "build/entity/Bomber"
 	time: "300",
 	posX: "2000",
 	posY: "100"

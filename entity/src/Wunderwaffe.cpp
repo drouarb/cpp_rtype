@@ -90,11 +90,11 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
         }
         else if (current_round % 444 == 0)
         {
-            action->newEntity = getDlLoader<server::ADynamicObject>("build/entity/libBomber")->getInstance();
+            action->newEntity = getDlLoader<server::ADynamicObject>("build/entity/Bomber")->getInstance();
         }
         else if (current_round % 222 == 0)
         {
-            action->newEntity = getDlLoader<server::ADynamicObject>("build/entity/libOstwind")->getInstance();
+            action->newEntity = getDlLoader<server::ADynamicObject>("build/entity/Ostwind")->getInstance();
         }
     }
     return action;
