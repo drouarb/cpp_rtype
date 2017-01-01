@@ -17,6 +17,7 @@ namespace server
         enum y_offset
         {
             Y_EXPLOSION_A = -20,
+            Y_EXPLOSION_B = -120,
             Y_EXPLOSION_C = -120
         };
 

@@ -99,6 +99,7 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
         {
             BigBullet *bullet = new BigBullet(this->data->getPosX() + 10, this->data->getPosY() + 30, -9, -3, 41, 30,
                                               "media/sprites/FieryBulletWunderwaffe.png", 200);
+            action->soundToPlay = "media/sounds/bigGunshot.ogg";
             action->newEntity = bullet;
         }
         if (m == 7) //medium-big cannon in front

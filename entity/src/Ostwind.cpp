@@ -28,6 +28,7 @@ server::EntityAction *Ostwind::act(server::round_t current_round, const server::
         {
             OstwindBullet *bullet = new OstwindBullet(this->data->getPosX() + 10, this->data->getPosY());
             action->newEntity = bullet;
+            action->soundToPlay = "media/sounds/gunshot.ogg";
             return action;
         }
 

@@ -15,12 +15,7 @@
       posY: "250"
     }
   ]
-  gamedata:
+gamedata:
   [
-      {
-	  time: "1",
-	  background: "backgrounds/normal.png",
-	  music: "musics/test_flight.ogg"
-      }
   ]
 }

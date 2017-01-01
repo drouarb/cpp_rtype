@@ -53,6 +53,7 @@ server::EntityAction *CrazyEntity::act(server::round_t current_round, const serv
         {
             a->newEntity = new CrazyProjectile(this->data->getPosX() - 10,
                                                this->data->getPosY() + current_round % 24 * 3 + 10);
+            a->soundToPlay = "media/sounds/gunshot.ogg";
         }
     }
     return (a);

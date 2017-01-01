@@ -415,8 +415,6 @@ void Game::manageNewGamedata()
         packet.setBackground(gamedata->first);
         packet.setAudio(gamedata->second);
 
-        std::cout << "new gamedata " << gamedata->first << " " << gamedata->second << std::endl;
-
         for (auto client : clientList)
         {
             packetf.send(packet, client->getClientId());
@@ -703,7 +701,8 @@ void Game::sendSound(const std::string &soundfile)
     auto packet = new network::packet::PacketPlaySound();
     packet->setTick(round);
     packet->setEventId(0);
-    /*packet->setSoundName(soundfile);*/ //TODO
+    packet->setSoundName(soundfile);
+
     for (auto client : clientList)
     {
         packetf.send(*packet, client->getClientId());
