@@ -20,7 +20,7 @@ private:
 
     static const int rounds_moving = 400;
 
-    static const int density = 10;
+    static const int density = 4;
 
 public:
     server::Tribool collidesWith(const server::Entity &entity) override;
@@ -69,7 +69,7 @@ private:
         server::round_t startRound;
         double angle;
 
-        static const int speed = 3;
+        static const int speed = 15;
         static const double startingAngle[8];
 
     public:

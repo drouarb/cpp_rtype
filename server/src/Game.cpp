@@ -322,44 +322,51 @@ void Game::letEntitesAct()
     {
         auto it = entities.at(i);
         EntityAction * action = it->obj->act(this->round, grid);
-
-        if (it->collisions.isSet())
-        {
-            it->collisions.apply(action);
-            it->collisions.reset();
-        }
-
-        if (action->speedX != it->data.getVectX())
-        {
-            it->data.setVectX(action->speedX);
-            this->sim_move(entities[i]);
-        }
-        if (action->speedY != it->data.getVectY())
-        {
-            it->data.setVectY(action->speedY);
-            this->sim_move(entities[i]);
-        }
-        if (action->hp != it->data.getHp())
-        {
-            it->data.setHp(action->hp);
-            this->sim_update(entities[i]);
-        }
-        if (action->newEntity)
-        {
-            auto newEntity = new Entity(action->newEntity, entityIdCount, round, grid);
-            entityIdCount++;
-            spawnEntity(newEntity);
-        }
-        if (action->destroy)
-        {
-            it->data.setDestroyed(true);
-        }
-        if (action->soundToPlay != "")
-        {
-            sendSound(action->soundToPlay);
-        }
-
+        act(action, &*it);
         delete action;
+    }
+}
+
+void Game::act(EntityAction *action, Entity *entity)
+{
+    if (entity->collisions.isSet())
+    {
+        entity->collisions.apply(action);
+        entity->collisions.reset();
+    }
+
+    if (action->speedX != entity->data.getVectX())
+    {
+        entity->data.setVectX(action->speedX);
+        this->sim_move(entity);
+    }
+    if (action->speedY != entity->data.getVectY())
+    {
+        entity->data.setVectY(action->speedY);
+        this->sim_move(entity);
+    }
+    if (action->hp != entity->data.getHp())
+    {
+        entity->data.setHp(action->hp);
+        this->sim_update(entity);
+    }
+    if (action->newEntity)
+    {
+        auto newEntity = new Entity(action->newEntity, entityIdCount, round, grid);
+        entityIdCount++;
+        spawnEntity(newEntity);
+
+        auto init = newEntity->obj->initialize(round, grid);
+        act(&init->action, newEntity);
+        delete init;
+    }
+    if (action->destroy)
+    {
+        entity->data.setDestroyed(true);
+    }
+    if (action->soundToPlay != "")
+    {
+        sendSound(action->soundToPlay);
     }
 }
 
@@ -548,18 +555,9 @@ pos_t Game::fyp(const Entity * entity_i) const
 void Game::sendData() {
     INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
 
-    std::cout << "------------" << std::endl;
-
     for (auto & event : gameEvents)
     {
         auto packet = event->createPacket();
-
-        if (dynamic_cast<network::packet::PacketMoveEntity*>(packet))
-        {
-            std::cout << "sending move " << std::to_string(dynamic_cast<network::packet::PacketMoveEntity*>(packet)->getEntityId()) << std::endl;
-        }
-        else
-            std::cout << "sending something else" << std::endl;
 
         for (auto & client : clientList)
         {

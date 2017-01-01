@@ -57,6 +57,7 @@ namespace server
         void checkCollisions();
         void checkCollision(Entity * entity1, Entity * entity2);
         void letEntitesAct();
+        void act(EntityAction * action, Entity * entity);
         void moveEntities();
         void unspawn();
         void manageNewGamedata();
