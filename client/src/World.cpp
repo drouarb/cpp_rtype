@@ -65,7 +65,7 @@ void World::applyTurn(int tickrate, ide_t playerId) {
 
     itEv = worldEvents.begin();
     while (itEv != worldEvents.end()) {
-        if (itEv->first <= turn + tickrate) {
+        if (1) {
             if (itEv->second.eventtype == SPAWN && (entitys.find(itEv->second.id) == entitys.end())) {
                 ent = new Entity(itEv->second.id, itEv->second.type, itEv->second.pos, itEv->first);
                 pos = ent->getPos();
