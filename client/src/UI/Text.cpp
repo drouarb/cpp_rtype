@@ -10,7 +10,7 @@ UI::Text::Text() : AItem(UI::TEXT) {
     font.loadFromFile("media/font/0_Trajan Bold.ttf");
     font.loadFromFile("media/font/0_TrajanPro-Regular.ttf");
     text.setFont(font);
-    text.setCharacterSize(24);
+    text.setCharacterSize(37);
     text.setOutlineColor(sf::Color::Black);
     text.setOutlineThickness(10);
     text.setFillColor(sf::Color::White);
