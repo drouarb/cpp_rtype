@@ -485,6 +485,8 @@ void GameUIInterface::setNplayer(Entity *nplayer) {
         ui_mut->lock();
 
         std::string res = typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
+        if (playerSprite != nullptr)
+            window->deleteItem(playerSprite);
         this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + AVATAR_EX,
                                                                 0, 900);
         playerSprite->setRatio(0.2);
