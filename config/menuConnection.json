@@ -38,7 +38,7 @@
       "selected": "ready2.png",
       "noselected": "ready.png",
       "default_selected" : 1,
-       "default_value" : "192.168.43.69:9000",
+       "default_value" : "127.0.0.1:9000",
       "lock" : 1,
       "position": [
         {
