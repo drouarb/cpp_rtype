@@ -125,6 +125,7 @@ void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t en
 void GameClient::managePlayerData(uint16_t nplayerId, uint8_t nbAttackPlayer) {
     if (world == nullptr) {
         horodatageTick.clear();
+	firstSynchro = false;
         world = new World(client_mut, gameui);
         playerId = nplayerId;
         nbrAttack = nbAttackPlayer;
@@ -139,6 +140,11 @@ void GameClient::managePlayerData(uint16_t nplayerId, uint8_t nbAttackPlayer) {
 
 void GameClient::manageSyncro(uint32_t turn, int64_t time) {
     horodatageTick.insert(std::pair<tick, uint64_t>(static_cast<tick>(turn), time));
+    if (firstSynchro == false)
+      {
+	firstSynchro = true;
+	world->setTick(turn);
+      }
 }
 
 void GameClient::manageGameData() {
@@ -175,6 +181,7 @@ void GameClient::manageQuit() {
         horodatageTick.clear();
         tickRateClient = 0;
         world = nullptr;
+	firstSynchro = false;
         sendAll(client::parse(I_LEADERBOARD, client::Key::KEY_ESCAPE));
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         horodatageTick.clear();

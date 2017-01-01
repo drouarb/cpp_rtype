@@ -6,8 +6,6 @@
 #include "ALayer.hh"
 #include "IAudioManager.hh"
 #include "IEventObserver.hh"
-#include "thread/Mutex.hh"
-#include "thread/Mutexer.hh"
 
 namespace UI {
     class UIManager {
@@ -27,7 +25,6 @@ namespace UI {
         void display();
 
     private:
-        Mutex mtx;
         std::vector<UI::IWindow*> windows;
         IAudioManager *audioManager;
         IEventObserver *eventObserver;
