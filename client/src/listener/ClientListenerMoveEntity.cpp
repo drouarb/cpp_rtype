@@ -18,6 +18,7 @@ ClientListenerMoveEntity::~ClientListenerMoveEntity()
 
 void ClientListenerMoveEntity::notify(const network::packet::PacketMoveEntity *packet)
 {
+  std::cout << "receive move " << (long)packet << std::endl;
     networkManager->receiveMoveEntity(packet->getTick(), packet->getEventId(), packet->getEntityId(), packet->getVecX(),
                                       packet->getVecY(), packet->getPosX(), packet->getPosY());
 }
