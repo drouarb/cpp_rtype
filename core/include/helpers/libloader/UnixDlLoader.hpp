@@ -17,7 +17,7 @@ public:
 	{
         handle = dlopen(path.c_str(), RTLD_NOW);
         if (handle == nullptr) {
-            throw std::runtime_error("Error when loading " + path);
+            throw std::runtime_error("Error when loading " + path + ": " + std::string(dlerror()));
         }
     }
 

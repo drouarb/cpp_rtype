@@ -11,8 +11,11 @@
 namespace server {
 
     class ServerListenerAskLeaderboard : public network::ListenerTemplate<network::packet::PacketAskLeaderBoard, network::packet::ASK_LEADERBOARD> {
+    private:
+        server::IListenerHandler *handler;
+
     public:
-        ServerListenerAskLeaderboard();
+        ServerListenerAskLeaderboard(server::IListenerHandler *handler);
 
         void notify(const network::packet::PacketAskLeaderBoard *packet);
     };

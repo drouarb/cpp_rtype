@@ -3,11 +3,12 @@
 //
 
 #include "entities/EntityData.hh"
+#include "cstring"
 
 using namespace server;
 
 EntityData::EntityData()
-{ }
+{}
 
 EntityData::~EntityData()
 { }

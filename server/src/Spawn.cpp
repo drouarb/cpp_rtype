@@ -21,9 +21,9 @@ Spawn & Spawn::operator=(const Spawn & other)
     return (*this);
 }
 
-Entity * Spawn::trigger(entityId_t id, round_t round, const std::vector<Entity *> &entities)
+Entity * Spawn::trigger(entityId_t id, round_t round, const Grid &environment)
 {
-    Entity * entity = Entity::make(this->dlName, id, round, entities);
+    Entity * entity = Entity::make(this->dlName, id, round, environment);
     if (entity == nullptr)
         return (nullptr);
     entity->data.setPosX(this->posX);

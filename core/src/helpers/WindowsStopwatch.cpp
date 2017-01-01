@@ -13,10 +13,10 @@ helpers::WindowsStopwatch::~WindowsStopwatch() {
 }
 
 void helpers::WindowsStopwatch::set() {
-    tick = static_cast<unsigned long>(GetTickCount());
+    tick = static_cast<unsigned long>(GetTickCount64());
 }
 
 long helpers::WindowsStopwatch::elapsedMs() {
-    return (static_cast<unsigned long>(GetTickCount()) - tick);
+    return (static_cast<unsigned long>(GetTickCount64()) - tick);
 }
 

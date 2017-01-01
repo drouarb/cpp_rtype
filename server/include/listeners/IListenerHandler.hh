@@ -30,6 +30,8 @@ namespace server {
         virtual void clientPlayerQuit(clientId_t src)= 0;
 
         virtual void askGame(clientId_t src)= 0;
+
+        virtual void askLeaderBoard(clientId_t src)= 0;
     };
 }
 

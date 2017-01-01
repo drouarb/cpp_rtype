@@ -9,6 +9,7 @@
 #include <ostream>
 #include "entities/ADynamicObject.hh"
 #include "Definitions.hh"
+#include "../../server/include/Grid.hh"
 
 class BasicEntity : public server::ADynamicObject {
 public:
@@ -17,8 +18,8 @@ public:
 //    friend std::ostream &operator<<(std::ostream &os, const BasicEntity &player);
 
     void collide(const server::Entity &entity, server::round_t current_round) override;
-    server::EntityAction *act(server::round_t current_round, const std::vector<server::Entity *> &) override;
-    server::EntityInitialization *initialize(server::round_t, const std::vector<server::Entity *> &) override;
+    server::EntityAction *act(server::round_t current_round, const server::Grid &) override;
+    server::EntityInitialization *initialize(server::round_t, const server::Grid &environment) override;
 
     server::hp_t getDamage() override;
 

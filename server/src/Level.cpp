@@ -3,6 +3,7 @@
 #include "Level.hh"
 #include <JSON/JsonParser.hpp>
 #include <JSON/JsonArr.hpp>
+#include <Game.hh>
 
 server::Level::Level(const std::string &filepath) {
 
@@ -35,8 +36,21 @@ server::Level::Level(const std::string &filepath) {
         spawn.posY = std::stoi(static_cast<JSON::JsonStr &>(obj->GetObj("posY")).Get());
 
         this->spawns[spawn.time].push_back(spawn);
+    }
 
 
+    JSON::JsonArr &gamedata = static_cast<JSON::JsonArr &>(root.GetObj("gamedata"));
+    std::list<JSON::IJson *> &gdlist = gamedata.GetList();
+
+    for (JSON::IJson *s : gdlist) {
+        JSON::JsonObj *obj = static_cast<JSON::JsonObj *>(s);
+
+        std::pair<std::string, std::string> newData;
+        newData.first = static_cast<JSON::JsonStr &>(obj->GetObj("background")).Get();
+        newData.second = static_cast<JSON::JsonStr &>(obj->GetObj("music")).Get();
+        auto time = static_cast<round_t >(std::stoi(static_cast<JSON::JsonStr &>(obj->GetObj("time")).Get()));
+
+        this->gamedata[time] = newData;
     }
 
     end = 0;
@@ -45,28 +59,31 @@ server::Level::Level(const std::string &filepath) {
         if (entry.first > end)
             end = entry.first;
     }
-    
-    /*   // Create a root
-BOOST_FOREACH(boost::property_tree::ptree::value_type
-                 child, root.get_child("spawns")) {
 
-           Spawn spawn;
-           spawn.dlName = child.second.get_child("dlName").get_value<std::string>();
-           spawn.time = child.second.get_child("time").get_value<round_t>();
-           spawn.posX = child.second.get_child("posX").get_value<int>();
-           spawn.posY = child.second.get_child("posY").get_value<int>();
-
-           this->spawns[spawn.time].push_back(spawn);
-       }*/
-
+    addBorders();
 }
 
 server::Level::~Level() {}
 
 const std::vector<server::Spawn> *server::Level::getNewSpawns(server::round_t tick) const {
-    try {
+    try
+    {
         return &this->spawns.at(tick);
-    } catch (std::out_of_range &e) {
+    }
+    catch (std::out_of_range &e)
+    {
+        return nullptr;
+    }
+}
+
+const std::pair<std::string, std::string> *server::Level::getNewData(server::round_t tick) const
+{
+    try
+    {
+        return &this->gamedata.at(tick);
+    }
+    catch (std::out_of_range &e)
+    {
         return nullptr;
     }
 }
@@ -76,3 +93,24 @@ bool server::Level::isOver(round_t tick) const
     return (tick > end);
 }
 
+void server::Level::addBorders()
+{
+    for (int i = 0; i < FIELD_WIDTH; i += BORDER_OBSTACLE_SIZE)
+    {
+        Spawn spawn;
+        spawn.dlName = BORDER_OBSTACLE_LIB;
+        spawn.time = 1;
+        spawn.posX = i;
+        spawn.posY = 10;
+        this->spawns[1].push_back(spawn);
+    }
+    for (int i = 0; i < FIELD_WIDTH; i += BORDER_OBSTACLE_SIZE)
+    {
+        Spawn spawn;
+        spawn.dlName = BORDER_OBSTACLE_LIB;
+        spawn.time = 1;
+        spawn.posX = i;
+        spawn.posY = FIELD_HEIGHT - 20;
+        this->spawns[1].push_back(spawn);
+    }
+}

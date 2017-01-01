@@ -6,16 +6,10 @@
 #include <entities/Entity.hh>
 #include <IDamager.hh>
 #include "BasicEntity.hh"
+#include "../../server/include/Grid.hh"
 
 using namespace server;
 
-extern "C"
-{
-    ADynamicObject * getInstance()
-    {
-        return (new BasicEntity());
-    }
-}
 
 BasicEntity::BasicEntity() : destroyed(false)
 { }
@@ -26,7 +20,7 @@ void BasicEntity::collide(const server::Entity &entity, server::round_t current_
     this->destroyed = true;
 }
 
-EntityAction *BasicEntity::act(round_t current_round, const std::vector<Entity *> &)
+EntityAction *BasicEntity::act(round_t current_round, const server::Grid &)
 {
     EntityAction * a = new EntityAction();
     if (this->destroyed) {
@@ -38,7 +32,7 @@ EntityAction *BasicEntity::act(round_t current_round, const std::vector<Entity *
     return (a);
 }
 
-EntityInitialization * BasicEntity::initialize(round_t, const std::vector<Entity *> &)
+EntityInitialization * BasicEntity::initialize(round_t, const Grid &environment)
 {
     EntityInitialization *initialization = new EntityInitialization();
     initialization->action.hp = 100;
@@ -51,4 +45,12 @@ hp_t BasicEntity::getDamage() {
 
 Tribool BasicEntity::collidesWith(const Entity &entity) {
     return (this->data->getTeam() != entity.data.getTeam() ? T_TRUE : T_FALSE);
+}
+
+extern "C"
+{
+EXPORT_SYM ADynamicObject * getInstance()
+{
+    return (new BasicEntity());
+}
 }

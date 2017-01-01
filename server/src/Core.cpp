@@ -17,11 +17,14 @@
 server::Core::Core(const std::string &path, const unsigned short port)
         : sw(helpers::IStopwatch::getInstance()), packetFactory(nullptr), networkManager(nullptr)
 {
-    IExplorer *fileExplorer = IExplorer::getInstance();
+    std::cout << "Instanciation" << std::endl;
 
+    IExplorer *fileExplorer = IExplorer::getInstance();
     this->isRunning = true;
     fileExplorer->loadFolder(path);
     this->networkManager = new NetworkManager(this);
+
+    std::cout << "Loading levels from '" << path << "'" << std::endl;
     const std::vector<IExplorer::File> &vector = fileExplorer->getFiles();
     for (auto f : vector) {
         if (f.name.find(".json") == std::string::npos) {
@@ -40,11 +43,15 @@ server::Core::Core(const std::string &path, const unsigned short port)
         return;
     }
 
-    //this->packetFactory = new PacketFactoryTest(port);
+    std::cout << std::to_string(levels.size()) << " levels loaded" << std::endl;
+
+    std::cout << "Preparing packet factory on port " << std::to_string(port) << std::endl;
+
+    // this->packetFactory = new PacketFactoryTest(port);
     this->packetFactory = new network::PacketFactory(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());
-    this->packetFactory->registerListener(new ServerListenerAskLeaderboard());
+    this->packetFactory->registerListener(new ServerListenerAskLeaderboard(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerAskList(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerJoin(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerPlayerAttack(this->networkManager));
@@ -52,21 +59,38 @@ server::Core::Core(const std::string &path, const unsigned short port)
     this->packetFactory->registerListener(new ServerListenerQuit(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerRegister(this->networkManager));
     this->packetFactory->run();
+
+    std::cout << "Server ready" << std::endl;
 }
 
 void server::Core::run() {
+    std::cout << "Server running" << std::endl;
+
+    helpers::IStopwatch *pStopwatch = helpers::IStopwatch::getInstance();
     while (isRunning) {
+        pStopwatch->set();
         sw->set();
         mutex.lock();
-
-        for (auto &game : games) {
-            std::cout << "- game " << std::to_string(game->getLobbyId()) << " - - -" << std::endl;
-            game->tick();
+        
+        for (auto game = games.begin(); game != games.end();)
+        {
+            INFO("- game " << std::to_string(game->getLobbyId()) << " - - -");
+            (*game)->tick();
+            if ((*game)->mustClose())
+            {
+                delete *game;
+                game = games.erase(game);
+            }
+            else
+            {
+                ++game;
+            }
         }
         mutex.unlock();
 
         if (sw->elapsedMs() < ROUND_DURATION_MS)
             std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - sw->elapsedMs()));
+        std::cout << "durée du dernier tick:" << sw->elapsedMs() << std::endl;
     }
 }
 

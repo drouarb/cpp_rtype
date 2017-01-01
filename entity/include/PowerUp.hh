@@ -1,22 +1,11 @@
 //
-// Created by greg on 02/12/2016.
+// Created by greg on 01/01/17.
 //
 
 #ifndef CPP_RTYPE_POWERUP_HH
 #define CPP_RTYPE_POWERUP_HH
 
 
-#include <IEntity.hh>
-
-class PowerUp : public server::IEntity {
-public:
-    PowerUp(const server::entityId_t entityId);
-
-    void collide(server::IEntity *);
-
-    server::EntityAction *nextAction();
-
-};
-
+#include <entities/ADynamicObject.hh>
 
 #endif //CPP_RTYPE_POWERUP_HH

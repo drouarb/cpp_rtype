@@ -28,12 +28,16 @@ namespace server {
          * @return
          */
         const std::vector<Spawn> *getNewSpawns(round_t tick) const;
+        const std::pair<std::string, std::string> * getNewData(round_t tick) const;
         bool isOver(round_t tick) const;
 
     private:
         std::map<round_t, std::vector<Spawn>> spawns;
+        std::map<round_t, std::pair<std::string, std::string> > gamedata;
         std::string name;
         round_t end;
+
+        void addBorders();
     };
 }
 

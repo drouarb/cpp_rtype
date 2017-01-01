@@ -1,7 +1,5 @@
 enable_testing()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLOG_INFO=ON -g")
-
 add_library("lib${PROJECT_NAME}" STATIC ${SERVER_SRCS})
 SET_TARGET_PROPERTIES("lib${PROJECT_NAME}" PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
 
@@ -10,8 +8,6 @@ include_directories(${RTYPE_SERVER_INCLUDE_DIRS})
 file(
         GLOB_RECURSE
         SERVER_TESTS_SOURCES
-        JoinQuitTest.cpp
-        PlayerAttackAndMoveTest.cpp
 )
 
 if (NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
