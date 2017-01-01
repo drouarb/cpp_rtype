@@ -117,12 +117,15 @@ void network::socket::WindowsUDPSocket::serverPoll() {
     bool found;
     struct sockaddr_in recvSocket;
     int recvSocketLen = sizeof(recvSocket);
+    int size;
+    std::vector<uint8_t> data;
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
 
     while (status == CONNECTED) {
         pollfd.fd = mainSocketFd;
         if (::WSAPoll(&pollfd, 1, POLL_TIMEOUT) && status == CONNECTED) {
-            recvfrom(mainSocketFd, (char *)buffer.data(), SOCKET_BUFFER, 0, (struct sockaddr *) &recvSocket, &recvSocketLen);
+            size = recvfrom(mainSocketFd, (char *)buffer.data(), SOCKET_BUFFER, 0, (struct sockaddr *) &recvSocket, &recvSocketLen);
+            data.assign(buffer.begin(), buffer.begin() + size);
             found = false;
             for (auto it = clients.begin(); it != clients.end(); it++) {
                 if (getClientId((*it).client) == getClientId(recvSocket)) {
@@ -130,9 +133,9 @@ void network::socket::WindowsUDPSocket::serverPoll() {
                     (*it).sw.set();
                     (*it).npings = 0;
                     if ((*it).status == CONNECTED)
-                        handleData(buffer, (*it).client);
+                        handleData(data, (*it).client);
                     if ((*it).status == CONNECTING)
-                        if (!serverHandshake(buffer, (*it), ACK))
+                        if (!serverHandshake(data, (*it), ACK))
                             clients.erase(it);
                     break;
                 }
@@ -141,7 +144,7 @@ void network::socket::WindowsUDPSocket::serverPoll() {
                 clients.emplace_back();
                 clients.back().status = CONNECTING;
                 memcpy(&clients.back().client, &recvSocket, sizeof(recvSocket));
-                if (!serverHandshake(buffer, clients.back(), SYNACK))
+                if (!serverHandshake(data, clients.back(), SYNACK))
                     clients.pop_back();
             }
         }
@@ -231,15 +234,18 @@ void network::socket::WindowsUDPSocket::serverTimeout() {
 }
 
 void network::socket::WindowsUDPSocket::clientPoll() {
+    int size;
+    std::vector<uint8_t> data;
     std::vector<uint8_t> buffer(SOCKET_BUFFER);
 
     pollfd.fd = mainSocketFd;
     while (status == CONNECTED) {
         if (::WSAPoll(&pollfd, 1, POLL_TIMEOUT) && status == CONNECTED) {
-            recv(mainSocketFd, (char *)buffer.data(), buffer.size(), 0);
+            size = recv(mainSocketFd, (char *)buffer.data(), buffer.size(), 0);
+            data.assign(buffer.begin(), buffer.begin() + size);
             npings = 0;
             sw.set();
-            handleData(buffer, mainSocket);
+            handleData(data, mainSocket);
         }
         else
             clientTimeout();
@@ -302,29 +308,37 @@ void network::socket::WindowsUDPSocket::clientTimeout() {
 
 void network::socket::WindowsUDPSocket::handleData(const std::vector<uint8_t> &data, const struct sockaddr_in &client) {
     try {
-        packet::PacketDisconnect packetDisconnect;
+        switch ((packet::PacketId)data.at(0)) {
+            case packet::PacketId::DISCONNECT: {
+                packet::PacketDisconnect packetDisconnect;
 
-        packetDisconnect.deserialize(const_cast<std::vector<uint8_t> *>(&data));
-        if (type == CLIENT)
-            clientDisconnect();
-        else
-            serverDisconnect(client);
-    } catch (std::exception e) {
-        try {
-            std::vector<uint8_t> buff;
-
-            packet::PacketPing packetPing;
-            packet::PacketPong packetPong;
-
-            //TODO Const APacket Protoboeuf
-            packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
-            packetPong.serialize(&buff);
-            send(buff, getClientId(client));
-        } catch (std::exception e) {
-            for (auto &l : dataListeners) {
-                l->notify(getClientId(client), data);
+                packetDisconnect.deserialize(const_cast<std::vector<uint8_t> *>(&data));
+                if (type == CLIENT)
+                    clientDisconnect();
+                else
+                    serverDisconnect(client);
+                return;
             }
+
+            case packet::PacketId::PING: {
+                std::vector<uint8_t> buff;
+
+                packet::PacketPing packetPing;
+                packet::PacketPong packetPong;
+
+                //TODO Const APacket Protoboeuf
+                packetPing.deserialize(const_cast<std::vector<uint8_t> *>(&data));
+                packetPong.serialize(&buff);
+                send(buff, getClientId(client));
+                return;
+            }
+
+            default: { }
         }
+    } catch (std::exception) {}
+
+    for (auto &l : dataListeners) {
+        l->notify(getClientId(client), data);
     }
 }
 
