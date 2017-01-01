@@ -417,11 +417,16 @@ void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
     if (tmp.size() == 5) {
         (item)->addAnimation(UI::IDLE, tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
         item->changeStatus(UI::IDLE);
+        if (path.find("explosion") != std::string::npos)
+            item->finished();
     }
     if (tmp.size() == 2) {
         (item)->addAnimation(UI::IDLE, tmp[0], tmp[1]);
         item->changeStatus(UI::IDLE);
+        if (path.find("explosion") != std::string::npos)
+            item->finished();
     }
+
 }
 
 void GameUIInterface::showError(const std::string &res) {
@@ -484,10 +489,9 @@ void GameUIInterface::setNplayer(Entity *nplayer) {
                                                                 0, 900);
         playerSprite->setRatio(0.2);
         playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->addTextBox(
-                100, 900);
+                150, 900);
         playerHp->setString(std::to_string(nplayer->getHp()));
         ui_mut->unlock();
-
     }
 }
 
