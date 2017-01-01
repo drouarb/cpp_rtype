@@ -592,7 +592,8 @@ void Game::sim_update(Entity *entity) {
 }
 
 void Game::sim_destroy(Entity *entity) {
-    this->gameEvents.push_back(new server::event::Destroy(this->round, entity->data.getId()));
+    for (int i = 0; i < DELETE_NB; ++i)
+        this->gameEvents.push_back(new server::event::Destroy(this->round, entity->data.getId()));
 }
 
 uint16_t Game::getClientSize() const

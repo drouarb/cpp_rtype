@@ -215,7 +215,7 @@ server::EntityAction *Zeppelin::NovaMissile::act(server::round_t current_round, 
 }
 
 server::hp_t Zeppelin::NovaMissile::getDamage() {
-    return 40;
+    return 10;
 }
 
 server::Tribool Zeppelin::NovaMissile::collidesWith(const server::Entity &entity) {

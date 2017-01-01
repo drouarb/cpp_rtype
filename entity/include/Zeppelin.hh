@@ -20,7 +20,7 @@ private:
 
     static const int rounds_moving = 400;
 
-    static const int density = 4;
+    static const int density = 3;
 
 public:
     server::Tribool collidesWith(const server::Entity &entity) override;
