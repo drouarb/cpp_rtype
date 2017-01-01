@@ -97,7 +97,7 @@ int main() {
 
     client->stop();
 
-    usleep(10000);
+    usleep(100000);
 
     assert(disconL->isDisconnected());
 
