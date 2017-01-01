@@ -25,7 +25,7 @@ server::ADynamicObject *YellowPlayer::createAttack(server::attackId_t id, server
         setAttackWait(id, BASIC_MISSILE_TIME, round);
         return new BasicMissile(this, this->data->getPosX() + this->data->getSprite().sizeX - 40,
                                 this->data->getPosY() + 10,
-                                "media/sprites/daggerE.png");
+                                "media/sprites/daggerC.png");
     }
 }
 
@@ -45,7 +45,7 @@ server::EntityInitialization *YellowPlayer::NovaMissile::initialize(server::roun
     server::EntityInitialization *initialization = new server::EntityInitialization;
     initialization->posY = this->posY;
     initialization->posX = this->posX;
-    initialization->sprite = std::string("media/sprites/magicBulletYellow.png");
+    initialization->sprite = std::string("media/sprites/crystalC.png");
     initialization->action.speedX = 0;
     initialization->action.speedY = 0;
     initialization->team = server::Team::PLAYER;

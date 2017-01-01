@@ -18,7 +18,7 @@ server::ADynamicObject *BluePlayer::createAttack(server::attackId_t id, server::
         setAttackWait(id, 3, round);
         return new MagicMissile(this, this->data->getPosX() + this->data->getSprite().sizeX + BULLET_SIZE + 1,
                                 this->data->getPosY(),
-                                round, "media/sprites/magicBulletBlue.png");
+                                round, "media/sprites/crystalB.png");
     }
     else
     {

@@ -3,6 +3,12 @@
   spawns:
   [
     {
+      dlName: "build/entity/Tower",
+      time: "1",
+      posX: "2000",
+      posY: "1000"
+    },
+    {
       dlName: "build/entity/BasicNastyEntity",
       time: "1",
       posX: "2000",
@@ -38,12 +44,6 @@
 	posX: "2000",
 	posY: "100"
     },
-    {
-	dlName: "build/entity/Tower"
-	time: "10",
-	posX: "2000",
-	posY: "1000"
-    }
   ]
   gamedata:
   [

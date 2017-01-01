@@ -114,7 +114,7 @@ server::EntityInitialization *GreenPlayer::WallAttack::WallElement::initialize(s
     initialization->team = server::Team::PLAYER;
     initialization->sprite.sizeX = 21;
     initialization->sprite.sizeY = 11;
-    initialization->sprite.path = "media/sprites/magicBulletGreen.png";
+    initialization->sprite.path = "media/sprites/crystalD.png";
     return initialization;
 }
 
