@@ -72,11 +72,7 @@ void World::applyTurn(int tickrate, ide_t playerId) {
                 entitys.insert(std::pair<ide_t, Entity *>(itEv->second.id, ent));
                 gameui->addEntity(getEntityById(itEv->second.id));
 		if (itEv->second.id == playerId)
-		  {
-		    //std::cout << "hectare swag " << itEv->second.vec.first << "tick : "<< itEv->first << std::endl;
-                    gameui->setNplayer(ent);
-		  }
-
+		  gameui->setNplayer(ent);
             } else if (itEv->second.eventtype == UPDATE && (entitys.find(itEv->second.id) != entitys.end())) {
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
@@ -92,8 +88,10 @@ void World::applyTurn(int tickrate, ide_t playerId) {
                 entitys.erase(itEv->second.id);
                 delete ent;
             }
+	    world_mut->lock();
             worldEvents.erase(itEv);
             itEv = worldEvents.begin();
+	    world_mut->unlock();
 		}
 		else {
 			++itEv;

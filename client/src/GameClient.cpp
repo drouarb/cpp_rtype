@@ -137,12 +137,25 @@ void GameClient::managePlayerData(uint32_t nplayerId, uint8_t nbAttackPlayer) {
 }
 
 void GameClient::manageSyncro(uint32_t turn, int64_t time) {
-    horodatageTick.insert(std::pair<tick, uint64_t>(static_cast<tick>(turn), time));
-    if (firstSynchro == false)
-      {
-	firstSynchro = true;
-	world->setTick(turn);
-      }
+  std::map<tick, uint64_t>::iterator it;
+  
+  it = horodatageTick.end();
+  if (firstSynchro == false)
+    {
+      firstSynchro = true;
+      world->setTick(turn);
+    }
+  if (horodatageTick.size() == 0)
+    {
+      horodatageTick.insert(std::pair<tick, uint64_t>(static_cast<tick>(turn), time));
+      return;
+    }
+  else
+    {
+      --it;
+      if (it->second < time)
+	horodatageTick.insert(std::pair<tick, uint64_t>(static_cast<tick>(turn), time));
+    }
 }
 
 void GameClient::manageGameData() {
