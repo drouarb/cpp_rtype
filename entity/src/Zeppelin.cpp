@@ -3,10 +3,11 @@
 //
 
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "Definitions.hh"
 #include "../../server/include/Grid.hh"
 #include <Zeppelin.hh>
-#include <cmath>
 
 Zeppelin::Zeppelin() : lostHp(0), mustDestroy(false)
 { }

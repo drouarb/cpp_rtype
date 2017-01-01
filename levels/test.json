@@ -1,0 +1,26 @@
+{
+  name: "basic",
+  spawns:
+  [
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "1",
+      posX: "2000",
+      posY: "250"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "200",
+      posX: "2000",
+      posY: "250"
+    }
+  ]
+  gamedata:
+  [
+      {
+	  time: "1",
+	  background: "backgrounds/normal.png",
+	  music: "musics/test_flight.ogg"
+      }
+  ]
+}

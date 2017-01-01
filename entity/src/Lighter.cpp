@@ -6,6 +6,7 @@
 #include "Definitions.hh"
 #include "../../server/include/Grid.hh"
 #include <Lighter.hh>
+#include <entities/VisualFx.hh>
 
 Lighter::Lighter() : lostHp(0), mustDestroy(false)
 { }
@@ -44,6 +45,13 @@ server::EntityAction *Lighter::act(server::round_t current_round, const server::
     a->speedY = 0;
     a->hp = this->data->getHp() - lostHp;
     lostHp = 0;
+
+    if (mustDestroy)
+    {
+        a->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_C, "media/sprites/explosionC.png", "", 100);
+        return (a);
+    }
+
 
     if (data->getPosX() > FIELD_WIDTH)
     {

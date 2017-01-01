@@ -5,9 +5,8 @@
 
 #include "Definitions.hh"
 #include "../../server/include/Grid.hh"
+#include "entities/VisualFx.hh"
 #include <BasicNastyEntity.hh>
-#include <iostream>
-#include <vector>
 
 BasicNastyEntity::BasicNastyEntity() : lostHp(0), mustDestroy(false)
 { }
@@ -50,18 +49,26 @@ server::EntityAction *BasicNastyEntity::act(server::round_t current_round, const
     a->hp = this->data->getHp() - lostHp;
     lostHp = 0;
 
-    if (current_round - startingRound < ROUNDS_MOVING)
+    if (mustDestroy)
     {
-        a->speedX = -SPEED;
+        a->newEntity = new server::VisualFx(data->getPosX(), data->getPosY() + server::VisualFx::Y_EXPLOSION_C, "media/sprites/explosionC.png", "", 100);
     }
     else
     {
-        if (current_round % (6 * FIRE_FREQUENCY) == 0)
+        if (current_round - startingRound < ROUNDS_MOVING)
         {
-            INFO("I'm the vilain nasty player : BOUM BIM BAM")
-            VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3,
-                                                                      this->data->getPosY() + this->data->getSprite().sizeY / 2);
-            a->newEntity = projectile;
+            a->speedX = -SPEED;
+        }
+        else
+        {
+            if (current_round % (6 * FIRE_FREQUENCY) == 0)
+            {
+                INFO("I'm the vilain nasty player : BOUM BIM BAM")
+                VeryNastyProjectile *projectile = new VeryNastyProjectile(this->data->getPosX() - 3,
+                                                                          this->data->getPosY() +
+                                                                          this->data->getSprite().sizeY / 2);
+                a->newEntity = projectile;
+            }
         }
     }
     INFO("Next action OK")
@@ -88,9 +95,9 @@ void BasicNastyEntity::VeryNastyProjectile::collide(const server::Entity &entity
 server::EntityAction *BasicNastyEntity::VeryNastyProjectile::act(server::round_t current_round, const server::Grid &)
 {
     server::EntityAction * a = new server::EntityAction();
-    if (this->isCollide) {
+    if (this->isCollide)
+    {
         a->destroy = true;
-        a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
     }
     a->speedX = -12;

@@ -5,6 +5,7 @@
 #ifndef CPP_RTYPE_CORETEST_HPP
 #define CPP_RTYPE_CORETEST_HPP
 
+//#define LOG_INFO
 #include <map>
 #include "../include/Core.hh"
 

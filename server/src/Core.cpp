@@ -47,7 +47,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
 
     std::cout << "Preparing packet factory on port " << std::to_string(port) << std::endl;
 
-    //this->packetFactory = new PacketFactoryTest(port);
+    // this->packetFactory = new PacketFactoryTest(port);
     this->packetFactory = new network::PacketFactory(port);
     this->packetFactory->registerConnectionListener(this->networkManager->getConnectionListener());
     this->packetFactory->registerDisconnectionListener(this->networkManager->getDisconnectionListener());

@@ -678,6 +678,7 @@ void Game::sendSimToNewNotFirst(const Client &client)
 void Game::sendAllMoves()
 {
     //TODO
+  if (round % 2 == 0)
     for (auto client : clientList)
     {
         for (auto entity : entities)
