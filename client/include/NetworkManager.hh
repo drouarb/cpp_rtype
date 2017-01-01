@@ -28,7 +28,7 @@ namespace client {
 
         bool startPacketFactory();
 
-        void receiveDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId);
+        void receiveDeleteEntity(uint32_t tick, uint32_t eventId, uint32_t entityId);
 
         void receiveDisconnect();
 
@@ -44,20 +44,21 @@ namespace client {
 
         void receiveSyncro(uint32_t tick, int64_t time);
 
-      void receivePlayerData(uint16_t playerId, uint8_t nbAttack);
+      void receivePlayerData(uint32_t playerId, uint8_t nbAttack);
 
-        void receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t vecx, int16_t vecy,
-                                       int16_t posx, int16_t posy);
+        void receiveMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t vecx, int16_t vecy,
+                               int16_t posx, int16_t posy);
 
         void receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName);
 
         void receiveQuit();
 
         void
-        receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
-                                   int16_t pos_y, int16_t hp);
+        receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint32_t entityId,
+                           int16_t pos_x,
+                           int16_t pos_y, int16_t hp);
 
-        void receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp);
+        void receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t hp);
 
         void receiveSynchronization(uint32_t turn, int64_t time);
       

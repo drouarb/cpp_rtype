@@ -4,14 +4,14 @@
 
 #include "network/packet/PacketUpdateEntity.hh"
 
-network::packet::PacketUpdateEntity::PacketUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp) :
+network::packet::PacketUpdateEntity::PacketUpdateEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t hp) :
         APacket
                 (
                         UPDATE_ENTITY,
                         {
                                 new utils::NetworkInteger(4, tick),
                                 new utils::NetworkInteger(4, eventId),
-                                new utils::NetworkInteger(2, entityId),
+                                new utils::NetworkInteger(4, entityId),
                                 new utils::NetworkInteger(2, hp)
                         }
                 )
@@ -43,12 +43,12 @@ uint32_t network::packet::PacketUpdateEntity::getEventId() const
     return GET_NETINT(schema, 1);
 }
 
-void network::packet::PacketUpdateEntity::setEntityId(uint16_t entityId)
+void network::packet::PacketUpdateEntity::setEntityId(uint32_t entityId)
 {
     SET_NETINT(schema, 2 , entityId);
 }
 
-uint16_t network::packet::PacketUpdateEntity::getEntityId() const
+uint32_t network::packet::PacketUpdateEntity::getEntityId() const
 {
     return GET_NETINT(schema, 2);
 }

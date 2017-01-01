@@ -92,7 +92,7 @@ void NetworkManager:: addListenerToPacketFactory()
         packetFactory->registerListener(*it);
 }
 
-void NetworkManager::receiveDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) {
+void NetworkManager::receiveDeleteEntity(uint32_t tick, uint32_t eventId, uint32_t entityId) {
     gameClient->manageDeleteEntity(tick, eventId, entityId);
 }
 
@@ -125,13 +125,13 @@ void NetworkManager::receiveSyncro(uint32_t tick, int64_t time)
   gameClient->manageSyncro(tick, time);
 }
 
-void NetworkManager::receivePlayerData(uint16_t playerId, uint8_t nbAttackPlayer)
+void NetworkManager::receivePlayerData(uint32_t playerId, uint8_t nbAttackPlayer)
 {
   gameClient->managePlayerData(playerId, nbAttackPlayer);
 }
 
 void
-NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t vecx, int16_t vecy,
+NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t vecx, int16_t vecy,
                                   int16_t posx, int16_t posy) {
   gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy, posx, posy);
 }
@@ -145,11 +145,12 @@ void NetworkManager::receiveQuit() {
 }
 
 void
-NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x, int16_t pos_y, int16_t hp) {
+NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint32_t entityId,
+                                   int16_t pos_x, int16_t pos_y, int16_t hp) {
     gameClient->manageSpawnEntity(tick, eventId, spriteName, entityId, pos_x, pos_y, hp);
 }
 
-void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp) {
+void NetworkManager::receiveUpdateEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t hp) {
     gameClient->manageUpdateEntity(tick, eventId, entityId, hp);
 }
 

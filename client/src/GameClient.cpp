@@ -92,7 +92,7 @@ World *GameClient::getWorld() const {
 
 void
 GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
-                              uint16_t entityId, int16_t pos_x, int16_t pos_y, int16_t hp) {
+                              uint32_t entityId, int16_t pos_x, int16_t pos_y, int16_t hp) {
     typeide_t type;
 
     type = gameui->registerNewSprite(spriteName);
@@ -101,12 +101,12 @@ GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string
     }
 }
 
-void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t entityId, int16_t hp) {
+void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t hp) {
     if (world != nullptr)
         world->updateEntity(hp, tick, entityId, eventId);
 }
 
-void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId,
+void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId,
                                   int16_t vecx, int16_t vecy, int16_t posx, int16_t posy) {
     if (world != nullptr)
       {
@@ -116,13 +116,13 @@ void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t enti
       }
 }
 
-void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) {
+void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint32_t entityId) {
     if (world != nullptr) {
         world->deleteEntity(entityId, tick, eventId);
     }
 }
 
-void GameClient::managePlayerData(uint16_t nplayerId, uint8_t nbAttackPlayer) {
+void GameClient::managePlayerData(uint32_t nplayerId, uint8_t nbAttackPlayer) {
     if (world == nullptr) {
         horodatageTick.clear();
 	firstSynchro = false;

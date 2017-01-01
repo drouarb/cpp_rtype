@@ -7,7 +7,7 @@
 network::packet::PacketPlayerData::~PacketPlayerData()
 {}
 
-network::packet::PacketPlayerData::PacketPlayerData(uint16_t id, uint8_t nbAttack) :
+network::packet::PacketPlayerData::PacketPlayerData(uint32_t id, uint8_t nbAttack) :
 
         APacket
                 (
@@ -21,11 +21,11 @@ network::packet::PacketPlayerData::PacketPlayerData(uint16_t id, uint8_t nbAttac
 
 }
 
-void network::packet::PacketPlayerData::setPlayerId(uint16_t id) {
+void network::packet::PacketPlayerData::setPlayerId(uint32_t id) {
     SET_NETINT(schema, 0, id);
 }
 
-uint16_t network::packet::PacketPlayerData::getPlayerId() const {
+uint32_t network::packet::PacketPlayerData::getPlayerId() const {
     return GET_NETINT(schema, 0);
 }
 
