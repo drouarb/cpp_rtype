@@ -47,6 +47,7 @@ namespace server
         bool going;
         Grid grid;
         const std::pair<std::string, std::string> * currentGamedata;
+        char player;
 
         static const std::string playerPaths[4];
 

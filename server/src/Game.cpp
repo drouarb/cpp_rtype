@@ -23,12 +23,12 @@
 using namespace server;
 
 Game::Game(network::PacketFactory &packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId),
-                                                           entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr)
+                                                           entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr), player(0)
 {}
 
 Game::Game(network::PacketFactory &packetf, int lobbyId, const Level &lvl) : packetf(packetf), lvl(&lvl), round(0),
                                                                              gameId(lobbyId), entityIdCount(0),
-                                                                             lastSyn(0), going(true), currentGamedata(nullptr)
+                                                                             lastSyn(0), going(true), currentGamedata(nullptr), player(0)
 {}
 
 Game::~Game()
@@ -471,7 +471,8 @@ void Game::newPlayer(Client *client) {
     this->clientList.push_back(client);
     Entity *entity = new Entity();
     controller->setEntity(entity);
-    entity->initialize(getDlLoader<ADynamicObject>(playerPaths[clientList.size() - 1])->getInstance(), entityIdCount, round, grid);
+    entity->initialize(getDlLoader<ADynamicObject>(playerPaths[this->player++])->getInstance(), entityIdCount, round, grid);
+    this->player %= 4;
     entityIdCount++;
     controller->setEntity(static_cast<Player *>(entity->obj));
     client->setController(controller);
@@ -481,6 +482,8 @@ void Game::newPlayer(Client *client) {
 
 void Game::removePlayer(Client *client)
 {
+    this->player -= 1;
+    this->player = this->player < 0c ? 0c : this->player;
     const std::list<server::Client *>::iterator &position = std::find(this->clientList.begin(), this->clientList.end(), client);
     if (position == this->clientList.end())
     {
