@@ -396,11 +396,10 @@ void Game::unspawn()
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
             grid.remove(*it);
-//            it = vect_erase(it, entities);
             entities.erase(std::find(entities.begin(), entities.end(), *it));
         }
         else
-            ++it;
+            ++it; //TODO
     }
     if (going && isFinished())
         endGame();
@@ -452,6 +451,7 @@ void Game::spawnEntity(Entity * entity)
 {
     entities.push_back(entity);
     this->sim_spawn(entity);
+    this->sim_move(entity);
     grid.add(entity);
 }
 
@@ -547,9 +547,20 @@ pos_t Game::fyp(const Entity * entity_i) const
 
 void Game::sendData() {
     INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
+
+    std::cout << "------------" << std::endl;
+
     for (auto & event : gameEvents)
     {
         auto packet = event->createPacket();
+
+        if (dynamic_cast<network::packet::PacketMoveEntity*>(packet))
+        {
+            std::cout << "sending move " << std::to_string(dynamic_cast<network::packet::PacketMoveEntity*>(packet)->getEntityId()) << std::endl;
+        }
+        else
+            std::cout << "sending something else" << std::endl;
+
         for (auto & client : clientList)
         {
             packetf.send(*packet, client->getClientId());
