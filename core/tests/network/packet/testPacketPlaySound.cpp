@@ -13,7 +13,7 @@ void testPacketPlaySound()
 {
     std::cout << "====Packet Player Move Test====" << std::endl;
     t_rawdata data;
-    PacketPlaySound *ack = new PacketPlaySound(UINT32_MAX, UINT32_MAX, UINT16_MAX);
+    PacketPlaySound *ack = new PacketPlaySound(UINT32_MAX, UINT32_MAX, "toto");
     ack->serialize(&data);
     PacketPlaySound *ack2 = new PacketPlaySound();
     ack2->deserialize(&data);
@@ -23,8 +23,8 @@ void testPacketPlaySound()
     assert(ack->getEventId() == UINT32_MAX);
     assert(ack->getEventId() == ack2->getEventId());
     std::cout << "SUCCESS getEventId" << std::endl;
-    assert(ack->getSoundName() == UINT16_MAX);
-    assert(ack->getSoundName() == ack2->getSoundName());
+    assert(std::string(ack->getSoundName().c_str()) == "toto");
+    assert(std::string(ack->getSoundName().c_str()) == ack2->getSoundName());
     std::cout << "SUCCESS getSoundName()" << std::endl;
     std::cout << "DONE" << std::endl;
 }
