@@ -6,7 +6,7 @@
       dlName: "build/entity/Tower",
       time: "1",
       posX: "2000",
-      posY: "1000"
+      posY: "600"
     },
     {
       dlName: "build/entity/BasicNastyEntity",

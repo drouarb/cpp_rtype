@@ -16,6 +16,7 @@ server::EntityAction *Tower::act(server::round_t, const server::Grid &environmen
     server::EntityAction *entityAction;
 
     entityAction = new server::EntityAction();
+    entityAction->speedX = -2;
     return entityAction;
 }
 
@@ -24,6 +25,8 @@ server::EntityInitialization *Tower::initialize(server::round_t round, const ser
     entityInitialization->sprite.path = "media/sprites/tower.png";
     entityInitialization->sprite.sizeX = 156;
     entityInitialization->sprite.sizeY = 463;
+    entityInitialization->team = server::Team::NEUTRAL;
+    entityInitialization->action.speedX = -2;
     return entityInitialization;
 }
 
