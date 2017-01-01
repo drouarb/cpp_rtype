@@ -177,9 +177,9 @@ void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, const std::str
 void GameClient::manageQuit() {
     if (world != nullptr) {
         delete world;
+        world = nullptr;
         horodatageTick.clear();
         tickRateClient = 0;
-        world = nullptr;
 	firstSynchro = false;
         sendAll(client::parse(I_LEADERBOARD, client::Key::KEY_ESCAPE));
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -190,7 +190,6 @@ void GameClient::manageQuit() {
 void GameClient::run() {
   	GameThread = new Thread<decltype(&GameClient::gameLoop), GameClient *>(&GameClient::gameLoop, this);
     	gameui->UILoop();
-	//gameLoop();
 }
 
 void GameClient::gameLoop() {
@@ -274,9 +273,9 @@ void GameClient::sendAll(struct s_info *info) {
                 gameui->changeMenu("roomList");
                 if (world != nullptr) {
                     delete world;
+                    world = nullptr;
                     horodatageTick.clear();
                     tickRateClient = 0;
-                    world = nullptr;
                     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                     horodatageTick.clear();
                 }

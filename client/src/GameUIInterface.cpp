@@ -77,17 +77,18 @@ void GameUIInterface::UILoop() {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     helpers::IStopwatch *sw;
 
-    running = true;
-    sw = helpers::IStopwatch::getInstance();
-    while (running == true) {
-        sw->set();
-        updateListEntity();
-        ui_mut->lock();
-        displaySimple();
-        ui_mut->unlock();
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
-        if (sw->elapsedMs() < 1000 / (TICKRATEUI))
-            std::this_thread::sleep_for(std::chrono::milliseconds((1000 / TICKRATEUI) - sw->elapsedMs()));
+  running = true;
+  sw = helpers::IStopwatch::getInstance();
+  while (running == true)
+    {
+      sw->set();
+      updateListEntity();
+      ui_mut->lock();
+      displaySimple();
+      ui_mut->unlock();
+      std::this_thread::sleep_for(std::chrono::milliseconds(2));
+      if (sw->elapsedMs() < 1000 / (TICKRATEUI))
+	std::this_thread::sleep_for(std::chrono::milliseconds((1000 / TICKRATEUI) - sw->elapsedMs()));
     }
 }
 
