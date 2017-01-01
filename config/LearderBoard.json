@@ -38,7 +38,7 @@
       "buttons_name": "game",
       "selected": "game2.png",
       "noselected": "game.png",
-      "default_selected": 1,
+      "default_selected": 0,
       "lock": 1,
       "position": [
         {

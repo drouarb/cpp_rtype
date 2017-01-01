@@ -6,20 +6,6 @@
   "type": 0,
   "Buttons": [
     {
-      "buttons_name": "register",
-      "selected": "rtype4.png",
-      "noselected": "rtype4.png",
-      "default_selected" : 0,
-      "lock" : 0,
-      "position": [
-        {
-          "x": -200,
-          "y": -100
-        }
-      ],
-      "type" : 0
-    },
-    {
       "buttons_name": "roomdId",
       "selected": "joinroom.png",
       "noselected": "joinroom.png",
@@ -76,6 +62,20 @@
       ],
       "type": 1,
       "goto": "MenuConnection"
+    },
+    {
+      "buttons_name": "register",
+      "selected": "rtype4.png",
+      "noselected": "rtype4.png",
+      "default_selected" : 0,
+      "lock" : 0,
+      "position": [
+        {
+          "x": -200,
+          "y": -100
+        }
+      ],
+      "type" : 0
     }
   ]
 }
