@@ -5,9 +5,7 @@
 #include <Definitions.hh>
 #include <entities/Player.hh>
 #include <iostream>
-#include <cmath>
 #include "entities/Entity.hh"
-#include "../../../server/include/Grid.hh"
 
 
 using namespace server;
@@ -119,9 +117,9 @@ void Player::cleanAttackTimeline(server::round_t round)
 
 ADynamicObject * Player::createAttack(attackId_t id, round_t round)
 {
-    setAttackWait(id, 3, round);
-    return new MagicMissile(this, this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(),
-                            round, "media/sprites/magicBullet.png");
+    setAttackWait(id, BASIC_MISSILE_TIME, round);
+    return new BasicMissile(this, this->data->getPosX() + CIRCLE_RADIUS * 2 + BULLET_SIZE + 1, this->data->getPosY(),
+                            "media/sprites/magicBullet.png");
 }
 
 void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound)
@@ -131,67 +129,6 @@ void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound
         attackTimeline[currentRound + i] = NOATTACK;
 }
 
-
-Player::MagicMissile::MagicMissile(APlayer *owner, pos_t posX, pos_t posY, round_t startRound, const std::string & sprite)
-        : Power(owner), mustDestroy(false), posX(posX), posY(posY), sprite(sprite)
-{ }
-
-
-void Player::MagicMissile::collide(const Entity &entity, server::round_t current_round) {
-    INFO("MagicMissile collide with : " << entity.data.getId() << "(id: " << this->data->getId() << ")")
-    if (entity.data.getTeam() == FOE)
-    {
-        modScore(static_cast<score_t >(getDamage()));
-    }
-    this->mustDestroy = true;
-}
-
-EntityAction *Player::MagicMissile::act(round_t current_round, const server::Grid &)
-{
-    server::EntityAction *entityAction = new server::EntityAction();
-
-    if (this->mustDestroy) {
-        entityAction->destroy = true;
-        INFO("MagicMassile ded" << this->data->getId() << ", x:" << this->data->getPosX() << ", y: "
-                                << this->data->getPosY())
-    }
-    auto circle_speed = CIRCLE_RADIUS;
-    auto x_speed = 5;
-    auto rad = ((current_round - startRound) % 15) * 0.4;
-    auto vectX = cos(rad) * circle_speed + x_speed;
-    auto vectY = sin(rad) * circle_speed;
-    entityAction->speedX = static_cast<speed_t >(vectX);
-    entityAction->speedY = static_cast<speed_t >(vectY);
-
-/*
-    entityAction->speedX = 5;
-    entityAction->speedY = 0;
-*/
-
-    return entityAction;
-}
-
-EntityInitialization *Player::MagicMissile::initialize(round_t round, const Grid &environment)
-{
-    EntityInitialization *initialization = new EntityInitialization();
-    initialization->action.hp = DEFAULT_LIFE;
-    initialization->posX = this->posX;
-    initialization->posY = this->posY;
-    initialization->team = server::Team::PLAYER;
-    initialization->sprite.sizeX = BULLET_SIZE;
-    initialization->sprite.sizeY = BULLET_SIZE;
-    initialization->sprite.path = sprite;
-    this->startRound = round;
-    return initialization;
-}
-
-hp_t Player::MagicMissile::getDamage() {
-    return DAMAGE;
-}
-
-Tribool Player::MagicMissile::collidesWith(const Entity &entity) {
-    return (entity.data.getTeam() != server::Team::PLAYER ? T_TRUE : T_FALSE);
-}
 
 /*
  * ----------------------------------------------------------------------------------------------

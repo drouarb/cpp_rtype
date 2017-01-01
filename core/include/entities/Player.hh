@@ -71,26 +71,6 @@ namespace server {
         EntityAction *act(round_t round, const Grid &) override;
         EntityInitialization *initialize(round_t, const Grid &) override;
         hp_t getDamage() override;
-
-        class MagicMissile : public ADynamicObject, protected APlayer::Power {
-        public:
-            MagicMissile(APlayer *owner, pos_t posX, pos_t posY, round_t startRound, const std::string & sprite);
-
-            void collide(const Entity &entity, server::round_t current_round) override;
-            EntityAction *act(round_t current_round, const Grid &) override;
-            EntityInitialization *initialize(round_t, const Grid &environment) override;
-            hp_t getDamage() override;
-            Tribool collidesWith(const Entity &entity) override;
-
-        private:
-            bool mustDestroy;
-            round_t startRound;
-            std::string sprite;
-
-            pos_t posX;
-            pos_t posY;
-            static const int DAMAGE = 15;
-        };
     };
 }
 

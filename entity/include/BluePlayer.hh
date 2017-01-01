@@ -7,11 +7,35 @@
 
 
 #include <entities/Player.hh>
+#include <cmath>
+
 
 class BluePlayer : public server::Player {
 public:
     server::EntityInitialization *initialize(server::round_t, const server::Grid &) override;
     server::ADynamicObject *createAttack(server::attackId_t id, server::round_t round) override;
+
+private:
+    class MagicMissile : public server::ADynamicObject, protected server::APlayer::Power
+    {
+    public:
+        MagicMissile(server::APlayer *owner, server::pos_t posX, server::pos_t posY, server::round_t startRound, const std::string & sprite);
+
+        void collide(const server::Entity &entity, server::round_t current_round) override;
+        server::EntityAction *act(server::round_t current_round, const server::Grid &) override;
+        server::EntityInitialization *initialize(server::round_t, const server::Grid &environment) override;
+        server::hp_t getDamage() override;
+        server::Tribool collidesWith(const server::Entity &entity) override;
+
+    private:
+        bool mustDestroy;
+        server::round_t startRound;
+        std::string sprite;
+
+        server::pos_t posX;
+        server::pos_t posY;
+        static const int DAMAGE = 15;
+    };
 };
 
 

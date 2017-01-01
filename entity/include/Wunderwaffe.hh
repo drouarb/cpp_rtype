@@ -63,7 +63,7 @@ private:
     server::hp_t damage;
     server::round_t startRound;
     server::pos_t pos;
-    server::ADynamicObject * firstHitbox;
+    server::ADynamicObject * lastHitbox;
 
 public:
 

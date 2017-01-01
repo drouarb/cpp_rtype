@@ -22,13 +22,13 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
         if (current_round - startRound == 125)
         {
             auto hb = new Wunderwaffe::Hitbox();
-            firstHitbox = hb;
             hb->setOwner(this, 1 * this->data->getSprite().sizeX);
             action->newEntity = hb;
         }
         if (current_round - startRound == 250)
         {
             auto hb = new Wunderwaffe::Hitbox();
+            lastHitbox = hb;
             hb->setOwner(this, 2 * this->data->getSprite().sizeX);
             action->newEntity = hb;
         }
@@ -47,9 +47,9 @@ server::EntityAction *Wunderwaffe::act(server::round_t current_round, const serv
             {
                 action->speedX = 2;
 /*
-                if (firstHitbox)
+                if (lastHitbox)
                 {
-                    auto whereIShouldBe = firstHitbox->data->getPosX() - this->data->getSprite().sizeX;
+                    server::pos_t whereIShouldBe = lastHitbox->data->getPosX() - this->data->getSprite().sizeX * 2;
                     action->speedX -= data->getPosX() - whereIShouldBe;
                 }
 */
@@ -104,7 +104,7 @@ server::EntityInitialization *
 Wunderwaffe::initialize(server::round_t round, const server::Grid & environment) {
     server::EntityInitialization *initialization = new server::EntityInitialization;
 
-    this->firstHitbox = nullptr;
+    this->lastHitbox = nullptr;
     this->damage = 0;
     this->startRound = round;
     initialization->sprite.path = "media/sprites/wunderwaffe1.png";
@@ -167,7 +167,7 @@ Wunderwaffe::BigBullet::initialize(server::round_t, const server::Grid &environm
 }
 
 server::hp_t Wunderwaffe::BigBullet::getDamage() {
-    return DEFAULT_DAMAGE;
+    return 100;
 }
 
 server::Tribool Wunderwaffe::BigBullet::collidesWith(const server::Entity &entity) {

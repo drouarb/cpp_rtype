@@ -80,7 +80,7 @@ server::EntityAction *Bomber::BomberProjectile::act(server::round_t current_roun
         a->soundToPlay = ""; //TODO add EXPLOSSSSSSSSSSSSSSSSSIONNN BOUM BAM BIM BROUM
         return (a);
     }
-    a->speedX = 0;
+    a->speedX = -1;
     a->speedY = 5;
     return (a);
 }
@@ -101,7 +101,7 @@ server::EntityInitialization *Bomber::BomberProjectile::initialize(server::round
 }
 
 server::hp_t Bomber::BomberProjectile::getDamage() {
-    return NASTY_DAMAGE;
+    return 50;
 }
 
 Bomber::BomberProjectile::BomberProjectile(server::speed_t posX, server::speed_t posY)

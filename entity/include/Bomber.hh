@@ -42,7 +42,6 @@ private:
     bool mustDestroy;
     server::round_t startingRound;
 
-    static const int NASTY_DAMAGE = 15;
     static const int DEFAULT_HP = 70;
 
 

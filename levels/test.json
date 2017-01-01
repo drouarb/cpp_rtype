@@ -1,0 +1,20 @@
+{
+  name: "basic",
+  spawns:
+  [
+    {
+      dlName: "build/entity/Zeppelin",
+      time: "1",
+      posX: "2000",
+      posY: "250"
+    }
+  ]
+  gamedata:
+  [
+      {
+	  time: "1",
+	  background: "backgrounds/normal.png",
+	  music: "musics/wind.ogg"
+      }
+  ]
+}

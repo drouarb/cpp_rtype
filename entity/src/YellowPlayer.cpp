@@ -56,7 +56,6 @@ server::EntityInitialization *YellowPlayer::NovaMissile::initialize(server::roun
 
 void YellowPlayer::NovaMissile::collide(const server::Entity &entity, server::round_t)
 {
-    std::cout << "nb " << nb << " collision " << entity.data.getId() << std::endl;
     if (entity.data.getTeam() == server::FOE)
     {
         modScore(static_cast<server::score_t >(getDamage()));
@@ -67,13 +66,8 @@ void YellowPlayer::NovaMissile::collide(const server::Entity &entity, server::ro
 server::EntityAction *YellowPlayer::NovaMissile::act(server::round_t current_round, const server::Grid &environment) {
     server::EntityAction *action = new server::EntityAction();
 
-
-    std::cout << "act " << nb << std::endl;
-    std::cout << "posx=" << data->getPosX() << " posy=" << data->getPosY() << std::endl;
-
     if (nb < 7 && current_round == startRound)
     {
-        std::cout << "create" << std::endl;
         action->newEntity = new NovaMissile(getOwner(), data->getPosX(), data->getPosY(), nb + 1);
     }
     else
@@ -94,14 +88,13 @@ server::EntityAction *YellowPlayer::NovaMissile::act(server::round_t current_rou
             action->speedY = static_cast<server::speed_t >(vectY);
         }
     }
-    std::cout << "speedX=" << action->speedX << " speedY=" << action->speedY << std::endl;
 
     action->destroy = this->mustDestroy;
     return action;
 }
 
 server::hp_t YellowPlayer::NovaMissile::getDamage() {
-    return 15;
+    return 10;
 }
 
 server::Tribool YellowPlayer::NovaMissile::collidesWith(const server::Entity &entity) {
