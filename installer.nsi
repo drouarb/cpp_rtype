@@ -63,6 +63,8 @@ Section "rtype (required)"
   SetOutPath $INSTDIR\config
   File /nonfatal /a /r "config\"
   
+  SetOutPath $INSTDIR
+
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\NSIS_rtype "Install_Dir" "$INSTDIR"
   
