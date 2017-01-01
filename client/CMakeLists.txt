@@ -5,6 +5,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 find_package(SFML 2 COMPONENTS system window graphics audio REQUIRED)
 
+find_package(Boost REQUIRED)
+
+
 file(
         GLOB_RECURSE
         CLIENT_SRCS
@@ -24,6 +27,7 @@ endif(WIN32)
 
 include_directories(include)
 include_directories(${SFML_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${PROTOBOEUF_INCLUDE_DIRS} ${RTYPE_CORE_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${CLIENT_SRCS})
@@ -32,6 +36,10 @@ target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES})
 if (UNIX)
     target_link_libraries(${PROJECT_NAME} pthread)
 endif()
+
+if (${UNIX})
+    target_link_libraries(${PROJECT_NAME} -lX11)
+endif(${UNIX})
 
 if (CLIENT_TESTS)
     enable_testing()

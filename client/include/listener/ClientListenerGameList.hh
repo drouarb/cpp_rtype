@@ -7,20 +7,20 @@
 
 #include <network/listener/ListenerTemplate.hpp>
 #include "network/packet/PacketGameList.hh"
-#include "GameClient.hh"
+#include "NetworkManager.hh"
 namespace client {
     class ClientListenerGameList
             : public network::ListenerTemplate<network::packet::PacketGameList, network::packet::GAME_LIST> {
 
     public:
-        ClientListenerGameList(GameClient *gameClient);
+        ClientListenerGameList(NetworkManager *networkManager);
 
         ~ClientListenerGameList();
 
         void notify(const network::packet::PacketGameList *packet);
 
     private:
-        GameClient *gameclient;
+        NetworkManager *networkManager;
     };
 }
 

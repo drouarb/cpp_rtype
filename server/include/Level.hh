@@ -28,9 +28,12 @@ namespace server {
          * @return
          */
         const std::vector<Spawn> *getNewSpawns(round_t tick) const;
+        bool isOver(round_t tick) const;
+
     private:
         std::map<round_t, std::vector<Spawn>> spawns;
         std::string name;
+        round_t end;
     };
 }
 

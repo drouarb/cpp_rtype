@@ -38,6 +38,13 @@ server::Level::Level(const std::string &filepath) {
 
 
     }
+
+    end = 0;
+    for (auto& entry : this->spawns)
+    {
+        if (entry.first > end)
+            end = entry.first;
+    }
     
     /*   // Create a root
 BOOST_FOREACH(boost::property_tree::ptree::value_type
@@ -62,5 +69,10 @@ const std::vector<server::Spawn> *server::Level::getNewSpawns(server::round_t ti
     } catch (std::out_of_range &e) {
         return nullptr;
     }
+}
+
+bool server::Level::isOver(round_t tick) const
+{
+    return (tick > end);
 }
 

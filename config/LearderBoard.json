@@ -1,0 +1,55 @@
+{
+  "Name": "LeaderBoard",
+  "Default_Visibility": 1,
+  "padding_up": 0,
+  "padding_left": 600,
+  "type": 0,
+  "Buttons": [
+    {
+      "buttons_name": "server",
+      "selected": "leaderboard.png",
+      "noselected": "leaderboard.png",
+      "default_selected": 0,
+      "lock": 0,
+      "position": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "type": 0
+    },
+    {
+      "buttons_name": "roomList",
+      "selected": "roomlist2.png",
+      "noselected": "roomlist.png",
+      "default_selected": 1,
+      "lock": 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 700
+        }
+      ],
+      "type" : 3,
+      "send" : 6
+    },
+    {
+      "buttons_name": "game",
+      "selected": "game2.png",
+      "noselected": "game.png",
+      "default_selected": 1,
+      "lock": 1,
+      "position": [
+        {
+          "x": 0,
+          "y": 850
+        }
+      ],
+      "type": 1,
+      "goto": "game"
+    }
+  ]
+
+
+}

@@ -4,7 +4,7 @@
 
 #include "network/packet/PacketSpawnEntity.hh"
 
-network::packet::PacketSpawnEntity::PacketSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint16_t entityId, int16_t pos_x,
+network::packet::PacketSpawnEntity::PacketSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint32_t entityId, int16_t pos_x,
                                                       int16_t pos_y, int16_t hp) :
         APacket
                 (
@@ -13,7 +13,7 @@ network::packet::PacketSpawnEntity::PacketSpawnEntity(uint32_t tick, uint32_t ev
                                 new utils::NetworkInteger(4, tick),
                                 new utils::NetworkInteger(4, eventId),
                                 new utils::NetworkString(spriteName.c_str()),
-                                new utils::NetworkInteger(2, entityId),
+                                new utils::NetworkInteger(4, entityId),
                                 new utils::NetworkInteger(2, pos_x),
                                 new utils::NetworkInteger(2, pos_y),
                                 new utils::NetworkInteger(2, hp)
@@ -58,12 +58,12 @@ const network::utils::NetworkString &network::packet::PacketSpawnEntity::getSpri
     return GET_NETSTR(schema, 2);
 }
 
-void network::packet::PacketSpawnEntity::setEntityId(uint16_t entityId)
+void network::packet::PacketSpawnEntity::setEntityId(uint32_t entityId)
 {
     SET_NETINT(schema, 3, entityId);
 }
 
-uint16_t network::packet::PacketSpawnEntity::getEntityId() const
+uint32_t network::packet::PacketSpawnEntity::getEntityId() const
 {
     return GET_NETINT(schema, 3);
 }
