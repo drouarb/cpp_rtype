@@ -34,8 +34,6 @@ void World::spawnEntity(ide_t nid, pos_t pos, typeide_t idtype, UIevent_t nevent
 void World::moveEntity(vec_t vec, pos_t pos, tick nturn, ide_t nid, UIevent_t nevent) {
     world_mut->lock();
     worldEvents.push_back(std::pair<tick, WorldEvent>(nturn, WorldEvent(nid, vec, pos, nturn, nevent)));
-    std::list<std::pair<tick, WorldEvent> >::iterator it;
-    it = worldEvents.begin();
     world_mut->unlock();
 }
 
@@ -55,6 +53,10 @@ tick World::getTick() const {
     return (turn);
 }
 
+void World::setTick(tick nturn) {
+  turn = nturn;
+}
+
 void World::applyTurn(int tickrate, ide_t playerId) {
     std::map<ide_t, Entity *>::iterator it;
     std::list<std::pair<tick, WorldEvent> >::iterator itEv;
@@ -63,12 +65,18 @@ void World::applyTurn(int tickrate, ide_t playerId) {
 
     itEv = worldEvents.begin();
     while (itEv != worldEvents.end()) {
-        if (1/*itEv->first <= turn + tickrate*/) {
+        if (itEv->first <= turn + tickrate) {
             if (itEv->second.eventtype == SPAWN && (entitys.find(itEv->second.id) == entitys.end())) {
                 ent = new Entity(itEv->second.id, itEv->second.type, itEv->second.pos, itEv->first);
                 pos = ent->getPos();
                 entitys.insert(std::pair<ide_t, Entity *>(itEv->second.id, ent));
                 gameui->addEntity(getEntityById(itEv->second.id));
+		if (itEv->second.id == playerId)
+		  {
+		    //std::cout << "hectare swag " << itEv->second.vec.first << "tick : "<< itEv->first << std::endl;
+                    gameui->setNplayer(ent);
+		  }
+
             } else if (itEv->second.eventtype == UPDATE && (entitys.find(itEv->second.id) != entitys.end())) {
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
@@ -77,18 +85,11 @@ void World::applyTurn(int tickrate, ide_t playerId) {
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
                 ent->moveEntity(itEv->second.vec, itEv->second.pos, itEv->second.turn);
-                if (itEv->second.id == playerId)
-		  {
-		    //std::cout << "hectare swag " << itEv->second.vec.first << "tick : "<< itEv->first << std::endl;
-                    gameui->setNplayer(ent);
-		  }
             } else if (itEv->second.eventtype == DELETE && (entitys.find(itEv->second.id) != entitys.end())) {
                 gameui->deleteEntity(entitys.at(itEv->second.id));
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
-		world_mut->lock();
                 entitys.erase(itEv->second.id);
-		world_mut->unlock();
                 delete ent;
             }
             worldEvents.erase(itEv);

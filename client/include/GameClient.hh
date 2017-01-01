@@ -43,6 +43,7 @@ namespace client {
         std::map<client::Key, int> keygame_attack;
         std::list<std::string> name_key;
       IThread			*GameThread;
+      bool			firstSynchro;
     public:
 
         static const std::map<client::Key, const std::string> keyStringMap;

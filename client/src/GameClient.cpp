@@ -182,9 +182,9 @@ void GameClient::manageQuit() {
 }
 
 void GameClient::run() {
-    //	GameThread = new Thread<decltype(&GameClient::gameLoop), GameClient *>(&GameClient::gameLoop, this);
-    //	gameui->UILoop();
-    gameLoop();
+  	GameThread = new Thread<decltype(&GameClient::gameLoop), GameClient *>(&GameClient::gameLoop, this);
+    	gameui->UILoop();
+	//gameLoop();
 }
 
 void GameClient::gameLoop() {
@@ -194,48 +194,46 @@ void GameClient::gameLoop() {
     tick tickcpt;
 
     while (gameui->windowIsOpen()) {
-        tickcpt = 0;
-        while (tickcpt < tickRateClient) {
-            sw->set();
-            if (tickcpt % PERIODTICKEVENT == 0) {
-                event = handler->getEvent();
-                if (event != -42) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-                    receive = gameui->manageInput(event);
-                    if (receive != nullptr) {
-                        if (receive->info == I_QUIT) {
-                            deleteNetworkManager();
-                            gameui->stopUI();
-                            return;
-                        }
-                        sendAll(receive);
-                        delete (receive);
-                    }
-                    event = -42;
-                } else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr) {
-                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
-                    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-                                            world->getEntityById(playerId)->getVec().second,
-                                            world->getEntityById(playerId)->getPos().first,
-                                            world->getEntityById(playerId)->getPos().second);
-                }
-            }
-            if (world != nullptr)
-                world->applyTurn(tickRateClient, playerId);
-            gameui->updateListEntity();
-            gameui->displaySimple();
-            ++tickcpt;
-            if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
-                std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
-        }
-        if (world != nullptr && horodatageTick.size() > 1) {
-            std::map<tick, uint64_t>::iterator it;
-            it = horodatageTick.end();
-            --it;
-            readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)),
-                            std::pair<tick, uint64_t>(it->first, it->second));
-        } else
-            tickRateClient = TICKRATE;
+      tickcpt = 0;
+      while (tickcpt < tickRateClient) {
+	sw->set();
+	if (tickcpt % PERIODTICKEVENT == 0) {
+	  event = handler->getEvent();
+	  if (event != -42) {
+	    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	    receive = gameui->manageInput(event);
+	    if (receive != nullptr) {
+	      if (receive->info == I_QUIT) {
+		deleteNetworkManager();
+		gameui->stopUI();
+		return;
+	      }
+	      sendAll(receive);
+	      delete (receive);
+	    }
+	    event = -42;
+	  } else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr) {
+	    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
+	    manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+				    world->getEntityById(playerId)->getVec().second,
+				    world->getEntityById(playerId)->getPos().first,
+				    world->getEntityById(playerId)->getPos().second);
+	  }
+	}
+	if (world != nullptr)
+	  world->applyTurn(tickRateClient, playerId);
+	++tickcpt;
+	if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
+	  std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
+      }
+      if (world != nullptr && horodatageTick.size() > 1) {
+	std::map<tick, uint64_t>::iterator it;
+	it = horodatageTick.end();
+	--it;
+	readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)),
+			std::pair<tick, uint64_t>(it->first, it->second));
+      } else
+	tickRateClient = TICKRATE;
     }
     gameui->stopUI();
 }

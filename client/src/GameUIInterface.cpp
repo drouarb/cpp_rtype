@@ -62,7 +62,7 @@ typeide_t GameUIInterface::registerNewSprite(const std::string &str) {
     it = typeEntity.begin();
     while (it != typeEntity.end()) {
         if (it->second == str) {
-      ui_mut->unlock();
+	  ui_mut->unlock();
             return (it->first);
         }
         ++it;
@@ -84,7 +84,10 @@ void GameUIInterface::UILoop()
     {
       sw->set();
       updateListEntity();
+      ui_mut->lock();
       displaySimple();
+      ui_mut->unlock();
+      std::this_thread::sleep_for(std::chrono::milliseconds(5));
       if (sw->elapsedMs() < 1000 / (TICKRATEUI))
 	std::this_thread::sleep_for(std::chrono::milliseconds((1000 / TICKRATEUI) - sw->elapsedMs()));
     }
@@ -135,7 +138,7 @@ void GameUIInterface::addEntity(Entity *listEntity) {
 }
 
 void GameUIInterface::updateListEntity() {
-    ui_mut->lock();
+  ui_mut->lock();
     for (auto it = gameItem.begin(); it != gameItem.end(); it++) {
         if (nplayer != nullptr)
         if (it->first == this->nplayer)
@@ -146,9 +149,7 @@ void GameUIInterface::updateListEntity() {
 }
 
 void GameUIInterface::updateEntity(Entity *entity) {
-    ui_mut->lock();
     gameItem[entity]->setPosition(entity->getPos().first, entity->getPos().second);
-    ui_mut->unlock();
 }
 
 void GameUIInterface::deleteListEntity(std::vector<Entity *> listentity) {
@@ -478,6 +479,8 @@ void GameUIInterface::setNplayer(Entity *nplayer) {
     GameUIInterface::nplayer = nplayer;
     if (nplayer != nullptr)
     {
+      ui_mut->lock();
+
       std::string res =    typeEntity[nplayer->getTypeid()].substr(0, typeEntity[nplayer->getTypeid()].find("."));
       this->playerSprite = window->getLayer(UI::HUD)->addItem(UI::ITEM, res + "vatar.png",
 							      0, 900);
@@ -485,5 +488,7 @@ void GameUIInterface::setNplayer(Entity *nplayer) {
       playerHp = static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->addTextBox(
 										     100, 900);
       playerHp->setString(std::to_string(nplayer->getHp()));
+      ui_mut->unlock();
+      
     }
 }

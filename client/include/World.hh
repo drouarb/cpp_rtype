@@ -64,6 +64,7 @@ namespace client
     std::map<ide_t, Entity*>			getEntitys();
     void applyTurn(int tickrate, ide_t playerId);
     tick					getTick() const;
+    void					setTick(tick nturn);
     std::vector<std::pair<UIevent_t, pos_t> >	getEvents();
   };
 }
