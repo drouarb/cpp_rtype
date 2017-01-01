@@ -3,12 +3,6 @@
   spawns:
   [
     {
-      dlName: "build/entity/Tower",
-      time: "1",
-      posX: "2000",
-      posY: "600"
-    },
-    {
       dlName: "build/entity/BasicNastyEntity",
       time: "1",
       posX: "2000",
@@ -50,7 +44,7 @@
       {
 	  time: "1",
 	  background: "backgrounds/normal.png",
-	  music: "musics/wind.ogg"
+	  music: "musics/test_flight.ogg"
       }
   ]
 }

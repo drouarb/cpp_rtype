@@ -3,22 +3,16 @@
   spawns:
   [
     {
-      dlName: "build/entity/Zeppelin",
+      dlName: "build/entity/BasicNastyEntity",
       time: "1",
       posX: "2000",
       posY: "250"
     },
     {
-      dlName: "build/entity/Zeppelin",
-      time: "1",
+      dlName: "build/entity/BasicNastyEntity",
+      time: "200",
       posX: "2000",
-      posY: "500"
-    },
-    {
-      dlName: "build/entity/Zeppelin",
-      time: "1",
-      posX: "2000",
-      posY: "750"
+      posY: "250"
     }
   ]
   gamedata:
@@ -26,7 +20,7 @@
       {
 	  time: "1",
 	  background: "backgrounds/normal.png",
-	  music: "musics/wind.ogg"
+	  music: "musics/test_flight.ogg"
       }
   ]
 }

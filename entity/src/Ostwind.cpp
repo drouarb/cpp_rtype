@@ -4,6 +4,7 @@
 
 #include <entities/Entity.hh>
 #include <iostream>
+#include <entities/VisualFx.hh>
 #include "Ostwind.hh"
 
 void Ostwind::collide(const server::Entity &entity, server::round_t) {
@@ -13,19 +14,25 @@ void Ostwind::collide(const server::Entity &entity, server::round_t) {
 server::EntityAction *Ostwind::act(server::round_t current_round, const server::Grid & environment) {
     server::EntityAction *action = new server::EntityAction();
 
-    if (this->data->getHp() < 0) {
+    if (this->data->getHp() < 0)
+    {
         action->destroy = true;
+        action->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_A, "media/sprites/explosionA.png", "", 100);
     }
-    action->hp = this->data->getHp() - this->damage;
-    this->damage = 0;
+    else
+    {
+        action->hp = this->data->getHp() - this->damage;
+        this->damage = 0;
 
-    if ((current_round % (30)) == 0) {
-        OstwindBullet *bullet = new OstwindBullet(this->data->getPosX() + 10, this->data->getPosY());
-        action->newEntity = bullet;
-        return action;
+        if ((current_round % (30)) == 0)
+        {
+            OstwindBullet *bullet = new OstwindBullet(this->data->getPosX() + 10, this->data->getPosY());
+            action->newEntity = bullet;
+            return action;
+        }
+
+        action->speedX = -2;
     }
-
-    action->speedX = -2;
 
     return action;
 }

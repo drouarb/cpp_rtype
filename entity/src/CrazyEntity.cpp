@@ -3,6 +3,7 @@
 //
 
 #include <entities/Entity.hh>
+#include <entities/VisualFx.hh>
 #include "CrazyEntity.hh"
 
 using namespace server;
@@ -39,6 +40,12 @@ server::EntityAction *CrazyEntity::act(server::round_t current_round, const serv
     a->speedY = 0;
     a->hp = this->data->getHp() - lostHp;
     lostHp = 0;
+
+    if (mustDestroy)
+    {
+        a->newEntity = new server::VisualFx(data->getPosX() + 30, data->getPosY() + server::VisualFx::Y_EXPLOSION_C, "media/sprites/explosionC.png", "", 100);
+        return (a);
+    }
 
     if (this->data->getPosX() < FIELD_BORDER_RIGHT - 50)
     {
