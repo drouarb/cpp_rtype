@@ -3,9 +3,11 @@ project(cpp_rtype)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
-if (NOT WIN32)
+if (WIN32)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox /Ob2 /Oi /Ot /GL")
+else (WIN32)
     find_package(Threads REQUIRED)
-endif (NOT WIN32)
+endif (WIN32)
 
 option(RTYPE_TESTS "Enable test compilation" OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH})
