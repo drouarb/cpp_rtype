@@ -1,4 +1,4 @@
-#include "../../include/UI/ALayer.hh"
+#include <UI/ALayer.hh>
 
 UI::ALayer::ALayer() {
     itemFactory = new ItemFactory();

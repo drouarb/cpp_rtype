@@ -1,7 +1,7 @@
 #include <iostream>
 #include <EventManager.hh>
 #include <thread>
-#include "../../include/UI/EventObserver.hh"
+#include <UI/EventObserver.hh>
 
 UI::EventObserver::EventObserver() {
 

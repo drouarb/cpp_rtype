@@ -3,7 +3,7 @@
 //
 
 #include <UI/Item.hh>
-#include "../../include/UI/Button.hh"
+#include <UI/Button.hh>
 
 UI::Button::Button() : Item(UI::BUTTON){
 }

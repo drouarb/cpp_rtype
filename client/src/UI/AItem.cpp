@@ -1,6 +1,6 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Image.hpp>
-#include "../../include/UI/AItem.hh"
+#include <UI/AItem.hh>
 
 void UI::AItem::playAnimation(animationType animationType) {
     //sprites.at(animationType);

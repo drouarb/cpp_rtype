@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "../../include/UI/Item.hh"
+#include <UI/Item.hh>
 
 UI::Item::Item(itemType t) : AItem(t) {
     scale = 1;
@@ -45,6 +45,10 @@ sf::Sprite UI::Item::getSprite() {
     return sprite;
 }
 
+void UI::Item::setTransparency(uint8_t transparency) {
+    sprite.setColor(sf::Color(255, 255, 255, transparency));
+}
+
 void UI::Item::setTexture(sf::Texture* _texture) {
     texture = _texture;
 }
@@ -68,10 +72,10 @@ void UI::Item::moveY(float range) {
 }
 
 void UI::Item::setRatio(float sizeXMax, float sizeYMax) {
-    if ((sizeXMax / sprite.getScale().x) < (sizeYMax / sprite.getScale().y)) {
-        sprite.setScale(sizeXMax / sprite.getScale().x, sizeXMax / sprite.getScale().x);
+    if ((sprite.getGlobalBounds().width / sizeXMax) > (sprite.getGlobalBounds().height / sizeYMax)) {
+        setRatio(1 / (sprite.getGlobalBounds().width / sizeXMax));
     } else {
-        sprite.setScale(sizeYMax / sprite.getScale().y, sizeYMax / sprite.getScale().y);
+        setRatio(1 / (sprite.getGlobalBounds().height / sizeYMax));
     }
 }
 

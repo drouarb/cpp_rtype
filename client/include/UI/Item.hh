@@ -30,6 +30,7 @@ namespace UI {
         void addAnimation(UI::animationType animationType, short frames, unsigned int posX, unsigned int posY, unsigned int width,
                           unsigned int height);
         void addAnimation(UI::animationType animationType, short frames, unsigned int size);
+        void setTransparency(uint8_t transparency);
 
     private:
         sf::Sprite sprite; // le changer en pointeur pour faciliter l'échange
