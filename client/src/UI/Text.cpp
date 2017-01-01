@@ -3,14 +3,14 @@
 //
 
 #include <bitset>
-#include "UI/Text.hh"
+#include <UI/Text.hh>
 
 UI::Text::Text() : AItem(UI::TEXT) {
     initStatus = font.loadFromFile("media/font/Pixeled.ttf");
-    font.loadFromFile("media/font/0_TrajanPro-Regular.ttf");
     font.loadFromFile("media/font/0_Trajan Bold.ttf");
+    font.loadFromFile("media/font/0_TrajanPro-Regular.ttf");
     text.setFont(font);
-    text.setCharacterSize(37);
+    text.setCharacterSize(24);
     text.setOutlineColor(sf::Color::Black);
     text.setOutlineThickness(10);
     text.setFillColor(sf::Color::White);
@@ -26,10 +26,6 @@ bool UI::Text::initOK() {
 
 void UI::Text::setBackgroundColor(sf::Color color) {
     text.setOutlineColor(color);
-}
-
-void UI::Text::setColor(sf::Color color) {
-    text.setFillColor(color);
 }
 
 void UI::Text::setString(const std::string &string) {

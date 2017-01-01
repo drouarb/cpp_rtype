@@ -18,6 +18,8 @@
 #include <UI/Background.cpp>
 #include <UI/MenuLayer.hh>
 #include <UI/HUDLayer.cpp>
+#include <UI/CreditLayer.hh>
+#include <UI/CreditLayer.cpp>
 
 
 int testshitfunction(int modifier, UI::UIManager *neue) {
@@ -37,6 +39,8 @@ int main()
     UI::AItem* item2;
     UI::AItem* item3;
     UI::AItem* item4;
+    UI::Credit credit;
+
 
     bool flag = true;
     int lermi = 100;
@@ -50,7 +54,8 @@ int main()
     text.setColor(sf::Color::Red);*/
 
     ui->getEventObserver()->listen(ui->getWindow(UI::MAIN_WINDOW));
-
+    static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "");
+    credit.HereWeGo(ui);
     ui->getAudioManager()->playMusic("/home/jonas_e/Work/Epitech/rtype/media/musics/Lady_Crimson.ogg");
     ui->getAudioManager()->setVolume(ui->getAudioManager()->getVolume() - 95); // plus et ça fait mal aux oreilles sur arch avec un alsa + ganoox à
     item = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/references/ALL_GONE.jpg", 250, 250);
@@ -75,10 +80,6 @@ int main()
     static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
     item4->changeStatus(UI::IDLE);
 
-    item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/magicalGirlD.png", 50 , 0);
-    static_cast<UI::Item *>(item4)->addAnimation(UI::IDLE, 4, 0, 0, 64, 64);
-    item4->changeStatus(UI::IDLE);
-
     item4 = ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::HUD)->addItem(UI::ITEM, "/home/jonas_e/Work/Epitech/rtype/media/sprites/ju87.png", 200 , 100);
     item4->setRatio(0.75);
     item4->addAnimation(UI::IDLE, 6, 350);
@@ -98,8 +99,6 @@ int main()
     item4->changeStatus(UI::IDLE);
 
     static_cast<UI::MenuLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::MENU))->addTextBox(400, 16)->setString("abc");
-
-    static_cast<UI::BackgroundLayer*>(ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(UI::BACKGROUND, "/home/jonas_e/Work/Epitech/rtype/media/backgrounds/nightfall.png");
     ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS)->addTexture(item3, UI::ACTIVE, "/home/jonas_e/Work/Epitech/rtype/media/menu/ready2.png");
     UI::IWindow* window = ui->getWindow(UI::MAIN_WINDOW);
     UI::IEventObserver* eventObserver = ui->getEventObserver();
@@ -107,8 +106,11 @@ int main()
     testshitfunction(0, ui);
     ui->alert("SHIT IS BROKEN AAAAH");
     ui->getAudioManager()->playMenuSound();
+    sf::Clock clocktest;
     while (window->isOpen()) {
+        clocktest.restart();
         window->display();
+        std::cout << "test:" << clocktest.getElapsedTime().asMilliseconds() << std::endl;
         if (ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->isVisible()) {
             ui->getWindow(UI::MAIN_WINDOW)->getLayer(UI::GAME)->close();
             item3->changeStatus(UI::ACTIVE);

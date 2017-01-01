@@ -12,6 +12,7 @@ namespace UI {
         void init(sf::RenderWindow* window);
         void listen(UI::IWindow *window);
         void getEvent();
+        bool received();
         void setEventManager(client::IEventHandler *eventHandler);
     private:
         sf::RenderWindow* window;

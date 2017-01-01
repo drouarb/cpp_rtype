@@ -7,7 +7,7 @@
 #include <UI/BackgroundLayer.hh>
 #include <UI/MenuLayer.hh>
 #include <UI/HUDLayer.hh>
-#include "UI/LayerFactory.hh"
+#include <UI/LayerFactory.hh>
 
 const std::map<UI::layerType, UI::LayerFactory::instantiateLayer> UI::LayerFactory::layerMap = {
         {MENU, &instantiateMenu},
@@ -29,7 +29,7 @@ UI::ILayer *UI::LayerFactory::instantiateMenu() {
 }
 
 UI::ILayer *UI::LayerFactory::instantiateHUD() {
-    return static_cast<ILayer*>(new HUDLayer());
+    return static_cast<ILayer*>(new MenuLayer());
 }
 
 UI::ILayer *UI::LayerFactory::instantiateGame() {
