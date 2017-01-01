@@ -51,11 +51,6 @@
 	  time: "1",
 	  background: "backgrounds/normal.png",
 	  music: "musics/wind.ogg"
-      },
-      {
-	  time: "200",
-	  background: "backgrounds/nightfall.png",
-	  music: "musics/Lady_Crimson.ogg"
       }
   ]
 }

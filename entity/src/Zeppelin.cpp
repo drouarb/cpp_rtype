@@ -63,9 +63,15 @@ server::EntityAction *Zeppelin::act(server::round_t current_round, const server:
     {
         if (current_round % density == 0)
         {
-            action->newEntity = new NovaMissile(this->data->getPosX() + this->data->getSprite().sizeX * 3 / 2 - 20,
+            action->newEntity = new NovaMissile(this->data->getPosX() + this->data->getSprite().sizeX * 3 / 2 + 80,
                                                 this->data->getPosY() + this->data->getSprite().sizeY / 2 + 50,
                                                 0, static_cast<double>(current_round / density % 78) * 0.04);
+        }
+        else if (current_round % density == 1)
+        {
+            action->newEntity = new NovaMissile(this->data->getPosX() + this->data->getSprite().sizeX * 3 / 2 - 140,
+                                                this->data->getPosY() + this->data->getSprite().sizeY / 2 + 50,
+                                                0, M_PI - static_cast<double>(current_round / density % 78) * 0.04);
         }
     }
 
