@@ -70,7 +70,7 @@ void server::Core::run() {
     while (isRunning) {
         pStopwatch->set();
         sw->set();
-        mutex.lock();
+//        mutex.lock();
         
         for (auto game = games.begin(); game != games.end();)
         {
@@ -86,7 +86,7 @@ void server::Core::run() {
                 ++game;
             }
         }
-        mutex.unlock();
+//        mutex.unlock();
 
         if (sw->elapsedMs() < ROUND_DURATION_MS)
             std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - sw->elapsedMs()));
