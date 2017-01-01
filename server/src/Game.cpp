@@ -566,6 +566,7 @@ void Game::sendData() {
 void Game::sim_spawn(Entity *entity) {
     this->gameEvents.push_back(new server::event::Spawn
                                        (this->round, entity->data.getId(), entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
+    this->gameEvents.push_back(new server::event::ModHP(this->round, entity->data.getId(), entity->data.getHp()));
     INFO("spawn " << std::to_string(gameEvents.back()->getEntityId()))
 }
 
