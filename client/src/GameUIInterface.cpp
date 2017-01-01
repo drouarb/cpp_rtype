@@ -32,6 +32,7 @@ GameUIInterface::~GameUIInterface() {
 
 void GameUIInterface::initUI() {
     window = managerUi.getWindow(UI::MAIN_WINDOW);
+    addMenu("config/menuSplash.json");
     addMenu("config/menuStart.json");
     addMenu("config/menuConnection.json");
     addMenu("config/MenuRegister.json");
@@ -184,6 +185,14 @@ void GameUIInterface::addMenu(const std::string &path) {
     int y = 0;
     int padding_up = root.get_child("padding_up").get_value<int>();
     int padding_left = root.get_child("padding_left").get_value<int>();
+    try {
+        temp->setMusic(root.get_child("son").get_value<std::string>());
+    }
+    catch (std::exception &)
+    {
+
+    }
+
     BOOST_FOREACH(boost::property_tree::ptree::value_type
                           child, root.get_child("Buttons")) {
                     BOOST_FOREACH(const boost::property_tree::ptree::value_type &child2,
@@ -282,6 +291,7 @@ void GameUIInterface::manageNavkey(const std::string &res) {
 
 s_info *GameUIInterface::manageEnter() {
 
+    managerUi.getAudioManager()->playMenuSound();
     if (currentMenu->getType(currentMenu->getCurrent_selected()) == GOTO) {
         changeMenu(currentMenu->getMenuName(currentMenu->getCurrent_selected()));
     } else if (currentMenu->getType(currentMenu->getCurrent_selected()) == TEXTBOX) {

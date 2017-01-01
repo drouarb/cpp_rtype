@@ -1,0 +1,39 @@
+{
+  "Name": "MenuSplash",
+  "Default_Visibility": 0,
+  "padding_up": -100,
+  "padding_left": 0,
+  "type": 0,
+  "son": "moh.ogg",
+  "Buttons": [
+    {
+      "buttons_name": "splash",
+      "selected": "splashscreen.png",
+      "noselected": "splashscreen.png",
+      "default_selected": 0,
+      "lock": 0,
+      "position": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "type" : 0
+    },
+    {
+      "buttons_name": "play",
+      "selected": "play.png",
+      "noselected": "play2.png",
+      "default_selected": 1,
+      "lock": 1,
+      "position": [
+        {
+          "x": 700,
+          "y": 600
+        }
+      ],
+      "type" : 1,
+      "goto" : "MenuStart"
+    }
+  ]
+}

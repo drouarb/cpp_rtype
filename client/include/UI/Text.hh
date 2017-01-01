@@ -26,6 +26,7 @@ namespace UI {
         bool initOK();
         float getWidth();
         void setBackgroundColor(sf::Color color);
+        void setColor(sf::Color color);
 
     private:
         void setImage(std::string filename);

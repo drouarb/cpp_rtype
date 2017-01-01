@@ -28,6 +28,10 @@ void UI::Text::setBackgroundColor(sf::Color color) {
     text.setOutlineColor(color);
 }
 
+void UI::Text::setColor(sf::Color color) {
+    text.setFillColor(color);
+}
+
 void UI::Text::setString(const std::string &string) {
     text.setString(string);
 }

@@ -11,6 +11,7 @@ Menu::Menu() : current_selected(nullptr) {
     layer = nullptr;
     default_selected = nullptr;
     music = "";
+    color = sf::Color(91, 91, 91);
 }
 
 unsigned long Menu::getLayer_id() const {
@@ -40,7 +41,7 @@ void Menu::selectedNext() {
                     if (textBox.find(current_selected) != textBox.end())
                         static_cast<UI::Text *>(current_selected)->setBackgroundColor(sf::Color::Black);
                     if (textBox.find(listItem[i + 1]) != textBox.end())
-                            static_cast<UI::Text *>(listItem[i + 1])->setBackgroundColor(sf::Color::Blue);
+                            static_cast<UI::Text *>(listItem[i + 1])->setBackgroundColor(color);
                     current_selected->changeStatus(UI::IDLE);
                     listItem[i + 1]->changeStatus(UI::ACTIVE);
                     current_selected = listItem[i + 1];
@@ -60,7 +61,7 @@ UI::AItem *Menu::getCurrent_selected() const {
 void Menu::setCurrent_selected(UI::AItem *curret_selected) {
     current_selected = curret_selected;
     if (textBox.find(current_selected) != textBox.end())
-        static_cast<UI::Text *>(current_selected)->setBackgroundColor(sf::Color::Blue);
+        static_cast<UI::Text *>(current_selected)->setBackgroundColor(color);
 }
 
 void Menu::selectedPrev() {
@@ -73,7 +74,7 @@ void Menu::selectedPrev() {
                     if (textBox.find(current_selected) != textBox.end())
                         static_cast<UI::Text *>(current_selected)->setBackgroundColor(sf::Color::Black);
                         if (textBox.find(listItem[i - 1]) != textBox.end())
-                            static_cast<UI::Text *>(listItem[i - 1])->setBackgroundColor(sf::Color::Blue);
+                            static_cast<UI::Text *>(listItem[i - 1])->setBackgroundColor(color);
 
                     current_selected->changeStatus(UI::IDLE);
                     listItem[i - 1]->changeStatus(UI::ACTIVE);
@@ -140,7 +141,7 @@ void Menu::reloadCurrent() {
         current_selected->changeStatus(UI::IDLE);
         current_selected = default_selected;
         if (textBox.find(current_selected) != textBox.end())
-                static_cast<UI::Text *>(current_selected)->setBackgroundColor(sf::Color::Blue);
+                static_cast<UI::Text *>(current_selected)->setBackgroundColor(color);
         current_selected->changeStatus(UI::ACTIVE);
 
     }

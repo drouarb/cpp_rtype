@@ -38,7 +38,7 @@ if (UNIX)
 endif()
 
 if (${UNIX})
-    target_link_libraries(${PROJECT_NAME} -lpthread)
+    target_link_libraries(${PROJECT_NAME} -lpthread -lX11)
 endif(${UNIX})
 
 if (CLIENT_TESTS)

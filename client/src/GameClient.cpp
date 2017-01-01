@@ -51,15 +51,15 @@ void GameClient::readaptTickRate(int servTickRate,
                                  std::pair<tick, uint64_t> servHoro) {
     double tickRateModif;
 
-    tickRateModif = (((double)((tickRateClient) - servTickRate)) * TICKRATEDIFFCONST)
-      + (((double)(((int64_t)estiClientHoro.first) - (int64_t)servHoro.first)) * TICKCURRENTDIFFCONST);
+    tickRateModif = (((double) ((tickRateClient) - servTickRate)) * TICKRATEDIFFCONST)
+                    + (((double) (((int64_t) estiClientHoro.first) - (int64_t) servHoro.first)) * TICKCURRENTDIFFCONST);
     std::cout << "Server. current tick : [" << servHoro.first << "] tickrate : " << servTickRate << std::endl;
     std::cout << "Client. current tick : [" << estiClientHoro.first << "] tickrate : " << tickRateClient << std::endl;
     std::cout << "Client tickrate " << ((tickRateModif < 0.0) ? "increase of + 1" : "decrease of - 1") << std::endl;
     if (tickRateModif < 0.0)
-      ++tickRateClient;
+        ++tickRateClient;
     else if (tickRateClient > 1 && tickRateModif > 0.0)
-      --tickRateClient;
+        --tickRateClient;
 }
 
 int GameClient::calcTickRate(int nbrLevel) {
@@ -120,14 +120,14 @@ void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t en
 
 void GameClient::managePlayerData(uint16_t nplayerId, uint8_t nbAttackPlayer) {
     if (world == nullptr) {
-      horodatageTick.clear();
+        horodatageTick.clear();
         world = new World(client_mut, gameui);
-      playerId = nplayerId;
-      nbrAttack = nbAttackPlayer;
+        playerId = nplayerId;
+        nbrAttack = nbAttackPlayer;
         tickRateClient = TICKRATE;
     } else {
-      playerId = nplayerId;
-      nbrAttack = nbAttackPlayer;
+        playerId = nplayerId;
+        nbrAttack = nbAttackPlayer;
     }
 
 
@@ -172,16 +172,15 @@ void GameClient::manageQuit() {
         tickRateClient = 0;
         world = nullptr;
         sendAll(client::parse(I_LEADERBOARD, client::Key::KEY_ESCAPE));
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         horodatageTick.clear();
     }
 }
 
-void GameClient::run()
-{
-  //	GameThread = new Thread<decltype(&GameClient::gameLoop), GameClient *>(&GameClient::gameLoop, this);
-  //	gameui->UILoop();
-  gameLoop();
+void GameClient::run() {
+    //	GameThread = new Thread<decltype(&GameClient::gameLoop), GameClient *>(&GameClient::gameLoop, this);
+    //	gameui->UILoop();
+    gameLoop();
 }
 
 void GameClient::gameLoop() {
@@ -197,51 +196,52 @@ void GameClient::gameLoop() {
             if (tickcpt % PERIODTICKEVENT == 0) {
                 event = handler->getEvent();
                 if (event != -42) {
-		  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
                     receive = gameui->manageInput(event);
                     if (receive != nullptr) {
                         if (receive->info == I_QUIT) {
-			  deleteNetworkManager();
-			  gameui->stopUI();
-			  return;
+                            deleteNetworkManager();
+                            gameui->stopUI();
+                            return;
                         }
                         sendAll(receive);
                         delete (receive);
                     }
                     event = -42;
                 } else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr) {
-                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second),
+                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
+                                                               pos_t(world->getEntityById(playerId)->getPos().first,
+                                                                     world->getEntityById(playerId)->getPos().second),
                                                                world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,
                                             world->getEntityById(playerId)->getPos().second);
-		  }
-	    }
-	    if (world != nullptr)
-	      world->applyTurn(tickRateClient, playerId);
-	    gameui->updateListEntity();
-	    gameui->displaySimple();
-	    ++tickcpt;
-	    if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
-	      std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
-	}
-	if (world != nullptr && horodatageTick.size() > 1)
-	  {
-	    std::map<tick, uint64_t>::iterator it;
-	    it = horodatageTick.end();
-	    --it;
-	    readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)), std::pair<tick, uint64_t>(it->first, it->second));
-	  }
-	else
-	  tickRateClient = TICKRATE;
+                }
+            }
+            if (world != nullptr)
+                world->applyTurn(tickRateClient, playerId);
+            gameui->updateListEntity();
+            gameui->displaySimple();
+            ++tickcpt;
+            if (tickRateClient != 0 && sw->elapsedMs() < 1000 / (tickRateClient))
+                std::this_thread::sleep_for(std::chrono::milliseconds((1000 / tickRateClient) - sw->elapsedMs()));
+        }
+        if (world != nullptr && horodatageTick.size() > 1) {
+            std::map<tick, uint64_t>::iterator it;
+            it = horodatageTick.end();
+            --it;
+            readaptTickRate(calcTickRate(3), std::pair<tick, uint64_t>(world->getTick(), std::time(nullptr)),
+                            std::pair<tick, uint64_t>(it->first, it->second));
+        } else
+            tickRateClient = TICKRATE;
     }
-	gameui->stopUI();
+    gameui->stopUI();
 }
 
 void GameClient::sendAll(struct s_info *info) {
-  switch (info->info) {
-  case I_CONNECTION: {
+    switch (info->info) {
+        case I_CONNECTION: {
             createNetworkManager(static_cast<s_connection *>(info)->ip, static_cast<s_connection *>(info)->port);
             if (manager != nullptr)
                 gameui->changeMenu("MenuRegister");
@@ -255,12 +255,12 @@ void GameClient::sendAll(struct s_info *info) {
             }
         }
             break;
-      case I_ASK: {
-          if (manager != nullptr) {
-              manager->sendAskList();
-          }
-  }
-    break;
+        case I_ASK: {
+            if (manager != nullptr) {
+                manager->sendAskList();
+            }
+        }
+            break;
         case I_ASKLIST: {
             if (manager != nullptr) {
                 manager->sendQuit();
@@ -288,12 +288,12 @@ void GameClient::sendAll(struct s_info *info) {
             saveConfig();
         }
             break;
-      case I_LEADERBOARD: {
-          if (manager != nullptr) {
-              gameui->changeMenu("LeaderBoard");
-          }
-      }
-          break;
+        case I_LEADERBOARD: {
+            if (manager != nullptr) {
+                gameui->changeMenu("LeaderBoard");
+            }
+        }
+            break;
         case I_ASKLEADERBOARD: {
             if (manager != nullptr) {
                 manager->sendAskLearderBoard();
@@ -302,9 +302,12 @@ void GameClient::sendAll(struct s_info *info) {
         }
             break;
         case I_PLAYER : {
-	  if (manager != nullptr && world != nullptr && world->getEntityById(playerId) != nullptr) {
-	      if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end()) {
-		world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player*>(info)->key], pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
+            if (manager != nullptr && world != nullptr && world->getEntityById(playerId) != nullptr) {
+                if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end()) {
+                    world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player *>(info)->key],
+                                                               pos_t(world->getEntityById(playerId)->getPos().first,
+                                                                     world->getEntityById(playerId)->getPos().second),
+                                                               world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,

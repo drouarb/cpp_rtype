@@ -38,7 +38,7 @@ namespace client {
         std::map<UI::AItem *, int> SendInfo;
         std::map<std::string, UI::AItem *> ButtonsName;
         std::string music;
-
+        sf::Color color;
     public:
         const std::string &getText() const;
 
