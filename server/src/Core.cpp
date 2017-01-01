@@ -66,10 +66,12 @@ server::Core::Core(const std::string &path, const unsigned short port)
 void server::Core::run() {
     std::cout << "Server running" << std::endl;
 
+    helpers::IStopwatch *pStopwatch = helpers::IStopwatch::getInstance();
     while (isRunning) {
+        pStopwatch->set();
         sw->set();
         mutex.lock();
-
+        
         for (auto game = games.begin(); game != games.end();)
         {
             INFO("- game " << std::to_string(game->getLobbyId()) << " - - -");
@@ -88,6 +90,7 @@ void server::Core::run() {
 
         if (sw->elapsedMs() < ROUND_DURATION_MS)
             std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - sw->elapsedMs()));
+        std::cout << "durée du dernier tick:" << sw->elapsedMs() << std::endl;
     }
 }
 
