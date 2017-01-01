@@ -381,9 +381,8 @@ void Game::moveEntities()
 
 void Game::unspawn()
 {
-    for (size_t i = 0; i < entities.size(); ++i)
+    for (auto it = entities.begin(); it != entities.end();)
     {
-        auto it = &entities.at(i);
         if ((*it)->data.getPosX() + (*it)->data.getSprite().sizeX <= FIELD_BORDER_LEFT - LEFT_MARGIN || (*it)->data.getPosX() > FIELD_BORDER_RIGHT + RIGHT_MARGIN
                 || (*it)->data.getPosY() + (*it)->data.getSprite().sizeY < Y_BORDER_WIDTH || (*it)->data.getPosY() > FIELD_HEIGHT + Y_BORDER_WIDTH)
         {
@@ -396,8 +395,7 @@ void Game::unspawn()
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
             grid.remove(*it);
-//            it = vect_erase(it, entities);
-            entities.erase(std::find(entities.begin(), entities.end(), *it));
+            it = vect_erase(it, entities);
         }
         else
             ++it;
