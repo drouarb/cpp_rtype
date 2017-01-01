@@ -27,6 +27,7 @@
 #include <listener/ClientListenerSynchronization.hh>
 #include <network/packet/PacketAskLeaderBoard.hh>
 #include <listener/ClientListenerGameData.hh>
+#include <listener/ClientListenerErrorGame.hh>
 
 using namespace client;
 
@@ -74,6 +75,7 @@ bool NetworkManager::startPacketFactory()
 void NetworkManager:: addListenerToPacketFactory()
 {
     packetFactory->registerDisconnectionListener(new client::ClientListenerDisconnect(this));
+    listeners.push_back(new client::ClientListenerErrorGame(this));
     listeners.push_back(new client::ClientListenerCancelEvent(this));
     listeners.push_back(new client::ClientListenerGameData(this));
     listeners.push_back(new client::ClientListenerDeleteEntity(this));
@@ -221,5 +223,9 @@ void NetworkManager::receiveSynchronization(uint32_t turn, int64_t time) {
 
 void NetworkManager::receiveGameData(const std::string &audio, const std::string &background) {
     gameClient->manageGameData(audio, background);
+}
+
+void NetworkManager::receiveErrorGame(const std::string &data) {
+    gameClient->manageErrorGame(data);
 }
 

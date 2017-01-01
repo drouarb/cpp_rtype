@@ -454,3 +454,9 @@ void GameClient::manageGameData(const std::string &audio, const std::string &bac
     gameui->addBackground("media/" + background);
 
 }
+
+void GameClient::manageErrorGame(const std::string &Data) {
+
+    gameui->showError(Data);
+    sendAll(parse(I_ASKLIST, client::KEY_ESCAPE));
+}

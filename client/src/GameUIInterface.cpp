@@ -322,6 +322,9 @@ void GameUIInterface::changeMenu(const std::string &ne) {
         static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(
                 UI::BACKGROUNDS))->setBackground(
                 UI::BACKGROUND, BASIC_BACKGROUND);
+        static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(
+                UI::BACKGROUNDS))->setBackground(
+                UI::BACKGROUND, BASIC_BACKGROUND);
         static_cast<UI::MenuLayer *>(window->getLayer(UI::HUD))->open();
     }
     if (currentMenu->getMusic() != "") {
