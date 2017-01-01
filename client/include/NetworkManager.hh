@@ -80,6 +80,7 @@ namespace client {
 
         void  receiveGameData(const std::string &audio, const std::string &background);
 
+        void receiveErrorGame(const std::string &data);
     };
 }
 

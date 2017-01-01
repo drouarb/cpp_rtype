@@ -78,6 +78,7 @@ namespace client {
 
         void manageDisconnect();
 
+        void manageErrorGame(const std::string &Data);
         void sendAll(struct s_info *info);
 
 
