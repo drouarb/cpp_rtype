@@ -3,14 +3,8 @@
   spawns:
   [
     {
-      dlName: "build/entity/BasicNastyEntity",
+      dlName: "build/entity/Zeppelin",
       time: "1",
-      posX: "2000",
-      posY: "250"
-    },
-    {
-      dlName: "build/entity/BasicNastyEntity",
-      time: "200",
       posX: "2000",
       posY: "250"
     }

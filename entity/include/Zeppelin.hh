@@ -18,6 +18,8 @@ private:
     bool mustDestroy;
     server::round_t startRound;
 
+    static const int rounds_moving = 400;
+
     static const int density = 10;
 
 public:
@@ -72,6 +74,32 @@ private:
 
     public:
         NovaMissile(server::pos_t posX, server::pos_t posY, int nb, double angle);
+
+        void collide(const server::Entity &entity, server::round_t current_round) override;
+
+        server::EntityAction *act(server::round_t current_round, const server::Grid &environment) override;
+
+        server::EntityInitialization *initialize(server::round_t round, const server::Grid &environment) override;
+
+        server::hp_t getDamage() override;
+
+        server::Tribool collidesWith(const server::Entity &entity) override;
+    };
+
+
+
+    class JumpingMissile : public server::ADynamicObject
+    {
+    private:
+        server::pos_t posX;
+        server::pos_t posY;
+        server::round_t startRound;
+        server::hp_t  lostHp;
+        server::speed_t speedX;
+        server::speed_t speedY;
+
+    public:
+        JumpingMissile(server::pos_t posX, server::pos_t posY, server::speed_t speedX, server::speed_t speedY);
 
         void collide(const server::Entity &entity, server::round_t current_round) override;
 

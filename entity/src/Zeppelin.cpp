@@ -8,6 +8,7 @@
 #include "Definitions.hh"
 #include "../../server/include/Grid.hh"
 #include <Zeppelin.hh>
+#include <iostream>
 
 Zeppelin::Zeppelin() : lostHp(0), mustDestroy(false)
 { }
@@ -44,7 +45,7 @@ server::EntityAction *Zeppelin::act(server::round_t current_round, const server:
     action->hp = this->data->getHp() - lostHp;
     lostHp = 0;
 
-    if (current_round - startRound < 400)
+    if (current_round - startRound < rounds_moving)
     {
         action->speedX = -3;
         if (current_round - startRound == 100)
@@ -62,17 +63,34 @@ server::EntityAction *Zeppelin::act(server::round_t current_round, const server:
     }
     else
     {
-        if (current_round % density == 0)
+        if ((current_round - startRound - rounds_moving) / 1000 % 2 == 0)
         {
-            action->newEntity = new NovaMissile(this->data->getPosX() + this->data->getSprite().sizeX * 3 / 2 + 80,
-                                                this->data->getPosY() + this->data->getSprite().sizeY / 2 + 50,
-                                                0, static_cast<double>(current_round / density % 78) * 0.04);
+            if (current_round % density == 0)
+            {
+                action->newEntity = new NovaMissile(this->data->getPosX() + this->data->getSprite().sizeX * 3 / 2 + 80,
+                                                    this->data->getPosY() + this->data->getSprite().sizeY / 2 + 50,
+                                                    0, static_cast<double>(current_round / density % 78) * 0.04);
+            }
+            else if (current_round % density == 1)
+            {
+                action->newEntity = new NovaMissile(this->data->getPosX() + this->data->getSprite().sizeX * 3 / 2 - 140,
+                                                    this->data->getPosY() + this->data->getSprite().sizeY / 2 + 50,
+                                                    0, M_PI - static_cast<double>(current_round / density % 78) * 0.04);
+            }
         }
-        else if (current_round % density == 1)
+        else
         {
-            action->newEntity = new NovaMissile(this->data->getPosX() + this->data->getSprite().sizeX * 3 / 2 - 140,
-                                                this->data->getPosY() + this->data->getSprite().sizeY / 2 + 50,
-                                                0, M_PI - static_cast<double>(current_round / density % 78) * 0.04);
+            if ((current_round - startRound - rounds_moving) / 500 % 2 == 0)
+            {
+                if (current_round % 20 == 0)
+                {
+                    double angle = static_cast<double>(current_round / 20 % 6);
+                    action->newEntity = new JumpingMissile(
+                            this->data->getPosX() + this->data->getSprite().sizeX * 3 / 2 - 140,
+                            this->data->getPosY() + this->data->getSprite().sizeY / 2 + 50,
+                            static_cast<int>(cos(angle) * 20), static_cast<int>(sin(angle) * 20));
+                }
+            }
         }
     }
 
@@ -215,6 +233,71 @@ const double Zeppelin::NovaMissile::startingAngle[8] =
                 6 * (M_PI / 4),
                 7 * (M_PI / 4)
         };
+
+
+
+
+
+
+
+
+
+Zeppelin::JumpingMissile::JumpingMissile(server::pos_t posX, server::pos_t posY, server::speed_t speedX, server::speed_t speedY) :
+        posX(posX), posY(posY), speedX(speedX), speedY(speedY)
+{
+    lostHp = 0;
+}
+
+server::EntityInitialization *Zeppelin::JumpingMissile::initialize(server::round_t round, const server::Grid &environment) {
+
+    startRound = round;
+    server::EntityInitialization *initialization = new server::EntityInitialization;
+
+    initialization->action.hp = 50;
+    initialization->posX = posX;
+    initialization->posY = posY;
+    initialization->team = server::FOE;
+    initialization->sprite.path = "media/sprites/JumpingBullet.png";
+    initialization->sprite.sizeX = 60;
+    initialization->sprite.sizeY = 60;
+
+    return initialization;
+}
+
+void Zeppelin::JumpingMissile::collide(const server::Entity &entity, server::round_t)
+{
+    lostHp += entity.obj->getDamage();
+}
+
+server::EntityAction *Zeppelin::JumpingMissile::act(server::round_t current_round, const server::Grid &environment) {
+
+    server::EntityAction *action = new server::EntityAction();
+
+    if (data->getVectX() == 0 || data->getPosX() + data->getSprite().sizeX > FIELD_WIDTH || data->getPosX() < 0)
+        speedX *= -1;
+    if (data->getVectY() == 0)
+        speedY *= -1;
+
+    action->speedX = speedX;
+    action->speedY = speedY;
+
+    action->hp = data->getHp() - lostHp;
+    lostHp = 0;
+
+    if (data->getHp() - lostHp < 0)
+        action->destroy = true;
+
+    return action;
+}
+
+server::hp_t Zeppelin::JumpingMissile::getDamage()
+{
+    return 60;
+}
+
+server::Tribool Zeppelin::JumpingMissile::collidesWith(const server::Entity &entity) {
+    return (entity.data.getTeam() == server::FOE ? server::T_FALSE : server::T_TRUE);
+}
 
 
 
