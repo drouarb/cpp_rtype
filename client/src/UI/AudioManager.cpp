@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include "../../include/UI/AudioManager.hh"
+#include "UI/AudioManager.hh"
 
 std::vector<std::string> menuSoundsPath {
         "media/musics/00.ogg",

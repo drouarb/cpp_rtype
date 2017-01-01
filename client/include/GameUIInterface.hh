@@ -21,6 +21,9 @@
 #include "TouchDefinition.hh"
 #include "Information.hh"
 
+#define CONF_FILE "config/configall.json"
+#define CONF_NAV "config/navigation.json"
+
 #define TICKRATEUI 60
 
 namespace client {

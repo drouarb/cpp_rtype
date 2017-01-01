@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "../../include/UI/MenuLayer.hh"
+#include "UI/MenuLayer.hh"
 
 UI::Text* UI::MenuLayer::addTextBox(float x, float y) {
     textBoxes.push_back(new Text());

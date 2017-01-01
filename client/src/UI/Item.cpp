@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "../../include/UI/Item.hh"
+#include "UI/Item.hh"
 
 UI::Item::Item(itemType t) : AItem(t) {
     scale = 1;

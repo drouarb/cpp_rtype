@@ -3,7 +3,7 @@
 //
 
 #include <bitset>
-#include "../../include/UI/Text.hh"
+#include "UI/Text.hh"
 
 UI::Text::Text() : AItem(UI::TEXT) {
     initStatus = font.loadFromFile("media/font/Pixeled.ttf");

@@ -7,7 +7,7 @@
 #include <UI/BackgroundLayer.hh>
 #include <UI/MenuLayer.hh>
 #include <UI/HUDLayer.hh>
-#include "../../include/UI/LayerFactory.hh"
+#include "UI/LayerFactory.hh"
 
 const std::map<UI::layerType, UI::LayerFactory::instantiateLayer> UI::LayerFactory::layerMap = {
         {MENU, &instantiateMenu},

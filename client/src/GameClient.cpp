@@ -5,10 +5,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-
 #include <stdexcept>
 #include <iostream>
-#include <future>
 #include <cstdint>
 #include "EventManager.hh"
 #include "GameClient.hh"
@@ -169,7 +167,6 @@ void GameClient::manageGameList(std::vector<std::pair<uint8_t, uint16_t> > gameL
 void GameClient::manageLeaderBoard(std::vector<std::pair<uint32_t, std::string> > LeaderBoard) {
     gameui->feedLeaderBoard(LeaderBoard);
     gameui->reloadMenuRoomList();
-    std::cerr << "je passe" << std::endl;
 }
 
 void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {

@@ -2,7 +2,7 @@
 // Created by jonas_e on 12/27/16.
 //
 
-#include "../../include/UI/HUDLayer.hh"
+#include "UI/HUDLayer.hh"
 
 UI::Text* UI::HUDLayer::addTextBox(float x, float y) {
     textBoxes.push_back(new Text());

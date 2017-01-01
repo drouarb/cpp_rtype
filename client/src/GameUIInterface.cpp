@@ -20,7 +20,6 @@ GameUIInterface::GameUIInterface(IEventHandler *handler) {
     currentMenu = nullptr;
     static_cast<UI::BackgroundLayer *>(managerUi.getWindow(UI::MAIN_WINDOW)->getLayer(UI::BACKGROUNDS))->setBackground(
             UI::BACKGROUND, "media/menu/black-background.jpg");
-    addNavMap("config/navigation.json");
     nplayer = nullptr;
     this->playerSprite = nullptr;
     this->playerHp = nullptr;
@@ -32,13 +31,13 @@ GameUIInterface::~GameUIInterface() {
 
 void GameUIInterface::initUI() {
     window = managerUi.getWindow(UI::MAIN_WINDOW);
-    addMenu("config/menuSplash.json");
-    addMenu("config/menuStart.json");
-    addMenu("config/menuConnection.json");
-    addMenu("config/MenuRegister.json");
-    addMenu("config/menuGameList.json");
-    addMenu("config/LearderBoard.json");
-    addMenu("config/menuOption.json");
+    boost::property_tree::ptree root;
+    read_json(CONF_FILE, root);
+    BOOST_FOREACH(boost::property_tree::ptree::value_type
+                          child, root.get_child("all")) {
+                    addMenu(child.second.get<std::string>("name"));
+                }
+                    addNavMap(CONF_NAV);
     createStaticMenu();
     if (listMenu.size() > 1) {
         currentMenu = listMenu[0];

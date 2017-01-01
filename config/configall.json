@@ -1,0 +1,25 @@
+{
+  "all" : [
+    {
+      "name" : "config/menuSplash.json"
+     },
+    {
+    "name" : "config/menuStart.json"
+    },
+    {
+      "name" : "config/menuConnection.json"
+    },
+    {
+      "name" : "config/MenuRegister.json"
+    },
+    {
+      "name" : "config/menuGameList.json"
+    },
+    {
+      "name" : "config/LearderBoard.json"
+    },
+    {
+      "name" : "config/menuOption.json"
+    }
+  ]
+}

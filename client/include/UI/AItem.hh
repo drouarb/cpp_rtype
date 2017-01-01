@@ -38,7 +38,6 @@ namespace UI {
                           unsigned int height) = 0;
         void setID(uint32_t id);
         uint32_t getID();
-        void playAnimation(animationType animation);
         itemType getType();
 
     protected:
@@ -46,8 +45,6 @@ namespace UI {
         animationType status;
         uint32_t id;
         bool animated;
-        //std::map<UI::animationType, Animation> sprites; //changer unsigned int dans un type plus générique ?
-        //sf::Sprite createSprite(const std::string filename, unsigned long part);
     };
 }
 
