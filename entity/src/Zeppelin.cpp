@@ -7,6 +7,7 @@
 #include <cmath>
 #include "Definitions.hh"
 #include "../../server/include/Grid.hh"
+#include "entities/VisualFx.hh"
 #include <Zeppelin.hh>
 #include <iostream>
 
@@ -253,7 +254,7 @@ server::EntityInitialization *Zeppelin::JumpingMissile::initialize(server::round
     startRound = round;
     server::EntityInitialization *initialization = new server::EntityInitialization;
 
-    initialization->action.hp = 50;
+    initialization->action.hp = 10;
     initialization->posX = posX;
     initialization->posY = posY;
     initialization->team = server::FOE;
@@ -285,7 +286,11 @@ server::EntityAction *Zeppelin::JumpingMissile::act(server::round_t current_roun
     lostHp = 0;
 
     if (data->getHp() - lostHp < 0)
+    {
+        if (current_round % 2 == 0)
+            action->newEntity = new server::VisualFx::PowerUp(data->getPosX(), data->getPosY());
         action->destroy = true;
+    }
 
     return action;
 }
