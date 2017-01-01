@@ -12,6 +12,7 @@ namespace UI {
     public:
         virtual ~IEventObserver(){};
         virtual void getEvent() = 0;
+        virtual bool received() = 0;
         virtual void listen(UI::IWindow *window) = 0;
         virtual void setEventManager(client::IEventHandler *eventHandler) = 0;
     };

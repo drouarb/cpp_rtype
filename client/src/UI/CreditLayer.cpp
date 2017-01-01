@@ -144,7 +144,8 @@ void UI::Credit::HereWeGo(UI::UIManager *ui) {
             }
         }
         ui->display();
-        ui->getEventObserver()->getEvent();
+        if (ui->getEventObserver()->received())
+            break;
     }
     iLayer->close();
 }

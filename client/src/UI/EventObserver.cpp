@@ -79,3 +79,7 @@ void UI::EventObserver::listen(UI::IWindow *win) {
 void UI::EventObserver::setEventManager(client::IEventHandler *eventHandler) {
     this->eventManager = eventHandler;
 }
+
+bool UI::EventObserver::received() {
+    return window->pollEvent(event);
+}
