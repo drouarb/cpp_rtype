@@ -13,7 +13,7 @@ network::packet::PacketPlayerData::PacketPlayerData(uint32_t id, uint8_t nbAttac
                 (
                         PLAYER_DATA,
                         {
-                                new utils::NetworkInteger(2, id),
+                                new utils::NetworkInteger(4, id),
                                 new utils::NetworkInteger(1, nbAttack)
                         }
                 )
