@@ -2,10 +2,11 @@
 // Created by greg on 22/12/16.
 //
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <entities/Entity.hh>
 #include <iostream>
 #include "YellowPlayer.hh"
-#include "math.h"
 
 server::EntityInitialization *YellowPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
