@@ -6,6 +6,7 @@
 #include <UI/Item.hh>
 
 UI::Item::Item(itemType t) : AItem(t) {
+    frame = 0;
     scale = 1;
     animationTick = 0;
     animation = new std::list<sf::Sprite*>{&sprite};
@@ -37,6 +38,13 @@ sf::Sprite UI::Item::getSprite() {
             animationTick = 0;
             animation->push_front(animation->back());
             animation->pop_back();
+            if (onetime) {
+                frame++;
+                if (frame == animation->size()) {
+                    animated = false;
+                    sprite.setColor(sf::Color(255,255,255,0));
+                }
+            }
         }
         animationTick++;
         animation->front()->setPosition(px, py);
