@@ -3,14 +3,14 @@
 //
 
 #include "network/packet/PacketPlaySound.hh"
-network::packet::PacketPlaySound::PacketPlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) :
+network::packet::PacketPlaySound::PacketPlaySound(uint32_t tick, uint32_t eventId, const std::string &SoundName) :
         APacket
                 (
                         PLAY_SOUND,
                         {
                                 new utils::NetworkInteger(4, tick),
                                 new utils::NetworkInteger(4, eventId),
-                                new utils::NetworkInteger(2, SoundName)
+                                new utils::NetworkString(SoundName.c_str())
                         }
                 )
 {
@@ -42,12 +42,12 @@ uint32_t network::packet::PacketPlaySound::getEventId() const
     return GET_NETINT(schema, 1);
 }
 
-void network::packet::PacketPlaySound::setSoundName(uint16_t SoundName)
+void network::packet::PacketPlaySound::setSoundName(const std::string &SoundName)
 {
-    SET_NETINT(schema, 2 , SoundName);
+    SET_NETSTR(schema, 2, SoundName);
 }
 
-uint16_t network::packet::PacketPlaySound::getSoundName() const
+network::utils::NetworkString network::packet::PacketPlaySound::getSoundName() const
 {
-    return GET_NETINT(schema, 2);
+    return GET_NETSTR(schema, 2);
 }
