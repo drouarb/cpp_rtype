@@ -87,7 +87,7 @@ namespace client {
 
         void manageLeaderBoard(std::vector<std::pair<uint32_t, std::string> > LeaderBoard);
 
-        void managePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName);
+        void managePlaySound(uint32_t tick, uint32_t eventId, const std::string &SoundName);
 
         void manageQuit();
 

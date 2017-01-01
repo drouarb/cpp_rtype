@@ -136,7 +136,7 @@ NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint32_t enti
   gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy, posx, posy);
 }
 
-void NetworkManager::receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {
+void NetworkManager::receivePlaySound(uint32_t tick, uint32_t eventId, const std::string &SoundName) {
   gameClient->managePlaySound(tick, eventId, SoundName);
 }
 

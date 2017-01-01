@@ -49,7 +49,7 @@ namespace client {
         void receiveMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t vecx, int16_t vecy,
                                int16_t posx, int16_t posy);
 
-        void receivePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName);
+        void receivePlaySound(uint32_t tick, uint32_t eventId, const std::string &SoundName);
 
         void receiveQuit();
 

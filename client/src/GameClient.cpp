@@ -169,7 +169,9 @@ void GameClient::manageLeaderBoard(std::vector<std::pair<uint32_t, std::string> 
     gameui->reloadMenuRoomList();
 }
 
-void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, uint16_t SoundName) {
+void GameClient::managePlaySound(uint32_t tick, uint32_t eventId, const std::string &SoundName) {
+    gameui->addSound(SoundName);
+    gameui->playSound(SoundName);
 }
 
 void GameClient::manageQuit() {

@@ -508,6 +508,7 @@ void GameUIInterface::credit() {
 }
 
 void GameUIInterface::addSound(const std::string &sound) {
+    if (soundName.find(sound) == soundName.end())
     soundName[sound] = managerUi.getAudioManager()->addSound(sound);
 }
 
