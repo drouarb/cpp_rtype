@@ -109,7 +109,11 @@ void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint16_t en
 void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint16_t entityId,
                                   int16_t vecx, int16_t vecy, int16_t posx, int16_t posy) {
     if (world != nullptr)
+      {
+	//if (entityId == playerId)
+	  //std::cout << "ici player move " << vecx << " tick : " << tick << std::endl;
         world->moveEntity(vec_t(vecx, vecy), pos_t(posx, posy), tick, entityId, eventId);
+      }
 }
 
 void GameClient::manageDeleteEntity(uint32_t tick, uint32_t eventId, uint16_t entityId) {
@@ -209,10 +213,7 @@ void GameClient::gameLoop() {
                     }
                     event = -42;
                 } else if (world != nullptr && playerId != -1 && world->getEntityById(playerId) != nullptr) {
-                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0),
-                                                               pos_t(world->getEntityById(playerId)->getPos().first,
-                                                                     world->getEntityById(playerId)->getPos().second),
-                                                               world->getTick());
+                    world->getEntityById(playerId)->moveEntity(vec_t(0, 0), pos_t(world->getEntityById(playerId)->getPos().first, world->getEntityById(playerId)->getPos().second), world->getTick());
                     manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
                                             world->getEntityById(playerId)->getVec().second,
                                             world->getEntityById(playerId)->getPos().first,

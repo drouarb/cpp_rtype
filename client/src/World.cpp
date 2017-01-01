@@ -9,7 +9,7 @@
 using namespace client;
 
 World::World(std::mutex *mmut, GameUIInterface *ngame) {
-  world_mut = mmut;
+  world_mut = new std::mutex();
     gameui = ngame;
     turn = 0;
 }
@@ -63,14 +63,12 @@ void World::applyTurn(int tickrate, ide_t playerId) {
 
     itEv = worldEvents.begin();
     while (itEv != worldEvents.end()) {
-        if (itEv->first <= turn + tickrate) {
+        if (1/*itEv->first <= turn + tickrate*/) {
             if (itEv->second.eventtype == SPAWN && (entitys.find(itEv->second.id) == entitys.end())) {
                 ent = new Entity(itEv->second.id, itEv->second.type, itEv->second.pos, itEv->first);
                 pos = ent->getPos();
                 entitys.insert(std::pair<ide_t, Entity *>(itEv->second.id, ent));
                 gameui->addEntity(getEntityById(itEv->second.id));
-                if (itEv->second.id == playerId)
-                    gameui->setNplayer(ent);
             } else if (itEv->second.eventtype == UPDATE && (entitys.find(itEv->second.id) != entitys.end())) {
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
@@ -79,6 +77,11 @@ void World::applyTurn(int tickrate, ide_t playerId) {
                 ent = entitys.at(itEv->second.id);
                 pos = ent->getPos();
                 ent->moveEntity(itEv->second.vec, itEv->second.pos, itEv->second.turn);
+                if (itEv->second.id == playerId)
+		  {
+		    //std::cout << "hectare swag " << itEv->second.vec.first << "tick : "<< itEv->first << std::endl;
+                    gameui->setNplayer(ent);
+		  }
             } else if (itEv->second.eventtype == DELETE && (entitys.find(itEv->second.id) != entitys.end())) {
                 gameui->deleteEntity(entitys.at(itEv->second.id));
                 ent = entitys.at(itEv->second.id);
