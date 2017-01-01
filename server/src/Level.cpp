@@ -101,7 +101,7 @@ void server::Level::addBorders()
         spawn.dlName = BORDER_OBSTACLE_LIB;
         spawn.time = 1;
         spawn.posX = i;
-        spawn.posY = 2;
+        spawn.posY = 10;
         this->spawns[1].push_back(spawn);
     }
     for (int i = 0; i < FIELD_WIDTH; i += BORDER_OBSTACLE_SIZE)
@@ -110,7 +110,7 @@ void server::Level::addBorders()
         spawn.dlName = BORDER_OBSTACLE_LIB;
         spawn.time = 1;
         spawn.posX = i;
-        spawn.posY = FIELD_HEIGHT - 2;
+        spawn.posY = FIELD_HEIGHT - 20;
         this->spawns[1].push_back(spawn);
     }
 }
