@@ -10,7 +10,7 @@
 
 class Wunderwaffe : public server::ADynamicObject {
 private:
-    static const int DEFAULT_LIFE = 1000;
+    static const int DEFAULT_LIFE = 10000;
 
     class BigBullet : public server::ADynamicObject
     {

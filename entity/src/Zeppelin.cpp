@@ -17,7 +17,7 @@ Zeppelin::Zeppelin() : lostHp(0), mustDestroy(false)
 server::EntityInitialization *Zeppelin::initialize(server::round_t round, const server::Grid &environment)
 {
     server::EntityInitialization *initialization = new server::EntityInitialization("");
-    initialization->action.hp = 2000;
+    initialization->action.hp = 10000;
     initialization->team = server::Team::FOE;
     initialization->action.speedX = 0;
     initialization->action.speedY = 0;
