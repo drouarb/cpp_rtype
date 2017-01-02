@@ -10,7 +10,7 @@
 
 server::EntityInitialization *YellowPlayer::initialize(server::round_t round, const server::Grid &entity) {
     server::EntityInitialization *pInitialization = server::Player::initialize(round, entity);
-    pInitialization->sprite.path = "media/sprites/magicalGirlB.png";
+    pInitialization->sprite.path = std::string("media/sprites/magicalGirlB.png");
     return pInitialization;
 }
 

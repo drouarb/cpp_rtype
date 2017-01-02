@@ -125,6 +125,17 @@ void network::socket::WindowsUDPSocket::serverPoll() {
         pollfd.fd = mainSocketFd;
         if (::WSAPoll(&pollfd, 1, POLL_TIMEOUT) && status == CONNECTED) {
             size = recvfrom(mainSocketFd, (char *)buffer.data(), SOCKET_BUFFER, 0, (struct sockaddr *) &recvSocket, &recvSocketLen);
+			if (size == -1) {
+				for (auto it = clients.begin(); it != clients.end(); it++) {
+					if (getClientId((*it).client) == getClientId(recvSocket)) {
+						for (auto &l : disconnectionListeners)
+							l->notify(getClientId(recvSocket));
+						clients.erase(it);
+						break;
+					}
+				}
+				continue;
+			}
             data.assign(buffer.begin(), buffer.begin() + size);
             found = false;
             for (auto it = clients.begin(); it != clients.end(); it++) {

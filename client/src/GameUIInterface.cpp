@@ -4,6 +4,7 @@
 
 #include <thread>
 #include <iostream>
+#include <string>
 #include <UI/BackgroundLayer.hh>
 #include <UI/MenuLayer.hh>
 #include <SFML/Graphics.hpp>
@@ -410,7 +411,8 @@ void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
         new_path = path.substr(0, path.find("."));
         std::fstream file(new_path + RTYPE_EX);
         if (file.is_open()) {
-            for (buf; getline(file, buf);) {
+
+            for (buf; std::getline(file, buf, '\n');) {
                 tmp.push_back(std::stoi(buf));
             }
             anim_map[path] = tmp;
