@@ -2,6 +2,7 @@
 // Created by lewis_e on 15/12/16.
 //
 
+#include <iostream>
 #include <entities/Sprite.hh>
 
 using namespace server;
@@ -24,10 +25,10 @@ Sprite::~Sprite()
 
 Sprite & Sprite::operator=(const Sprite &other)
 {
-    path = other.path;
     sizeX = other.sizeX;
     sizeY = other.sizeY;
-    return (*this);
+	path = std::string(other.path);
+	return (*this);
 }
 
 bool Sprite::operator==(const Sprite &other)
