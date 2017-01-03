@@ -409,7 +409,7 @@ void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
         tmp = anim_map[path];
     else {
         new_path = path.substr(0, path.find("."));
-        std::fstream file(new_path + RTYPE_EX);
+        std::ifstream file(new_path + RTYPE_EX);
         if (file.is_open()) {
 
             for (buf; std::getline(file, buf, '\n');) {
