@@ -1,0 +1,259 @@
+{
+  name: "Zeppelin",
+  spawns:
+  [
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "1",
+      posX: "2000",
+      posY: "500"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "400",
+      posX: "2000",
+      posY: "20"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "404",
+      posX: "2000",
+      posY: "150"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "409",
+      posX: "2000",
+      posY: "290"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "402",
+      posX: "2000",
+      posY: "430"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "408",
+      posX: "2000",
+      posY: "570"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "409",
+      posX: "2000",
+      posY: "700"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "401",
+      posX: "2000",
+      posY: "850"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "350",
+      posX: "2000",
+      posY: "200"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "350",
+      posX: "2000",
+      posY: "800"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "500",
+      posX: "2000",
+      posY: "80"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "504",
+      posX: "2000",
+      posY: "210"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "509",
+      posX: "2000",
+      posY: "350"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "502",
+      posX: "2000",
+      posY: "490"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "508",
+      posX: "2000",
+      posY: "630"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "509",
+      posX: "2000",
+      posY: "760"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "501",
+      posX: "2000",
+      posY: "900"
+    },
+    {
+        dlName: "build/entity/Ostwind"
+        time: "759",
+        posX: "2000",
+        posY: "880"
+    },
+    {
+        dlName: "build/entity/Ostwind"
+        time: "702",
+        posX: "2000",
+        posY: "850"
+    },
+    {
+        dlName: "build/entity/Ostwind"
+        time: "802",
+        posX: "2000",
+        posY: "880"
+    },
+    {
+        dlName: "build/entity/Bomber"
+        time: "550",
+        posX: "2000",
+        posY: "20"
+    },
+    {
+        dlName: "build/entity/Bomber"
+        time: "650",
+        posX: "2000",
+        posY: "100"
+    },
+    {
+        dlName: "build/entity/Bomber"
+        time: "655",
+        posX: "2000",
+        posY: "250"
+    },
+    {
+        dlName: "build/entity/Ostwind"
+        time: "807",
+        posX: "2000",
+        posY: "900"
+    },
+    {
+        dlName: "build/entity/Ostwind"
+        time: "803",
+        posX: "2000",
+        posY: "800"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "1009",
+      posX: "2000",
+      posY: "550"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "1009",
+      posX: "2000",
+      posY: "20"
+    },
+    {
+        dlName: "build/entity/Bomber"
+        time: "751",
+        posX: "2000",
+        posY: "50"
+    },
+    {
+        dlName: "build/entity/Ostwind"
+        time: "876",
+        posX: "2000",
+        posY: "850"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "1138",
+      posX: "2000",
+      posY: "875"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "1209",
+      posX: "2000",
+      posY: "700"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "1205",
+      posX: "2000",
+      posY: "300"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1600",
+      posX: "2000",
+      posY: "200"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1650",
+      posX: "2000",
+      posY: "800"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1700",
+      posX: "2000",
+      posY: "500"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1750",
+      posX: "2000",
+      posY: "100"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1800",
+      posX: "2000",
+      posY: "300"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1850",
+      posX: "2000",
+      posY: "900"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1900",
+      posX: "2000",
+      posY: "200"
+    },
+    {
+      dlName: "build/entity/Zeppelin",
+      time: "2700",
+      posX: "2000",
+      posY: "200"
+    },
+  ]
+  gamedata:
+  [
+      {
+	  time: "1",
+	  background: "backgrounds/normal.png",
+	  music: "musics/tally_oh.ogg"
+      },
+      {
+	  time: "2700",
+	  background: "backgrounds/normal.png",
+	  music: "musics/battle_frontier.ogg"
+      }
+  ]
+}
