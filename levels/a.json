@@ -1,0 +1,199 @@
+{
+  name: "Wunderwaffe",
+  spawns:
+  [
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "1",
+      posX: "2000",
+      posY: "250"
+    },
+    {
+	dlName: "build/entity/Ostwind"
+	time: "1",
+	posX: "2000",
+	posY: "880"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "183",
+      posX: "2000",
+      posY: "450"
+    },
+    {
+	dlName: "build/entity/Bomber"
+	time: "304",
+	posX: "2000",
+	posY: "100"
+    },
+    {
+	dlName: "build/entity/Bomber"
+	time: "409",
+	posX: "2000",
+	posY: "100"
+    },
+    {
+	dlName: "build/entity/Ostwind"
+	time: "402",
+	posX: "2000",
+	posY: "850"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "506",
+      posX: "2000",
+      posY: "650"
+    },
+    {
+	dlName: "build/entity/Ostwind"
+	time: "501",
+	posX: "2000",
+	posY: "950"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "558",
+      posX: "2000",
+      posY: "250"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "552",
+      posX: "2000",
+      posY: "750"
+    },
+    {
+	dlName: "build/entity/Ostwind"
+	time: "607",
+	posX: "2000",
+	posY: "800"
+    },
+    {
+	dlName: "build/entity/Bomber"
+	time: "653",
+	posX: "2000",
+	posY: "100"
+    },
+    {
+	dlName: "build/entity/Bomber"
+	time: "708",
+	posX: "2000",
+	posY: "150"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "751",
+      posX: "2000",
+      posY: "200"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "800",
+      posX: "2000",
+      posY: "600"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1100",
+      posX: "2000",
+      posY: "700"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "1156",
+      posX: "2000",
+      posY: "600"
+    },
+    {
+	dlName: "build/entity/Ostwind"
+	time: "1054",
+	posX: "2000",
+	posY: "850"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "1205",
+      posX: "2000",
+      posY: "300"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "1309",
+      posX: "2000",
+      posY: "700"
+    },
+    {
+      dlName: "build/entity/BasicNastyEntity",
+      time: "1400",
+      posX: "2000",
+      posY: "500"
+    },
+    {
+	dlName: "build/entity/Bomber"
+	time: "1504",
+	posX: "2000",
+	posY: "100"
+    },
+    {
+	dlName: "build/entity/Ostwind"
+	time: "1507",
+	posX: "2000",
+	posY: "800"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1550",
+      posX: "2000",
+      posY: "750"
+    },
+    {
+      dlName: "build/entity/Lighter",
+      time: "1600",
+      posX: "1950",
+      posY: "350"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "1650",
+      posX: "2000",
+      posY: "750"
+    },
+    {
+      dlName: "build/entity/CrazyEntity",
+      time: "1700",
+      posX: "1950",
+      posY: "350"
+    },
+    {
+	dlName: "build/entity/Bomber"
+	time: "1701",
+	posX: "2000",
+	posY: "150"
+    },
+    {
+	dlName: "build/entity/Ostwind"
+	time: "1708",
+	posX: "2000",
+	posY: "900"
+    },
+    {
+      dlName: "build/entity/Wunderwaffe",
+      time: "2300",
+      posX: "2000",
+      posY: "750"
+    }
+  ]
+  gamedata:
+  [
+      {
+	  time: "1",
+	  background: "backgrounds/normal.png",
+	  music: "musics/test_flight.ogg"
+      },
+      {
+	  time: "2350",
+	  background: "backgrounds/normal.png",
+	  music: "musics/the_target.ogg"
+      }
+  ]
+}
