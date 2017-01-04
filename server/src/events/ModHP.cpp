@@ -5,19 +5,13 @@
 #include <network/packet/PacketUpdateEntity.hh>
 #include "events/ModHP.hh"
 
-server::event::ModHP::ModHP(const server::round_t tick, const server::entityId_t entityId, const int hp)
-        : AGameEvent(tick,
-                     entityId), hp(hp) {}
+server::event::ModHP::ModHP(const server::round_t tick, const Entity *entity, const int hp)
+        : AGameEvent(tick, entity), hp(hp)
+{}
 
-server::event::IGameEvent *server::event::ModHP::getParentEvent() {
-    return nullptr;
-}
 
-server::entityId_t server::event::ModHP::getEntityId() {
-    return this->entityId;
-}
-
-server::event::EventType server::event::ModHP::getEventType() {
+server::event::EventType server::event::ModHP::getEventType() const
+{
     return EventType::MOD_HP;
 }
 
@@ -25,8 +19,8 @@ network::packet::IPacket *server::event::ModHP::createPacket()
 {
     auto packet = new network::packet::PacketUpdateEntity();
     packet->setTick(tick);
-    packet->setEntityId(entityId);
+    packet->setEntityId(entity->data.getId());
     packet->setEventId(eventId);
-    packet->setHp(hp);
+    packet->setHp(static_cast<int16_t>(hp));
     return (packet);
 }

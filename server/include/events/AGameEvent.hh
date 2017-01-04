@@ -10,18 +10,22 @@
 #include "IGameEvent.hh"
 
 namespace server {
+    class Entity;
+
     namespace event {
         class AGameEvent : public IGameEvent {
         protected:
             const round_t tick;
-            const entityId_t entityId;
             eventId_t eventId;
+            const Entity * entity;
 
             static eventId_t lastId;
 
         public:
-            AGameEvent(const round_t tick, const entityId_t entityId);
+            AGameEvent(const round_t tick, const Entity *entity);
             virtual network::packet::IPacket *createPacket() = 0;
+
+            const Entity * getEntity() const;
 
             round_t getTick();
 
