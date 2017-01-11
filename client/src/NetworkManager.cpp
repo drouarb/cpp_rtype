@@ -133,8 +133,8 @@ void NetworkManager::receivePlayerData(uint32_t playerId, uint8_t nbAttackPlayer
 }
 
 void
-NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t vecx, int16_t vecy,
-                                  int16_t posx, int16_t posy) {
+NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t vecx, int16_t vecy, int16_t posx, int16_t posy) {
+  std::cout << "pos : [" << posx << ";" << posy << "]" << std::endl;
   gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy, posx, posy);
 }
 

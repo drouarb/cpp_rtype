@@ -22,6 +22,16 @@ namespace client
       MOVE = 0x03,
       DELETE = 0x04
     };
+
+    struct Event
+    {
+      Event()
+      {key = -42;pressed = false;}
+      Event(short nkey, bool npressed)
+      {key = nkey; pressed = npressed;}
+      short       key;
+      bool        pressed;
+    };
 }
 
 typedef std::pair<int16_t, int16_t>	pos_t;

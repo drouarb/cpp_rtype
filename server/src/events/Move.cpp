@@ -28,9 +28,9 @@ network::packet::IPacket *server::event::Move::createPacket()
     packet->setTick(tick);
     packet->setEventId(eventId);
     packet->setEntityId(entityId);
-    packet->setPosX(posX);
-    packet->setPosY(posY);
-    packet->setVecX(newVectX);
-    packet->setVecY(newVectY);
+    packet->setPosX(posX * 10.0);
+    packet->setPosY(posY * 10.0);
+    packet->setVecX(newVectX * 10.0);
+    packet->setVecY(newVectY * 10.0);
     return (packet);
 }

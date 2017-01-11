@@ -7,27 +7,31 @@
 
 #include <SFML/Window/Keyboard.hpp>
 #include "IEventHandler.hh"
+#include "Definitions.hh"
 #include "GameClient.hh"
+#include <vector>
 
-namespace client {
-    class EventManager : public IEventHandler {
-    private:
-        client::GameClient *gameClient;
-        short event;
-    public:
-        EventManager(client::GameClient *gameclient);
-
-        ~EventManager();
-
-        void onKeyPressed(short key);
-
-        void onKeyRealease(short key);
-
-        void onMouseRealease(short x, short y);
-
-        short getEvent();
-
-    };
+namespace client
+{
+  class EventManager : public IEventHandler
+  {
+  private:
+    client::GameClient	*gameClient;
+    std::vector<Event >	events;
+  public:
+    EventManager(client::GameClient *gameclient);
+      
+    ~EventManager();
+      
+    void onKeyPressed(short key);
+      
+    void onKeyRelease(short key);
+      
+    void onMouseRelease(short x, short y);
+      
+    client::Event getEvent();
+      
+  };
 }
 
 

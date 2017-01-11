@@ -31,8 +31,8 @@ network::packet::IPacket *server::event::Spawn::createPacket()
     packet->setEventId(eventId);
     packet->setHp(hp);
     packet->setSpriteName(sprite);
-    packet->setPosX(posX);
-    packet->setPosY(posY);
+    packet->setPosX(posX * 100.0);
+    packet->setPosY(posY * 100.0);
     return (packet);
 }
 

@@ -546,7 +546,7 @@ pos_t Game::fyp(const Entity * entity_i) const
 }
 
 void Game::sendData() {
-    INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
+    INFO("Game::sendData : " << this->gameEvents.size() << " events to sendx");
     for (auto & event : gameEvents)
     {
         auto packet = event->createPacket();
