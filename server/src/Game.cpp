@@ -403,11 +403,10 @@ void Game::unspawn()
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
             grid.remove(*it);
-//            it = vect_erase(it, entities);
             entities.erase(std::find(entities.begin(), entities.end(), *it));
         }
         else
-            ++it;
+            ++it; //TODO
     }
     if (going && isFinished())
         endGame();
@@ -459,6 +458,7 @@ void Game::spawnEntity(Entity * entity)
 {
     entities.push_back(entity);
     this->sim_spawn(entity);
+    this->sim_move(entity);
     grid.add(entity);
 }
 
@@ -553,12 +553,6 @@ pos_t Game::fyp(const Entity * entity_i) const
 }
 
 void Game::sendData() {
-  /*<<<<<<< HEAD
-    INFO("Game::sendData : " << this->gameEvents.size() << " events to sendx");
-    for (auto & event : gameEvents)
-    {
-        auto packet = event->createPacket();
-	=======*/
     INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
 
     for (auto & event : gameEvents)
@@ -591,7 +585,6 @@ void Game::sendData() {
 
         auto packet = event->createPacket();
 
-	//>>>>>>> 8a774d96ae6a09a4e00ed39258ae6ac90700ee68
         for (auto & client : clientList)
         {
             packetf.send(*packet, client->getClientId());
@@ -600,7 +593,7 @@ void Game::sendData() {
     }
     this->gameEvents.clear();
 
-    sendAllMoves();
+    //sendAllMoves();
 
     if (round - lastSyn > ROUNDS_BETWEEN_SYN)
         sendPacketSync(nullptr);
@@ -608,19 +601,6 @@ void Game::sendData() {
 
 void Game::sim_spawn(Entity *entity) {
     this->gameEvents.push_back(new server::event::Spawn
-			       /*<<<<<<< HEAD
-			       (this->round, entity->data.getId(), entity->data.getPosX() * 10.0, entity->data.getPosY() * 10.0, entity->data.getHp(), entity->data.getSprite().path));
-    this->gameEvents.push_back(new server::event::ModHP(this->round, entity->data.getId(), entity->data.getHp()));
-    INFO("spawn " << std::to_string(gameEvents.back()->getEntityId()))
-}
-
-void Game::sim_move(Entity *entity) {
-
-      this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX() * 10.0,
-                                                       entity->data.getVectY() * 10.0, entity->data.getPosX() * 10.0,
-                                                       entity->data.getPosY() * 10.0));
-  
-=======*/
                                        (this->round, entity, entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
     INFO("spawn " << std::to_string(gameEvents.back()->getEntity()))
 }
@@ -630,7 +610,6 @@ void Game::sim_move(Entity *entity)
     this->gameEvents.push_back(new server::event::Move(this->round, entity, entity->data.getVectX(),
                                                        entity->data.getVectY(), entity->data.getPosX(),
                                                        entity->data.getPosY()));
-    //>>>>>>> 8a774d96ae6a09a4e00ed39258ae6ac90700ee68
 }
 
 void Game::sim_update(Entity *entity) {
@@ -711,13 +690,13 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pspawn->setEntityId(entity->data.getId());
         pspawn->setHp(entity->data.getHp());
         pspawn->setSpriteName(entity->data.getSprite().path);
-        pspawn->setPosX(entity->data.getPosX() * 10.0);
-        pspawn->setPosY(entity->data.getPosY() * 10.0);
+        pspawn->setPosX(entity->data.getPosX());
+        pspawn->setPosY(entity->data.getPosY());
         packetf.send(*pspawn, client.getClientId());
         delete pspawn;
         ++id;
 
-        /*auto pmove = new network::packet::PacketMoveEntity();
+        auto pmove = new network::packet::PacketMoveEntity();
         pmove->setTick(round);
         pmove->setEventId(id);
         pmove->setEntityId(entity->data.getId());
@@ -727,14 +706,14 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pmove->setVecY(entity->data.getVectY());
         packetf.send(*pmove, client.getClientId());
         delete pmove;
-        ++id;*/
+        ++id;
     }
 }
 
 void Game::sendAllMoves()
 {
     //TODO
-   if (round % 2 == 0)
+  if (round % 2 == 0)
     for (auto client : clientList)
     {
         for (auto entity : entities)
@@ -743,10 +722,10 @@ void Game::sendAllMoves()
             pmove->setTick(round);
             pmove->setEventId(0);
             pmove->setEntityId(entity->data.getId());
-            pmove->setPosX(entity->data.getPosX() * 10.0);
-            pmove->setPosY(entity->data.getPosY() * 10.0);
-            pmove->setVecX(entity->data.getVectX() * 10.0);
-            pmove->setVecY(entity->data.getVectY() * 10.0);
+            pmove->setPosX(entity->data.getPosX());
+            pmove->setPosY(entity->data.getPosY());
+            pmove->setVecX(entity->data.getVectX());
+            pmove->setVecY(entity->data.getVectY());
 
             packetf.send(*pmove, client->getClientId());
             delete pmove;

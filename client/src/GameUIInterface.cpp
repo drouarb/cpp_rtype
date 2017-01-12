@@ -310,6 +310,8 @@ std::vector<s_info *> GameUIInterface::manageInput(client::Event event)
       info->key = client::Key::KEY_BACKSPACE;
       final.push_back(info);
     }
+  if (currentMenu->getType() == DEFAULT)
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));    
   return (final);
 }
 

@@ -30,7 +30,7 @@ namespace server {
 
     protected:
         static const int BULLET_SIZE = 25;
-        static const int BASIC_MISSILE_TIME = 8;
+        static const int BASIC_MISSILE_TIME = 4;
 
         std::map<server::round_t, server::attackId_t> attackTimeline;
         round_t lastRound;

@@ -360,14 +360,12 @@ void GameClient::sendMove()
 {
   if (ttadd > 0)
     {
-      additioner.first / ttadd;
-      additioner.second / ttadd;
       world->getEntityById(playerId)->moveEntity(additioner,
 						 pos_t(world->getEntityById(playerId)->getPos().first,
 						       world->getEntityById(playerId)->getPos().second),
 						 world->getTick());
-      manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-			      world->getEntityById(playerId)->getVec().second,
+      manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first / 10,
+			      world->getEntityById(playerId)->getVec().second / 10,
 			      world->getEntityById(playerId)->getPos().first,
 			      world->getEntityById(playerId)->getPos().second);
     }

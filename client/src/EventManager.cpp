@@ -21,7 +21,6 @@ void client::EventManager::onMouseRelease(short x, short y)
 
 void client::EventManager::onKeyPressed(short key)
 {
-  std::cout << "--------------------PRESS" << key << std::endl;
   if (key != -42)
     if (events.size() == 0 || events[events.size() - 1].key != key
 	|| events[events.size() - 1].pressed != true)
@@ -30,7 +29,6 @@ void client::EventManager::onKeyPressed(short key)
 
 void client::EventManager::onKeyRelease(short key)
 {
-  std::cout << "===========================RELEASE" << key << std::endl;
   if (key != -42)
     if (events.size() == 0 || events[events.size() - 1].key != key
 	|| events[events.size() - 1].pressed != false)
