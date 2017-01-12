@@ -21,6 +21,8 @@ void client::EventManager::onMouseRelease(short x, short y)
 
 void client::EventManager::onKeyPressed(short key)
 {
+  if (events.size() > 2)
+    return;
   if (key != -42)
     if (events.size() == 0 || events[events.size() - 1].key != key
 	|| events[events.size() - 1].pressed != true)
@@ -29,6 +31,14 @@ void client::EventManager::onKeyPressed(short key)
 
 void client::EventManager::onKeyRelease(short key)
 {
+  unsigned int i;
+  i = 0;
+  while (i < events.size())
+    {
+      if (events[i].key == key && events[i].pressed == false)
+	return;
+      ++i;
+    }
   if (key != -42)
     if (events.size() == 0 || events[events.size() - 1].key != key
 	|| events[events.size() - 1].pressed != false)
