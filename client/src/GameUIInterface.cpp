@@ -119,7 +119,7 @@ void GameUIInterface::addListEntity(std::vector<Entity *> listentity) {
   ui_mut->lock();
   for (int i = 0; listentity[i]; i++) {
     auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listentity[i]->getTypeid()],
-						    listentity[i]->getPos().first / 10, listentity[i]->getPos().second / 10);
+						    listentity[i]->getPos().first / 100, listentity[i]->getPos().second / 100);
     gameItem[listentity[i]] = item;
   }
   ui_mut->unlock();
@@ -128,7 +128,7 @@ void GameUIInterface::addListEntity(std::vector<Entity *> listentity) {
 void GameUIInterface::addEntity(Entity *listEntity) {
   ui_mut->lock();
   auto item = window->getLayer(UI::GAME)->addItem(UI::ITEM, typeEntity[listEntity->getTypeid()],
-						  listEntity->getPos().first / 10, listEntity->getPos().second / 10);
+						  listEntity->getPos().first / 100, listEntity->getPos().second / 100);
 
   addAnimaton(typeEntity[listEntity->getTypeid()], item);
   gameItem[listEntity] = item;
@@ -142,13 +142,13 @@ void GameUIInterface::updateListEntity() {
     if (nplayer != nullptr)
       if (it->first == this->nplayer)
 	updateHp();
-    it->second->setPosition(it->first->getPos().first / 10, it->first->getPos().second / 10);
+    it->second->setPosition(it->first->getPos().first / 100, it->first->getPos().second / 100);
   }
   ui_mut->unlock();
 }
 
 void GameUIInterface::updateEntity(Entity *entity) {
-  gameItem[entity]->setPosition(entity->getPos().first / 10, entity->getPos().second / 10);
+  gameItem[entity]->setPosition(entity->getPos().first / 100, entity->getPos().second / 100);
 }
 
 void GameUIInterface::deleteListEntity(std::vector<Entity *> listentity) {

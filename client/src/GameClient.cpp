@@ -90,7 +90,7 @@ World *GameClient::getWorld() const {
 
 void
 GameClient::manageSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName,
-                              uint32_t entityId, int16_t pos_x, int16_t pos_y, int16_t hp) {
+                              uint32_t entityId, int32_t pos_x, int32_t pos_y, int16_t hp) {
   typeide_t type;
 
   type = gameui->registerNewSprite(spriteName);
@@ -105,7 +105,7 @@ void GameClient::manageUpdateEntity(uint32_t tick, uint32_t eventId, uint32_t en
 }
 
 void GameClient::manageMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId,
-                                  int16_t vecx, int16_t vecy, int16_t posx, int16_t posy) {
+                                  int32_t vecx, int32_t vecy, int32_t posx, int32_t posy) {
   if (world != nullptr)
     {
       //if (entityId == playerId)
@@ -360,12 +360,13 @@ void GameClient::sendMove()
 {
   if (ttadd > 0)
     {
+      additioner.first /= ttadd;
+      additioner.second /= ttadd;
       world->getEntityById(playerId)->moveEntity(additioner,
 						 pos_t(world->getEntityById(playerId)->getPos().first,
 						       world->getEntityById(playerId)->getPos().second),
 						 world->getTick());
-      manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first / 10,
-			      world->getEntityById(playerId)->getVec().second / 10,
+      manager->sendPlayerMove(world->getTick(), additioner.first / 100, additioner.second / 100,
 			      world->getEntityById(playerId)->getPos().first,
 			      world->getEntityById(playerId)->getPos().second);
     }

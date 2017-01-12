@@ -21,7 +21,7 @@ void client::EventManager::onMouseRelease(short x, short y)
 
 void client::EventManager::onKeyPressed(short key)
 {
-  if (events.size() > 2)
+  if (events.size() > 1)
     return;
   if (key != -42)
     if (events.size() == 0 || events[events.size() - 1].key != key

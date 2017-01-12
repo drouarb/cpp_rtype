@@ -593,7 +593,7 @@ void Game::sendData() {
     }
     this->gameEvents.clear();
 
-    //sendAllMoves();
+    sendAllMoves();
 
     if (round - lastSyn > ROUNDS_BETWEEN_SYN)
         sendPacketSync(nullptr);
@@ -690,8 +690,8 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pspawn->setEntityId(entity->data.getId());
         pspawn->setHp(entity->data.getHp());
         pspawn->setSpriteName(entity->data.getSprite().path);
-        pspawn->setPosX(entity->data.getPosX());
-        pspawn->setPosY(entity->data.getPosY());
+        pspawn->setPosX(entity->data.getPosX() * 100.0);
+        pspawn->setPosY(entity->data.getPosY() * 100.0);
         packetf.send(*pspawn, client.getClientId());
         delete pspawn;
         ++id;
@@ -700,10 +700,10 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pmove->setTick(round);
         pmove->setEventId(id);
         pmove->setEntityId(entity->data.getId());
-        pmove->setPosX(entity->data.getPosX());
-        pmove->setPosY(entity->data.getPosY());
-        pmove->setVecX(entity->data.getVectX());
-        pmove->setVecY(entity->data.getVectY());
+        pmove->setPosX(entity->data.getPosX() * 100.0);
+        pmove->setPosY(entity->data.getPosY() * 100.0);
+        pmove->setVecX(entity->data.getVectX() * 100.0);
+        pmove->setVecY(entity->data.getVectY() * 100.0);
         packetf.send(*pmove, client.getClientId());
         delete pmove;
         ++id;
@@ -713,7 +713,7 @@ void Game::sendSimToNewNotFirst(const Client &client)
 void Game::sendAllMoves()
 {
     //TODO
-  if (round % 2 == 0)
+  if (round % 120 == 0)
     for (auto client : clientList)
     {
         for (auto entity : entities)
@@ -722,10 +722,10 @@ void Game::sendAllMoves()
             pmove->setTick(round);
             pmove->setEventId(0);
             pmove->setEntityId(entity->data.getId());
-            pmove->setPosX(entity->data.getPosX());
-            pmove->setPosY(entity->data.getPosY());
-            pmove->setVecX(entity->data.getVectX());
-            pmove->setVecY(entity->data.getVectY());
+            pmove->setPosX(entity->data.getPosX() * 100.0);
+            pmove->setPosY(entity->data.getPosY() * 100.0);
+            pmove->setVecX(entity->data.getVectX() * 100.0);
+            pmove->setVecY(entity->data.getVectY() * 100.0);
 
             packetf.send(*pmove, client->getClientId());
             delete pmove;

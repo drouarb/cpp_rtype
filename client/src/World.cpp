@@ -97,9 +97,21 @@ void World::applyTurn(int tickrate, ide_t playerId) {
 			++itEv;
 		}
     }
+    std::map<ide_t, Entity *>::iterator itTmp;
+    
     it = entitys.begin();
     while (it != entitys.end()) {
       it->second->applyVec(it->second->getVec(), turn);
+      if (it->second->getPos().first < -30000 || it->second->getPos().first > 212000
+	  || it->second->getPos().second < -30000 || it->second->getPos().second > 128000)
+	{
+	  itTmp = it;
+	  --it;
+	  gameui->deleteEntity(entitys.at(itTmp->first));
+	  ent = entitys.at(itTmp->first);
+	  entitys.erase(itTmp->first);
+	  delete ent;
+	}
       ++it;
     }
     ++turn;

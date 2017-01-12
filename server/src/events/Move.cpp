@@ -21,18 +21,10 @@ network::packet::IPacket *server::event::Move::createPacket()
     auto packet = new network::packet::PacketMoveEntity();
     packet->setTick(tick);
     packet->setEventId(eventId);
-    /*<<<<<<< HEAD
-    packet->setEntityId(entityId);
-    packet->setPosX(posX * 10.0);
-    packet->setPosY(posY * 10.0);
-    packet->setVecX(newVectX * 10.0);
-    packet->setVecY(newVectY * 10.0);
-    =======*/
     packet->setEntityId(entity->data.getId());
-    packet->setPosX(posX * 10.0);
-    packet->setPosY(posY * 10.0);
-    packet->setVecX(newVectX * 10.0);
-    packet->setVecY(newVectY * 10.0);
-    //>>>>>>> 8a774d96ae6a09a4e00ed39258ae6ac90700ee68
+    packet->setPosX(posX * 100.0);
+    packet->setPosY(posY * 100.0);
+    packet->setVecX(newVectX * 100.0);
+    packet->setVecY(newVectY * 100.0);
     return (packet);
 }
