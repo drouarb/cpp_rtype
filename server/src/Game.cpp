@@ -322,44 +322,51 @@ void Game::letEntitesAct()
     {
         auto it = entities.at(i);
         EntityAction * action = it->obj->act(this->round, grid);
-
-        if (it->collisions.isSet())
-        {
-            it->collisions.apply(action);
-            it->collisions.reset();
-        }
-
-        if (action->speedX != it->data.getVectX())
-        {
-            it->data.setVectX(action->speedX);
-            this->sim_move(entities[i]);
-        }
-        if (action->speedY != it->data.getVectY())
-        {
-            it->data.setVectY(action->speedY);
-            this->sim_move(entities[i]);
-        }
-        if (action->hp != it->data.getHp())
-        {
-            it->data.setHp(action->hp);
-            this->sim_update(entities[i]);
-        }
-        if (action->newEntity)
-        {
-            auto newEntity = new Entity(action->newEntity, entityIdCount, round, grid);
-            entityIdCount++;
-            spawnEntity(newEntity);
-        }
-        if (action->destroy)
-        {
-            it->data.setDestroyed(true);
-        }
-        if (action->soundToPlay != "")
-        {
-            sendSound(action->soundToPlay);
-        }
-
+        act(action, &*it);
         delete action;
+    }
+}
+
+void Game::act(EntityAction *action, Entity *entity)
+{
+    if (entity->collisions.isSet())
+    {
+        entity->collisions.apply(action);
+        entity->collisions.reset();
+    }
+
+    if (action->speedX != entity->data.getVectX())
+    {
+        entity->data.setVectX(action->speedX);
+        this->sim_move(entity);
+    }
+    if (action->speedY != entity->data.getVectY())
+    {
+        entity->data.setVectY(action->speedY);
+        this->sim_move(entity);
+    }
+    if (action->hp != entity->data.getHp())
+    {
+        entity->data.setHp(action->hp);
+        this->sim_update(entity);
+    }
+    if (action->newEntity)
+    {
+        auto newEntity = new Entity(action->newEntity, entityIdCount, round, grid);
+        entityIdCount++;
+        spawnEntity(newEntity);
+
+        auto init = newEntity->obj->initialize(round, grid);
+        act(&init->action, newEntity);
+        delete init;
+    }
+    if (action->destroy)
+    {
+        entity->data.setDestroyed(true);
+    }
+    if (action->soundToPlay != "")
+    {
+        sendSound(action->soundToPlay);
     }
 }
 
@@ -546,10 +553,45 @@ pos_t Game::fyp(const Entity * entity_i) const
 }
 
 void Game::sendData() {
+  /*<<<<<<< HEAD
     INFO("Game::sendData : " << this->gameEvents.size() << " events to sendx");
     for (auto & event : gameEvents)
     {
         auto packet = event->createPacket();
+	=======*/
+    INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
+
+    for (auto & event : gameEvents)
+    {
+        if (event->getEntity()->data.isDestroyed() && event->getEventType() != event::DESTROY)
+            continue;
+
+        if (event->getEntity()->data.getId() == 0)
+        {
+            if (event->getEventType() == event::MOVE)
+            {
+                auto m = dynamic_cast<network::packet::PacketMoveEntity*>(event->createPacket());
+                std::cout << "vx=" << m->getVecX() << " vy=" << m->getVecY() << std::endl;
+            }
+            if (event->getEventType() == event::MOD_HP)
+            {
+                auto m = dynamic_cast<network::packet::PacketUpdateEntity*>(event->createPacket());
+                std::cout << "hp=" << m->getHp() << std::endl;
+            }
+            if (event->getEventType() == event::DESTROY)
+            {
+                std::cout << "destroy" << std::endl;
+            }
+            if (event->getEventType() == event::SPAWN)
+            {
+                auto m = dynamic_cast<network::packet::PacketSpawnEntity*>(event->createPacket());
+                std::cout << "spawn hp=" << m->getHp() << std::endl;
+            }
+        }
+
+        auto packet = event->createPacket();
+
+	//>>>>>>> 8a774d96ae6a09a4e00ed39258ae6ac90700ee68
         for (auto & client : clientList)
         {
             packetf.send(*packet, client->getClientId());
@@ -566,6 +608,7 @@ void Game::sendData() {
 
 void Game::sim_spawn(Entity *entity) {
     this->gameEvents.push_back(new server::event::Spawn
+			       /*<<<<<<< HEAD
 			       (this->round, entity->data.getId(), entity->data.getPosX() * 10.0, entity->data.getPosY() * 10.0, entity->data.getHp(), entity->data.getSprite().path));
     this->gameEvents.push_back(new server::event::ModHP(this->round, entity->data.getId(), entity->data.getHp()));
     INFO("spawn " << std::to_string(gameEvents.back()->getEntityId()))
@@ -573,18 +616,29 @@ void Game::sim_spawn(Entity *entity) {
 
 void Game::sim_move(Entity *entity) {
 
-  /*    this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX() * 10.0,
+      this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX() * 10.0,
                                                        entity->data.getVectY() * 10.0, entity->data.getPosX() * 10.0,
                                                        entity->data.getPosY() * 10.0));
-  */
+  
+=======*/
+                                       (this->round, entity, entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
+    INFO("spawn " << std::to_string(gameEvents.back()->getEntity()))
+}
+
+void Game::sim_move(Entity *entity)
+{
+    this->gameEvents.push_back(new server::event::Move(this->round, entity, entity->data.getVectX(),
+                                                       entity->data.getVectY(), entity->data.getPosX(),
+                                                       entity->data.getPosY()));
+    //>>>>>>> 8a774d96ae6a09a4e00ed39258ae6ac90700ee68
 }
 
 void Game::sim_update(Entity *entity) {
-    this->gameEvents.push_back(new server::event::ModHP(this->round, entity->data.getId(), entity->data.getHp()));
+    this->gameEvents.push_back(new server::event::ModHP(this->round, entity, entity->data.getHp()));
 }
 
 void Game::sim_destroy(Entity *entity) {
-    this->gameEvents.push_back(new server::event::Destroy(this->round, entity->data.getId()));
+    this->gameEvents.push_back(new server::event::Destroy(this->round, entity));
 }
 
 uint16_t Game::getClientSize() const

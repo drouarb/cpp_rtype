@@ -14,7 +14,7 @@ void testPacketDeleteEntity()
     deleteEntity2->deserialize(&rawdata);
     assert((deleteEntity->getEntityId() == UINT16_MAX));
     assert(deleteEntity->getEntityId() == deleteEntity2->getEntityId());
-    std::cout << "SUCCESS getEntityId()" << std::endl;
+    std::cout << "SUCCESS getEntity()" << std::endl;
     assert((deleteEntity->getEventId() == UINT32_MAX));
     assert(deleteEntity->getEventId() == deleteEntity2->getEventId());
     std::cout << "SUCCESS getEventId()" << std::endl;

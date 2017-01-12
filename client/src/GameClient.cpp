@@ -222,10 +222,8 @@ void GameClient::gameLoop() {
 	receive.clear();
 	receive = gameui->manageInput(event);
 	i = 0;
-	std::cout << "begin" << std::endl;
 	while (i < receive.size())
 	  {
-	    std::cout << "apply info"<< std::endl;
 	    if (receive[i] != nullptr)
 	      {
 		if (receive[i]->info == I_QUIT)
