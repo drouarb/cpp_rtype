@@ -2,6 +2,7 @@
 // Created by greg on 17/12/2016.
 //
 
+#include <iostream>
 #include <events/Move.hh>
 #include <network/packet/PacketMoveEntity.hh>
 

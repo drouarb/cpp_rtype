@@ -251,7 +251,7 @@ std::vector<s_info *> GameUIInterface::manageInput(client::Event event)
   bool			sameKey;
   unsigned int		i;
 
-  std::cout << "event : " << event.key << " : " << event.pressed << std::endl;
+  //std::cout << "event : " << event.key << " : " << event.pressed << std::endl;
   i = 0;
   if (event.key != -42)
     {
@@ -260,32 +260,25 @@ std::vector<s_info *> GameUIInterface::manageInput(client::Event event)
 	{
 	  if (pressedKey[i] == event.key)
 	    {
-	      //std::cout << "find key = " << event.key << std::endl;
 	      if (event.pressed == false)
-		{
-		  //std::cout << "erase" << std::endl;
-		  pressedKey.erase(pressedKey.begin() + i);
-		}
+		pressedKey.erase(pressedKey.begin() + i);
 	      sameKey = true;
 	      break;
 	    }
 	  ++i;
 	}
       if (sameKey == false && event.pressed == true)
-	{
-	  //std::cout << "oui" << std::endl;
 	  pressedKey.push_back(event.key);
-	}
     }
 
   i = 0;
-  std::cout << std::endl << "tab" << std::endl;
+  /*std::cout << std::endl << "tab" << std::endl;
   while (i < pressedKey.size())
     {
       std::cout << i << " : " << pressedKey[i] << std::endl;
       ++i;
     }
-    std::cout << "===========" << std::endl << std::endl;
+    std::cout << "===========" << std::endl << std::endl;*/
   i = 0;
   while (i < pressedKey.size())
     {
@@ -309,7 +302,7 @@ std::vector<s_info *> GameUIInterface::manageInput(client::Event event)
       }
       ++i;
     }
-  if (pressedKey.size() == 0)
+  if (pressedKey.size() == 0 && currentMenu->getType() == GAME)
     {
       s_player *info;
       info = new s_player;

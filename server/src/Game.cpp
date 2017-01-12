@@ -566,17 +566,17 @@ void Game::sendData() {
 
 void Game::sim_spawn(Entity *entity) {
     this->gameEvents.push_back(new server::event::Spawn
-                                       (this->round, entity->data.getId(), entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
+			       (this->round, entity->data.getId(), entity->data.getPosX() * 10.0, entity->data.getPosY() * 10.0, entity->data.getHp(), entity->data.getSprite().path));
     this->gameEvents.push_back(new server::event::ModHP(this->round, entity->data.getId(), entity->data.getHp()));
     INFO("spawn " << std::to_string(gameEvents.back()->getEntityId()))
 }
 
 void Game::sim_move(Entity *entity) {
-/*
-    this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX(),
-                                                       entity->data.getVectY(), entity->data.getPosX(),
-                                                       entity->data.getPosY()));
-*/
+
+  /*    this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX() * 10.0,
+                                                       entity->data.getVectY() * 10.0, entity->data.getPosX() * 10.0,
+                                                       entity->data.getPosY() * 10.0));
+  */
 }
 
 void Game::sim_update(Entity *entity) {
@@ -657,8 +657,8 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pspawn->setEntityId(entity->data.getId());
         pspawn->setHp(entity->data.getHp());
         pspawn->setSpriteName(entity->data.getSprite().path);
-        pspawn->setPosX(entity->data.getPosX());
-        pspawn->setPosY(entity->data.getPosY());
+        pspawn->setPosX(entity->data.getPosX() * 10.0);
+        pspawn->setPosY(entity->data.getPosY() * 10.0);
         packetf.send(*pspawn, client.getClientId());
         delete pspawn;
         ++id;
@@ -680,7 +680,7 @@ void Game::sendSimToNewNotFirst(const Client &client)
 void Game::sendAllMoves()
 {
     //TODO
-  if (round % 2 == 0)
+   if (round % 2 == 0)
     for (auto client : clientList)
     {
         for (auto entity : entities)
@@ -689,10 +689,10 @@ void Game::sendAllMoves()
             pmove->setTick(round);
             pmove->setEventId(0);
             pmove->setEntityId(entity->data.getId());
-            pmove->setPosX(entity->data.getPosX());
-            pmove->setPosY(entity->data.getPosY());
-            pmove->setVecX(entity->data.getVectX());
-            pmove->setVecY(entity->data.getVectY());
+            pmove->setPosX(entity->data.getPosX() * 10.0);
+            pmove->setPosY(entity->data.getPosY() * 10.0);
+            pmove->setVecX(entity->data.getVectX() * 10.0);
+            pmove->setVecY(entity->data.getVectY() * 10.0);
 
             packetf.send(*pmove, client->getClientId());
             delete pmove;

@@ -24,6 +24,9 @@ client::GameClient::GameClient() {
   gameui = new GameUIInterface(handler);
   gameui->initUI();
   createKeyMap("config/gameCommand.json");
+  additioner.first = 0;
+  additioner.second = 0;
+  ttadd = 0;
 }
 
 void client::GameClient::createNetworkManager(const std::string &ip, unsigned short port) {
@@ -219,22 +222,24 @@ void GameClient::gameLoop() {
 	receive.clear();
 	receive = gameui->manageInput(event);
 	i = 0;
+	std::cout << "begin" << std::endl;
 	while (i < receive.size())
 	  {
-	    if (event.key != -42) {
-	      if (receive[i] != nullptr) {
-		if (receive[i]->info == I_QUIT) {
-		  deleteNetworkManager();
-		  gameui->stopUI();
-		  return;
-		}
+	    std::cout << "apply info"<< std::endl;
+	    if (receive[i] != nullptr)
+	      {
+		if (receive[i]->info == I_QUIT)
+		  {
+		    deleteNetworkManager();
+		    gameui->stopUI();
+		    return;
+		  }
 		sendAll(receive[i]);
 		delete (receive[i]);
 	      }
-	      event.key = -42;
-	    }
 	    ++i;
 	  }
+	sendMove();
       }
       if (world != nullptr)
 	world->applyTurn(tickRateClient, playerId);
@@ -320,23 +325,30 @@ void GameClient::sendAll(struct s_info *info) {
     }
   }
     break;
-  case I_PLAYER : {
-    if (manager != nullptr && world != nullptr && world->getEntityById(playerId) != nullptr) {
-      if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end()) {
-	world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player *>(info)->key],
-						   pos_t(world->getEntityById(playerId)->getPos().first,
-							 world->getEntityById(playerId)->getPos().second),
-						   world->getTick());
-	manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-				world->getEntityById(playerId)->getVec().second,
-				world->getEntityById(playerId)->getPos().first,
-				world->getEntityById(playerId)->getPos().second);
-      }
-      if (keygame_attack.find(static_cast<s_player *>(info)->key) != keygame_attack.end()) {
-	manager->sendPlayerAttack(world->getTick(), keygame_attack[static_cast<s_player *>(info)->key]);
-      }
+  case I_PLAYER :
+    {
+      if (manager != nullptr && world != nullptr && world->getEntityById(playerId) != nullptr)
+	{
+	  if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end())
+	    {
+	      /*world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player *>(info)->key],
+		pos_t(world->getEntityById(playerId)->getPos().first,
+		world->getEntityById(playerId)->getPos().second),
+		world->getTick());
+		manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+		world->getEntityById(playerId)->getVec().second,
+		world->getEntityById(playerId)->getPos().first,
+		world->getEntityById(playerId)->getPos().second);*/
+	      additioner.first += keygame_move[static_cast<s_player *>(info)->key].first;
+	      additioner.second += keygame_move[static_cast<s_player *>(info)->key].second;
+	    }
+	  if (keygame_attack.find(static_cast<s_player *>(info)->key) != keygame_attack.end())
+	    {
+	      manager->sendPlayerAttack(world->getTick(), keygame_attack[static_cast<s_player *>(info)->key]);
+	    }
+	  ++ttadd;
+	}
     }
-  }
     break;
   default:
     {
@@ -344,6 +356,26 @@ void GameClient::sendAll(struct s_info *info) {
     break;
     }
   }
+}
+
+void GameClient::sendMove()
+{
+  if (ttadd > 0)
+    {
+      additioner.first / ttadd;
+      additioner.second / ttadd;
+      world->getEntityById(playerId)->moveEntity(additioner,
+						 pos_t(world->getEntityById(playerId)->getPos().first,
+						       world->getEntityById(playerId)->getPos().second),
+						 world->getTick());
+      manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
+			      world->getEntityById(playerId)->getVec().second,
+			      world->getEntityById(playerId)->getPos().first,
+			      world->getEntityById(playerId)->getPos().second);
+    }
+  additioner.first = 0;
+  additioner.second = 0;
+  ttadd = 0;
 }
 
 void GameClient::createKeyMap(const std::string &path) {
