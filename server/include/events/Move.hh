@@ -19,14 +19,10 @@ namespace server {
             const pos_t posY;
 
         public:
-            Move(const server::round_t tick, const server::entityId_t entityId, const speed_t newVectX,
+            Move(const server::round_t tick, const server::Entity * entity, const speed_t newVectX,
                              const speed_t newVectY, const pos_t posX, const pos_t posY);
 
-            IGameEvent *getParentEvent() override;
-
-            entityId_t getEntityId() override;
-
-            EventType getEventType() override;
+            EventType getEventType() const override;
 
             network::packet::IPacket *createPacket();
 

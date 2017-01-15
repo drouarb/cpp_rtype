@@ -4,36 +4,61 @@
 
 #include <EventManager.hh>
 
-
-void client::EventManager::onKeyPressed(short key) {
-event = key;
+client::EventManager::EventManager(client::GameClient *ngameclient)
+{
+  gameClient = ngameclient;
 }
 
-client::EventManager::EventManager(client::GameClient *gameclient)  : gameClient(gameclient), event(-42){
-
-}
-
-client::EventManager::~EventManager() {
+client::EventManager::~EventManager()
+{
 
 }
 
-void client::EventManager::onMouseRealease(short x, short y) {
+void client::EventManager::onMouseRelease(short x, short y)
+{
 
 }
 
-void client::EventManager::onKeyRealease(short key) {
-event = -42;
+void client::EventManager::onKeyPressed(short key)
+{
+  if (events.size() > 1)
+    return;
+  if (key != -42)
+    if (events.size() == 0 || events[events.size() - 1].key != key
+	|| events[events.size() - 1].pressed != true)
+      events.push_back(client::Event(key, true));
 }
 
-short client::EventManager::getEvent() {
-short buff = 0;
-    if (event != -42)
+void client::EventManager::onKeyRelease(short key)
+{
+  unsigned int i;
+  i = 0;
+  while (i < events.size())
     {
-        buff = event;
-        event = -42;
+      if (events[i].key == key && events[i].pressed == false)
+	return;
+      ++i;
     }
-    else
-        buff = event;
-    return (buff);
+  if (key != -42)
+    if (events.size() == 0 || events[events.size() - 1].key != key
+	|| events[events.size() - 1].pressed != false)
+      events.push_back(client::Event(key, false));
+}
 
+client::Event client::EventManager::getEvent()
+{
+  client::Event buff;
+
+  if (events.size() > 0)
+    {
+      buff.key = events[0].key;
+      buff.pressed = events[0].pressed;
+      events.erase(events.begin());
+    }
+  else
+    {
+      buff.key = -42;
+      buff.pressed = false;
+    }
+  return (buff);
 }

@@ -5,6 +5,7 @@
 #ifndef CPP_RTYPE_IGAMEEVENT_HH
 #define CPP_RTYPE_IGAMEEVENT_HH
 
+#include <Entity.hh>
 #include "Definitions.hh"
 
 namespace server {
@@ -23,9 +24,8 @@ namespace server {
          */
         class IGameEvent {
         public:
-            virtual IGameEvent *getParentEvent()= 0;
-            virtual entityId_t getEntityId() = 0;
-            virtual EventType getEventType() = 0;
+            virtual const Entity * getEntity() const = 0;
+            virtual EventType getEventType() const = 0;
         };
     }
 }

@@ -79,10 +79,10 @@ fabric.properties
 build/
 
 cmake-build-debug
-client/*.sh
 *~
-client/rtype_client
 test.sh
-debug.sh
 make.sh
-launch.sh
+client.sh
+server.sh
+clientDebug.sh
+serverDebug.sh

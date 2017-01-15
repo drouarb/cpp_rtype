@@ -53,8 +53,7 @@ namespace client
         KEY_SPACE = 1006,
         KEY_POINT = '.',
         KEY_BACKSPACE = 1007,
-        KEY_DOUBLE_POINT =':'
-        
+	KEY_DOUBLE_POINT =':'
     };
 }
 #endif //CPP_RTYPE_TOUCHDEFINITION_HH

@@ -33,114 +33,115 @@
 #define RTYPE_EX ".rtype"
 #define AVATAR_EX "vatar.png"
 
-namespace client {
-    class GameUIInterface {
-    private:
-        Mutex* ui_mut;
-        std::map<typeide_t, std::string> typeEntity;
-        std::vector<std::pair<uint8_t, uint16_t> > gameList;
-        std::vector<std::pair<uint32_t, std::string> > leaderBoard;
-        std::map<Entity*, UI::AItem *> gameItem;
-        std::map<const std::string, int>soundName;
-		std::vector<Menu*> listMenu;
-        UI::UIManager managerUi;
-        UI::IWindow *window;
-        Menu *currentMenu;
-        Entity* nplayer;
-        UI::Text* playerHp;
-        UI::AItem *playerSprite;
-    private:
-        std::map<std::string ,client::Key>nav_map;
-        std::map<std::string , std::vector<int>>anim_map;
-        static const std::map<sf::Keyboard::Key, client::Key> keymap;
-        client::Key KeygameList;
-		bool running;
+namespace client
+{
+  class GameUIInterface
+  {
+  private:
+    Mutex*							ui_mut;
+    static const std::map<sf::Keyboard::Key, client::Key>	keymap;
+    std::map<typeide_t, std::string>				typeEntity;
+    std::map<std::string ,client::Key>				nav_map;
+    std::map<std::string , std::vector<int> >			anim_map;
+    std::map<Entity*, UI::AItem *>				gameItem;
+    std::map<const std::string, int>				soundName;
+    std::vector<std::pair<uint8_t, uint16_t> >			gameList;
+    std::vector<std::pair<uint32_t, std::string> >		leaderBoard;
+    std::vector<Menu*>						listMenu;
+    std::vector<short>						pressedKey;
+    UI::UIManager						managerUi;
+    UI::IWindow							*window;
+    UI::Text							*playerHp;
+    UI::AItem							*playerSprite;
+    client::Key							KeygameList;
+    client::Key							KeyLeaderBoard;
+    Menu							*currentMenu;
+    Entity							*nplayer;
+    bool							running;
+    
+  private:
+    GameUIInterface() {};
+  public:
+    GameUIInterface(IEventHandler *);
 
-    private:
-        client::Key KeyLeaderBoard;
-    private:
-        GameUIInterface() {};
-    public:
-        GameUIInterface(IEventHandler *);
+    ~GameUIInterface();
 
-        ~GameUIInterface();
+    void initUI();
 
-        void initUI();
+    void displaySimple();
 
-        void displaySimple();
+    void UILoop();
 
-      void UILoop();
-
-	  void stopUI();
+    void stopUI();
       
-        typeide_t registerNewSprite(const std::string &);
+    typeide_t registerNewSprite(const std::string &);
 
-        void feedLeaderBoard(std::vector<std::pair<uint32_t, std::string> > leaderBoard);
+    void feedLeaderBoard(std::vector<std::pair<uint32_t, std::string> > leaderBoard);
 
-        void feedGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList);
+    void feedGameList(std::vector<std::pair<uint8_t, uint16_t> > gameList);
 
-        void addListEntity(std::vector<Entity *> listentity);
+    void addListEntity(std::vector<Entity *> listentity);
 
-        void addEntity(Entity *listEntity);
+    void addEntity(Entity *listEntity);
 
-        void updateListEntity();
+    void updateListEntity();
 
-        void updateEntity(Entity *entity);
+    void updateEntity(Entity *entity);
 
-        void deleteListEntity(std::vector<Entity *> listentity);
+    void deleteListEntity(std::vector<Entity *> listentity);
 
-        void deleteEntity(Entity *entity);
+    void deleteEntity(Entity *entity);
 
-        void addMenu(const std::string &path);
+    void addMenu(const std::string &path);
 
-        void addAnimaton(const std::string &path, UI::AItem *item);
+    void addAnimaton(const std::string &path, UI::AItem *item);
 
-        void addNavMap(const std::string & path);
+    void addNavMap(const std::string & path);
 
-        s_info * manageInput(short key);
+    std::vector<s_info*> manageInput(client::Event event);
 
-        std::string isNavKey(client::Key);
+    std::string isNavKey(client::Key);
 
-        void manageNavkey(const std::string &res);
+    void manageNavkey(const std::string &res);
 
-        s_info * manageEnter();
+    s_info * manageEnter();
 
-        void showError(const std::string &res);
-        void changeMenu(const std::string & ne);
+    void showError(const std::string &res);
+    void changeMenu(const std::string & ne);
 
-        void manageTouch(client::Key);
+    void manageTouch(client::Key);
 
-        void createStaticMenu();
+    void createStaticMenu();
 
-        void reloadMenuRoomList();
+    void reloadMenuRoomList();
 
-        bool windowIsOpen();
+    bool windowIsOpen();
 
-        void setKeygameList(Key KeygameList);
+    void setKeygameList(Key KeygameList);
 
-        void setKeyLeaderBoard(Key KeyLeaderBoard);
+    void setKeyLeaderBoard(Key KeyLeaderBoard);
 
-        void setStringToButtons(const std::string &name, const std::string &data, const std::string &menuName);
+    void setStringToButtons(const std::string &name, const std::string &data, const std::string &menuName);
 
-        const std::string getStringFromButtons(const std::string &name, const std::string &menuName);
+    const std::string getStringFromButtons(const std::string &name, const std::string &menuName);
 
-        void setNplayer(Entity *nplayer);
+    void setNplayer(Entity *nplayer);
 
-		void updateHp();
+    void updateHp();
 
-		void playSound(const std::string & path);
+    void playSound(const std::string & path);
 
-        void  addBackground(const std::string & path);
+    void  addBackground(const std::string & path);
 
-        void credit();
+    void credit();
 
-		void addSound(const std::string &sound);
+    void addSound(const std::string &sound);
 
-		void playSoundEffect(const std::string &sound);
-    private:
-        typeide_t getNextId();
+    void playSoundEffect(const std::string &sound);
+  private:
+    typeide_t getNextId();
 
-    };
+  };
 }
 
 #endif /*GAMEUIINTERFACE_HH_*/

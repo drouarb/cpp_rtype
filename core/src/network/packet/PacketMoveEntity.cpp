@@ -5,7 +5,7 @@
 #include "network/packet/PacketMoveEntity.hh"
 
 
-network::packet::PacketMoveEntity::PacketMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId , int16_t vecX, int16_t vecY, int16_t posx, int16_t posy ) :
+network::packet::PacketMoveEntity::PacketMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId , int32_t vecX, int32_t vecY, int32_t posx, int32_t posy ) :
         APacket
                 (
                         MOVE_ENTITY,
@@ -13,10 +13,10 @@ network::packet::PacketMoveEntity::PacketMoveEntity(uint32_t tick, uint32_t even
                                 new utils::NetworkInteger(4, tick),
                                 new utils::NetworkInteger(4, eventId),
                                 new utils::NetworkInteger(4, entityId),
-                                new utils::NetworkInteger(2, vecX),
-                                new utils::NetworkInteger(2, vecY),
-                                new utils::NetworkInteger(2, posx),
-                                new utils::NetworkInteger(2, posy)
+                                new utils::NetworkInteger(4, vecX),
+                                new utils::NetworkInteger(4, vecY),
+                                new utils::NetworkInteger(4, posx),
+                                new utils::NetworkInteger(4, posy)
                         }
                 )
 {
@@ -58,38 +58,38 @@ uint32_t network::packet::PacketMoveEntity::getEntityId() const
     return GET_NETINT(schema, 2);
 }
 
-void network::packet::PacketMoveEntity::setVecX(int16_t vecX)
+void network::packet::PacketMoveEntity::setVecX(int32_t vecX)
 {
     SET_NETINT(schema, 3, vecX);
 }
 
-int16_t network::packet::PacketMoveEntity::getVecX() const
+int32_t network::packet::PacketMoveEntity::getVecX() const
 {
     return GET_NETINT(schema, 3);
 }
 
-void network::packet::PacketMoveEntity::setVecY(int16_t vecY)
+void network::packet::PacketMoveEntity::setVecY(int32_t vecY)
 {
     SET_NETINT(schema, 4, vecY);
 }
 
-int16_t network::packet::PacketMoveEntity::getVecY() const
+int32_t network::packet::PacketMoveEntity::getVecY() const
 {
     return GET_NETINT(schema, 4);
 }
 
-void network::packet::PacketMoveEntity::setPosX(int16_t pos_x) {
+void network::packet::PacketMoveEntity::setPosX(int32_t pos_x) {
     SET_NETINT(schema, 5, pos_x);
 }
 
-int16_t network::packet::PacketMoveEntity::getPosX() const {
+int32_t network::packet::PacketMoveEntity::getPosX() const {
     return  GET_NETINT(schema, 5);
 }
 
-void network::packet::PacketMoveEntity::setPosY(int16_t pos_y) {
+void network::packet::PacketMoveEntity::setPosY(int32_t pos_y) {
     SET_NETINT(schema, 6, pos_y);
 }
 
-int16_t network::packet::PacketMoveEntity::getPosY() const {
+int32_t network::packet::PacketMoveEntity::getPosY() const {
     return GET_NETINT(schema, 6);
 }

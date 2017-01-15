@@ -151,13 +151,9 @@ server::Tribool Lighter::Lightning::collidesWith(const server::Entity &entity) {
     return (this->data->getTeam() != entity.data.getTeam() ? server::T_TRUE : server::T_FALSE);
 }
 
-
-
-
 extern "C"
 {
-server::ADynamicObject * getInstance()
-{
-    return (new Lighter());
-}
+	EXPORT_SYM server::ADynamicObject *getInstance() {
+		return (new Lighter());
+	}
 }

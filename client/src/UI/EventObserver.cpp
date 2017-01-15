@@ -13,12 +13,14 @@ void UI::EventObserver::getEvent() {
         switch (event.type)
         {
             case sf::Event::Closed:
-                window->close();
-                break;
+	      window->close();
+	      break;
             case sf::Event::KeyPressed:
-                this->eventManager->onKeyPressed(event.key.code);
-                break;
-            case sf::Event::KeyReleased:break;
+	      this->eventManager->onKeyPressed(event.key.code);
+	      break;
+            case sf::Event::KeyReleased:
+	      this->eventManager->onKeyRelease(event.key.code);
+	      break;
             case sf::Event::MouseButtonPressed:event.mouseButton.x;event.mouseButton.y;
             case sf::Event::MouseButtonReleased:event.mouseButton.x;event.mouseButton.y;
             case sf::Event::MouseMoved:event.mouseButton.x;event.mouseButton.y;
@@ -47,7 +49,7 @@ void UI::EventObserver::getEvent() {
             case sf::Event::SensorChanged:break;
             case sf::Event::Count:break;
 */
-            case sf::Event::Resized:break;
+	/*case sf::Event::Resized:break;
             case sf::Event::LostFocus:break;
             case sf::Event::GainedFocus:break;
             case sf::Event::MouseWheelMoved:break;
@@ -63,7 +65,7 @@ void UI::EventObserver::getEvent() {
             case sf::Event::TouchMoved:break;
             case sf::Event::TouchEnded:break;
             case sf::Event::SensorChanged:break;
-            case sf::Event::Count:break;
+            case sf::Event::Count:break;*/
         }
     }
 }

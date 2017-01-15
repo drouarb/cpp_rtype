@@ -12,6 +12,7 @@ UI::Window::Window() {
     width = WIDTH;
     name = "rtype";
     window = new sf::RenderWindow(sf::VideoMode(length, width, 32), name);
+    window->setKeyRepeatEnabled(false);
     alertText.setString("");
     alerted = false;
 }
@@ -32,7 +33,6 @@ void UI::Window::setName(std::string name) {
 }
 
 void UI::Window::render() {
-    window->create(sf::VideoMode(length, width, 32), name);
     window->setFramerateLimit(60);
     //std::cerr << "DEBUGplskill: " << window->getPosition().x << std::endl;
 }

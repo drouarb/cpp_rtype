@@ -19,7 +19,7 @@ file(
         include/*.hpp
 )
 
-if (WIN32)
+if (MSVC)
     file(
             GLOB_RECURSE
             CORE_SRCS
@@ -28,7 +28,7 @@ if (WIN32)
             src/helpers/WindowsStopwatch.cpp
             src/Explorer/WindowsFileExplorer.cpp
     )
-else (WIN32)
+else (MSVC)
     file(
             GLOB_RECURSE
             CORE_SRCS
@@ -37,7 +37,7 @@ else (WIN32)
             src/helpers/UnixStopwatch.cpp
             src/Explorer/FileExplorer.cpp
     )
-endif (WIN32)
+endif (MSVC)
 
 include_directories(include)
 include_directories(include/JSON)
@@ -46,11 +46,11 @@ include_directories(${PROTOBOEUF_INCLUDE_DIRS})
 add_library(${PROJECT_NAME} STATIC ${CORE_SRCS})
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-if (WIN32)
+if (MSVC)
     set(ADDITIONAL_LIBS wsock32 ws2_32)
-else(WIN32)
+else(MSVC)
     set(ADDITIONAL_LIBS dl)
-endif(WIN32)
+endif(MSVC)
 
 set(RTYPE_CORE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include ${PROTOBOEUF_INCLUDE_DIRS}
         CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)

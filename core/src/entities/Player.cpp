@@ -64,7 +64,6 @@ EntityInitialization *Player::initialize(round_t, const Grid &)
 {
     EntityInitialization *ei = new EntityInitialization();
     ei->team = PLAYER;
-    ei->action.hp = 5;
     ei->sprite.sizeX = 50;
     ei->sprite.sizeY = 50;
     ei->posX = ei->sprite.sizeX;

@@ -34,6 +34,7 @@ Entity * Entity::make(const std::string &path, entityId_t id, round_t round, con
     try
     {
         auto * obj = getDlLoader<ADynamicObject>(path)->getInstance();
+		
         return (new Entity(obj, id, round, environment));
     }
     catch (std::runtime_error &e)
