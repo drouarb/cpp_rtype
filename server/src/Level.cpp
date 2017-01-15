@@ -66,7 +66,10 @@ server::Level::Level(const std::string &filepath) {
 server::Level::~Level() {}
 
 const std::vector<server::Spawn> *server::Level::getNewSpawns(server::round_t tick) const {
-    try
+	if (this->spawns.find(tick) == this->spawns.end()) {
+		return nullptr;
+	}
+	try
     {
         return &this->spawns.at(tick);
     }
@@ -78,6 +81,9 @@ const std::vector<server::Spawn> *server::Level::getNewSpawns(server::round_t ti
 
 const std::pair<std::string, std::string> *server::Level::getNewData(server::round_t tick) const
 {
+	if (this->gamedata.find(tick) == this->gamedata.end()) {
+		return nullptr;
+	}
     try
     {
         return &this->gamedata.at(tick);
