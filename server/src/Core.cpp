@@ -66,6 +66,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
     this->packetFactory->registerListener(new ServerListenerQuit(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerRegister(this->networkManager));
     this->packetFactory->run();
+	
 
     std::cout << "Server ready" << std::endl;
 }
@@ -82,7 +83,7 @@ void server::Core::run() {
         for (auto game = games.begin(); game != games.end();)
         {
             INFO("- game " << std::to_string(game->getLobbyId()) << " - - -");
-            (*game)->tick();
+            //(*game)->tick();
             if ((*game)->mustClose())
             {
                 delete *game;
@@ -123,8 +124,10 @@ void server::Core::psetClient(server::Client &client, server::gameId_t gameId) {
         }
     }
 
+
     games.push_back(new Game(*packetFactory, gameId));
     games.back()->setLevel(levels[gameId % levels.size()]);
+	
 	try {
 		games.back()->newPlayer(&client);
 	}

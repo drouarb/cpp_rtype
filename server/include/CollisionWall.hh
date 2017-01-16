@@ -7,7 +7,7 @@
 
 namespace server
 {
-    class EntityAction;
+	struct EntityAction;
 
     enum Axis
     {

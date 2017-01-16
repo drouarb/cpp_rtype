@@ -4,6 +4,7 @@
 
 #include "Entity.hh"
 #include "Grid.hh"
+#include <iostream>
 
 using namespace server;
 
@@ -22,6 +23,10 @@ void Grid::remove(const Entity * entity)
 
 void Grid::add(Entity *entity)
 {
+	if (getCoordinate(entity->data.getPosY()) >= GRID_HEIGHT || getCoordinate(entity->data.getPosX()) >= GRID_WIDTH)
+	{
+		std::cerr << "This may not happen" << std::endl;
+	}
     auto & cell = grid[getCoordinate(entity->data.getPosY())][getCoordinate(entity->data.getPosX())];
     cell.push_back(entity);
 }
