@@ -38,7 +38,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
             continue;
         }
         try {
-            this->levels.push_back(Level(path + f.name));
+            this->levels.push_back(Level(path + SYSTEM_FOLDER + f.name));
         }
         catch (std::runtime_error &e) {
             std::cerr << e.what() << std::endl;
