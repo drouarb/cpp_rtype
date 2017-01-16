@@ -19,6 +19,7 @@
 #include <network/packet/PacketGameData.hh>
 #include <helpers/libloader/getDlLoader.hpp>
 #include <network/packet/PacketUpdateEntity.hh>
+#include <thread>
 #include "Game.hh"
 
 using namespace server;
@@ -74,13 +75,13 @@ void Game::tick()
 	round++;
 
     progressLevel();
-    checkCollisions(); //must be before moveEntities
+    if (!(lowPerf && this->getTick() % 4 == 0)) {
+        checkCollisions(); //must be before moveEntities
+    }
     moveEntities();
     letEntitesAct(); //must be called after checkCollisions
     unspawn(); //must be after letEntitiesAct
     manageNewGamedata();
-
-    sendData();
 }
 
 gameId_t Game::getLobbyId() const
@@ -549,8 +550,10 @@ std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator
 
 void Game::loop()
 {
+    uint16_t tickLate = 0;
 	this->sw = helpers::IStopwatch::getInstance();
-	while (!this->mustDestroy )
+	this->lowPerf = false;
+    while (!this->mustDestroy )
 	{
 		mutex.lock();
 		if (!this->sw)
@@ -560,11 +563,20 @@ void Game::loop()
 		if (sw->elapsedMs() < ROUND_DURATION_MS)
 		{
 			long elapsed = sw->elapsedMs();
-			mutex.unlock();
-			std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - elapsed));
-		} 
+            sendData();
+            mutex.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - elapsed));
+        }
 		else
 		{
+            //Don't send data if thread is late
+            tickLate = static_cast<uint16_t>(sw->elapsedMs() / ROUND_DURATION_MS);
+
+            for (; tickLate; --tickLate) {
+                this->lowPerf = true;
+                tick();
+            }
+            this->lowPerf = false;
 			mutex.unlock();
 		}
 

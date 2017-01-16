@@ -47,6 +47,7 @@ namespace server
         std::vector<server::event::AGameEvent *> gameEvents;
         round_t lastSyn;
         bool going;
+		bool lowPerf;
         Grid grid;
         const std::pair<std::string, std::string> * currentGamedata;
         char player;
