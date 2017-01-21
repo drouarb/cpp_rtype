@@ -164,7 +164,7 @@ void testPacketDeleteEntity()
     PacketDeleteEntity *deleteEntity2 = new PacketDeleteEntity;
     deleteEntity2->deserialize(&rawdata);
     assert(deleteEntity->getEntityId() == deleteEntity2->getEntityId());
-    std::cout << "SUCCESS getEntityId()" << std::endl;
+    std::cout << "SUCCESS getEntity()" << std::endl;
     assert(deleteEntity->getEventId() == deleteEntity2->getEventId());
     std::cout << "SUCCESS getEventId()" << std::endl;
     assert(deleteEntity2->getTick() == deleteEntity->getTick());

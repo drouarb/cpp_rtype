@@ -77,12 +77,10 @@ void network::PacketFactory::dataCallback(unsigned long fd, const std::vector<ui
 
     buff.assign(data.begin(), data.end());
     while (buff.size()) {
-        try {
-            id = static_cast<packet::PacketId>(buff.at(0));
-            packet = (packet::IPacket *) ((this->*(createMap.at(id)))(fd, buff));
-        } catch (std::exception e) {
-            return;
-        }
+        id = static_cast<packet::PacketId>(buff.at(0));
+		if (createMap.find(id) == createMap.end())
+			return;
+		packet = (packet::IPacket *) ((this->*(createMap.at(id)))(fd, buff));
         if (packet) {
             buff.erase(buff.begin(), buff.begin() + packet->getSize() + PACKET_HEADER_SIZE);
             this->notifyPacket(packet);

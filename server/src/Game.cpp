@@ -1,3 +1,4 @@
+#include <mutex>
 #include <algorithm>
 #include <iostream>
 #include <entities/Player.hh>
@@ -18,22 +19,32 @@
 #include <network/packet/PacketGameData.hh>
 #include <helpers/libloader/getDlLoader.hpp>
 #include <network/packet/PacketUpdateEntity.hh>
+#include <thread>
 #include "Game.hh"
 
 using namespace server;
 
 Game::Game(network::PacketFactory &packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId),
-                                                           entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr), player(0)
-{}
+                                                           entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr), player(0), sw(nullptr), gameThread(new std::thread(&Game::loop, this))
+{
+	this->mustDestroy = false;
+}
 
 Game::Game(network::PacketFactory &packetf, int lobbyId, const Level &lvl) : packetf(packetf), lvl(&lvl), round(0),
                                                                              gameId(lobbyId), entityIdCount(0),
-                                                                             lastSyn(0), going(true), currentGamedata(nullptr), player(0)
-{}
+                                                                             lastSyn(0), going(true), currentGamedata(nullptr), player(0), sw(nullptr), gameThread(new std::thread(&Game::loop, this))
+{
+	this->mustDestroy = false;
+}
 
 Game::~Game()
 {
-    while (clientList.size() > 0)
+	this->mustDestroy = true;
+	this->mutex.lock();
+	this->gameThread->detach();
+	this->mutex.unlock();
+	this->mutex.lock();
+	while (clientList.size() > 0)
     {
         removePlayer(clientList.back());
     }
@@ -45,10 +56,12 @@ Game::~Game()
     {
         delete entity;
     }
+	this->mutex.unlock();
 }
 
 bool Game::operator==(const Game &other)
 {
+	std::unique_lock<std::mutex> unique(mutex);
     return (this == &other);
 }
 
@@ -59,7 +72,7 @@ void Game::setLevel(const Level & lvl)
 
 void Game::tick()
 {
-    round++;
+	round++;
 
     progressLevel();
     checkCollisions(); //must be before moveEntities
@@ -67,11 +80,9 @@ void Game::tick()
     letEntitesAct(); //must be called after checkCollisions
     unspawn(); //must be after letEntitiesAct
     manageNewGamedata();
-
-    sendData();
 }
 
-gameId_t Game::getLobbyId()
+gameId_t Game::getLobbyId() const
 {
     return (gameId);
 }
@@ -80,14 +91,14 @@ void Game::progressLevel()
 {
     if (lvl)
     {
-        const std::vector<Spawn> *pVector = lvl->getNewSpawns(round);
-        if (pVector == NULL)
+	    auto pVector = lvl->getNewSpawns(round);
+        if (pVector == nullptr)
         {
             return;
         }
         for (auto spawn : *pVector)
         {
-            Entity * entity = spawn.trigger(entityIdCount, round, grid);
+	        auto entity = spawn.trigger(entityIdCount, round, grid);
             if (entity == nullptr)
             {
                 LOG_ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
@@ -131,7 +142,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
     if (entity_i->obj->collidesWith(*entity_j) == NA || entity_j->obj->collidesWith(*entity_i) == NA)
         return;
 
-    int dist;
+    server::pos_t dist;
 
     // calculations are based on entity[i]
 
@@ -322,44 +333,51 @@ void Game::letEntitesAct()
     {
         auto it = entities.at(i);
         EntityAction * action = it->obj->act(this->round, grid);
-
-        if (it->collisions.isSet())
-        {
-            it->collisions.apply(action);
-            it->collisions.reset();
-        }
-
-        if (action->speedX != it->data.getVectX())
-        {
-            it->data.setVectX(action->speedX);
-            this->sim_move(entities[i]);
-        }
-        if (action->speedY != it->data.getVectY())
-        {
-            it->data.setVectY(action->speedY);
-            this->sim_move(entities[i]);
-        }
-        if (action->hp != it->data.getHp())
-        {
-            it->data.setHp(action->hp);
-            this->sim_update(entities[i]);
-        }
-        if (action->newEntity)
-        {
-            auto newEntity = new Entity(action->newEntity, entityIdCount, round, grid);
-            entityIdCount++;
-            spawnEntity(newEntity);
-        }
-        if (action->destroy)
-        {
-            it->data.setDestroyed(true);
-        }
-        if (action->soundToPlay != "")
-        {
-            sendSound(action->soundToPlay);
-        }
-
+        act(action, &*it);
         delete action;
+    }
+}
+
+void Game::act(EntityAction *action, Entity *entity)
+{
+    if (entity->collisions.isSet())
+    {
+        entity->collisions.apply(action);
+        entity->collisions.reset();
+    }
+
+    if (action->speedX != entity->data.getVectX())
+    {
+        entity->data.setVectX(action->speedX);
+        this->sim_move(entity);
+    }
+    if (action->speedY != entity->data.getVectY())
+    {
+        entity->data.setVectY(action->speedY);
+        this->sim_move(entity);
+    }
+    if (action->hp != entity->data.getHp())
+    {
+        entity->data.setHp(action->hp);
+        this->sim_update(entity);
+    }
+    if (action->newEntity)
+    {
+        auto newEntity = new Entity(action->newEntity, entityIdCount, round, grid);
+        entityIdCount++;
+        spawnEntity(newEntity);
+
+        auto init = newEntity->obj->initialize(round, grid);
+        act(&init->action, newEntity);
+        delete init;
+    }
+    if (action->destroy)
+    {
+        entity->data.setDestroyed(true);
+    }
+    if (action->soundToPlay != "")
+    {
+        sendSound(action->soundToPlay);
     }
 }
 
@@ -396,11 +414,10 @@ void Game::unspawn()
             this->sim_destroy(*it);
             destroyedEntities.push_back(*it);
             grid.remove(*it);
-//            it = vect_erase(it, entities);
             entities.erase(std::find(entities.begin(), entities.end(), *it));
         }
         else
-            ++it;
+            ++it; //TODO
     }
     if (going && isFinished())
         endGame();
@@ -452,11 +469,13 @@ void Game::spawnEntity(Entity * entity)
 {
     entities.push_back(entity);
     this->sim_spawn(entity);
+    this->sim_move(entity);
     grid.add(entity);
 }
 
 void Game::newPlayer(Client *client) {
-    INFO("Adding player from " << client->getClientId())
+	std::unique_lock<std::mutex> unique(mutex);
+	INFO("Adding player from " << client->getClientId())
 
     if (clientList.size() == 4)
     {
@@ -500,6 +519,7 @@ void Game::removePlayer(Client *client)
 
 bool Game::hasClient(const Client & client)
 {
+	std::unique_lock<std::mutex> unique(mutex);
     for (auto c : clientList)
     {
         if (c == &client)
@@ -508,8 +528,9 @@ bool Game::hasClient(const Client & client)
     return (false);
 }
 
-bool Game::empty() const
+bool Game::empty()
 {
+	std::unique_lock<std::mutex> unique(this->mutex);
     return (clientList.empty());
 }
 
@@ -523,6 +544,41 @@ std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator
     *it = vect.back();
     vect.pop_back();
     return (it);
+}
+
+void Game::loop()
+{
+    uint16_t tickLate = 0;
+	this->sw = helpers::IStopwatch::getInstance();
+	this->lowPerf = false;
+    while (!this->mustDestroy )
+	{
+		mutex.lock();
+		if (!this->sw)
+			return;
+		this->sw->set();
+		this->tick();
+		if (sw->elapsedMs() < ROUND_DURATION_MS)
+		{
+			long elapsed = sw->elapsedMs();
+            sendData();
+            mutex.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - elapsed));
+        }
+		else
+		{
+            //Don't send data if thread is late
+            tickLate = static_cast<uint16_t>(sw->elapsedMs() / ROUND_DURATION_MS);
+
+            for (; tickLate; --tickLate) {
+                this->lowPerf = true;
+                tick();
+            }
+            this->lowPerf = false;
+			mutex.unlock();
+		}
+
+	}
 }
 
 pos_t Game::fx(const Entity * entity_i) const
@@ -547,9 +603,37 @@ pos_t Game::fyp(const Entity * entity_i) const
 
 void Game::sendData() {
     INFO("Game::sendData : " << this->gameEvents.size() << " events to send");
+
     for (auto & event : gameEvents)
     {
+        if (event->getEntity()->data.isDestroyed() && event->getEventType() != event::DESTROY)
+            continue;
+
+        if (event->getEntity()->data.getId() == 0)
+        {
+            if (event->getEventType() == event::MOVE)
+            {
+                auto m = dynamic_cast<network::packet::PacketMoveEntity*>(event->createPacket());
+                std::cout << "vx=" << m->getVecX() << " vy=" << m->getVecY() << std::endl;
+            }
+            if (event->getEventType() == event::MOD_HP)
+            {
+                auto m = dynamic_cast<network::packet::PacketUpdateEntity*>(event->createPacket());
+                std::cout << "hp=" << m->getHp() << std::endl;
+            }
+            if (event->getEventType() == event::DESTROY)
+            {
+                std::cout << "destroy" << std::endl;
+            }
+            if (event->getEventType() == event::SPAWN)
+            {
+                auto m = dynamic_cast<network::packet::PacketSpawnEntity*>(event->createPacket());
+                std::cout << "spawn hp=" << m->getHp() << std::endl;
+            }
+        }
+
         auto packet = event->createPacket();
+
         for (auto & client : clientList)
         {
             packetf.send(*packet, client->getClientId());
@@ -566,25 +650,23 @@ void Game::sendData() {
 
 void Game::sim_spawn(Entity *entity) {
     this->gameEvents.push_back(new server::event::Spawn
-                                       (this->round, entity->data.getId(), entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
-    this->gameEvents.push_back(new server::event::ModHP(this->round, entity->data.getId(), entity->data.getHp()));
-    INFO("spawn " << std::to_string(gameEvents.back()->getEntityId()))
+                                       (this->round, entity, entity->data.getPosX(), entity->data.getPosY(), entity->data.getHp(), entity->data.getSprite().path));
+    INFO("spawn " << std::to_string(gameEvents.back()->getEntity()))
 }
 
-void Game::sim_move(Entity *entity) {
-/*
-    this->gameEvents.push_back(new server::event::Move(this->round, entity->data.getId(), entity->data.getVectX(),
+void Game::sim_move(Entity *entity)
+{
+    this->gameEvents.push_back(new server::event::Move(this->round, entity, entity->data.getVectX(),
                                                        entity->data.getVectY(), entity->data.getPosX(),
                                                        entity->data.getPosY()));
-*/
 }
 
 void Game::sim_update(Entity *entity) {
-    this->gameEvents.push_back(new server::event::ModHP(this->round, entity->data.getId(), entity->data.getHp()));
+    this->gameEvents.push_back(new server::event::ModHP(this->round, entity, entity->data.getHp()));
 }
 
 void Game::sim_destroy(Entity *entity) {
-    this->gameEvents.push_back(new server::event::Destroy(this->round, entity->data.getId()));
+    this->gameEvents.push_back(new server::event::Destroy(this->round, entity));
 }
 
 uint16_t Game::getClientSize() const
@@ -597,7 +679,7 @@ round_t Game::getTick() const
     return (round);
 }
 
-bool Game::mustClose() const
+bool Game::mustClose()
 {
     return (!going || empty());
 }
@@ -657,30 +739,30 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pspawn->setEntityId(entity->data.getId());
         pspawn->setHp(entity->data.getHp());
         pspawn->setSpriteName(entity->data.getSprite().path);
-        pspawn->setPosX(entity->data.getPosX());
-        pspawn->setPosY(entity->data.getPosY());
+        pspawn->setPosX(static_cast<int32_t>(entity->data.getPosX())* 100);
+        pspawn->setPosY(static_cast<int32_t>(entity->data.getPosY()) * 100);
         packetf.send(*pspawn, client.getClientId());
         delete pspawn;
         ++id;
 
-        /*auto pmove = new network::packet::PacketMoveEntity();
+        auto pmove = new network::packet::PacketMoveEntity();
         pmove->setTick(round);
         pmove->setEventId(id);
         pmove->setEntityId(entity->data.getId());
-        pmove->setPosX(entity->data.getPosX());
-        pmove->setPosY(entity->data.getPosY());
-        pmove->setVecX(entity->data.getVectX());
-        pmove->setVecY(entity->data.getVectY());
+        pmove->setPosX(static_cast<int32_t>(entity->data.getPosX()) * 100);
+        pmove->setPosY(static_cast<int32_t>(entity->data.getPosY()) * 100);
+        pmove->setVecX(static_cast<int32_t>(entity->data.getVectX()) * 100);
+        pmove->setVecY(static_cast<int32_t>(entity->data.getVectY()) * 100);
         packetf.send(*pmove, client.getClientId());
         delete pmove;
-        ++id;*/
+        ++id;
     }
 }
 
 void Game::sendAllMoves()
 {
     //TODO
-  if (round % 2 == 0)
+  if (round % 120 == 0)
     for (auto client : clientList)
     {
         for (auto entity : entities)
@@ -689,10 +771,10 @@ void Game::sendAllMoves()
             pmove->setTick(round);
             pmove->setEventId(0);
             pmove->setEntityId(entity->data.getId());
-            pmove->setPosX(entity->data.getPosX());
-            pmove->setPosY(entity->data.getPosY());
-            pmove->setVecX(entity->data.getVectX());
-            pmove->setVecY(entity->data.getVectY());
+            pmove->setPosX(static_cast<int32_t>(entity->data.getPosX()) * 100);
+            pmove->setPosY(static_cast<int32_t>(entity->data.getPosY()) * 100);
+            pmove->setVecX(static_cast<int32_t>(entity->data.getVectX()) * 100);
+            pmove->setVecY(static_cast<int32_t>(entity->data.getVectY()) * 100);
 
             packetf.send(*pmove, client->getClientId());
             delete pmove;

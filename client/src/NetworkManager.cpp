@@ -133,8 +133,7 @@ void NetworkManager::receivePlayerData(uint32_t playerId, uint8_t nbAttackPlayer
 }
 
 void
-NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int16_t vecx, int16_t vecy,
-                                  int16_t posx, int16_t posy) {
+NetworkManager::receiveMoveEntity(uint32_t tick, uint32_t eventId, uint32_t entityId, int32_t vecx, int32_t vecy, int32_t posx, int32_t posy) {
   gameClient->manageMoveEntity(tick , eventId, entityId, vecx, vecy, posx, posy);
 }
 
@@ -148,7 +147,7 @@ void NetworkManager::receiveQuit() {
 
 void
 NetworkManager::receiveSpawnEntity(uint32_t tick, uint32_t eventId, const std::string &spriteName, uint32_t entityId,
-                                   int16_t pos_x, int16_t pos_y, int16_t hp) {
+                                   int32_t pos_x, int32_t pos_y, int16_t hp) {
     gameClient->manageSpawnEntity(tick, eventId, spriteName, entityId, pos_x, pos_y, hp);
 }
 
@@ -201,17 +200,16 @@ void NetworkManager::sendQuit() {
     {}
 }
 
-void NetworkManager::sendPlayerMove(uint32_t tick, int16_t vect_x, int16_t vect_y, int16_t pos_x, int16_t pos_y) {
+void NetworkManager::sendPlayerMove(uint32_t tick, int32_t vect_x, int32_t vect_y, int32_t pos_x, int32_t pos_y) {
   network::packet::PacketPlayerMove playerMove(tick - gameClient->getTickRate(), vect_x, vect_y, pos_x, pos_y);
-  //std::cout << "player move" << std::endl;
+  std::cout << "sending : " << vect_x << ", " << vect_y << ", pos{" << pos_x << ", " << pos_y << "}" << std::endl;
     try { packetFactory->broadcast(playerMove);}
-    catch (std::runtime_error)
+    catch (std::runtime_error&)
     {}
 }
 
 void NetworkManager::sendPlayerAttack(int32_t tick, uint8_t attackId) {
   network::packet::PacketPlayerAttack packetPlayerAttack(tick - gameClient->getTickRate(), attackId);
-  //std::cout << "player attack" << std::endl;
     try { packetFactory->broadcast(packetPlayerAttack);}
     catch (std::runtime_error)
     {}

@@ -19,13 +19,9 @@ namespace server {
             const std::string sprite;
 
         public:
-            Spawn(const round_t tick, const entityId_t entityId, pos_t posX, pos_t posY, int hp, const std::string & sprite);
+            Spawn(const round_t tick, const Entity * entity, pos_t posX, pos_t posY, int hp, const std::string & sprite);
 
-            IGameEvent *getParentEvent() override;
-
-            entityId_t getEntityId() override;
-
-            EventType getEventType() override;
+            EventType getEventType() const override;
 
             network::packet::IPacket *createPacket();
         };

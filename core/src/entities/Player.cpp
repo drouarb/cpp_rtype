@@ -64,7 +64,6 @@ EntityInitialization *Player::initialize(round_t, const Grid &)
 {
     EntityInitialization *ei = new EntityInitialization();
     ei->team = PLAYER;
-    ei->action.hp = 5;
     ei->sprite.sizeX = 50;
     ei->sprite.sizeY = 50;
     ei->posX = ei->sprite.sizeX;
@@ -125,7 +124,7 @@ ADynamicObject * Player::createAttack(attackId_t id, round_t round)
 void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound)
 {
     attackTimeline[currentRound] = 0;
-    for (int i = 1; i < nbRounds; ++i)
+    for (unsigned int i = 1; i < nbRounds; ++i)
         attackTimeline[currentRound + i] = NOATTACK;
 }
 

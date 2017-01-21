@@ -14,7 +14,7 @@ Name "rtype"
 OutFile "rtype_setup.exe"
 
 ; The default installation directory
-InstallDir $PROGRAMFILES\rtype
+InstallDir $APPDATA\rtype
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)

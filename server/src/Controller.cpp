@@ -7,7 +7,7 @@ void server::Controller::playMove(server::pos_t speedX, server::pos_t speedY)
     {
         return;
     }
-    this->player->move(speedX * 2, speedY * 2);
+    this->player->move(speedX, speedY);
 }
 
 void server::Controller::playShoot(attackId_t attackId, round_t tick)

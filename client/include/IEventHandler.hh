@@ -14,9 +14,9 @@ namespace client {
 
         virtual void onKeyPressed(short key) = 0;
 
-        virtual void onKeyRealease(short key) = 0;
+        virtual void onKeyRelease(short key) = 0;
 
-        virtual void onMouseRealease(short x, short y) = 0;
+        virtual void onMouseRelease(short x, short y) = 0;
 
     };
 }

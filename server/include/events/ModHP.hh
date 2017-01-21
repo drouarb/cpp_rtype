@@ -13,13 +13,9 @@ namespace server {
         private:
             const int hp;
         public:
-            ModHP(const server::round_t tick, const server::entityId_t entityId, const int hp);
+            ModHP(const server::round_t tick, const Entity *entity, const int hp);
 
-            IGameEvent *getParentEvent() override;
-
-            entityId_t getEntityId() override;
-
-            EventType getEventType() override;
+            EventType getEventType() const override;
 
             network::packet::IPacket *createPacket();
         };

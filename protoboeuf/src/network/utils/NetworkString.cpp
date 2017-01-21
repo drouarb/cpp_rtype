@@ -11,7 +11,7 @@ network::utils::NetworkString::~NetworkString() {
 }
 
 uint16_t network::utils::NetworkString::getSize() const {
-    return this->size() + 2;
+    return static_cast<uint16_t>(this->size()) + 2;
 }
 
 void network::utils::NetworkString::serialize(t_rawdata *data) const {

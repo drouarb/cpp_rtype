@@ -6,8 +6,11 @@
 #include "network/PacketFactory.hh"
 #include "events/Timeline.hh"
 #include "Grid.hh"
+#include <mutex>
 #include <map>
 #include <stack>
+#include <thread>
+#include "helpers/IStopwatch.hh"
 
 #define Y_BORDER_WIDTH 10
 
@@ -26,12 +29,12 @@ namespace server
         void removePlayer(Client *client);
         void setLevel(const Level &);
         void tick();
-        gameId_t getLobbyId();
+        gameId_t getLobbyId() const;
         bool hasClient(const Client &);
-        bool empty() const;
+        bool empty();
         uint16_t getClientSize() const;
         round_t getTick() const;
-        bool mustClose() const;
+        bool mustClose();
 
     private:
         network::PacketFactory & packetf;
@@ -45,18 +48,24 @@ namespace server
         std::vector<server::event::AGameEvent *> gameEvents;
         round_t lastSyn;
         bool going;
+		bool lowPerf;
         Grid grid;
         const std::pair<std::string, std::string> * currentGamedata;
         char player;
-
-        static const std::string playerPaths[4];
+		std::mutex mutex;
+	    bool mustDestroy;
+	    static const std::string playerPaths[4];
+		std::thread *gameThread;
+		helpers::IStopwatch * sw;
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 
+		void loop();
         void progressLevel();
         void checkCollisions();
         void checkCollision(Entity * entity1, Entity * entity2);
         void letEntitesAct();
+        void act(EntityAction * action, Entity * entity);
         void moveEntities();
         void unspawn();
         void manageNewGamedata();

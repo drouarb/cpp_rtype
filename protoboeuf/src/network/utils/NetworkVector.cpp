@@ -72,7 +72,7 @@ t_rawdata::iterator network::utils::NetworkVector::deserialize(t_rawdata *data, 
         }
     }
     this->data.resize(0);
-    for (size_t i = 0; i < size.getValue(); i++) {
+    for (ssize_t i = 0; i < size.getValue(); i++) {
         it = deserializeSchema(data, it);
     }
     return it;

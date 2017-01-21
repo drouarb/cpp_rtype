@@ -15,6 +15,8 @@
 
 #define NOATTACK ((attackId_t)-1)
 
+#define DELETE_NB 3
+
 namespace server {
 
     enum Team : unsigned int

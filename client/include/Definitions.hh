@@ -5,6 +5,7 @@
 #ifndef DEFINITION_CLIENT_HH_
 # define DEFINITION_CLIENT_HH_
 
+#include <cstdint>
 #include <tuple>
 
 namespace client
@@ -22,10 +23,20 @@ namespace client
       MOVE = 0x03,
       DELETE = 0x04
     };
+
+    struct Event
+    {
+      Event()
+      {key = -42;pressed = false;}
+      Event(short nkey, bool npressed)
+      {key = nkey; pressed = npressed;}
+      short       key;
+      bool        pressed;
+    };
 }
 
-typedef std::pair<int16_t, int16_t>	pos_t;
-typedef std::pair<int16_t, int16_t>	vec_t;
+typedef std::pair<int32_t, int32_t>	pos_t;
+typedef std::pair<int32_t, int32_t>	vec_t;
 typedef uint32_t			tick;
 typedef uint32_t			ide_t;
 typedef uint16_t			typeide_t;
