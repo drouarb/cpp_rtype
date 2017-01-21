@@ -329,14 +329,6 @@ void GameClient::sendAll(struct s_info *info) {
 	{
 	  if (keygame_move.find(static_cast<s_player *>(info)->key) != keygame_move.end())
 	    {
-	    world->getEntityById(playerId)->moveEntity(keygame_move[static_cast<s_player *>(info)->key],
-		pos_t(world->getEntityById(playerId)->getPos().first,
-		world->getEntityById(playerId)->getPos().second),
-		world->getTick());
-		manager->sendPlayerMove(world->getTick(), world->getEntityById(playerId)->getVec().first,
-		world->getEntityById(playerId)->getVec().second,
-		world->getEntityById(playerId)->getPos().first,
-		world->getEntityById(playerId)->getPos().second);
 	      additioner.first += keygame_move[static_cast<s_player *>(info)->key].first;
 	      additioner.second += keygame_move[static_cast<s_player *>(info)->key].second;
 	    }

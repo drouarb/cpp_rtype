@@ -9,6 +9,7 @@
 #include <mutex>
 #include <map>
 #include <stack>
+#include <thread>
 #include "helpers/IStopwatch.hh"
 
 #define Y_BORDER_WIDTH 10

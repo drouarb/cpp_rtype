@@ -75,9 +75,7 @@ void Game::tick()
 	round++;
 
     progressLevel();
-    if (!(lowPerf && this->getTick() % 4 == 0)) {
-        checkCollisions(); //must be before moveEntities
-    }
+    checkCollisions(); //must be before moveEntities
     moveEntities();
     letEntitesAct(); //must be called after checkCollisions
     unspawn(); //must be after letEntitiesAct
