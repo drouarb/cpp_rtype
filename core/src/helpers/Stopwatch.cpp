@@ -4,7 +4,7 @@
 
 #include "helpers/IStopwatch.hh"
 
-#ifdef _WIN32
+#ifdef WIN32
 #include "helpers/WindowsStopwatch.hh"
 #else
 
@@ -13,7 +13,7 @@
 #endif
 
 helpers::IStopwatch *helpers::IStopwatch::getInstance() {
-#ifdef _WIN32
+#ifdef WIN32
     return (new WindowsStopwatch());
 #else
     return (new UnixStopwatch());

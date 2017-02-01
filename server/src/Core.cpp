@@ -12,6 +12,7 @@
 #include <listeners/ServerListenerPlayerMove.hh>
 #include <listeners/ServerListenerQuit.hh>
 #include <listeners/ServerListenerRegister.hh>
+#include <network/packet/PacketErrorGame.hh>
 #include <ProjTester.hpp>
 
 server::Core::Core(const std::string &path, const unsigned short port)
@@ -21,7 +22,13 @@ server::Core::Core(const std::string &path, const unsigned short port)
 
     IExplorer *fileExplorer = IExplorer::getInstance();
     this->isRunning = true;
-    fileExplorer->loadFolder(path);
+	try {
+		fileExplorer->loadFolder(path);
+	}
+	catch (std::runtime_error &e) {
+		std::cerr << e.what() << std::endl;
+		return;
+	}
     this->networkManager = new NetworkManager(this);
 
     std::cout << "Loading levels from '" << path << "'" << std::endl;
@@ -31,7 +38,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
             continue;
         }
         try {
-            this->levels.push_back(Level(path + f.name));
+            this->levels.push_back(Level(path + SYSTEM_FOLDER + f.name));
         }
         catch (std::runtime_error &e) {
             std::cerr << e.what() << std::endl;
@@ -59,6 +66,7 @@ server::Core::Core(const std::string &path, const unsigned short port)
     this->packetFactory->registerListener(new ServerListenerQuit(this->networkManager));
     this->packetFactory->registerListener(new ServerListenerRegister(this->networkManager));
     this->packetFactory->run();
+	
 
     std::cout << "Server ready" << std::endl;
 }
@@ -75,7 +83,7 @@ void server::Core::run() {
         for (auto game = games.begin(); game != games.end();)
         {
             INFO("- game " << std::to_string(game->getLobbyId()) << " - - -");
-            (*game)->tick();
+            //(*game)->tick();
             if ((*game)->mustClose())
             {
                 delete *game;
@@ -104,14 +112,31 @@ void server::Core::psetClient(server::Client &client, server::gameId_t gameId) {
     premoveClient(client);
     for (auto &game : games) {
         if (game->getLobbyId() == gameId) {
-            game->newPlayer(&client);
+			try {
+				game->newPlayer(&client);
+			}
+			catch (std::runtime_error &e) {
+				network::packet::PacketErrorGame packet(e.what());
+				this->packetFactory->send(packet, client.getClientId());
+				std::cerr << e.what() << " for " << client.getClientId() << std::endl;
+			}
             return;
         }
     }
 
+
     games.push_back(new Game(*packetFactory, gameId));
     games.back()->setLevel(levels[gameId % levels.size()]);
-    games.back()->newPlayer(&client);
+	
+	try {
+		games.back()->newPlayer(&client);
+	}
+	catch (std::runtime_error &e) {
+		network::packet::PacketErrorGame packet(e.what());
+		this->packetFactory->send(packet, client.getClientId());
+		std::cerr << e.what() << " for " << client.getClientId() << std::endl;
+		games.erase(games.end() - 1);
+	}
 }
 
 
