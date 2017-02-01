@@ -10,7 +10,7 @@ int main(int ac, char **av) {
 
     server::Core *core = nullptr;
     try {
-        core = new server::Core(std::string("levels"), port);
+        core = new server::Core(std::string("levels") + SYSTEM_FOLDER, port);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
         return -1;

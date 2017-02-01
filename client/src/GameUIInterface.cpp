@@ -456,13 +456,14 @@ void GameUIInterface::addAnimaton(const std::string &path, UI::AItem *item) {
     tmp = anim_map[path];
   else {
     new_path = path.substr(0, path.find("."));
-	std::ifstream file(new_path + RTYPE_EX);
-	if (file.is_open()) {
+    std::fstream file(new_path + RTYPE_EX);
+    if (file.is_open()) {
 
       for (buf; std::getline(file, buf, '\n');) {
 	tmp.push_back(std::stoi(buf));
       }
       anim_map[path] = tmp;
+
     }
   }
   if (tmp.size() == 5) {

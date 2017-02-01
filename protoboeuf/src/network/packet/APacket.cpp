@@ -3,7 +3,6 @@
 //
 
 #include <stdexcept>
-#include <iostream>
 #include "network/packet/APacket.hh"
 
 network::packet::APacket::APacket(PacketId id, std::vector<utils::INetworkUtil *> schema):
@@ -31,11 +30,6 @@ t_rawdata::iterator network::packet::APacket::deserialize(t_rawdata *data) {
 }
 
 t_rawdata::iterator network::packet::APacket::deserialize(t_rawdata *data, t_rawdata::iterator it) {
-    static unsigned long count = 0;
-    if (packetId.getValue() == DELETE_ENTITY) {
-        count++;
-        std::cout << count << std::endl;
-    }
     utils::NetworkInteger id(PACKET_ID_SIZE);
     utils::NetworkInteger size(PACKET_SIZE_SIZE);
 

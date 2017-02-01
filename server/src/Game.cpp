@@ -1,4 +1,3 @@
-#include <mutex>
 #include <algorithm>
 #include <iostream>
 #include <entities/Player.hh>
@@ -19,7 +18,6 @@
 #include <network/packet/PacketGameData.hh>
 #include <helpers/libloader/getDlLoader.hpp>
 #include <network/packet/PacketUpdateEntity.hh>
-#include <thread>
 #include "Game.hh"
 
 using namespace server;
@@ -39,12 +37,7 @@ Game::Game(network::PacketFactory &packetf, int lobbyId, const Level &lvl) : pac
 
 Game::~Game()
 {
-	this->mustDestroy = true;
-	this->mutex.lock();
-	this->gameThread->detach();
-	this->mutex.unlock();
-	this->mutex.lock();
-	while (clientList.size() > 0)
+    while (clientList.size() > 0)
     {
         removePlayer(clientList.back());
     }
@@ -56,12 +49,10 @@ Game::~Game()
     {
         delete entity;
     }
-	this->mutex.unlock();
 }
 
 bool Game::operator==(const Game &other)
 {
-	std::unique_lock<std::mutex> unique(mutex);
     return (this == &other);
 }
 
@@ -72,7 +63,7 @@ void Game::setLevel(const Level & lvl)
 
 void Game::tick()
 {
-	round++;
+    round++;
 
     progressLevel();
     checkCollisions(); //must be before moveEntities
@@ -80,9 +71,11 @@ void Game::tick()
     letEntitesAct(); //must be called after checkCollisions
     unspawn(); //must be after letEntitiesAct
     manageNewGamedata();
+
+    sendData();
 }
 
-gameId_t Game::getLobbyId() const
+gameId_t Game::getLobbyId()
 {
     return (gameId);
 }
@@ -91,14 +84,14 @@ void Game::progressLevel()
 {
     if (lvl)
     {
-	    auto pVector = lvl->getNewSpawns(round);
-        if (pVector == nullptr)
+        const std::vector<Spawn> *pVector = lvl->getNewSpawns(round);
+        if (pVector == NULL)
         {
             return;
         }
         for (auto spawn : *pVector)
         {
-	        auto entity = spawn.trigger(entityIdCount, round, grid);
+            Entity * entity = spawn.trigger(entityIdCount, round, grid);
             if (entity == nullptr)
             {
                 LOG_ERROR("Game " << gameId << ": failed to create player " << spawn.dlName << std::endl);
@@ -142,7 +135,7 @@ void Game::checkCollision(Entity * entity_i, Entity * entity_j)
     if (entity_i->obj->collidesWith(*entity_j) == NA || entity_j->obj->collidesWith(*entity_i) == NA)
         return;
 
-    server::pos_t dist;
+    int dist;
 
     // calculations are based on entity[i]
 
@@ -474,8 +467,7 @@ void Game::spawnEntity(Entity * entity)
 }
 
 void Game::newPlayer(Client *client) {
-	std::unique_lock<std::mutex> unique(mutex);
-	INFO("Adding player from " << client->getClientId())
+    INFO("Adding player from " << client->getClientId())
 
     if (clientList.size() == 4)
     {
@@ -519,7 +511,6 @@ void Game::removePlayer(Client *client)
 
 bool Game::hasClient(const Client & client)
 {
-	std::unique_lock<std::mutex> unique(mutex);
     for (auto c : clientList)
     {
         if (c == &client)
@@ -528,9 +519,8 @@ bool Game::hasClient(const Client & client)
     return (false);
 }
 
-bool Game::empty()
+bool Game::empty() const
 {
-	std::unique_lock<std::mutex> unique(this->mutex);
     return (clientList.empty());
 }
 
@@ -544,41 +534,6 @@ std::vector<Entity *>::iterator Game::vect_erase(std::vector<Entity *>::iterator
     *it = vect.back();
     vect.pop_back();
     return (it);
-}
-
-void Game::loop()
-{
-    uint16_t tickLate = 0;
-	this->sw = helpers::IStopwatch::getInstance();
-	this->lowPerf = false;
-    while (!this->mustDestroy )
-	{
-		mutex.lock();
-		if (!this->sw)
-			return;
-		this->sw->set();
-		this->tick();
-		if (sw->elapsedMs() < ROUND_DURATION_MS)
-		{
-			long elapsed = sw->elapsedMs();
-            sendData();
-            mutex.unlock();
-            std::this_thread::sleep_for(std::chrono::milliseconds(ROUND_DURATION_MS - elapsed));
-        }
-		else
-		{
-            //Don't send data if thread is late
-            tickLate = static_cast<uint16_t>(sw->elapsedMs() / ROUND_DURATION_MS);
-
-            for (; tickLate; --tickLate) {
-                this->lowPerf = true;
-                tick();
-            }
-            this->lowPerf = false;
-			mutex.unlock();
-		}
-
-	}
 }
 
 pos_t Game::fx(const Entity * entity_i) const
@@ -679,7 +634,7 @@ round_t Game::getTick() const
     return (round);
 }
 
-bool Game::mustClose()
+bool Game::mustClose() const
 {
     return (!going || empty());
 }
@@ -739,8 +694,8 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pspawn->setEntityId(entity->data.getId());
         pspawn->setHp(entity->data.getHp());
         pspawn->setSpriteName(entity->data.getSprite().path);
-        pspawn->setPosX(static_cast<int32_t>(entity->data.getPosX())* 100);
-        pspawn->setPosY(static_cast<int32_t>(entity->data.getPosY()) * 100);
+        pspawn->setPosX(entity->data.getPosX() * 100.0);
+        pspawn->setPosY(entity->data.getPosY() * 100.0);
         packetf.send(*pspawn, client.getClientId());
         delete pspawn;
         ++id;
@@ -749,10 +704,10 @@ void Game::sendSimToNewNotFirst(const Client &client)
         pmove->setTick(round);
         pmove->setEventId(id);
         pmove->setEntityId(entity->data.getId());
-        pmove->setPosX(static_cast<int32_t>(entity->data.getPosX()) * 100);
-        pmove->setPosY(static_cast<int32_t>(entity->data.getPosY()) * 100);
-        pmove->setVecX(static_cast<int32_t>(entity->data.getVectX()) * 100);
-        pmove->setVecY(static_cast<int32_t>(entity->data.getVectY()) * 100);
+        pmove->setPosX(entity->data.getPosX() * 100.0);
+        pmove->setPosY(entity->data.getPosY() * 100.0);
+        pmove->setVecX(entity->data.getVectX() * 100.0);
+        pmove->setVecY(entity->data.getVectY() * 100.0);
         packetf.send(*pmove, client.getClientId());
         delete pmove;
         ++id;
@@ -771,10 +726,10 @@ void Game::sendAllMoves()
             pmove->setTick(round);
             pmove->setEventId(0);
             pmove->setEntityId(entity->data.getId());
-            pmove->setPosX(static_cast<int32_t>(entity->data.getPosX()) * 100);
-            pmove->setPosY(static_cast<int32_t>(entity->data.getPosY()) * 100);
-            pmove->setVecX(static_cast<int32_t>(entity->data.getVectX()) * 100);
-            pmove->setVecY(static_cast<int32_t>(entity->data.getVectY()) * 100);
+            pmove->setPosX(entity->data.getPosX() * 100.0);
+            pmove->setPosY(entity->data.getPosY() * 100.0);
+            pmove->setVecX(entity->data.getVectX() * 100.0);
+            pmove->setVecY(entity->data.getVectY() * 100.0);
 
             packetf.send(*pmove, client->getClientId());
             delete pmove;

@@ -25,13 +25,14 @@ void WindowsFileExplorer::loadFolder(const std::string &path) {
         _tprintf(TEXT("\nDirectory path is too long.\n"));
     }
 
+
     StringCchCopy(szDir, MAX_PATH, path.c_str());
     StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
 
     hFind = FindFirstFile(szDir, &ffd);
 
     if (INVALID_HANDLE_VALUE == hFind)
-    {		
+    {
         throw std::runtime_error("Excepted value when opening directory " + path);
     }
 

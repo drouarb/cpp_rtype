@@ -48,6 +48,7 @@ uint64_t Epoch::getTimeS() {
 
 #else
 
+#include <bits/time.h>
 #include <sys/time.h>
 
 

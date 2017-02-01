@@ -13,8 +13,8 @@ namespace client
 
   struct moveData
   {
-	  moveData(pos_t npos, vec_t nvec) : pos(npos), vec(nvec)
-	  {}
+    moveData(pos_t npos, vec_t nvec)
+    {pos = npos;vec = nvec;}
     pos_t pos;
     vec_t vec;
   };

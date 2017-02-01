@@ -113,5 +113,5 @@ bool EntityData::isDestroyed() const
 
 void EntityData::setDestroyed(bool destroyed)
 {
-    this->destroyed = destroyed;
+    EntityData::destroyed = destroyed;
 }

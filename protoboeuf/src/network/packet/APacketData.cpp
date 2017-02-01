@@ -53,7 +53,7 @@ const t_rawdata &network::packet::APacketData::getData() const {
 }
 
 uint16_t network::packet::APacketData::getSize() const {
-    return static_cast<uint16_t>(data.size());
+    return data.size();
 }
 
 network::packet::PacketId network::packet::APacketData::getPacketId() const {
