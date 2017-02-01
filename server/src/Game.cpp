@@ -24,12 +24,16 @@ using namespace server;
 
 Game::Game(network::PacketFactory &packetf, int lobbyId) : packetf(packetf), lvl(nullptr), round(0), gameId(lobbyId),
                                                            entityIdCount(0), lastSyn(0), going(true), currentGamedata(nullptr), player(0)
-{}
+{
+	std::random_shuffle(this->playerPaths.begin(), this->playerPaths.end());
+}
 
 Game::Game(network::PacketFactory &packetf, int lobbyId, const Level &lvl) : packetf(packetf), lvl(&lvl), round(0),
                                                                              gameId(lobbyId), entityIdCount(0),
                                                                              lastSyn(0), going(true), currentGamedata(nullptr), player(0)
-{}
+{
+	std::random_shuffle(this->playerPaths.begin(), this->playerPaths.end());
+}
 
 Game::~Game()
 {
@@ -799,11 +803,3 @@ void Game::endGame()
     }
     going = false;
 }
-
-const std::string Game::playerPaths[4] =
-    {
-            "build/entity/YellowPlayer",
-            "build/entity/BluePlayer",
-            "build/entity/GreenPlayer",
-            "build/entity/RedPlayer"
-    };

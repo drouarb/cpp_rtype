@@ -6,6 +6,7 @@
 #define CPP_RTYPE_DEFINITIONS_HH
 
 #include "cstdint"
+#include <stddef.h>
 
 #define ROUND_DURATION_MS 28
 #define MAX_PLAYERS 4

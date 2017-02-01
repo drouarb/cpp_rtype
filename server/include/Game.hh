@@ -49,7 +49,13 @@ namespace server
         const std::pair<std::string, std::string> * currentGamedata;
         char player;
 
-        static const std::string playerPaths[4];
+		std::vector<std::string> playerPaths =
+		{
+			"build/entity/YellowPlayer",
+			"build/entity/BluePlayer",
+			"build/entity/GreenPlayer",
+			"build/entity/RedPlayer"
+		};
 
         std::vector<Entity*>::iterator vect_erase(std::vector<Entity*>::iterator it, std::vector<Entity*> & vect);
 

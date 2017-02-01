@@ -156,7 +156,7 @@ server::Tribool Lighter::Lightning::collidesWith(const server::Entity &entity) {
 
 extern "C"
 {
-server::ADynamicObject * getInstance()
+EXPORT_SYM server::ADynamicObject * getInstance()
 {
     return (new Lighter());
 }
