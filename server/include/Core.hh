@@ -23,6 +23,7 @@ namespace server
         std::vector<Level> levels;
         std::vector<Game *> games;
         helpers::IStopwatch * sw;
+
     protected:
         bool isRunning;
 

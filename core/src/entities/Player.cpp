@@ -124,7 +124,7 @@ ADynamicObject * Player::createAttack(attackId_t id, round_t round)
 void Player::setAttackWait(attackId_t id, round_t nbRounds, round_t currentRound)
 {
     attackTimeline[currentRound] = 0;
-    for (unsigned int i = 1; i < nbRounds; ++i)
+    for (int i = 1; i < nbRounds; ++i)
         attackTimeline[currentRound + i] = NOATTACK;
 }
 

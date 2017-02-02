@@ -9,7 +9,7 @@ using namespace server;
 
 VisualFx::VisualFx(pos_t posX, pos_t posY, const std::string &sprite, const std::string &sound, int time, int x_offset,
                    int y_offset) :
-    posX(posX), posY(posY), sprite(sprite), sound(sound), time(time), playedSound(false), x_offset(static_cast<server::pos_t>(x_offset)), y_offset(static_cast<server::pos_t>(y_offset))
+    posX(posX), posY(posY), sprite(sprite), sound(sound), time(time), playedSound(false), x_offset(x_offset), y_offset(y_offset)
 { }
 
 server::Tribool VisualFx::collidesWith(const server::Entity &entity)
@@ -33,7 +33,7 @@ server::EntityAction *VisualFx::act(server::round_t current_round, const server:
         act->soundToPlay = sound;
         playedSound = true;
     }
-    if (current_round - startRound >= static_cast<server::round_t>(time))
+    if (current_round - startRound >= time)
     {
         act->destroy = true;
     }

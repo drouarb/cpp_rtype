@@ -5,8 +5,8 @@
 #ifndef DEFINITION_CLIENT_HH_
 # define DEFINITION_CLIENT_HH_
 
-#include <cstdint>
-#include <tuple>
+#include <stdint.h>
+#include <utility>
 
 namespace client
 {
@@ -34,6 +34,8 @@ namespace client
       bool        pressed;
     };
 }
+
+
 
 typedef std::pair<int32_t, int32_t>	pos_t;
 typedef std::pair<int32_t, int32_t>	vec_t;
